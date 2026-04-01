@@ -193,11 +193,22 @@ export const MOCK_FILTERS: FilterProduct[] = [
 ];
 
 export const MOCK_SUPPLIERS: SupplierData[] = [
-  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 15, complianceRate: 99.96, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1V", "E1", "W2", "N1", "SE1", "NW1", "OX1"] },
-  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8, complianceRate: 99.95, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "B5", "B15", "NG1", "NG7"] },
-  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7, complianceRate: 99.97, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "M4", "M20", "L1", "L2"] },
-  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5, complianceRate: 99.94, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "LS2", "LS6", "S1", "S10"] },
-  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.5, complianceRate: 99.93, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1"] },
+  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 15, complianceRate: 99.96, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1V", "SW3", "SW6", "SW7", "SW11", "SW15", "SW18", "SW19", "SE1", "SE10", "SE13", "SE15", "E1", "E2", "E3", "E8", "E14", "N1", "N7", "NW1", "NW3", "NW10", "W2", "W4", "W8", "W12", "OX1", "OX2", "RG1"] },
+  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8, complianceRate: 99.95, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "B3", "B5", "B8", "B11", "B15", "NG1", "NG2", "NG7", "DE1", "CV1", "CV3", "LE1", "LE2"] },
+  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7, complianceRate: 99.97, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "M3", "M4", "M5", "M14", "M20", "M21", "L1", "L2", "L3", "L5", "L8"] },
+  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5, complianceRate: 99.94, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "LS2", "LS3", "LS6", "LS7", "S1", "S2", "S10", "S11", "YO1", "YO10"] },
+  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.5, complianceRate: 99.93, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1", "CB2", "NR1", "NR2"] },
+  { id: "southern-water", name: "Southern Water", region: "South East", customersM: 4.7, complianceRate: 99.91, website: "https://www.southernwater.co.uk", postcodeAreas: ["BN1", "BN2", "PO1", "PO2", "SO14", "SO15"] },
+  { id: "south-west-water", name: "South West Water", region: "Devon and Cornwall", customersM: 1.8, complianceRate: 99.92, website: "https://www.southwestwater.co.uk", postcodeAreas: ["EX1", "EX2", "PL1", "PL2"] },
+  { id: "welsh-water", name: "Dŵr Cymru Welsh Water", region: "Wales", customersM: 3, complianceRate: 99.94, website: "https://www.dwrcymru.com", postcodeAreas: ["CF10", "CF11", "CF14", "SA1", "SA2"] },
+  { id: "northumbrian-water", name: "Northumbrian Water", region: "North East", customersM: 2.7, complianceRate: 99.96, website: "https://www.nwl.co.uk", postcodeAreas: ["NE1", "NE2", "NE3", "NE4", "NE6"] },
+  { id: "bristol-water", name: "Bristol Water", region: "Bristol and surrounding area", customersM: 1.2, complianceRate: 99.97, website: "https://www.bristolwater.co.uk", postcodeAreas: ["BS1", "BS2", "BS3", "BS5", "BS6", "BS8", "BA1", "BA2"] },
+  { id: "scottish-water", name: "Scottish Water", region: "Scotland", customersM: 5.4, complianceRate: 99.91, website: "https://www.scottishwater.co.uk", postcodeAreas: ["EH1", "EH3", "EH7", "G1", "G2", "G3", "G12", "AB10", "AB11"] },
+  { id: "portsmouth-water", name: "Portsmouth Water", region: "Hampshire and West Sussex", customersM: 0.7, complianceRate: 99.98, website: "https://www.portsmouthwater.co.uk", postcodeAreas: ["PO4", "PO5"] },
+  { id: "south-east-water", name: "South East Water", region: "South East England", customersM: 2.2, complianceRate: 99.93, website: "https://www.southeastwater.co.uk", postcodeAreas: ["BN3"] },
+  { id: "south-staffs-water", name: "South Staffs Water", region: "South Staffordshire and Cambridge", customersM: 1.6, complianceRate: 99.95, website: "https://www.south-staffs-water.co.uk", postcodeAreas: ["CB3", "CB4"] },
+  { id: "wessex-water", name: "Wessex Water", region: "South West", customersM: 2.8, complianceRate: 99.96, website: "https://www.wessexwater.co.uk", postcodeAreas: ["BA1", "BA2"] },
+  { id: "affinity-water", name: "Affinity Water", region: "South East England", customersM: 3.6, complianceRate: 99.92, website: "https://www.affinitywater.co.uk", postcodeAreas: ["N11", "N12", "NW9"] },
 ];
 
 export const MOST_CHECKED = ["SW1A", "E1", "M1", "B1", "LS1", "BS1", "EH1", "CF10", "NE1", "OX1"];

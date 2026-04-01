@@ -6,6 +6,14 @@ const BASE_URL = "https://tapwater.uk";
 
 const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate"];
 
+const GUIDE_SLUGS = [
+  "pfas-uk-explained",
+  "lead-pipes-uk",
+  "water-hardness-map",
+  "understanding-your-water-supplier",
+  "how-to-test-your-water",
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const postcodePaths = getAllPostcodeDistricts().map((district) => ({
     url: `${BASE_URL}/postcode/${district}/`,
@@ -71,6 +79,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+    {
+      url: `${BASE_URL}/guides`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    },
+    ...GUIDE_SLUGS.map((slug) => ({
+      url: `${BASE_URL}/guides/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
     ...postcodePaths,
     ...supplierPaths,
     ...contaminantPaths,
