@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED, MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
@@ -12,6 +13,24 @@ import {
   ShieldCheck,
   Building2,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "TapWater.uk — Check Your Tap Water Quality by Postcode",
+  description:
+    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and 48 other contaminants. Based on Environment Agency and Drinking Water Inspectorate data.",
+  openGraph: {
+    title: "What's in your tap water?",
+    description:
+      "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more.",
+    url: "https://tapwater.uk",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TapWater.uk — Is Your Tap Water Safe?",
+    description: "Free water quality reports for every UK postcode.",
+  },
+};
 
 const TRUST_METRICS = [
   { value: "2,979", label: "Postcode areas" },

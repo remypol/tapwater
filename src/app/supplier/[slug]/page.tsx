@@ -18,9 +18,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Not Found" };
   }
 
+  const description = `${supplier.name} serves ${supplier.customersM} million customers across ${supplier.region}. View compliance rates, supply zones, and postcode areas served.`;
+
   return {
     title: `${supplier.name} Water Quality Report`,
-    description: `${supplier.name} serves ${supplier.customersM} million customers across ${supplier.region}. View compliance rates, supply zones, and postcode areas served.`,
+    description,
+    openGraph: {
+      title: `${supplier.name} Water Quality Report`,
+      description,
+      url: `https://tapwater.uk/supplier/${supplier.id}/`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${supplier.name} Water Quality Report`,
+      description,
+    },
   };
 }
 

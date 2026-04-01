@@ -84,9 +84,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Not Found" };
   }
 
+  const description = `Learn about ${contaminant.name} in UK tap water — health effects, sources, UK and WHO legal limits, and how to remove it with the right water filter.`;
+
   return {
     title: `${contaminant.name} in UK Drinking Water`,
-    description: `Learn about ${contaminant.name} in UK tap water — health effects, sources, UK and WHO legal limits, and how to remove it with the right water filter.`,
+    description,
+    openGraph: {
+      title: `${contaminant.name} in UK Drinking Water`,
+      description,
+      url: `https://tapwater.uk/contaminant/${slug}/`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${contaminant.name} in UK Drinking Water`,
+      description,
+    },
   };
 }
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Instrument_Serif, Space_Mono } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { OrganizationSchema, WebSiteSchema } from "@/components/json-ld";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -51,6 +52,8 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col antialiased">
         <Header />
+        <OrganizationSchema />
+        <WebSiteSchema />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

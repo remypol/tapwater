@@ -11,6 +11,7 @@ import { EmailCapture } from "@/components/email-capture";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
+import { PostcodeDatasetSchema } from "@/components/json-ld";
 
 interface Props {
   params: Promise<{ district: string }>;
@@ -25,9 +26,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = getPostcodeData(district);
   if (!data) return { title: "Not Found" };
 
+  const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free 2026 report for ${data.areaName}.`;
+
   return {
     title: `${data.district} Water Quality: Is It Safe? | ${data.areaName} 2026`,
-    description: `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free 2026 report for ${data.areaName}.`,
+    description,
+    openGraph: {
+      title: `${data.district} Water Quality: Is It Safe?`,
+      description,
+      url: `https://tapwater.uk/postcode/${data.district}/`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${data.district} Water Quality: Is It Safe?`,
+      description,
+    },
   };
 }
 
@@ -118,6 +132,14 @@ export default async function PostcodePage({ params }: Props) {
   return (
     <div className={gradientClass}>
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <PostcodeDatasetSchema
+          district={data.district}
+          areaName={data.areaName}
+          supplier={data.supplier}
+          score={data.safetyScore}
+          lastUpdated={data.lastUpdated}
+          contaminantsTested={data.contaminantsTested}
+        />
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
@@ -165,19 +187,30 @@ export default async function PostcodePage({ params }: Props) {
               </div>
             )}
 
-            {/* Summary — the GEO-optimised opening paragraph */}
+            {/* Summary — GEO-optimised for AI citation */}
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
-                Your water in {data.district} is supplied by{" "}
+                According to Environment Agency monitoring data, tap water in{" "}
+                {data.district} ({data.areaName}) is supplied by{" "}
                 <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
                   {data.supplier}
                 </Link>
-                . Based on the latest data (sampled {data.lastSampleDate}),{" "}
-                <span className="font-data">{data.contaminantsTested}</span> contaminants
+                . Based on the latest data (last sampled {data.lastSampleDate}),{" "}
+                <span className="font-data">{data.contaminantsTested}</span> parameters
                 were tested with{" "}
                 <span className="font-data">{data.contaminantsFlagged}</span> exceeding
-                recommended levels. The overall water quality score for {data.district} is{" "}
-                <span className="font-data font-bold">{data.safetyScore}/10</span>.
+                recommended levels.{" "}
+                The overall water quality score for {data.district} is{" "}
+                <span className="font-data font-bold">{data.safetyScore}/10</span>
+                {data.pfasDetected && data.pfasLevel != null && (
+                  <>
+                    . PFAS (forever chemicals) were detected at{" "}
+                    <span className="font-data">{data.pfasLevel}</span> µg/L in
+                    nearby environmental monitoring — the UK currently has no
+                    legal limit for PFAS in drinking water
+                  </>
+                )}
+                .
               </p>
             </div>
 
