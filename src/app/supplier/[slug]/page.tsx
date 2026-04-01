@@ -6,6 +6,10 @@ import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 
 type Props = { params: Promise<{ slug: string }> };
 
+export function generateStaticParams() {
+  return MOCK_SUPPLIERS.map((s) => ({ slug: s.id }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const supplier = MOCK_SUPPLIERS.find((s) => s.id === slug);

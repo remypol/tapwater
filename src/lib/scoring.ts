@@ -36,11 +36,13 @@ const LIMITS: Record<string, LimitEntry> = {
   mercury: { ukLimit: 0.001, whoGuideline: 0.006, unit: "mg/L", tier: 2, displayName: "Mercury" },
   ammonia: { ukLimit: 0.5, whoGuideline: null, unit: "mg/L", tier: 2, displayName: "Ammonia" },
   phosphate: { ukLimit: null, whoGuideline: null, unit: "mg/L", tier: 2, displayName: "Phosphate" },
+  nickel: { ukLimit: 0.02, whoGuideline: 0.07, unit: "mg/L", tier: 2, displayName: "Nickel" },
 
   // Tier 3 (weight 1.0) — aesthetic/indirect
   iron: { ukLimit: 0.2, whoGuideline: 0.3, unit: "mg/L", tier: 3, displayName: "Iron" },
   manganese: { ukLimit: 0.05, whoGuideline: 0.08, unit: "mg/L", tier: 3, displayName: "Manganese" },
   zinc: { ukLimit: null, whoGuideline: null, unit: "mg/L", tier: 3, displayName: "Zinc" },
+  boron: { ukLimit: 1.0, whoGuideline: 2.4, unit: "mg/L", tier: 3, displayName: "Boron" },
   ph: { ukLimit: null, whoGuideline: null, unit: "pH", tier: 3, displayName: "pH" },
   "dissolved oxygen": { ukLimit: null, whoGuideline: null, unit: "mg/L", tier: 3, displayName: "Dissolved Oxygen" },
   temperature: { ukLimit: null, whoGuideline: null, unit: "°C", tier: 3, displayName: "Temperature" },
@@ -61,26 +63,56 @@ function normalizeDeterminand(label: string): string | null {
   // Common EA label variations
   if (lower.includes("lead") && !lower.includes("mislead")) return "lead";
   if (lower.includes("arsenic")) return "arsenic";
-  if (lower.includes("e.coli") || lower.includes("e coli") || lower === "escherichia coli") return "e coli";
+  if (lower.includes("e.coli") || lower.includes("e coli") || lower.includes("escherichia coli")) return "e coli";
   if (lower.includes("coliform")) return "coliform bacteria";
   if (lower.includes("nitrate") && !lower.includes("nitrite")) return "nitrate";
   if (lower.includes("nitrite")) return "nitrite";
+  if (lower.includes("nitrogen, total oxidised")) return "nitrate";
   if (lower.includes("copper")) return "copper";
   if (lower.includes("cadmium")) return "cadmium";
   if (lower.includes("chromium")) return "chromium";
   if (lower.includes("mercury")) return "mercury";
   if (lower.includes("ammonia") || lower.includes("ammoniacal")) return "ammonia";
   if (lower.includes("phosphate") || lower.includes("phosphorus")) return "phosphate";
+  if (lower.includes("nickel")) return "nickel";
   if (lower.includes("iron") && !lower.includes("environment")) return "iron";
   if (lower.includes("manganese")) return "manganese";
   if (lower.includes("zinc")) return "zinc";
-  if (lower === "ph" || lower === "p h") return "ph";
-  if (lower.includes("dissolved oxygen") || lower === "o diss") return "dissolved oxygen";
+  if (lower.includes("boron")) return "boron";
+  if (lower.startsWith("ph")) return "ph";
+  if (lower.includes("dissolved oxygen") || lower === "o diss" || lower.startsWith("oxygen, dissolved")) return "dissolved oxygen";
   if (lower.includes("temp") && !lower.includes("temporal")) return "temperature";
   if (lower.includes("turbidity")) return "turbidity";
   if (lower.includes("conductivity")) return "conductivity";
 
   return null;
+}
+
+// ── Unit conversion helpers ──
+
+/**
+ * Normalizes the observation value to match the unit expected by the LIMITS entry.
+ * EA API sometimes reports metals in µg/L while our limits are in mg/L (factor of 1000).
+ */
+function normalizeUnit(value: number, obsUnit: string, limitUnit: string): number {
+  const obs = obsUnit.toLowerCase();
+  const lim = limitUnit.toLowerCase();
+
+  const obsIsUg = obs.includes("ug") || obs.includes("µg");
+  const limIsUg = lim.includes("ug") || lim.includes("µg");
+  const obsIsMg = obs.includes("mg");
+  const limIsMg = lim.includes("mg");
+
+  if (obsIsUg && limIsMg) {
+    // Convert µg/L → mg/L
+    return value / 1000;
+  }
+  if (obsIsMg && limIsUg) {
+    // Convert mg/L → µg/L
+    return value * 1000;
+  }
+
+  return value;
 }
 
 // ── Score computation ──
@@ -92,7 +124,7 @@ export interface ScoredReading extends ContaminantReading {
 
 export interface ScoreResult {
   safetyScore: number;
-  scoreGrade: "excellent" | "good" | "fair" | "poor" | "very-poor";
+  scoreGrade: "excellent" | "good" | "fair" | "poor" | "very-poor" | "insufficient-data";
   readings: ContaminantReading[];
   contaminantsTested: number;
   contaminantsFlagged: number;
@@ -124,12 +156,15 @@ export function computeScore(
     const limits = LIMITS[key];
     if (!limits) continue;
 
+    // Normalize value to the unit used in LIMITS before comparing
+    const normalizedValue = normalizeUnit(obs.value, obs.unit, limits.unit);
+
     const limit = limits.ukLimit ?? limits.whoGuideline;
     let paramScore = 10;
     let status: "pass" | "warning" | "fail" = "pass";
 
     if (limit !== null && limit > 0) {
-      const ratio = obs.value / limit;
+      const ratio = normalizedValue / limit;
       paramScore = Math.max(0, Math.min(10, 10 * (1 - ratio)));
 
       if (ratio > 1) {
@@ -141,20 +176,23 @@ export function computeScore(
       }
     } else if (limit === 0) {
       // Zero tolerance (e.g., E. coli)
-      paramScore = obs.value === 0 ? 10 : 0;
-      if (obs.value > 0) {
+      paramScore = normalizedValue === 0 ? 10 : 0;
+      if (normalizedValue > 0) {
         status = "fail";
         flagged++;
       }
     }
 
-    const weight = TIER_WEIGHTS[limits.tier];
-    weightedSum += paramScore * weight;
-    totalWeight += weight;
+    // Skip zinc from weighted scoring (informational only — no meaningful limits)
+    if (key !== "zinc") {
+      const weight = TIER_WEIGHTS[limits.tier];
+      weightedSum += paramScore * weight;
+      totalWeight += weight;
+    }
 
     readings.push({
       name: limits.displayName,
-      value: obs.value,
+      value: normalizedValue,
       unit: limits.unit,
       ukLimit: limits.ukLimit,
       whoGuideline: limits.whoGuideline,
@@ -193,19 +231,27 @@ export function computeScore(
   }
 
   // Compute final score
-  const rawScore = totalWeight > 0 ? weightedSum / totalWeight : 7.5; // default if no data
-  const safetyScore = Math.round(rawScore * 10) / 10;
+  let safetyScore: number;
+  let scoreGrade: ScoreResult["scoreGrade"];
 
-  const scoreGrade =
-    safetyScore >= 9
-      ? "excellent"
-      : safetyScore >= 7
-        ? "good"
-        : safetyScore >= 5
-          ? "fair"
-          : safetyScore >= 3
-            ? "poor"
-            : "very-poor";
+  if (totalWeight === 0) {
+    // No recognized readings with limits — cannot produce a meaningful score
+    safetyScore = -1;
+    scoreGrade = "insufficient-data";
+  } else {
+    const rawScore = weightedSum / totalWeight;
+    safetyScore = Math.round(rawScore * 10) / 10;
+    scoreGrade =
+      safetyScore >= 9
+        ? "excellent"
+        : safetyScore >= 7
+          ? "good"
+          : safetyScore >= 5
+            ? "fair"
+            : safetyScore >= 3
+              ? "poor"
+              : "very-poor";
+  }
 
   // Sort readings: flagged first, then by tier
   readings.sort((a, b) => {

@@ -17,7 +17,7 @@ export interface PostcodeData {
   supplierId: string;
   supplyZone: string;
   safetyScore: number;
-  scoreGrade: "excellent" | "good" | "fair" | "poor" | "very-poor";
+  scoreGrade: "excellent" | "good" | "fair" | "poor" | "very-poor" | "insufficient-data";
   contaminantsTested: number;
   contaminantsFlagged: number;
   pfasDetected: boolean;

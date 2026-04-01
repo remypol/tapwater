@@ -8,12 +8,16 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { FilterCards } from "@/components/filter-cards";
 import { EmailCapture } from "@/components/email-capture";
-import { getPostcodeData } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
 
 interface Props {
   params: Promise<{ district: string }>;
+}
+
+export function generateStaticParams() {
+  return getAllPostcodeDistricts().map((district) => ({ district }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,7 +42,8 @@ export default async function PostcodePage({ params }: Props) {
   const data = getPostcodeData(district);
   if (!data) notFound();
 
-  const scoreColor = getScoreColor(data.safetyScore);
+  const hasData = data.safetyScore >= 0;
+  const scoreColor = hasData ? getScoreColor(data.safetyScore) : "safe";
   const gradientClass = GRADIENT_CLASS[scoreColor];
 
   return (
@@ -47,8 +52,6 @@ export default async function PostcodePage({ params }: Props) {
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/" className="hover:text-accent transition-colors">Postcode</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-ink font-medium">{data.district}</span>
         </nav>
@@ -67,117 +70,129 @@ export default async function PostcodePage({ params }: Props) {
           </p>
         </header>
 
-        {/* Score */}
-        <div className="flex justify-center py-10 lg:py-14 animate-fade-in delay-3">
-          <SafetyScore score={data.safetyScore} size={200} parameterCount={data.contaminantsTested} />
-        </div>
+        {hasData ? (
+          <>
+            {/* Score */}
+            <div className="flex justify-center py-10 lg:py-14 animate-fade-in delay-3">
+              <SafetyScore score={data.safetyScore} size={200} parameterCount={data.contaminantsTested} />
+            </div>
 
-        {/* Stat Cards */}
-        <StatCards
-          contaminantsTested={data.contaminantsTested}
-          contaminantsFlagged={data.contaminantsFlagged}
-          supplier={data.supplier}
-          lastUpdated={data.lastUpdated}
-        />
-
-        {/* PFAS Banner */}
-        {data.pfasDetected && (
-          <div className="mt-6">
-            <PfasBanner
-              detected={data.pfasDetected}
-              level={data.pfasLevel}
-              postcode={data.district}
+            {/* Stat Cards */}
+            <StatCards
+              contaminantsTested={data.contaminantsTested}
+              contaminantsFlagged={data.contaminantsFlagged}
+              supplier={data.supplier}
+              lastUpdated={data.lastUpdated}
             />
+
+            {/* PFAS Banner */}
+            {data.pfasDetected && (
+              <div className="mt-6">
+                <PfasBanner
+                  detected={data.pfasDetected}
+                  level={data.pfasLevel}
+                  postcode={data.district}
+                />
+              </div>
+            )}
+
+            {/* Summary — the GEO-optimised opening paragraph */}
+            <div className="mt-10 max-w-3xl">
+              <p className="text-base text-body leading-relaxed">
+                Your water in {data.district} is supplied by{" "}
+                <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
+                  {data.supplier}
+                </Link>
+                . Based on the latest data (sampled {data.lastSampleDate}),{" "}
+                <span className="font-data">{data.contaminantsTested}</span> contaminants
+                were tested with{" "}
+                <span className="font-data">{data.contaminantsFlagged}</span> exceeding
+                recommended levels. The overall water quality score for {data.district} is{" "}
+                <span className="font-data font-bold">{data.safetyScore}/10</span>.
+              </p>
+            </div>
+
+            {/* Contaminant Data */}
+            <section className="mt-12">
+              <h2 className="font-display text-2xl text-ink italic">
+                What&apos;s in your water
+              </h2>
+              <p className="text-sm text-muted mt-1 mb-5">
+                All readings from the latest monitoring data for your supply zone.
+              </p>
+              <ContaminantTable readings={data.readings} />
+            </section>
+
+            {/* Trend Chart — simple bar visualisation */}
+            <section className="mt-12">
+              <h2 className="font-display text-2xl text-ink italic">
+                Water quality trend
+              </h2>
+              <p className="text-sm text-muted mt-1">
+                {data.district} quality score, 2020&ndash;2026
+              </p>
+              <div className="card-elevated mt-4 p-8 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
+                <div className="flex items-end gap-2">
+                  {data.historicalScores.map((h) => {
+                    const height = Math.max(24, (h.score / 10) * 140);
+                    const color =
+                      h.score >= 7
+                        ? "bg-[var(--color-safe)]"
+                        : h.score >= 5
+                          ? "bg-[var(--color-warning)]"
+                          : "bg-[var(--color-danger)]";
+                    return (
+                      <div key={h.year} className="flex flex-col items-center gap-1.5">
+                        <span className="font-data text-[10px] text-faint">{h.score}</span>
+                        <div
+                          className={`w-7 sm:w-9 rounded-t-sm ${color} opacity-80`}
+                          style={{ height }}
+                        />
+                        <span className="text-[10px] text-faint font-data">{h.year}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-faint mt-5">
+                  Full interactive chart in development
+                </p>
+              </div>
+            </section>
+
+            {/* Comparison Tool Placeholder */}
+            <section className="mt-12">
+              <h2 className="font-display text-2xl text-ink italic">
+                Compare water quality
+              </h2>
+              <p className="text-sm text-muted mt-1">
+                Moving house? See how your water compares.
+              </p>
+              <div className="card mt-4 p-8 flex items-center justify-center" style={{ minHeight: 100 }}>
+                <p className="text-sm text-faint">Postcode comparison tool in development</p>
+              </div>
+            </section>
+
+            {/* Filter Recommendations */}
+            <div className="mt-12">
+              <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
+            </div>
+          </>
+        ) : (
+          /* Insufficient data state */
+          <div className="mt-10 card-elevated rounded-2xl p-8 max-w-2xl">
+            <p className="font-display text-2xl text-ink italic">Insufficient monitoring data</p>
+            <p className="text-base text-body leading-relaxed mt-3">
+              We don&apos;t have enough Environment Agency data for this area to calculate a score. This doesn&apos;t mean your water is unsafe.
+            </p>
           </div>
         )}
 
-        {/* Summary — the GEO-optimised opening paragraph */}
-        <div className="mt-10 max-w-3xl">
-          <p className="text-base text-body leading-relaxed">
-            Your water in {data.district} is supplied by{" "}
-            <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
-              {data.supplier}
-            </Link>
-            . Based on the latest data (sampled {data.lastSampleDate}),{" "}
-            <span className="font-data">{data.contaminantsTested}</span> contaminants
-            were tested with{" "}
-            <span className="font-data">{data.contaminantsFlagged}</span> exceeding
-            recommended levels. The overall water quality score for {data.district} is{" "}
-            <span className="font-data font-bold">{data.safetyScore}/10</span>.
-          </p>
-        </div>
-
-        {/* Contaminant Data */}
-        <section className="mt-12">
-          <h2 className="font-display text-2xl text-ink italic">
-            What&apos;s in your water
-          </h2>
-          <p className="text-sm text-muted mt-1 mb-5">
-            All readings from the latest monitoring data for your supply zone.
-          </p>
-          <ContaminantTable readings={data.readings} />
-        </section>
-
-        {/* Trend Chart — simple bar visualisation */}
-        <section className="mt-12">
-          <h2 className="font-display text-2xl text-ink italic">
-            Water quality trend
-          </h2>
-          <p className="text-sm text-muted mt-1">
-            {data.district} quality score, 2020&ndash;2026
-          </p>
-          <div className="card-elevated mt-4 p-8 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
-            <div className="flex items-end gap-2">
-              {data.historicalScores.map((h) => {
-                const height = Math.max(24, (h.score / 10) * 140);
-                const color =
-                  h.score >= 7
-                    ? "bg-[var(--color-safe)]"
-                    : h.score >= 5
-                      ? "bg-[var(--color-warning)]"
-                      : "bg-[var(--color-danger)]";
-                return (
-                  <div key={h.year} className="flex flex-col items-center gap-1.5">
-                    <span className="font-data text-[10px] text-faint">{h.score}</span>
-                    <div
-                      className={`w-7 sm:w-9 rounded-t-sm ${color} opacity-80`}
-                      style={{ height }}
-                    />
-                    <span className="text-[10px] text-faint font-data">{h.year}</span>
-                  </div>
-                );
-              })}
-            </div>
-            <p className="text-xs text-faint mt-5">
-              Full interactive chart in development
-            </p>
-          </div>
-        </section>
-
-        {/* Comparison Tool Placeholder */}
-        <section className="mt-12">
-          <h2 className="font-display text-2xl text-ink italic">
-            Compare water quality
-          </h2>
-          <p className="text-sm text-muted mt-1">
-            Moving house? See how your water compares.
-          </p>
-          <div className="card mt-4 p-8 flex items-center justify-center" style={{ minHeight: 100 }}>
-            <p className="text-sm text-faint">Postcode comparison tool in development</p>
-          </div>
-        </section>
-
-        {/* Email Capture */}
+        {/* Email Capture — always shown */}
         <div className="mt-12">
           <EmailCapture postcode={data.district} />
         </div>
 
-        {/* Filter Recommendations */}
-        <div className="mt-12">
-          <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
-        </div>
-
-        {/* Nearby Areas */}
+        {/* Nearby Areas — always shown */}
         <section className="mt-12">
           <h2 className="font-display text-2xl text-ink italic">
             Nearby areas
@@ -192,7 +207,7 @@ export default async function PostcodePage({ params }: Props) {
           </div>
         </section>
 
-        {/* Supplier Card */}
+        {/* Supplier Card — always shown */}
         <div className="mt-10">
           <Link
             href={`/supplier/${data.supplierId}/`}
@@ -215,7 +230,8 @@ export default async function PostcodePage({ params }: Props) {
 
         {/* Methodology Footer */}
         <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
-          Based on {data.contaminantsTested} regulated parameters. See our{" "}
+          {hasData ? <>Based on {data.contaminantsTested} regulated parameters. </> : null}
+          See our{" "}
           <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
             methodology
           </Link>{" "}

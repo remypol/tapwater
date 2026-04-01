@@ -72,6 +72,10 @@ const REMOVAL_DESCRIPTIONS: Record<string, string> = {
 
 type Props = { params: Promise<{ slug: string }> };
 
+export function generateStaticParams() {
+  return Object.keys(CONTAMINANTS).map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const contaminant = CONTAMINANTS[slug];
@@ -294,7 +298,7 @@ export default async function ContaminantPage({ params }: Props) {
       {/* 9. Filter link */}
       <div className="mt-8">
         <Link
-          href={`/filters/${slug}`}
+          href={`/contaminant/${slug}`}
           className="inline-flex items-center gap-2 text-blue-600 font-medium hover:underline"
         >
           View filters that remove {contaminant.name} &rarr;

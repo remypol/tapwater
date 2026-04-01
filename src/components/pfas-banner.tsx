@@ -47,7 +47,7 @@ export function PfasBanner({ detected, level, postcode }: PfasBannerProps) {
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
         <Link
-          href="/filters/pfas"
+          href="/contaminant/pfas"
           className="inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 hover:underline underline-offset-2"
         >
           Filters that remove PFAS

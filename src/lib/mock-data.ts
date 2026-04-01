@@ -193,11 +193,11 @@ export const MOCK_FILTERS: FilterProduct[] = [
 ];
 
 export const MOCK_SUPPLIERS: SupplierData[] = [
-  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 15, complianceRate: 99.96, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1B", "E1", "W1", "EC1", "N1", "SE1", "NW1"] },
-  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8, complianceRate: 99.95, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "CV1", "DE1", "NG1", "ST1"] },
-  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7, complianceRate: 99.97, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "L1", "PR1", "WA1", "BL1"] },
-  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5, complianceRate: 99.94, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "BD1", "HU1", "S1", "HG1", "YO1"] },
-  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.5, complianceRate: 99.93, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1", "IP1", "NR1", "PE1"] },
+  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 15, complianceRate: 99.96, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1V", "E1", "W2", "N1", "SE1", "NW1", "OX1"] },
+  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8, complianceRate: 99.95, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "B5", "B15", "NG1", "NG7"] },
+  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7, complianceRate: 99.97, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "M4", "M20", "L1", "L2"] },
+  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5, complianceRate: 99.94, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "LS2", "LS6", "S1", "S10"] },
+  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.5, complianceRate: 99.93, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1"] },
 ];
 
-export const MOST_CHECKED = ["SW1A", "E1", "M1", "B1", "LS1", "BS1", "EH1", "CF1", "NE1", "G1"];
+export const MOST_CHECKED = ["SW1A", "E1", "M1", "B1", "LS1", "BS1", "EH1", "CF10", "NE1", "OX1"];
