@@ -3,7 +3,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED, MOCK_SUPPLIERS } from "@/lib/mock-data";
-import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts, getMapPostcodes } from "@/lib/data";
+import { LazyMap } from "@/components/lazy-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import {
@@ -125,6 +126,17 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* Interactive Map */}
+      <section className="mt-20">
+        <h2 className="font-display text-2xl text-ink italic">
+          Water quality across the UK
+        </h2>
+        <p className="text-sm text-muted mt-1 mb-4">
+          Click any marker to see the full water quality report for that area.
+        </p>
+        <LazyMap postcodes={getMapPostcodes()} />
+      </section>
 
       {/* Areas of concern */}
       <section className="mt-20">

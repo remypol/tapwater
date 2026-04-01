@@ -138,3 +138,26 @@ export function getPostcodesByCity(city: string): PostcodeData[] {
     (p) => p.city.toLowerCase() === city.toLowerCase()
   );
 }
+
+export interface MapPostcode {
+  district: string;
+  areaName: string;
+  lat: number;
+  lng: number;
+  score: number;
+  scoreGrade: string;
+}
+
+export function getMapPostcodes(): MapPostcode[] {
+  return typed.map((entry) => {
+    const data = postcodeCache.get(entry.district.toUpperCase());
+    return {
+      district: entry.district,
+      areaName: entry.areaName,
+      lat: entry.latitude,
+      lng: entry.longitude,
+      score: data?.safetyScore ?? -1,
+      scoreGrade: data?.scoreGrade ?? "insufficient-data",
+    };
+  });
+}
