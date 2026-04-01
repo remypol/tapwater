@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin, Building2, ExternalLink } from "lucide-react";
+import { ChevronRight, MapPin, Building2, ExternalLink, ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
 import { SafetyScore } from "@/components/safety-score";
 import { StatCards } from "@/components/stat-cards";
 import { PfasBanner } from "@/components/pfas-banner";
@@ -37,6 +37,69 @@ const GRADIENT_CLASS = {
   danger: "bg-score-danger",
 } as const;
 
+function getWhatThisMeans(score: number, district: string): {
+  text: string;
+  borderColor: string;
+  textColor: string;
+  Icon: React.ElementType;
+} {
+  if (score >= 9) {
+    return {
+      text: `Water quality in ${district} is excellent. All tested parameters are well within regulatory limits.`,
+      borderColor: "border-l-[var(--color-safe)]",
+      textColor: "text-[var(--color-safe)]",
+      Icon: ShieldCheck,
+    };
+  }
+  if (score >= 7) {
+    return {
+      text: `Water quality in ${district} is good. Most parameters are within limits, though some are worth monitoring.`,
+      borderColor: "border-l-[var(--color-safe)]",
+      textColor: "text-[var(--color-safe)]",
+      Icon: ShieldCheck,
+    };
+  }
+  if (score >= 5) {
+    return {
+      text: `Water quality in ${district} is fair. Several parameters are elevated and may warrant attention.`,
+      borderColor: "border-l-[var(--color-warning)]",
+      textColor: "text-[var(--color-warning)]",
+      Icon: ShieldAlert,
+    };
+  }
+  if (score >= 3) {
+    return {
+      text: `Water quality in ${district} is poor. Multiple contaminants exceed recommended guidelines.`,
+      borderColor: "border-l-[var(--color-danger)]",
+      textColor: "text-[var(--color-danger)]",
+      Icon: ShieldX,
+    };
+  }
+  return {
+    text: `Water quality in ${district} is very poor. Significant contamination has been detected in environmental monitoring.`,
+    borderColor: "border-l-[var(--color-danger)]",
+    textColor: "text-[var(--color-danger)]",
+    Icon: ShieldX,
+  };
+}
+
+function getTrendNote(historicalScores: { year: number; score: number }[]): string {
+  if (historicalScores.length < 2) return "";
+  const oldest = historicalScores[0].score;
+  const newest = historicalScores[historicalScores.length - 1].score;
+  const delta = newest - oldest;
+  if (delta > 0.5) return "Water quality has improved over the past 6 years.";
+  if (delta < -0.5) return "Water quality has declined — worth monitoring.";
+  return "Water quality has remained stable.";
+}
+
+function getScoreBadgeColor(score: number): string {
+  const color = getScoreColor(score);
+  if (color === "safe") return "text-[var(--color-safe)]";
+  if (color === "warning") return "text-[var(--color-warning)]";
+  return "text-[var(--color-danger)]";
+}
+
 export default async function PostcodePage({ params }: Props) {
   const { district } = await params;
   const data = getPostcodeData(district);
@@ -45,6 +108,12 @@ export default async function PostcodePage({ params }: Props) {
   const hasData = data.safetyScore >= 0;
   const scoreColor = hasData ? getScoreColor(data.safetyScore) : "safe";
   const gradientClass = GRADIENT_CLASS[scoreColor];
+
+  // Pre-fetch nearby postcode data for the enriched nearby section
+  const nearbyData = data.nearbyPostcodes.map((pc) => ({
+    code: pc,
+    data: getPostcodeData(pc),
+  }));
 
   return (
     <div className={gradientClass}>
@@ -112,8 +181,21 @@ export default async function PostcodePage({ params }: Props) {
               </p>
             </div>
 
+            {/* What this means — contextual callout */}
+            {(() => {
+              const { text, borderColor, textColor, Icon } = getWhatThisMeans(data.safetyScore, data.district);
+              return (
+                <div className={`card p-5 mt-5 max-w-3xl border-l-3 ${borderColor} flex items-start gap-3`}>
+                  <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${textColor}`} />
+                  <p className="text-sm text-body leading-relaxed">{text}</p>
+                </div>
+              );
+            })()}
+
+            <hr className="border-rule mt-10" />
+
             {/* Contaminant Data */}
-            <section className="mt-12">
+            <section className="bg-surface -mx-5 px-5 py-8 mt-0">
               <h2 className="font-display text-2xl text-ink italic">
                 What&apos;s in your water
               </h2>
@@ -123,8 +205,10 @@ export default async function PostcodePage({ params }: Props) {
               <ContaminantTable readings={data.readings} />
             </section>
 
+            <hr className="border-rule" />
+
             {/* Trend Chart — simple bar visualisation */}
-            <section className="mt-12">
+            <section className="mt-8">
               <h2 className="font-display text-2xl text-ink italic">
                 Water quality trend
               </h2>
@@ -153,27 +237,26 @@ export default async function PostcodePage({ params }: Props) {
                     );
                   })}
                 </div>
-                <p className="text-xs text-faint mt-5">
-                  Full interactive chart in development
-                </p>
+                {(() => {
+                  const note = getTrendNote(data.historicalScores);
+                  return note ? (
+                    <p className="text-sm text-muted italic mt-2">{note}</p>
+                  ) : null;
+                })()}
               </div>
             </section>
 
-            {/* Comparison Tool Placeholder */}
-            <section className="mt-12">
-              <h2 className="font-display text-2xl text-ink italic">
-                Compare water quality
-              </h2>
-              <p className="text-sm text-muted mt-1">
-                Moving house? See how your water compares.
-              </p>
-              <div className="card mt-4 p-8 flex items-center justify-center" style={{ minHeight: 100 }}>
-                <p className="text-sm text-faint">Postcode comparison tool in development</p>
-              </div>
-            </section>
+            <hr className="border-rule mt-10" />
+
+            {/* Email Capture — lighter ask, comes before filter recommendations */}
+            <div className="mt-8">
+              <EmailCapture postcode={data.district} />
+            </div>
+
+            <hr className="border-rule mt-10" />
 
             {/* Filter Recommendations */}
-            <div className="mt-12">
+            <div className="mt-8">
               <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
             </div>
           </>
@@ -187,23 +270,35 @@ export default async function PostcodePage({ params }: Props) {
           </div>
         )}
 
-        {/* Email Capture — always shown */}
-        <div className="mt-12">
-          <EmailCapture postcode={data.district} />
-        </div>
+        <hr className="border-rule mt-10" />
 
-        {/* Nearby Areas — always shown */}
-        <section className="mt-12">
+        {/* Nearby Areas — enriched with score previews */}
+        <section className="mt-8">
           <h2 className="font-display text-2xl text-ink italic">
             Nearby areas
           </h2>
           <div className="flex flex-wrap gap-2 mt-4">
-            {data.nearbyPostcodes.map((pc) => (
-              <Link key={pc} href={`/postcode/${pc}/`} className="pill">
-                <MapPin className="w-3 h-3 text-faint mr-1.5" />
-                {pc}
-              </Link>
-            ))}
+            {nearbyData.map(({ code, data: pcData }) =>
+              pcData ? (
+                <Link
+                  key={code}
+                  href={`/postcode/${code}/`}
+                  className="card py-2 px-3 inline-flex items-center gap-2"
+                >
+                  <MapPin className="w-3 h-3 text-faint shrink-0" />
+                  <span className="text-sm text-ink font-medium">{code}</span>
+                  <span className="text-xs text-muted">{pcData.areaName}</span>
+                  <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pcData.safetyScore)}`}>
+                    {pcData.safetyScore}
+                  </span>
+                </Link>
+              ) : (
+                <Link key={code} href={`/postcode/${code}/`} className="pill">
+                  <MapPin className="w-3 h-3 text-faint mr-1.5" />
+                  {code}
+                </Link>
+              )
+            )}
           </div>
         </section>
 
