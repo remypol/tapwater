@@ -8,7 +8,8 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { FilterCards } from "@/components/filter-cards";
 import { EmailCapture } from "@/components/email-capture";
-import { MOCK_POSTCODES, MOCK_FILTERS } from "@/lib/mock-data";
+import { getPostcodeData } from "@/lib/data";
+import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
 
 interface Props {
@@ -17,7 +18,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { district } = await params;
-  const data = MOCK_POSTCODES[district.toUpperCase()];
+  const data = getPostcodeData(district);
   if (!data) return { title: "Not Found" };
 
   return {
@@ -34,7 +35,7 @@ const GRADIENT_CLASS = {
 
 export default async function PostcodePage({ params }: Props) {
   const { district } = await params;
-  const data = MOCK_POSTCODES[district.toUpperCase()];
+  const data = getPostcodeData(district);
   if (!data) notFound();
 
   const scoreColor = getScoreColor(data.safetyScore);

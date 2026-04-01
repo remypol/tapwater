@@ -1,0 +1,5926 @@
+[
+  {
+    "district": "SW1A",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.504521769230756,
+    "longitude": -0.13222562937062937,
+    "samplingPointCount": 20,
+    "recentObservations": 100,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.8,
+        "unit": "PHUNITS",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 24.6,
+        "unit": "CEL",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 46,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.092,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.082,
+        "unit": "mg/l",
+        "date": "2002-01-20T09:00:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 4.8,
+        "unit": "mg/l",
+        "date": "2002-01-20T09:00:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      }
+    ]
+  },
+  {
+    "district": "SW1V",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.48954067015711,
+    "longitude": -0.14001318324607331,
+    "samplingPointCount": 20,
+    "recentObservations": 145,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8,
+        "unit": "PHUNITS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 7.6,
+        "unit": "CEL",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.032,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.78,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 205,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 74.6,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 47,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 80.5,
+        "unit": "%",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 9.68,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.2,
+        "unit": "mg/l",
+        "date": "2000-02-27T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.002,
+        "unit": "mg/l",
+        "date": "2000-03-12T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen : Grant YSI 55 : In Situ",
+        "value": 0.16,
+        "unit": "mg/l",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Confirmed : MF",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Confirmed",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 63,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Presumptive : MF",
+        "value": 54,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1274,
+        "unit": "uS/cm",
+        "date": "2021-07-29T10:38:00",
+        "samplingPoint": "PRINCESS DIANA FOUNTAIN, HYDE PARK"
+      }
+    ]
+  },
+  {
+    "district": "SW3",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.48943471527774,
+    "longitude": -0.16598660185185227,
+    "samplingPointCount": 20,
+    "recentObservations": 145,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8,
+        "unit": "PHUNITS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 7.6,
+        "unit": "CEL",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.032,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.78,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 205,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 74.6,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 47,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 80.5,
+        "unit": "%",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 9.68,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.2,
+        "unit": "mg/l",
+        "date": "2000-02-27T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.002,
+        "unit": "mg/l",
+        "date": "2000-03-12T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen : Grant YSI 55 : In Situ",
+        "value": 0.16,
+        "unit": "mg/l",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Confirmed : MF",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Confirmed",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 63,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Presumptive : MF",
+        "value": 54,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1274,
+        "unit": "uS/cm",
+        "date": "2021-07-29T10:38:00",
+        "samplingPoint": "PRINCESS DIANA FOUNTAIN, HYDE PARK"
+      }
+    ]
+  },
+  {
+    "district": "SW7",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.496294338050326,
+    "longitude": -0.1769917122641505,
+    "samplingPointCount": 20,
+    "recentObservations": 150,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.8,
+        "unit": "PHUNITS",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 16.9,
+        "unit": "CEL",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.066,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 4.13,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0013,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7.6,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 187,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 2.06,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Suite Indicator : D",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 79.6,
+        "unit": "%",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 7.68,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1,
+        "unit": "mg/l",
+        "date": "2001-09-04T03:17:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 205,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 47,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen : Grant YSI 55 : In Situ",
+        "value": 0.16,
+        "unit": "mg/l",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Confirmed : MF",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Confirmed",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 63,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      }
+    ]
+  },
+  {
+    "district": "SE1",
+    "areaName": "Southwark",
+    "city": "Southwark",
+    "region": "England",
+    "latitude": 51.49919075312335,
+    "longitude": -0.09153558720639697,
+    "samplingPointCount": 20,
+    "recentObservations": 134,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.1,
+        "unit": "PHUNITS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.1,
+        "unit": "CEL",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.4,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.37,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 39,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.137,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.031,
+        "unit": "mg/l",
+        "date": "2001-12-02T08:10:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7,
+        "unit": "mg/l",
+        "date": "2002-08-18T16:20:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 36,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 99.7,
+        "unit": "%",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 12.01,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      }
+    ]
+  },
+  {
+    "district": "SE10",
+    "areaName": "Greenwich",
+    "city": "Greenwich",
+    "region": "England",
+    "latitude": 51.48470859831126,
+    "longitude": 0.00044876960193003377,
+    "samplingPointCount": 20,
+    "recentObservations": 109,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.2,
+        "unit": "PHUNITS",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 7.5,
+        "unit": "CEL",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.25,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 72,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.052,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 36,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 99.7,
+        "unit": "%",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 12.01,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1,
+        "unit": "mg/l",
+        "date": "2000-03-12T09:10:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.082,
+        "unit": "mg/l",
+        "date": "2000-05-21T09:15:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 1040,
+        "unit": "uS/cm",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 2.16,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 400,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.804,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 140,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Sodium, Dissolved",
+        "value": 68,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Potassium, Dissolved",
+        "value": 6.5,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      },
+      {
+        "determinand": "Magnesium, Dissolved",
+        "value": 32.2,
+        "unit": "mg/l",
+        "date": "2000-01-10T14:45:00",
+        "samplingPoint": "GREENWICH, PIONEER BH, TUNNEL AVE :TQ37/166D"
+      }
+    ]
+  },
+  {
+    "district": "E1",
+    "areaName": "Hackney",
+    "city": "Hackney",
+    "region": "England",
+    "latitude": 51.51738706196442,
+    "longitude": -0.05940814765985488,
+    "samplingPointCount": 20,
+    "recentObservations": 134,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.1,
+        "unit": "PHUNITS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.1,
+        "unit": "CEL",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.4,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.37,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 39,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.137,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.031,
+        "unit": "mg/l",
+        "date": "2001-12-02T08:10:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7,
+        "unit": "mg/l",
+        "date": "2002-08-18T16:20:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 36,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 99.7,
+        "unit": "%",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 12.01,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      }
+    ]
+  },
+  {
+    "district": "E14",
+    "areaName": "Tower Hamlets",
+    "city": "Tower Hamlets",
+    "region": "England",
+    "latitude": 51.50615169633504,
+    "longitude": -0.018190904188481658,
+    "samplingPointCount": 20,
+    "recentObservations": 119,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.1,
+        "unit": "PHUNITS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.1,
+        "unit": "CEL",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.4,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.37,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 39,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.137,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.031,
+        "unit": "mg/l",
+        "date": "2001-12-02T08:10:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7,
+        "unit": "mg/l",
+        "date": "2002-08-18T16:20:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 184,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 36,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 99.7,
+        "unit": "%",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 12.01,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:50:00",
+        "samplingPoint": "G.U.C. AT SOLEBAY STREET, MILE END"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 1140,
+        "unit": "uS/cm",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 453,
+        "unit": "mg/l",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      },
+      {
+        "determinand": "Bromide",
+        "value": 0.485,
+        "unit": "mg/l",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      },
+      {
+        "determinand": "Cyanide as CN",
+        "value": 0.0069,
+        "unit": "mg/l",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.742,
+        "unit": "mg/l",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 145,
+        "unit": "mg/l",
+        "date": "2004-01-15T11:33:00",
+        "samplingPoint": "HACKNEY, DARO FACTORS LTD B/H :TQ38/001B"
+      }
+    ]
+  },
+  {
+    "district": "W2",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.515132313380306,
+    "longitude": -0.1856613758802816,
+    "samplingPointCount": 20,
+    "recentObservations": 131,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.9,
+        "unit": "PHUNITS",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 4.6,
+        "unit": "CEL",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.062,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.37,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 65.7,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.17,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 10.2,
+        "unit": "mg/l",
+        "date": "2001-07-08T11:55:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 192,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:40:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:40:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 49,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:40:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 97.5,
+        "unit": "%",
+        "date": "2000-02-06T08:40:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 11.47,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:40:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.006,
+        "unit": "mg/l",
+        "date": "2000-05-21T08:45:00",
+        "samplingPoint": "G.U.C. AT CAMLEY STREET, KING'S CROSS"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen : Grant YSI 55 : In Situ",
+        "value": 0.16,
+        "unit": "mg/l",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Confirmed : MF",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Confirmed",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 63,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      }
+    ]
+  },
+  {
+    "district": "W8",
+    "areaName": "Kensington and Chelsea",
+    "city": "Kensington and Chelsea",
+    "region": "England",
+    "latitude": 51.50118552312147,
+    "longitude": -0.19425353323699407,
+    "samplingPointCount": 20,
+    "recentObservations": 150,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.8,
+        "unit": "PHUNITS",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 16.9,
+        "unit": "CEL",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.066,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 4.13,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0013,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7.6,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 187,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 2.06,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Suite Indicator : D",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 79.6,
+        "unit": "%",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 7.68,
+        "unit": "mg/l",
+        "date": "2001-09-04T01:30:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1,
+        "unit": "mg/l",
+        "date": "2001-09-04T03:17:00",
+        "samplingPoint": "BEVERLEY BROOK AT A306, ROCKS LANE"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 205,
+        "unit": "mg/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 47,
+        "unit": "ug/l",
+        "date": "2000-02-06T08:15:00",
+        "samplingPoint": "G.U.C. AT WESTBOURNE TERRACE ROAD, PADDINGTON"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen : Grant YSI 55 : In Situ",
+        "value": 0.16,
+        "unit": "mg/l",
+        "date": "2000-06-19T11:30:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Total : Confirmed : MF",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Confirmed",
+        "value": 45,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 63,
+        "unit": "NO/100ml",
+        "date": "2002-05-15T12:00:00",
+        "samplingPoint": "BATHING WATER - THE SERPENTINE (11940)"
+      }
+    ]
+  },
+  {
+    "district": "N1",
+    "areaName": "Camden",
+    "city": "Camden",
+    "region": "England",
+    "latitude": 51.53776181774474,
+    "longitude": -0.09698946197552447,
+    "samplingPointCount": 20,
+    "recentObservations": 146,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Colour, Filtered",
+        "value": 6.5,
+        "unit": "HAZEN",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 12,
+        "unit": "CEL",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 611,
+        "unit": "uS/cm",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Carbon, Organic, Dissolved as C :- {DOC}",
+        "value": 2.5,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Phosphorus, Total as P",
+        "value": 0.018,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrite, Filtered as N",
+        "value": 0.021,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Chloride, GF/C Filtered",
+        "value": 42,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Alkalinity, Dissolved as CaCO3",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Chlorophyll : Acetone Extract",
+        "value": 6.1,
+        "unit": "ug/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrogen, Total as N",
+        "value": 3.6,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Silicate, Filtered as SiO2",
+        "value": 3.2,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 142.3,
+        "unit": "%",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised, Filtered as N",
+        "value": 3.3,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen, Filtered as N",
+        "value": 0.039,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Orthophosphate, Filtered as P",
+        "value": 0.022,
+        "unit": "mg/l",
+        "date": "2024-10-16T10:51:00",
+        "samplingPoint": "STOKE NEWINGTON WEST RESERVOIR"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.4,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.37,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 39,
+        "unit": "mg/l",
+        "date": "2001-01-21T10:40:00",
+        "samplingPoint": "NATIONAL GRID BONNER HALL BRIDGE CABLE C/W :HACKNEY"
+      }
+    ]
+  },
+  {
+    "district": "NW1",
+    "areaName": "Westminster",
+    "city": "Westminster",
+    "region": "England",
+    "latitude": 51.533365982456424,
+    "longitude": -0.14386622383545103,
+    "samplingPointCount": 20,
+    "recentObservations": 100,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.8,
+        "unit": "PHUNITS",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 24.6,
+        "unit": "CEL",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 7,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 46,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.092,
+        "unit": "mg/l",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-07-08T10:50:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.082,
+        "unit": "mg/l",
+        "date": "2002-01-20T09:00:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 4.8,
+        "unit": "mg/l",
+        "date": "2002-01-20T09:00:00",
+        "samplingPoint": "NATIONAL GRID STURTS LOCK CABLE C/W :ISLINGTON"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2001-01-21T12:30:00",
+        "samplingPoint": "NATIONAL GRID FITZROY BRIDGE CABLE C/W :CAMDEN"
+      }
+    ]
+  },
+  {
+    "district": "NW3",
+    "areaName": "Barnet",
+    "city": "Barnet",
+    "region": "England",
+    "latitude": 51.55235804905662,
+    "longitude": -0.17255419622641496,
+    "samplingPointCount": 20,
+    "recentObservations": 234,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8,
+        "unit": "PHUNITS",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 11.13,
+        "unit": "CEL",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 11.9,
+        "unit": "mg/l",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 4.7,
+        "unit": "mg/l",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 9.2,
+        "unit": "mg/l",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 186,
+        "unit": "mg/l",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 84.8,
+        "unit": "%",
+        "date": "2001-04-27T12:31:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.73,
+        "unit": "mg/l",
+        "date": "2001-05-13T17:01:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.15,
+        "unit": "mg/l",
+        "date": "2001-07-02T13:59:00",
+        "samplingPoint": "BELL LANE SWO :HENDON"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 939,
+        "unit": "uS/cm",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 2.93,
+        "unit": "mg/l",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.27,
+        "unit": "mg/l",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0106,
+        "unit": "mg/l",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 240,
+        "unit": "mg/l",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 6.28,
+        "unit": "mg/l",
+        "date": "2024-06-03T10:26:00",
+        "samplingPoint": "MUTTON BROOK U/S CONFLUENCE WITH DOLLIS BROOK"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 7.88,
+        "unit": "PHUNITS",
+        "date": "2000-01-12T13:57:00",
+        "samplingPoint": "BRENT AT PRIESTLEY WAY, HENDON"
+      },
+      {
+        "determinand": "Suite Indicator : GQA",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-01-12T13:57:00",
+        "samplingPoint": "BRENT AT PRIESTLEY WAY, HENDON"
+      }
+    ]
+  },
+  {
+    "district": "NW10",
+    "areaName": "Hammersmith and Fulham",
+    "city": "Hammersmith and Fulham",
+    "region": "England",
+    "latitude": 51.541178186688285,
+    "longitude": -0.24817176028138507,
+    "samplingPointCount": 13,
+    "recentObservations": 238,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 159,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.9,
+        "unit": "PHUNITS",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 10.48,
+        "unit": "CEL",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 16.2,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 0.2,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.852,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 5.76,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 320,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 600,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.415,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 5.2,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 7.9,
+        "unit": "PHUNITS",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Suite Indicator : E",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Copper",
+        "value": 24.1,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Zinc",
+        "value": 97,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Nickel",
+        "value": 15,
+        "unit": "ug/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 94.5,
+        "unit": "%",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 10.45,
+        "unit": "mg/l",
+        "date": "2000-03-10T10:59:00",
+        "samplingPoint": "ABBEYDALE ROAD SWO :PARK ROYAL"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.002,
+        "unit": "mg/l",
+        "date": "2000-01-12T13:35:00",
+        "samplingPoint": "BRENT AT NEASDEN LANE, WEMBLEY"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 154,
+        "unit": "mg/l",
+        "date": "2000-01-12T13:35:00",
+        "samplingPoint": "BRENT AT NEASDEN LANE, WEMBLEY"
+      }
+    ]
+  },
+  {
+    "district": "N7",
+    "areaName": "Camden",
+    "city": "Camden",
+    "region": "England",
+    "latitude": 51.55332811457177,
+    "longitude": -0.11829031145717475,
+    "samplingPointCount": 20,
+    "recentObservations": 166,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.5,
+        "unit": "PHUNITS",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Colour, Filtered",
+        "value": 6.5,
+        "unit": "HAZEN",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 12,
+        "unit": "CEL",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 611,
+        "unit": "uS/cm",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Carbon, Organic, Dissolved as C :- {DOC}",
+        "value": 2.5,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Phosphorus, Total as P",
+        "value": 0.018,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrite, Filtered as N",
+        "value": 0.021,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Chloride, GF/C Filtered",
+        "value": 42,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Alkalinity, Dissolved as CaCO3",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Chlorophyll : Acetone Extract",
+        "value": 6.1,
+        "unit": "ug/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrogen, Total as N",
+        "value": 3.6,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Silicate, Filtered as SiO2",
+        "value": 3.2,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 142.3,
+        "unit": "%",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised, Filtered as N",
+        "value": 3.3,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen, Filtered as N",
+        "value": 0.039,
+        "unit": "mg/l",
+        "date": "2024-04-19T11:03:00",
+        "samplingPoint": "WOODBERRY WETLANDS"
+      },
+      {
+        "determinand": "Orthophosphate, Filtered as P",
+        "value": 0.022,
+        "unit": "mg/l",
+        "date": "2024-10-16T10:51:00",
+        "samplingPoint": "STOKE NEWINGTON WEST RESERVOIR"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 5.1,
+        "unit": "mg/l",
+        "date": "2000-02-07T14:37:00",
+        "samplingPoint": "MUTTON BROOK AT BELVEDERE COURT, FINCHLEY"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.261,
+        "unit": "mg/l",
+        "date": "2000-02-07T14:37:00",
+        "samplingPoint": "MUTTON BROOK AT BELVEDERE COURT, FINCHLEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3,
+        "unit": "mg/l",
+        "date": "2000-02-07T14:37:00",
+        "samplingPoint": "MUTTON BROOK AT BELVEDERE COURT, FINCHLEY"
+      }
+    ]
+  },
+  {
+    "district": "M1",
+    "areaName": "Manchester",
+    "city": "Manchester",
+    "region": "England",
+    "latitude": 53.477492433333346,
+    "longitude": -2.2362198481481452,
+    "samplingPointCount": 20,
+    "recentObservations": 142,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Number of overflow operations: Annual",
+        "value": 2042,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "FPF % of readings >= 92% of limit when overflowing: Annual",
+        "value": 98.7,
+        "unit": "%",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual median",
+        "value": 1762,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual mean",
+        "value": 1750,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Duration of overflow operation: Annual",
+        "value": 651,
+        "unit": "H (Dec)",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Days without both good FPF and good overflow operation data: Annual",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good overflow operation data: Annual max",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good Flow Passed Forward data: Annual max",
+        "value": 2,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.86,
+        "unit": "PHUNITS",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.6,
+        "unit": "CEL",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 455,
+        "unit": "uS/cm",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 2.02,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.208,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 1.83,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 1.79,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.043,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.00206,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 3,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 135,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 29.3,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      }
+    ]
+  },
+  {
+    "district": "M2",
+    "areaName": "Manchester",
+    "city": "Manchester",
+    "region": "England",
+    "latitude": 53.48044419158876,
+    "longitude": -2.244505981308413,
+    "samplingPointCount": 20,
+    "recentObservations": 174,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 10.2,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 65,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.97,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 9.09,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 8.97,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.122,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 24,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 12.1,
+        "unit": "mg/l",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Flow, instantaneous",
+        "value": 1230,
+        "unit": "l/s",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Laboratory Sample Number : Nottingham OMR",
+        "value": 453583,
+        "unit": "NO.",
+        "date": "2000-01-06T11:20:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 0.517,
+        "unit": "ug/l",
+        "date": "2000-01-21T11:15:00",
+        "samplingPoint": "SALFORD WWTW FINAL EFFLUENT"
+      },
+      {
+        "determinand": "Number of overflow operations: Annual",
+        "value": 2042,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "FPF % of readings >= 92% of limit when overflowing: Annual",
+        "value": 98.7,
+        "unit": "%",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual median",
+        "value": 1762,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual mean",
+        "value": 1750,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Duration of overflow operation: Annual",
+        "value": 651,
+        "unit": "H (Dec)",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Days without both good FPF and good overflow operation data: Annual",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good overflow operation data: Annual max",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good Flow Passed Forward data: Annual max",
+        "value": 2,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.28,
+        "unit": "PHUNITS",
+        "date": "2000-03-07T14:40:00",
+        "samplingPoint": "ESSO (TRAFFORD PARK) CSW FROM MAIN INTERCEPTORESSO PETROLEUM CO LTD,   MANCHESTER TERMINAL, CHURCHILL WAY, TRAFFORD PK"
+      }
+    ]
+  },
+  {
+    "district": "M4",
+    "areaName": "Manchester",
+    "city": "Manchester",
+    "region": "England",
+    "latitude": 53.48500564683303,
+    "longitude": -2.230149642994243,
+    "samplingPointCount": 20,
+    "recentObservations": 151,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2001-10-15T09:30:00",
+        "samplingPoint": "FAILSWORTH STW STORM TANK DISCHARGE , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Laboratory Sample Number : Nottingham OMR",
+        "value": 472620,
+        "unit": "NO.",
+        "date": "2001-10-15T09:30:00",
+        "samplingPoint": "FAILSWORTH STW STORM TANK DISCHARGE , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Flow, instantaneous",
+        "value": 0,
+        "unit": "Ml/d",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 6.28,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 60,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 16.7,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 16.6,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.091,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 21,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 6.1,
+        "unit": "mg/l",
+        "date": "2000-01-26T14:10:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.577,
+        "unit": "mg/l",
+        "date": "2000-02-15T13:50:00",
+        "samplingPoint": "FAILSWORTH STW FINAL EFFLUENT - NITRIFYING FILTERS SIRCO SAMPLE  24 HOURLY SAMPLES"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.86,
+        "unit": "PHUNITS",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.6,
+        "unit": "CEL",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 455,
+        "unit": "uS/cm",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.00206,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 135,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 29.3,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 89,
+        "unit": "%",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 10.9,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Solids, non-volatile at 500 C",
+        "value": 11,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:30:00",
+        "samplingPoint": "PLATT BK U/S CRINGLE BK"
+      }
+    ]
+  },
+  {
+    "district": "M20",
+    "areaName": "Manchester",
+    "city": "Manchester",
+    "region": "England",
+    "latitude": 53.42418946456692,
+    "longitude": -2.2326970472440912,
+    "samplingPointCount": 20,
+    "recentObservations": 140,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 47,
+        "unit": "mg/l",
+        "date": "2001-01-16T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "Date sample data first entered on file.",
+        "value": 2001.0117,
+        "unit": "UNITLESS",
+        "date": "2001-01-16T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "Laboratory Sample Number",
+        "value": 1150645,
+        "unit": "UNITLESS",
+        "date": "2001-01-16T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "Time of amendment",
+        "value": 0.1621,
+        "unit": "UNITLESS",
+        "date": "2001-01-16T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 26,
+        "unit": "mg/l",
+        "date": "2001-02-02T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "Date of amendment",
+        "value": 2001.0208,
+        "unit": "UNITLESS",
+        "date": "2001-02-02T08:04:00",
+        "samplingPoint": "STOCKPORT STW NEW PLANT FINAL EFFLUENTSAMPLED FROM CHANNEL TO RIVER NEAR GAS HOLDER"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 11.5,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.91,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 3.73,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.184,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 14,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 3.35,
+        "unit": "mg/l",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Laboratory Sample Number : Nottingham OMR",
+        "value": 452021,
+        "unit": "NO.",
+        "date": "2000-01-06T13:55:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Flow, instantaneous",
+        "value": 2750,
+        "unit": "m3/h",
+        "date": "2000-01-10T11:20:00",
+        "samplingPoint": "STOCKPORT STW - COMBINED EFFLUENT DISCHARGE TO RIVER MERSEY"
+      },
+      {
+        "determinand": "Number of overflow operations: Annual",
+        "value": 1016,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      },
+      {
+        "determinand": "FPF % of readings >= 92% of limit when overflowing: Annual",
+        "value": 95,
+        "unit": "%",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual median",
+        "value": 1835,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual mean",
+        "value": 1834,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      },
+      {
+        "determinand": "Duration of overflow operation: Annual",
+        "value": 435,
+        "unit": "H (Dec)",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      },
+      {
+        "determinand": "Days without both good FPF and good overflow operation data: Annual",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "STOCKPORT STW STORM TANK EFFLUENTSAMPLED AT STORM TANK OVERFLOW"
+      }
+    ]
+  },
+  {
+    "district": "M60",
+    "areaName": "Salford",
+    "city": "Salford",
+    "region": "England",
+    "latitude": 53.48437068148148,
+    "longitude": -2.2351227999999965,
+    "samplingPointCount": 20,
+    "recentObservations": 142,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Number of overflow operations: Annual",
+        "value": 2042,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "FPF % of readings >= 92% of limit when overflowing: Annual",
+        "value": 98.7,
+        "unit": "%",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual median",
+        "value": 1762,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Flow Passed Forward readings when overflow is operating: Annual mean",
+        "value": 1750,
+        "unit": "l/s",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Duration of overflow operation: Annual",
+        "value": 651,
+        "unit": "H (Dec)",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Days without both good FPF and good overflow operation data: Annual",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good overflow operation data: Annual max",
+        "value": 0,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "Consecutive days without good Flow Passed Forward data: Annual max",
+        "value": 2,
+        "unit": "NO.",
+        "date": "2024-12-31T23:59:00",
+        "samplingPoint": "SALFORD WWTW STORM TANK EFFLUENT"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.86,
+        "unit": "PHUNITS",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 6.6,
+        "unit": "CEL",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 455,
+        "unit": "uS/cm",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 2.02,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.208,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 1.83,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 1.79,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.043,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.00206,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 3,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 135,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 29.3,
+        "unit": "mg/l",
+        "date": "2000-01-10T10:00:00",
+        "samplingPoint": "FALLOWFIELD BROOK AT FOOTBRIDGE D/S WELLINGTON ROAD"
+      }
+    ]
+  },
+  {
+    "district": "B1",
+    "areaName": "Birmingham",
+    "city": "Birmingham",
+    "region": "England",
+    "latitude": 52.47987993124995,
+    "longitude": -1.9093764281250003,
+    "samplingPointCount": 20,
+    "recentObservations": 11,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-04-27T13:00:00",
+        "samplingPoint": "SITE DRAINAGE FROM IM PROPERTIES PLC"
+      }
+    ]
+  },
+  {
+    "district": "B2",
+    "areaName": "Birmingham",
+    "city": "Birmingham",
+    "region": "England",
+    "latitude": 52.488556795106945,
+    "longitude": -1.8968557584097863,
+    "samplingPointCount": 20,
+    "recentObservations": 117,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 500,
+        "unit": "uS/cm",
+        "date": "2000-01-11T12:00:00",
+        "samplingPoint": "RIVER TAME - THOMPSON DRIVE STN UREA SURVEY"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1020,
+        "unit": "mg/l",
+        "date": "2000-01-11T12:00:00",
+        "samplingPoint": "RIVER TAME - THOMPSON DRIVE STN UREA SURVEY"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 2060,
+        "unit": "mg/l",
+        "date": "2000-01-11T12:00:00",
+        "samplingPoint": "RIVER TAME - THOMPSON DRIVE STN UREA SURVEY"
+      },
+      {
+        "determinand": "Urea as N",
+        "value": 1960,
+        "unit": "mg/l",
+        "date": "2000-01-11T12:00:00",
+        "samplingPoint": "RIVER TAME - THOMPSON DRIVE STN UREA SURVEY"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 0.3,
+        "unit": "CEL",
+        "date": "2000-02-11T12:00:00",
+        "samplingPoint": "RIVER TAME - THOMPSON DRIVE STN UREA SURVEY"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.2,
+        "unit": "PHUNITS",
+        "date": "2000-03-24T15:45:00",
+        "samplingPoint": "WASH WATER & SITE DRAINAGE FROM ALLIED BREWERIES LTD"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 13,
+        "unit": "mg/l",
+        "date": "2000-03-24T15:45:00",
+        "samplingPoint": "WASH WATER & SITE DRAINAGE FROM ALLIED BREWERIES LTD"
+      },
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-08-31T11:00:00",
+        "samplingPoint": "WASH WATER & SITE DRAINAGE FROM ALLIED BREWERIES LTD"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 2.68,
+        "unit": "mg/l",
+        "date": "2001-07-31T10:45:00",
+        "samplingPoint": "WASH WATER & SITE DRAINAGE FROM ALLIED BREWERIES LTD"
+      },
+      {
+        "determinand": "Lead",
+        "value": 6.44,
+        "unit": "ug/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 0.249,
+        "unit": "ug/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 8.21,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0031,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 316,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 159,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 1.25,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 17.8,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 97.1,
+        "unit": "mg/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 5.5,
+        "unit": "ug/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      },
+      {
+        "determinand": "Chromium, Dissolved",
+        "value": 1.95,
+        "unit": "ug/l",
+        "date": "2000-01-14T14:15:00",
+        "samplingPoint": "RIVER TAME - SALTLEY"
+      }
+    ]
+  },
+  {
+    "district": "B5",
+    "areaName": "Birmingham",
+    "city": "Birmingham",
+    "region": "England",
+    "latitude": 52.469081358490556,
+    "longitude": -1.897651179245285,
+    "samplingPointCount": 20,
+    "recentObservations": 129,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-04-27T13:00:00",
+        "samplingPoint": "SITE DRAINAGE FROM IM PROPERTIES PLC"
+      },
+      {
+        "determinand": "Lead",
+        "value": 208,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Lead, Dissolved",
+        "value": 2.3,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "pH",
+        "value": 8,
+        "unit": "PHUNITS",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 31.1,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 362,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Cadmium, Dissolved",
+        "value": 0.54,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 1.83,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.37,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.65,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 791,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 109,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 1530,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.098,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Carbon, Organic, Dissolved as C :- {DOC}",
+        "value": 12.5,
+        "unit": "mg/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 86.3,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Zinc, Dissolved",
+        "value": 386,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Chromium, Dissolved",
+        "value": 5.01,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Nickel, Dissolved",
+        "value": 295,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      },
+      {
+        "determinand": "Copper, Dissolved",
+        "value": 61.1,
+        "unit": "ug/l",
+        "date": "2005-01-27T11:35:00",
+        "samplingPoint": "RIVER COLE - BAKELITE STORM WATER SEWER OUTFALL, HAY MILLS, BIRMINGHAM"
+      }
+    ]
+  },
+  {
+    "district": "B15",
+    "areaName": "Birmingham",
+    "city": "Birmingham",
+    "region": "England",
+    "latitude": 52.46629231836735,
+    "longitude": -1.9233169551020408,
+    "samplingPointCount": 20,
+    "recentObservations": 110,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.7,
+        "unit": "PHUNITS",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 3.25,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.226,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.67,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 3.61,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.061,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 85,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 145,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 87.7,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 45.8,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.38,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 11,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 40.1,
+        "unit": "mg/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Copper, Dissolved",
+        "value": 9.7,
+        "unit": "ug/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Zinc",
+        "value": 44.2,
+        "unit": "ug/l",
+        "date": "2000-01-13T12:30:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 5.2,
+        "unit": "CEL",
+        "date": "2000-01-21T12:15:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0019,
+        "unit": "mg/l",
+        "date": "2000-01-21T12:15:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 106,
+        "unit": "%",
+        "date": "2000-01-21T12:15:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Oxygen, Dissolved as O2",
+        "value": 13.4,
+        "unit": "mg/l",
+        "date": "2000-01-21T12:15:00",
+        "samplingPoint": "RIVER COLE - WARWICK RD, GREET"
+      },
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-11-13T12:30:00",
+        "samplingPoint": "COOLING WATER (DIRECT) FROM INDESTRUCTIBLE PAINT CO LTD, 23-25 PENTOS DRIVE, SPARKHILL, BIRMINGHAM"
+      }
+    ]
+  },
+  {
+    "district": "LS1",
+    "areaName": "Leeds",
+    "city": "Leeds",
+    "region": "England",
+    "latitude": 53.797663286806795,
+    "longitude": -1.5512902657743857,
+    "samplingPointCount": 20,
+    "recentObservations": 103,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 26,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 6.1,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 53,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "National Grid Reference : Whole : Field report",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.6,
+        "unit": "PHUNITS",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 934,
+        "unit": "uS/cm",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 1.57,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.348,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 0.195,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 330,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 324,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.35,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 14.6,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 111,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 80.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 6.09,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 26.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 88.7,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Chlorobenzene",
+        "value": 0.64,
+        "unit": "ug/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      }
+    ]
+  },
+  {
+    "district": "LS2",
+    "areaName": "Leeds",
+    "city": "Leeds",
+    "region": "England",
+    "latitude": 53.80256940000001,
+    "longitude": -1.5456467226666668,
+    "samplingPointCount": 20,
+    "recentObservations": 103,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 26,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 6.1,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 53,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "National Grid Reference : Whole : Field report",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.6,
+        "unit": "PHUNITS",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 934,
+        "unit": "uS/cm",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 1.57,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.348,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 0.195,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 330,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 324,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.35,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 14.6,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 111,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 80.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 6.09,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 26.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 88.7,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Chlorobenzene",
+        "value": 0.64,
+        "unit": "ug/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      }
+    ]
+  },
+  {
+    "district": "LS6",
+    "areaName": "Leeds",
+    "city": "Leeds",
+    "region": "England",
+    "latitude": 53.82010850736129,
+    "longitude": -1.5708766579841453,
+    "samplingPointCount": 20,
+    "recentObservations": 103,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 1.6,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 26,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 6.1,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 53,
+        "unit": "mg/l",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "National Grid Reference : Whole : Field report",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2009-10-28T20:30:00",
+        "samplingPoint": "KIRKSTALL (AIRE) (ENVIRONMENTAL MONITORING PROGRAMME)"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.6,
+        "unit": "PHUNITS",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 934,
+        "unit": "uS/cm",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 1.57,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.348,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 0.195,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 330,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 324,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.35,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 14.6,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 111,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 80.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 6.09,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 26.4,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 88.7,
+        "unit": "mg/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      },
+      {
+        "determinand": "Chlorobenzene",
+        "value": 0.64,
+        "unit": "ug/l",
+        "date": "2000-12-05T10:30:00",
+        "samplingPoint": "KIRKSTALL RIAD 2/27/17/136"
+      }
+    ]
+  },
+  {
+    "district": "BS1",
+    "areaName": "Bristol, City of",
+    "city": "Bristol, City of",
+    "region": "England",
+    "latitude": 51.45323875866331,
+    "longitude": -2.5938155173267354,
+    "samplingPointCount": 20,
+    "recentObservations": 142,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 14,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.15,
+        "unit": "PHUNITS",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 1250,
+        "unit": "uS/cm",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Colour, Filtered",
+        "value": 6.6,
+        "unit": "HAZEN",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 43,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 7.9,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 1.67,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.089,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.31,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 385,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 89.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 226,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 75.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 29.4,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 20.6,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 1.5,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Manganese",
+        "value": 589,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Iron",
+        "value": 1390,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Copper",
+        "value": 16.2,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      }
+    ]
+  },
+  {
+    "district": "BS2",
+    "areaName": "Bristol, City of",
+    "city": "Bristol, City of",
+    "region": "England",
+    "latitude": 51.45989214112294,
+    "longitude": -2.5819498452200347,
+    "samplingPointCount": 20,
+    "recentObservations": 90,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 14,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.15,
+        "unit": "PHUNITS",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 1250,
+        "unit": "uS/cm",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Colour, Filtered",
+        "value": 6.6,
+        "unit": "HAZEN",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 43,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 7.9,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 1.67,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.089,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.31,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 385,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 89.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 226,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 75.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 29.4,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 20.6,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 1.5,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Manganese",
+        "value": 589,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Iron",
+        "value": 1390,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Copper",
+        "value": 16.2,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      }
+    ]
+  },
+  {
+    "district": "BS8",
+    "areaName": "North Somerset",
+    "city": "North Somerset",
+    "region": "England",
+    "latitude": 51.45752506746972,
+    "longitude": -2.622256765060244,
+    "samplingPointCount": 20,
+    "recentObservations": 142,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 14,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.15,
+        "unit": "PHUNITS",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 1250,
+        "unit": "uS/cm",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Colour, Filtered",
+        "value": 6.6,
+        "unit": "HAZEN",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 43,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 7.9,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 1.67,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.089,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.31,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 385,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 89.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 226,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 75.3,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 29.4,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 20.6,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 200,
+        "unit": "mg/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 1.5,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Manganese",
+        "value": 589,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Iron",
+        "value": 1390,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      },
+      {
+        "determinand": "Copper",
+        "value": 16.2,
+        "unit": "ug/l",
+        "date": "2005-03-15T12:35:00",
+        "samplingPoint": "PENNYWELL ROAD GROUNDWATER 1"
+      }
+    ]
+  },
+  {
+    "district": "L1",
+    "areaName": "Liverpool",
+    "city": "Liverpool",
+    "region": "England",
+    "latitude": 53.40205348290596,
+    "longitude": -2.9805034871794875,
+    "samplingPointCount": 20,
+    "recentObservations": 128,
+    "pfasDetected": true,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 3.59,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.53,
+        "unit": "PHUNITS",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 17.6,
+        "unit": "CEL",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 11600,
+        "unit": "uS/cm",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 23.3,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Mercury",
+        "value": 0.16,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.905,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 1.71,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 216,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 3750,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 436,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 1760,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 38,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 242,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 335,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Carbon, Organic, Dissolved as C :- {DOC}",
+        "value": 11.7,
+        "unit": "mg/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Chromium",
+        "value": 3.81,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Manganese",
+        "value": 172,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Iron",
+        "value": 470,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      },
+      {
+        "determinand": "Copper",
+        "value": 5.32,
+        "unit": "ug/l",
+        "date": "2001-05-31T12:15:00",
+        "samplingPoint": "30335 AD-HOC @ UK WASTE MANAGEMENT LTD, BROMBOROUGH DOCK NORTH"
+      }
+    ]
+  },
+  {
+    "district": "L2",
+    "areaName": "Liverpool",
+    "city": "Liverpool",
+    "region": "England",
+    "latitude": 53.40671541242936,
+    "longitude": -2.989909870056497,
+    "samplingPointCount": 20,
+    "recentObservations": 152,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 90,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.37,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.63,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 3.52,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.108,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 60,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.58,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Laboratory Sample Number : Nottingham OMR",
+        "value": 404058,
+        "unit": "NO.",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.59,
+        "unit": "PHUNITS",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1800,
+        "unit": "uS/cm",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Solids, non-volatile at 500 C",
+        "value": 33,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 211,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 355,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 229,
+        "unit": "mg/l",
+        "date": "2000-07-26T13:15:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "National Grid Reference : Whole : Field report",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-07-26T13:15:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 15,
+        "unit": "CEL",
+        "date": "2000-01-20T10:30:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Hydrocarbon Oils",
+        "value": 1.78,
+        "unit": "mg/l",
+        "date": "2000-02-23T10:50:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Flow, instantaneous",
+        "value": 0,
+        "unit": "Ml/d",
+        "date": "2000-04-28T13:40:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-04-28T13:40:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Lead",
+        "value": 379,
+        "unit": "ug/l",
+        "date": "2000-01-05T11:30:00",
+        "samplingPoint": "SANDON DOCK WWTW FINAL EFFLUENT OUTLET 1&2 TO RIVER MERSEY"
+      }
+    ]
+  },
+  {
+    "district": "L3",
+    "areaName": "Liverpool",
+    "city": "Liverpool",
+    "region": "England",
+    "latitude": 53.408376384482715,
+    "longitude": -2.9845638448275875,
+    "samplingPointCount": 20,
+    "recentObservations": 152,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 90,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.37,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.63,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 3.52,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.108,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 60,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.58,
+        "unit": "mg/l",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Laboratory Sample Number : Nottingham OMR",
+        "value": 404058,
+        "unit": "NO.",
+        "date": "2000-04-26T14:10:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.59,
+        "unit": "PHUNITS",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1800,
+        "unit": "uS/cm",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Solids, non-volatile at 500 C",
+        "value": 33,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 211,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 355,
+        "unit": "mg/l",
+        "date": "2000-02-22T10:40:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 229,
+        "unit": "mg/l",
+        "date": "2000-07-26T13:15:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "National Grid Reference : Whole : Field report",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-07-26T13:15:00",
+        "samplingPoint": "BIRKENHEAD WWTW -  , NWW LIMITED, LINGLEY MERE, GT SANKEY, WARRINGTON  WA5 3LP"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 15,
+        "unit": "CEL",
+        "date": "2000-01-20T10:30:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Hydrocarbon Oils",
+        "value": 1.78,
+        "unit": "mg/l",
+        "date": "2000-02-23T10:50:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Flow, instantaneous",
+        "value": 0,
+        "unit": "Ml/d",
+        "date": "2000-04-28T13:40:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Site visit only : No sample bottle",
+        "value": 1,
+        "unit": "UNITLESS",
+        "date": "2000-04-28T13:40:00",
+        "samplingPoint": "MOBIL OIL BIRKENHEAD OUTLET 8 TO GREAT CULVERTMANAGER MOBIL OIL CO LTD WALLASEY BRIDGE RD       BIRKENHEAD   MERSEYSIDE"
+      },
+      {
+        "determinand": "Lead",
+        "value": 379,
+        "unit": "ug/l",
+        "date": "2000-01-05T11:30:00",
+        "samplingPoint": "SANDON DOCK WWTW FINAL EFFLUENT OUTLET 1&2 TO RIVER MERSEY"
+      }
+    ]
+  },
+  {
+    "district": "S1",
+    "areaName": "Sheffield",
+    "city": "Sheffield",
+    "region": "England",
+    "latitude": 53.37997112572528,
+    "longitude": -1.4712830793036786,
+    "samplingPointCount": 20,
+    "recentObservations": 168,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 7.49,
+        "unit": "PHUNITS",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1860,
+        "unit": "uS/cm",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 5.35,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 1.38,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 0.178,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.022,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 460,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 556,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 93,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.25,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 17.3,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 421,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 254,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 18.9,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 53.7,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 95.8,
+        "unit": "mg/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Chromium, Dissolved",
+        "value": 2.31,
+        "unit": "ug/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Manganese",
+        "value": 88.5,
+        "unit": "ug/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Iron",
+        "value": 166,
+        "unit": "ug/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      },
+      {
+        "determinand": "Boron",
+        "value": 454,
+        "unit": "ug/l",
+        "date": "2000-10-20T10:30:00",
+        "samplingPoint": "OUTO KUMPO, ATTERCLIFFE, SHEFFIELD"
+      }
+    ]
+  },
+  {
+    "district": "S10",
+    "areaName": "Sheffield",
+    "city": "Sheffield",
+    "region": "England",
+    "latitude": 53.376713927567586,
+    "longitude": -1.5184218086486485,
+    "samplingPointCount": 20,
+    "recentObservations": 116,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 1.45,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "pH",
+        "value": 5.46,
+        "unit": "PHUNITS",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 363,
+        "unit": "uS/cm",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 2.36,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 0.524,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 3.9,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 3.89,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.005,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 55.3,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 60.6,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 8.89,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 41.7,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 44.4,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 3.19,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 4.21,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 15.2,
+        "unit": "mg/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Chloroform :- {Trichloromethane}",
+        "value": 0.49,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Zinc, Dissolved",
+        "value": 27.8,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Nickel, Dissolved",
+        "value": 9.3,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      },
+      {
+        "determinand": "Toluene :- {Methylbenzene}",
+        "value": 0.26,
+        "unit": "ug/l",
+        "date": "2000-10-27T11:25:00",
+        "samplingPoint": "RIVELIN LODGE SPRING, FOX HAGG FARM, RIVELIN 2/27/05/120"
+      }
+    ]
+  },
+  {
+    "district": "EH1",
+    "areaName": "City of Edinburgh",
+    "city": "City of Edinburgh",
+    "region": "Scotland",
+    "latitude": 55.95077116975304,
+    "longitude": -3.1929250648148138,
+    "samplingPointCount": 0,
+    "recentObservations": 0,
+    "pfasDetected": false,
+    "topReadings": []
+  },
+  {
+    "district": "EH3",
+    "areaName": "City of Edinburgh",
+    "city": "City of Edinburgh",
+    "region": "Scotland",
+    "latitude": 55.95189511126009,
+    "longitude": -3.2067764584450407,
+    "samplingPointCount": 0,
+    "recentObservations": 0,
+    "pfasDetected": false,
+    "topReadings": []
+  },
+  {
+    "district": "CF10",
+    "areaName": "Cardiff",
+    "city": "Cardiff",
+    "region": "Wales",
+    "latitude": 51.474771918110235,
+    "longitude": -3.173189321259844,
+    "samplingPointCount": 0,
+    "recentObservations": 0,
+    "pfasDetected": false,
+    "topReadings": []
+  },
+  {
+    "district": "NE1",
+    "areaName": "Newcastle upon Tyne",
+    "city": "Newcastle upon Tyne",
+    "region": "England",
+    "latitude": 54.972417689719634,
+    "longitude": -1.6115534037383168,
+    "samplingPointCount": 20,
+    "recentObservations": 148,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.45,
+        "unit": "PHUNITS",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 5.6,
+        "unit": "CEL",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.25,
+        "unit": "mg/l",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0033,
+        "unit": "mg/l",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "pH : In Situ",
+        "value": 8,
+        "unit": "PHUNITS",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Salinity : In Situ",
+        "value": 0.4,
+        "unit": "g/l",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation",
+        "value": 85,
+        "unit": "%",
+        "date": "2000-02-02T09:05:00",
+        "samplingPoint": "DERWENT AT METRO RADIOS SITE (SURFACE)"
+      },
+      {
+        "determinand": "Escherichia coli : Confirmed : MF",
+        "value": 520,
+        "unit": "NO/100ml",
+        "date": "2025-05-06T13:34:00",
+        "samplingPoint": "DERWENT AT RAIL FOOTBRIDGE U/S TYNE CONFLUENCE"
+      },
+      {
+        "determinand": "Volume of Sample Filtered",
+        "value": 600,
+        "unit": "ml",
+        "date": "2025-05-06T13:34:00",
+        "samplingPoint": "DERWENT AT RAIL FOOTBRIDGE U/S TYNE CONFLUENCE"
+      },
+      {
+        "determinand": "Enterococci: Intestinal: Presumptive: MF",
+        "value": 250,
+        "unit": "CFU/0.1l",
+        "date": "2025-05-15T12:19:00",
+        "samplingPoint": "DERWENT AT RAIL FOOTBRIDGE U/S TYNE CONFLUENCE"
+      },
+      {
+        "determinand": "Enterococci: Intestinal: Confirmed: MF",
+        "value": 100,
+        "unit": "CFU/0.1l",
+        "date": "2025-05-15T12:19:00",
+        "samplingPoint": "DERWENT AT RAIL FOOTBRIDGE U/S TYNE CONFLUENCE"
+      },
+      {
+        "determinand": "Lead",
+        "value": 0.837,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 2.5,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.99,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 2.96,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.028,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 4,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 385,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 230,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 21.4,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      }
+    ]
+  },
+  {
+    "district": "NE2",
+    "areaName": "Newcastle upon Tyne",
+    "city": "Newcastle upon Tyne",
+    "region": "England",
+    "latitude": 54.987068896281755,
+    "longitude": -1.6059516771037174,
+    "samplingPointCount": 20,
+    "recentObservations": 78,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Lead",
+        "value": 0.837,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "pH",
+        "value": 8.13,
+        "unit": "PHUNITS",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 2.9,
+        "unit": "CEL",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 2.5,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.177,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 2.99,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 2.96,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.028,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.0019,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 4,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 385,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 230,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 21.4,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 119,
+        "unit": "mg/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Zinc, Dissolved",
+        "value": 7.72,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Iron",
+        "value": 253,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Boron",
+        "value": 103,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Copper, Dissolved",
+        "value": 9.04,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Copper",
+        "value": 12,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      },
+      {
+        "determinand": "Zinc",
+        "value": 9.3,
+        "unit": "ug/l",
+        "date": "2000-01-10T11:10:00",
+        "samplingPoint": "OUSE BURN AT JESMOND DENE"
+      }
+    ]
+  },
+  {
+    "district": "NG1",
+    "areaName": "Nottingham",
+    "city": "Nottingham",
+    "region": "England",
+    "latitude": 52.95478375113793,
+    "longitude": -1.1483737754173002,
+    "samplingPointCount": 20,
+    "recentObservations": 67,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Temperature of Water",
+        "value": 32.3,
+        "unit": "CEL",
+        "date": "2015-12-03T09:42:00",
+        "samplingPoint": "ABSTRACTED GROUNDWATER USED IN NOTTINGHAM UNIVERSITY HUMANITIES BUILDING HEAT EXCHANGER"
+      },
+      {
+        "determinand": "Cadmium : Dry Wt",
+        "value": 3.98,
+        "unit": "mg/kg",
+        "date": "2000-12-29T12:00:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Residual mass: after drying at 105 C",
+        "value": 39.1,
+        "unit": "%",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Copper : Dry Wt",
+        "value": 118,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Magnesium : Dry Wt",
+        "value": 8240,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Zinc : Dry Wt",
+        "value": 468,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Mercury : Dry Wt",
+        "value": 0.434,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Lead : Dry Wt",
+        "value": 251,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Chromium : Dry Wt",
+        "value": 50.1,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Nickel : Dry Wt",
+        "value": 54.1,
+        "unit": "mg/kg",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Solids, Volatile at 550 C",
+        "value": 10.8,
+        "unit": "%",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "pH : Solid sample",
+        "value": 7.59,
+        "unit": "PHUNITS",
+        "date": "2001-12-18T14:50:00",
+        "samplingPoint": "RIVER TRENT SEDIMENT SAMPLE AT GUNTHORPE"
+      },
+      {
+        "determinand": "Lead",
+        "value": 6.73,
+        "unit": "ug/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.1,
+        "unit": "PHUNITS",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 1.18,
+        "unit": "ug/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.621,
+        "unit": "mg/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 0.329,
+        "unit": "mg/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Ammonia un-ionised as N",
+        "value": 0.00184,
+        "unit": "mg/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 360,
+        "unit": "mg/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 345,
+        "unit": "mg/l",
+        "date": "2002-10-25T11:10:00",
+        "samplingPoint": "TRADE EFFLUENT (PUMPED GROUNDWATER) FROM BIFFA WASTE SERVICES, PRIVATE ROAD NO.2, COLWICK INDUSTRIAL ESTATE, COLWICK, NOTTINGHAM"
+      }
+    ]
+  },
+  {
+    "district": "NG7",
+    "areaName": "Nottingham",
+    "city": "Nottingham",
+    "region": "England",
+    "latitude": 52.95794367911722,
+    "longitude": -1.1725238336162978,
+    "samplingPointCount": 20,
+    "recentObservations": 62,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Temperature of Water",
+        "value": 32.3,
+        "unit": "CEL",
+        "date": "2015-12-03T09:42:00",
+        "samplingPoint": "ABSTRACTED GROUNDWATER USED IN NOTTINGHAM UNIVERSITY HUMANITIES BUILDING HEAT EXCHANGER"
+      },
+      {
+        "determinand": "Coliforms, Faecal : Presumptive : MF",
+        "value": 21,
+        "unit": "NO/100ml",
+        "date": "2000-02-08T11:10:00",
+        "samplingPoint": "NON-TIDAL TRENT - BACTI - WEST LAKE AT COLWICK PARK"
+      },
+      {
+        "determinand": "Streptococci : Faecal : Presumptive : MF",
+        "value": 180,
+        "unit": "NO/100ml",
+        "date": "2000-02-08T11:10:00",
+        "samplingPoint": "NON-TIDAL TRENT - BACTI - WEST LAKE AT COLWICK PARK"
+      },
+      {
+        "determinand": "Coliforms, Total : Presumptive : MF",
+        "value": 21,
+        "unit": "NO/100ml",
+        "date": "2000-02-08T11:10:00",
+        "samplingPoint": "NON-TIDAL TRENT - BACTI - WEST LAKE AT COLWICK PARK"
+      },
+      {
+        "determinand": "pH",
+        "value": 7.48,
+        "unit": "PHUNITS",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 965,
+        "unit": "uS/cm",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.122,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 6.31,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 6.31,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 416,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 275,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Bromide",
+        "value": 0.337,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 92.5,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.275,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 8.32,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 154,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Sodium",
+        "value": 62.7,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Potassium",
+        "value": 9,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Magnesium",
+        "value": 32.6,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      },
+      {
+        "determinand": "Calcium",
+        "value": 113,
+        "unit": "mg/l",
+        "date": "2007-01-31T10:16:00",
+        "samplingPoint": "TRENT BRIDGE CRICKET GROUND BOREHOLE 03/28/64/0293/1"
+      }
+    ]
+  },
+  {
+    "district": "OX1",
+    "areaName": "Oxford",
+    "city": "Oxford",
+    "region": "England",
+    "latitude": 51.74500215863692,
+    "longitude": -1.261324339600466,
+    "samplingPointCount": 20,
+    "recentObservations": 101,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "Flow : Daily mean",
+        "value": 4.91,
+        "unit": "m3/s",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Lead",
+        "value": 14,
+        "unit": "ug/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "pH",
+        "value": 8.1,
+        "unit": "PHUNITS",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Conductivity at 20 C",
+        "value": 704,
+        "unit": "uS/cm",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 4.07,
+        "unit": "CEL",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 13.2,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Carbon, Organic, Total as C :- {TOC}",
+        "value": 4.12,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Cadmium",
+        "value": 0.3,
+        "unit": "ug/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.054,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 11.6,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 11.5,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.045,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 14,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Hardness, Total as CaCO3",
+        "value": 380,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Alkalinity to pH 4.5 as CaCO3",
+        "value": 243,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Chloride",
+        "value": 41.1,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Fluoride",
+        "value": 0.248,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.291,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Silica, reactive as SiO2",
+        "value": 9.1,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      },
+      {
+        "determinand": "Sulphate as SO4",
+        "value": 88,
+        "unit": "mg/l",
+        "date": "2000-01-25T16:40:00",
+        "samplingPoint": "CHERWELL AT MARSTON ROAD, OXFORD"
+      }
+    ]
+  },
+  {
+    "district": "CB1",
+    "areaName": "Cambridge",
+    "city": "Cambridge",
+    "region": "England",
+    "latitude": 52.19519964230441,
+    "longitude": 0.14140156061908865,
+    "samplingPointCount": 20,
+    "recentObservations": 143,
+    "pfasDetected": false,
+    "topReadings": [
+      {
+        "determinand": "pH",
+        "value": 8.3,
+        "unit": "PHUNITS",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Turbidity",
+        "value": 2.8,
+        "unit": "FTU",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Temperature of Water",
+        "value": 5,
+        "unit": "CEL",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Conductivity at 25 C",
+        "value": 1040,
+        "unit": "uS/cm",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Oxygen, Dissolved, % Saturation : (Laboratory)",
+        "value": 87.9,
+        "unit": "%",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Oxygen, Dissolved : (Laboratory) as O2",
+        "value": 11.2,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Nitrogen, Total Oxidised as N",
+        "value": 14,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Nitrate as N",
+        "value": 13.9,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Nitrite as N",
+        "value": 0.057,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Solids, Suspended at 105 C",
+        "value": 3,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Chloride",
+        "value": 71.7,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Orthophosphate, reactive as P",
+        "value": 0.361,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Nitrogen, Total Inorganic : (Calculated)",
+        "value": 14,
+        "unit": "mg/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Copper, Dissolved",
+        "value": 2.5,
+        "unit": "ug/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Copper",
+        "value": 2.7,
+        "unit": "ug/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Zinc",
+        "value": 14,
+        "unit": "ug/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Chlorophyll : Methanol Extract",
+        "value": 2,
+        "unit": "ug/l",
+        "date": "2000-02-15T11:55:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "Ammoniacal Nitrogen as N",
+        "value": 0.035,
+        "unit": "mg/l",
+        "date": "2000-01-18T11:15:00",
+        "samplingPoint": "BOURN BK.TRIB.CAM CANTELUPE FM.BR."
+      },
+      {
+        "determinand": "BOD : 5 Day ATU",
+        "value": 80.2,
+        "unit": "mg/l",
+        "date": "2000-08-17T12:30:00",
+        "samplingPoint": "NEWFIELDS CARAVAN SITE MILTON"
+      },
+      {
+        "determinand": "Chemical Oxygen Demand :- {COD}",
+        "value": 248,
+        "unit": "mg/l",
+        "date": "2000-08-17T12:30:00",
+        "samplingPoint": "NEWFIELDS CARAVAN SITE MILTON"
+      }
+    ]
+  }
+]

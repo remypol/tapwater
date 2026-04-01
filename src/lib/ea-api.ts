@@ -185,25 +185,23 @@ export async function fetchObservations(
     return members.map((item: unknown) => {
       const obs = item as Record<string, unknown>;
 
-      // Determinand: nested object with prefLabel + notation
-      const det = nested(obs, "determinand");
+      // EA API v1.2 field names (verified April 2026):
+      // observedProperty = determinand (nested with prefLabel + notation)
+      // hasSimpleResult = value
+      // hasUnit = unit (string)
+      // phenomenonTime = sample date
+      // hasSamplingPoint = sampling point info
+      const det = nested(obs, "observedProperty");
       const detLabel = det ? str(det, "prefLabel") : "";
       const detNotation = det ? str(det, "notation") : "";
 
-      // Unit: nested object with prefLabel
-      const unitObj = nested(obs, "unit");
-      const unit = unitObj ? str(unitObj, "prefLabel") : "";
+      const unit = typeof obs.hasUnit === "string" ? obs.hasUnit : "";
+      const sampleDate = typeof obs.phenomenonTime === "string" ? obs.phenomenonTime : "";
 
-      // Sample: nested with sampleDateTime
-      const sample = nested(obs, "sample");
-      const sampleDate = sample ? str(sample, "sampleDateTime") : "";
-
-      // Sampling point label
-      const spObj = nested(obs, "samplingPoint");
+      const spObj = nested(obs, "hasSamplingPoint");
       const spLabel = spObj ? str(spObj, "prefLabel") : samplingPointId;
 
-      // Value: result field
-      const rawValue = (obs as Record<string, unknown>)["result"];
+      const rawValue = obs.hasSimpleResult;
       const value = typeof rawValue === "number" ? rawValue : parseFloat(String(rawValue ?? "0"));
 
       return {
