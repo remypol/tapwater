@@ -24,14 +24,14 @@
   --color-muted: #6b7280;
   --color-faint: #9ca3af;
   --color-surface: #ffffff;
-  --color-wash: #f9fafb;
+  --color-wash: #f9fafb; /* overridden in :root below */
   --color-rule: #e5e7eb;
   --color-rule-strong: #d1d5db;
 
   /* Accent */
-  --color-accent: #1d4ed8;
-  --color-accent-hover: #1e40af;
-  --color-accent-light: #dbeafe;
+  --color-accent: #0891b2;
+  --color-accent-hover: #0e7490;
+  --color-accent-light: #ecfeff;
 
   /* Fonts */
   --font-display: var(--font-instrument-serif);
@@ -41,6 +41,10 @@
 
 :root {
   color-scheme: light;
+  --color-wash: #f0f9ff;
+  --color-accent: #0891b2;
+  --color-accent-hover: #0e7490;
+  --color-accent-light: #ecfeff;
 }
 
 body {
@@ -69,26 +73,34 @@ body {
 
 .bg-hero {
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(29, 78, 216, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(124, 58, 237, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 55% at 40% -5%, rgba(8, 145, 178, 0.08) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 85% 15%, rgba(14, 116, 144, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 15% 30%, rgba(6, 182, 212, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 60% at 70% 80%, rgba(8, 145, 178, 0.03) 0%, transparent 60%),
     var(--color-wash);
 }
 
 .bg-score-safe {
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(22, 163, 74, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(22, 163, 74, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 15% 60%, rgba(8, 145, 178, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 85% 40%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
     var(--color-wash);
 }
 
 .bg-score-warning {
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(217, 119, 6, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(217, 119, 6, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 15% 60%, rgba(8, 145, 178, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 85% 40%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
     var(--color-wash);
 }
 
 .bg-score-danger {
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(220, 38, 38, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(220, 38, 38, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 15% 60%, rgba(8, 145, 178, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 85% 40%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
     var(--color-wash);
 }
 
@@ -152,12 +164,17 @@ body {
   background: var(--color-surface);
   border: 1px solid var(--color-rule);
   border-radius: 12px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.25s ease-out, box-shadow 0.25s ease-out, transform 0.25s ease-out;
 }
 
 .card:hover {
   border-color: var(--color-rule-strong);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 16px rgba(8, 145, 178, 0.06);
+  transform: translateY(-1px);
+}
+
+.card:active {
+  transform: scale(0.98);
 }
 
 .card-elevated {
@@ -167,6 +184,51 @@ body {
     0 0 0 1px rgba(0, 0, 0, 0.03),
     0 1px 3px rgba(0, 0, 0, 0.04),
     0 6px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Water-Native Animations ── */
+
+@keyframes wave {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(4px) translateY(-3px); }
+  50% { transform: translateX(-2px) translateY(3px); }
+  75% { transform: translateX(-4px) translateY(-1px); }
+}
+
+@keyframes wave2 {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-3px) translateY(2px); }
+  50% { transform: translateX(4px) translateY(-2px); }
+  75% { transform: translateX(2px) translateY(3px); }
+}
+
+@keyframes icon-spring {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes water-rise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(var(--water-offset, 0%)); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(8, 145, 178, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2); }
+}
+
+.animate-icon-spring {
+  animation: icon-spring 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-water-rise {
+  animation: water-rise 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ── Reduced Motion ── */
