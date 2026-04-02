@@ -26,26 +26,23 @@ export function StatCards({
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
 
       {/* Parameters Tested */}
-      <div className="card p-5 animate-fade-up delay-1">
-        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center mb-3">
+      <div className="card p-6 animate-fade-up delay-1">
+        <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
           <FlaskConical className="w-4 h-4 text-blue-600" aria-hidden="true" />
         </div>
         <p className="font-data text-2xl font-bold" style={{ color: "var(--color-ink)" }}>
           {contaminantsTested}
         </p>
-        <p
-          className="mt-1 text-xs uppercase tracking-wider"
-          style={{ color: "var(--color-muted)" }}
-        >
+        <p className="mt-1 text-sm text-muted">
           Tests run
         </p>
       </div>
 
       {/* Flagged */}
-      <div className="card p-5 animate-fade-up delay-2">
+      <div className="card p-6 animate-fade-up delay-2">
         <div
           className={[
-            "w-8 h-8 rounded-lg flex items-center justify-center mb-3",
+            "w-9 h-9 rounded-xl flex items-center justify-center mb-3",
             isFlagged ? "bg-amber-50" : "bg-green-50",
           ].join(" ")}
         >
@@ -60,48 +57,39 @@ export function StatCards({
         >
           {isFlagged ? contaminantsFlagged : "All clear"}
         </p>
-        <p
-          className="mt-1 text-xs uppercase tracking-wider"
-          style={{ color: "var(--color-muted)" }}
-        >
-          {isFlagged ? "To watch" : "To watch"}
+        <p className="mt-1 text-sm text-muted">
+          To watch
         </p>
       </div>
 
       {/* Supplier */}
-      <div className="card p-5 animate-fade-up delay-3">
-        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center mb-3">
+      <div className="card p-6 animate-fade-up delay-3">
+        <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center mb-3">
           <Building2 className="w-4 h-4 text-slate-600" aria-hidden="true" />
         </div>
         <p
-          className="text-base font-semibold leading-snug"
+          className="text-2xl font-semibold leading-snug"
           style={{ color: "var(--color-ink)" }}
         >
           {supplier}
         </p>
-        <p
-          className="mt-1 text-xs uppercase tracking-wider"
-          style={{ color: "var(--color-muted)" }}
-        >
+        <p className="mt-1 text-sm text-muted">
           Your water company
         </p>
       </div>
 
       {/* Last Updated */}
-      <div className="card p-5 animate-fade-up delay-4">
-        <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center mb-3">
+      <div className="card p-6 animate-fade-up delay-4">
+        <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center mb-3">
           <CalendarCheck className="w-4 h-4 text-emerald-600" aria-hidden="true" />
         </div>
         <p
-          className="font-data text-base font-bold"
+          className="font-data text-2xl font-bold"
           style={{ color: "var(--color-ink)" }}
         >
           {formatLastUpdated(lastUpdated)}
         </p>
-        <p
-          className="mt-1 text-xs uppercase tracking-wider"
-          style={{ color: "var(--color-muted)" }}
-        >
+        <p className="mt-1 text-sm text-muted">
           Last checked
         </p>
       </div>

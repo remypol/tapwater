@@ -85,7 +85,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-3 mt-6">
         {filters.map((filter, i) => {
           const badge = BADGE_CONFIG[filter.badge];
           const stripColor = STRIP_COLOR[filter.badge];
@@ -93,7 +93,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
           return (
             <ScrollReveal key={filter.id} delay={i * 100}>
             <div
-              className="card-elevated overflow-hidden flex flex-col"
+              className="card-elevated overflow-hidden flex flex-col w-[280px] shrink-0 snap-start md:w-auto md:shrink"
             >
               {/* Colored top strip */}
               <div className={`h-[3px] w-full ${stripColor}`} />

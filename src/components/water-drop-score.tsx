@@ -8,6 +8,7 @@ interface Props {
   size?: number
   tested?: number
   flagged?: number
+  className?: string
 }
 
 // Gradient colours per level
@@ -44,7 +45,7 @@ function getSecondaryLine(tested?: number, flagged?: number, score?: number): st
   return `We checked ${tested} things and found ${secondary}`
 }
 
-export function WaterDropScore({ score, size = 200, tested, flagged }: Props) {
+export function WaterDropScore({ score, size = 200, tested, flagged, className }: Props) {
   const level = getScoreColor(score)
   const grade = getScoreGrade(score)
   const gradient = GRADIENTS[level]
@@ -145,7 +146,7 @@ export function WaterDropScore({ score, size = 200, tested, flagged }: Props) {
   const ariaLabel = `Water quality score: ${score} out of 10, rated ${grade}. ${primaryLine}.${secondaryLine ? ` ${secondaryLine}.` : ''}`
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className={["flex flex-col items-center gap-4", className].filter(Boolean).join(" ")}>
       {/* Keyframe injection */}
       <style>{`
         @keyframes water-rise-drop {
@@ -282,9 +283,8 @@ export function WaterDropScore({ score, size = 200, tested, flagged }: Props) {
 
       {/* Primary line */}
       <p
-        className="font-sans font-semibold text-center animate-fade-up delay-3"
+        className="font-sans font-semibold text-base sm:text-lg text-center animate-fade-up delay-3"
         style={{
-          fontSize: primaryLineSize,
           color:
             level === 'safe'
               ? 'var(--color-safe)'
@@ -298,7 +298,7 @@ export function WaterDropScore({ score, size = 200, tested, flagged }: Props) {
 
       {/* Secondary line */}
       {secondaryLine && (
-        <p className="text-sm text-center animate-fade-in delay-4" style={{ color: 'var(--color-muted)' }}>
+        <p className="text-xs sm:text-sm text-center animate-fade-in delay-4" style={{ color: 'var(--color-muted)' }}>
           {secondaryLine}
         </p>
       )}

@@ -151,15 +151,12 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   ].join(' ')}
                 >
                   {/* Contaminant */}
-                  <td className="py-3 px-4 align-top">
+                  <td className="py-4 px-4 align-top">
                     <span className="font-medium text-ink">{reading.name}</span>
-                    <div className="text-[10px] text-faint mt-0.5">
-                      Source: Environment Agency
-                    </div>
                   </td>
 
                   {/* Your Level */}
-                  <td className="py-3 px-4 align-top">
+                  <td className="py-4 px-4 align-top">
                     <span className="font-data text-sm text-body">
                       {reading.value} {reading.unit}
                     </span>
@@ -167,7 +164,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   </td>
 
                   {/* UK Limit */}
-                  <td className="py-3 px-4 align-top">
+                  <td className="py-4 px-4 align-top">
                     {reading.ukLimit !== null ? (
                       <span className="font-data text-sm text-body">
                         {reading.ukLimit} {reading.unit}
@@ -178,7 +175,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   </td>
 
                   {/* WHO Guideline */}
-                  <td className="py-3 px-4 align-top">
+                  <td className="py-4 px-4 align-top">
                     {reading.whoGuideline !== null ? (
                       <span className="font-data text-sm text-body">
                         {reading.whoGuideline} {reading.unit}
@@ -189,7 +186,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   </td>
 
                   {/* Status */}
-                  <td className="py-3 px-4 align-top">
+                  <td className="py-4 px-4 align-top">
                     <StatusDisplay status={reading.status} display="inline" />
                   </td>
                 </tr>
@@ -209,18 +206,13 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
             <div
               key={reading.name}
               className={[
-                'card p-4 snap-start shrink-0 w-[280px] sm:w-auto sm:shrink',
+                'card p-4 snap-start shrink-0 w-[300px] sm:w-auto sm:shrink',
                 reading.isPfas ? 'border-l-[3px] border-l-violet-500' : '',
               ].join(' ')}
             >
               {/* Card header */}
               <div className="flex items-start justify-between gap-2">
-                <div>
-                  <span className="font-medium text-ink">{reading.name}</span>
-                  <div className="text-[10px] text-faint mt-0.5">
-                    Source: Environment Agency
-                  </div>
-                </div>
+                <span className="font-medium text-ink">{reading.name}</span>
                 <StatusDisplay status={reading.status} display="badge" />
               </div>
 
@@ -272,6 +264,9 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
           );
         })}
       </div>
+
+      {/* Attribution — shown once, not per-item */}
+      <p className="text-xs text-faint mt-3">Source: Environment Agency</p>
 
     </div>
   );

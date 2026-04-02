@@ -127,13 +127,13 @@ export default async function PostcodePage({ params }: Props) {
             />
 
             {/* Score */}
-            <div className="flex justify-center py-10 lg:py-14 animate-fade-in delay-3">
-              <WaterDropScore
-                score={data.safetyScore}
-                size={200}
-                tested={data.contaminantsTested}
-                flagged={data.contaminantsFlagged}
-              />
+            <div className="flex justify-center py-8 lg:py-14 animate-fade-in delay-3">
+              <div className="block sm:hidden">
+                <WaterDropScore score={data.safetyScore} size={150} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} />
+              </div>
+              <div className="hidden sm:block">
+                <WaterDropScore score={data.safetyScore} size={200} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} />
+              </div>
             </div>
 
             {/* Sentinel: triggers sticky bar once scrolled past */}
@@ -211,24 +211,27 @@ export default async function PostcodePage({ params }: Props) {
                 <p className="text-sm text-muted mt-1">
                   {data.district} quality score, 2020&ndash;2026
                 </p>
-                <div className="card-elevated mt-4 p-8 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
+                <div className="card-elevated mt-4 p-6 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
                   <div className="flex items-end gap-2">
                     {data.historicalScores.map((h) => {
                       const height = Math.max(24, (h.score / 10) * 140);
-                      const color =
+                      const colorBase =
                         h.score >= 7
-                          ? "bg-[var(--color-safe)]"
+                          ? "var(--color-safe)"
                           : h.score >= 5
-                            ? "bg-[var(--color-warning)]"
-                            : "bg-[var(--color-danger)]";
+                            ? "var(--color-warning)"
+                            : "var(--color-danger)";
                       return (
                         <div key={h.year} className="flex flex-col items-center gap-1.5">
-                          <span className="font-data text-[10px] text-faint">{h.score}</span>
+                          <span className="font-data text-[11px] font-medium text-faint">{h.score}</span>
                           <div
-                            className={`w-7 sm:w-9 rounded-t-sm ${color} opacity-80`}
-                            style={{ height }}
+                            className="w-8 sm:w-10 rounded-md"
+                            style={{
+                              height,
+                              background: `linear-gradient(to top, ${colorBase}cc, ${colorBase})`,
+                            }}
                           />
-                          <span className="text-[10px] text-faint font-data">{h.year}</span>
+                          <span className="text-[11px] text-faint font-data">{h.year}</span>
                         </div>
                       );
                     })}
