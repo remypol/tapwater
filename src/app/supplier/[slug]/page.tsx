@@ -8,6 +8,7 @@ import {
   ChevronRight,
   MapPin,
 } from "lucide-react";
+import { BreadcrumbSchema } from "@/components/json-ld";
 
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData } from "@/lib/data";
@@ -116,6 +117,13 @@ export default async function SupplierPage({ params }: Props) {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://tapwater.uk" },
+          { name: "Suppliers", url: "https://tapwater.uk/supplier/" },
+          { name: supplier.name, url: `https://tapwater.uk/supplier/${supplier.id}/` },
+        ]}
+      />
       <nav className="flex items-center gap-1.5 text-sm text-faint mb-6" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors">
           Home

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { FAQSchema } from '@/components/json-ld'
 
 export const metadata: Metadata = {
   title: 'Methodology — How We Calculate Water Quality Scores',
@@ -10,6 +11,22 @@ export const metadata: Metadata = {
 export default function MethodologyPage() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <FAQSchema
+        faqs={[
+          {
+            question: "How does TapWater.uk calculate water quality scores?",
+            answer: "We use a weighted 0-10 scoring system based on official water quality tests. Each contaminant is compared against UK legal limits and WHO guidelines, then weighted by health significance: Tier 1 (lead, arsenic, E.coli) has 3\u00d7 weight, Tier 2 (nitrate, copper) has 2\u00d7 weight, and Tier 3 (iron, manganese) has 1\u00d7 weight.",
+          },
+          {
+            question: "What does each score grade mean?",
+            answer: "Excellent (9-10): All contaminants well within limits. Good (7-8): Minor traces detected, all within limits. Fair (5-6): Some contaminants approaching limits. Poor (3-4): Multiple contaminants near or exceeding limits. Very Poor (0-2): Significant contamination detected.",
+          },
+          {
+            question: "Where does the water quality data come from?",
+            answer: "Our data comes from two sources: the Stream Water Data Portal, which publishes actual tap water test results from UK water companies, and the Environment Agency Water Quality Archive, which monitors rivers, groundwater, and reservoirs across England.",
+          },
+        ]}
+      />
       <div className="max-w-3xl mx-auto">
         <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5">

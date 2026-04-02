@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { FAQSchema } from "@/components/json-ld";
 import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -25,6 +26,26 @@ export const metadata: Metadata = {
 export default function LeadPipesGuide() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <FAQSchema
+        faqs={[
+          {
+            question: "How many UK homes have lead pipes?",
+            answer: "An estimated 6-7 million properties in England and Wales still have lead service pipes, predominantly homes built before 1970.",
+          },
+          {
+            question: "What is the UK legal limit for lead in drinking water?",
+            answer: "The UK legal limit is 10 \u00b5g/L, though the EU is tightening to 5 \u00b5g/L by 2036. Any detectable amount of lead in water is considered undesirable.",
+          },
+          {
+            question: "How can I tell if I have lead pipes?",
+            answer: "Check the pipe coming into your kitchen \u2014 if it's dull grey, soft enough to scratch with a coin, and makes a dull thud when tapped, it's likely lead.",
+          },
+          {
+            question: "How do I remove lead from my tap water?",
+            answer: "Run the tap for 30-60 seconds before drinking, especially in the morning. For permanent removal, carbon block filters certified to NSF/ANSI 53 are effective, or consider having lead pipes replaced (\u00a31,000-\u00a33,000).",
+          },
+        ]}
+      />
       <div className="max-w-3xl mx-auto">
 
         {/* Breadcrumb */}

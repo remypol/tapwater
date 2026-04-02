@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
+import { FAQSchema } from "@/components/json-ld"
 
 export const metadata: Metadata = {
   title: "UK Water Hardness Map: Is Your Water Hard or Soft? (2026)",
@@ -18,6 +19,22 @@ export const metadata: Metadata = {
 export default function WaterHardnessMapPage() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-14">
+      <FAQSchema
+        faqs={[
+          {
+            question: "Is my water hard or soft?",
+            answer: "Enter your postcode on TapWater.uk to check. Generally, London and the South East have the hardest water (250-350 mg/L CaCO\u2083), while Scotland, Wales, and the North West have softer water (under 100 mg/L).",
+          },
+          {
+            question: "Is hard water bad for you?",
+            answer: "Hard water is not harmful to health \u2014 calcium and magnesium in hard water may actually be beneficial. However, it causes limescale buildup in pipes and appliances, reducing their efficiency and lifespan.",
+          },
+          {
+            question: "Do I need a water softener?",
+            answer: "If your water hardness is above 200 mg/L and you're experiencing limescale problems, a water softener can help. Ion exchange softeners cost \u00a3500-\u00a31,500 installed and require regular salt top-ups.",
+          },
+        ]}
+      />
       <div className="max-w-3xl mx-auto">
 
         {/* Breadcrumb */}

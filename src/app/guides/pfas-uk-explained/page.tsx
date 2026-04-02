@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { FAQSchema } from "@/components/json-ld";
 import { AlertTriangle, FlaskConical, ShieldAlert, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -25,6 +26,26 @@ export const metadata: Metadata = {
 export default function PFASGuide() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <FAQSchema
+        faqs={[
+          {
+            question: "What are PFAS forever chemicals?",
+            answer: "PFAS (per- and polyfluoroalkyl substances) are a family of over 4,700 synthetic compounds with extremely strong carbon-fluorine bonds. They do not biodegrade in soil, water, or the human body, earning the label 'forever chemicals.'",
+          },
+          {
+            question: "Is there PFAS in UK tap water?",
+            answer: "PFAS compounds have been detected in environmental monitoring in 14 of the 220 postcode areas we track, clustered near military airbases, airports, and industrial sites. Whether contamination reaches your tap depends on your water company's treatment processes.",
+          },
+          {
+            question: "What is the UK legal limit for PFAS in drinking water?",
+            answer: "The UK currently has no legal limit for PFAS in drinking water, unlike the EU which set limits of 0.1 \u00b5g/L for individual PFAS and 0.5 \u00b5g/L for total PFAS under Directive 2020/2184.",
+          },
+          {
+            question: "How do I remove PFAS from my tap water?",
+            answer: "Reverse osmosis systems are the most effective option, removing 90-99% of PFAS compounds (typically \u00a3150-\u00a3400 under-sink). Activated carbon filters offer partial reduction (50-80%), and ion exchange resins can match RO performance in whole-house systems.",
+          },
+        ]}
+      />
       <div className="max-w-3xl mx-auto">
 
         {/* Breadcrumb */}
