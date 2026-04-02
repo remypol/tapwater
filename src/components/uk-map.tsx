@@ -123,14 +123,14 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
     <div className="relative flex justify-center">
       <svg
         ref={svgRef}
-        viewBox="0 0 500 700"
+        viewBox="0 0 400 650"
         className="w-full"
         style={{ maxWidth: 500 }}
         role="img"
         aria-label="UK water quality map by region"
       >
         {/* Sea background */}
-        <rect width="500" height="700" fill="var(--color-wash)" rx="12" />
+        <rect width="400" height="650" fill="var(--color-wash)" rx="12" />
 
         {UK_REGIONS.map((region) => {
           const stats = regionStats[region.id];
@@ -139,9 +139,11 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
           const isHovered = hoveredRegion === region.id;
 
           return (
-            <path
-              key={region.id}
-              d={region.path}
+            <g key={region.id}>
+              {region.paths.map((pathD, i) => (
+              <path
+              key={`${region.id}-${i}`}
+              d={pathD}
               fill={fill}
               stroke={isSelected ? "#ffffff" : "var(--color-surface)"}
               strokeWidth={isSelected ? 2.5 : 1}
@@ -162,6 +164,8 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
               onMouseLeave={handleMouseLeave}
               aria-label={`${region.name}${stats ? ` — Average score: ${stats.avgScore.toFixed(1)}` : ""}`}
             />
+              ))}
+            </g>
           );
         })}
 
