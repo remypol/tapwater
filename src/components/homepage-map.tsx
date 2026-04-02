@@ -64,15 +64,18 @@ export function HomepageMap({ postcodes }: HomepageMapProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8 items-start">
+      <div className={selectedRegion && regionPostcodes.length > 0
+        ? "grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start"
+        : "flex justify-center"
+      }>
         {/* Map */}
-        <div className="lg:sticky lg:top-6">
+        <div className={selectedRegion ? "lg:sticky lg:top-6" : ""}>
           <UKMap postcodes={postcodes} onRegionSelect={handleRegionSelect} />
         </div>
 
-        {/* Desktop: region detail panel */}
+        {/* Desktop: region detail panel — only when a region is selected */}
+        {selectedRegion && regionPostcodes.length > 0 && (
         <div className="hidden lg:block">
-          {selectedRegion && regionPostcodes.length > 0 ? (
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <button
@@ -111,13 +114,8 @@ export function HomepageMap({ postcodes }: HomepageMapProps) {
                 ))}
               </div>
             </div>
-          ) : (
-            <div className="text-sm text-muted text-center py-12">
-              <p className="text-faint">Tap a region on the map</p>
-              <p className="text-faint mt-1">to see postcode-level data.</p>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Mobile: bottom sheet */}

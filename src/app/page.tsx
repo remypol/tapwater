@@ -83,7 +83,7 @@ export default function HomePage() {
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
 
       {/* Hero */}
-      <section className="bg-hero noise-overlay pt-20 pb-16 lg:pt-28 lg:pb-20 -mx-5 sm:-mx-6 lg:-mx-8 px-5 sm:px-6 lg:px-8">
+      <section className="bg-hero noise-overlay pt-12 pb-10 lg:pt-16 lg:pb-12 -mx-5 sm:-mx-6 lg:-mx-8 px-5 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <h1 className="animate-fade-up delay-1 font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic">
             What&apos;s in your tap water?
@@ -100,7 +100,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust metrics */}
-      <div className="mt-10 max-w-3xl mx-auto">
+      <div className="mt-8 max-w-3xl mx-auto">
         <div className="flex flex-wrap justify-center items-center gap-y-4">
           {TRUST_METRICS.map(({ value, label }, i) => (
             <Fragment key={label}>
@@ -123,14 +123,20 @@ export default function HomePage() {
       </div>
 
       {/* Interactive Map */}
-      <section className="mt-12">
-        <h2 className="font-display text-2xl text-ink italic">
-          Water quality across the UK
-        </h2>
-        <p className="text-sm text-muted mt-1 mb-6">
-          Tap a region to explore water quality data.
-        </p>
-        <HomepageMap postcodes={mapPostcodes} />
+      <section className="mt-8">
+        <div className="lg:flex lg:items-start lg:gap-8">
+          <div className="lg:flex-1 lg:pt-8">
+            <h2 className="font-display text-2xl text-ink italic">
+              Water quality across the UK
+            </h2>
+            <p className="text-sm text-muted mt-1 mb-4 lg:mb-0 lg:mt-2 lg:max-w-sm">
+              Tap a region to see detailed water quality data for that area. Colours show the lowest score found in each region.
+            </p>
+          </div>
+          <div className="lg:w-[320px] lg:shrink-0">
+            <HomepageMap postcodes={mapPostcodes} />
+          </div>
+        </div>
       </section>
 
       {/* Areas to watch + Cleanest water — side by side on desktop */}

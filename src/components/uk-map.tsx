@@ -56,7 +56,7 @@ function scoreToColor(score: number): string {
   }
 }
 
-const NO_DATA_COLOR = "#e5e7eb";
+const NO_DATA_COLOR = "#d1d5db";
 
 export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
@@ -126,14 +126,14 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
     <div className="relative flex justify-center">
       <svg
         ref={svgRef}
-        viewBox="0 0 400 650"
-        className="w-full"
-        style={{ maxWidth: 500 }}
+        viewBox="60 200 340 460"
+        className="w-full h-auto mx-auto"
+        style={{ maxWidth: 280 }}
         role="img"
         aria-label="UK water quality map by region"
       >
         {/* Sea background */}
-        <rect width="400" height="650" fill="var(--color-wash)" rx="12" />
+        <rect x="60" y="200" width="340" height="460" fill="var(--color-wash)" rx="12" />
 
         {UK_REGIONS.map((region) => {
           const stats = regionStats[region.id];
@@ -148,7 +148,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
               key={`${region.id}-${i}`}
               d={pathD}
               fill={fill}
-              stroke={isSelected ? "#ffffff" : "var(--color-surface)"}
+              stroke={isSelected ? "#0891b2" : "rgba(255,255,255,0.8)"}
               strokeWidth={isSelected ? 2.5 : 1}
               style={{
                 cursor: "pointer",
