@@ -38,7 +38,7 @@ function StatusDisplay({ status, display = 'inline' }: StatusCellProps) {
         {status === 'pass' && <CheckCircle2 className="w-3 h-3" />}
         {status === 'warning' && <AlertTriangle className="w-3 h-3" />}
         {status === 'fail' && <XCircle className="w-3 h-3" />}
-        {status === 'pass' ? 'OK' : status === 'warning' ? 'Watch' : 'Exceeds'}
+        {status === 'pass' ? 'Safe' : status === 'warning' ? 'Watch' : 'Over limit'}
       </span>
     );
   }
@@ -48,7 +48,7 @@ function StatusDisplay({ status, display = 'inline' }: StatusCellProps) {
     return (
       <span className="inline-flex items-center gap-1.5 text-safe">
         <CheckCircle2 className="w-4 h-4 shrink-0" />
-        <span className="text-xs font-medium">OK</span>
+        <span className="text-xs font-medium">Safe</span>
       </span>
     );
   }
@@ -63,7 +63,7 @@ function StatusDisplay({ status, display = 'inline' }: StatusCellProps) {
   return (
     <span className="inline-flex items-center gap-1.5 text-danger">
       <XCircle className="w-4 h-4 shrink-0" />
-      <span className="text-xs font-medium">Exceeds</span>
+      <span className="text-xs font-medium">Over limit</span>
     </span>
   );
 }
@@ -119,16 +119,16 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
           <thead>
             <tr className="bg-wash text-left">
               <th scope="col" className="w-[30%] py-3 px-4 text-xs font-medium uppercase tracking-wider text-muted">
-                Contaminant
+                Substance
               </th>
               <th scope="col" className="w-[22%] py-3 px-4 text-xs font-medium uppercase tracking-wider text-muted">
-                Your Level
+                Found
               </th>
               <th scope="col" className="w-[17%] py-3 px-4 text-xs font-medium uppercase tracking-wider text-muted">
-                UK Limit
+                Safe Level
               </th>
               <th scope="col" className="w-[17%] py-3 px-4 text-xs font-medium uppercase tracking-wider text-muted">
-                WHO Guideline
+                WHO Safe Level
               </th>
               <th scope="col" className="w-[14%] py-3 px-4 text-xs font-medium uppercase tracking-wider text-muted">
                 Status
@@ -153,7 +153,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   <td className="py-3 px-4 align-top">
                     <span className="font-medium text-ink">{reading.name}</span>
                     <div className="text-[10px] text-faint mt-0.5">
-                      Source: EA Water Quality Archive
+                      Source: Environment Agency
                     </div>
                   </td>
 
@@ -216,7 +216,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                 <div>
                   <span className="font-medium text-ink">{reading.name}</span>
                   <div className="text-[10px] text-faint mt-0.5">
-                    Source: EA Water Quality Archive
+                    Source: Environment Agency
                   </div>
                 </div>
                 <StatusDisplay status={reading.status} display="badge" />
@@ -228,7 +228,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                 <div className="grid grid-cols-3 gap-2">
                   <div>
                     <div className="text-[10px] uppercase tracking-wider text-faint mb-1">
-                      Your Level
+                      Found
                     </div>
                     <div className="font-data text-sm text-ink">
                       {reading.value} {reading.unit}
@@ -236,7 +236,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   </div>
                   <div>
                     <div className="text-[10px] uppercase tracking-wider text-faint mb-1">
-                      UK Limit
+                      Safe level
                     </div>
                     <div className={`font-data text-sm ${reading.ukLimit !== null ? 'text-ink' : 'text-faint'}`}>
                       {formatValue(reading.ukLimit, reading.unit)}
@@ -257,7 +257,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
 
                 {/* Percentage label */}
                 <div className="text-xs text-muted mt-1.5">
-                  {Math.round(percent)}% of limit
+                  {Math.round(percent)}% of safe level
                 </div>
               </div>
             </div>

@@ -76,11 +76,11 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
     <section>
       <div>
         <h2 className="font-display text-2xl text-ink italic">
-          Recommended for {postcode}
+          Filters for your area
         </h2>
         <p className="mt-1.5 text-sm text-muted flex items-center gap-1.5">
           <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-          Selected based on contaminants detected in your area
+          Picked to match what we found in your water
         </p>
       </div>
 

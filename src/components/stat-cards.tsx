@@ -37,7 +37,7 @@ export function StatCards({
           className="mt-1 text-xs uppercase tracking-wider"
           style={{ color: "var(--color-muted)" }}
         >
-          Parameters Tested
+          Tests run
         </p>
       </div>
 
@@ -58,13 +58,13 @@ export function StatCards({
           className="font-data text-2xl font-bold"
           style={{ color: isFlagged ? "#d97706" : "var(--color-ink)" }}
         >
-          {contaminantsFlagged}
+          {isFlagged ? contaminantsFlagged : "All clear"}
         </p>
         <p
           className="mt-1 text-xs uppercase tracking-wider"
           style={{ color: "var(--color-muted)" }}
         >
-          Flagged
+          {isFlagged ? "To watch" : "To watch"}
         </p>
       </div>
 
@@ -83,7 +83,7 @@ export function StatCards({
           className="mt-1 text-xs uppercase tracking-wider"
           style={{ color: "var(--color-muted)" }}
         >
-          Water Supplier
+          Your water company
         </p>
       </div>
 
@@ -102,7 +102,7 @@ export function StatCards({
           className="mt-1 text-xs uppercase tracking-wider"
           style={{ color: "var(--color-muted)" }}
         >
-          Last Updated
+          Last checked
         </p>
       </div>
 

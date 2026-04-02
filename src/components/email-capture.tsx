@@ -28,11 +28,10 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
         {/* Content */}
         <div className="flex-1 mt-4 lg:mt-0">
           <h2 className="text-lg font-semibold text-ink">
-            Stay informed about {postcode}
+            Get alerts for your area
           </h2>
           <p className="text-sm text-muted mt-1">
-            Get notified when water quality data changes in your area or when
-            incidents affect your supply.
+            We&apos;ll let you know if anything changes with the water in your area.
           </p>
 
           {subscribed ? (
@@ -63,7 +62,7 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
                 </button>
               </form>
               <p className="text-xs text-faint mt-2">
-                Monthly digest + breaking alerts. No spam, unsubscribe anytime.
+                Monthly updates + breaking alerts. No spam ever.
               </p>
             </>
           )}

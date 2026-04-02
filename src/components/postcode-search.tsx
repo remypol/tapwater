@@ -94,7 +94,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
 
       {isLg && !error && (
         <p className="text-xs text-faint mt-3 text-center">
-          Enter a full postcode or district code — e.g. SW1A 1AA, M1, B1
+          Try your postcode — e.g. SW1A, M1, B1
         </p>
       )}
     </div>
