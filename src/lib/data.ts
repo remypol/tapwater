@@ -148,7 +148,8 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         ? await getSupplierById(pd.supplier_id)
         : getSupplier(pd.city);
 
-      const drinkingReadings = (row.drinking_water_readings ?? []) as ContaminantReading[];
+      const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
+        .map((r) => ({ ...r, source: "drinking" as const }));
       const envReadings = (row.all_readings ?? []) as ContaminantReading[];
       const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
 

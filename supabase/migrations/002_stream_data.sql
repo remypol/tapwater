@@ -12,10 +12,9 @@ CREATE TABLE IF NOT EXISTS postcode_lsoa (
 CREATE INDEX IF NOT EXISTS idx_postcode_lsoa_lsoa
   ON postcode_lsoa (lsoa_code);
 
--- Functional index for postcode district prefix lookups
--- Extracts the district part (everything before the space)
+-- Prefix index for LIKE 'XX99 %' queries
 CREATE INDEX IF NOT EXISTS idx_postcode_lsoa_district
-  ON postcode_lsoa (split_part(postcode, ' ', 1));
+  ON postcode_lsoa (postcode text_pattern_ops);
 
 -- Update drinking_water_readings source constraint to allow 'stream_portal'
 ALTER TABLE drinking_water_readings

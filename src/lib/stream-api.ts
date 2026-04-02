@@ -90,14 +90,17 @@ export async function queryStreamService(
   if (lsoaCodes.length === 0) return [];
 
   const baseUrl = `${ARCGIS_BASE}/${source.orgId}/ArcGIS/rest/services/${encodeURIComponent(serviceName)}/FeatureServer/0/query`;
-  const lsoaList = lsoaCodes.map((c) => `'${c}'`).join(",");
+  const lsoaList = lsoaCodes.map((c) => `'${c.replace(/'/g, "")}'`).join(",");
   const where = `${source.geoField} IN (${lsoaList})`;
 
   const allRecords: StreamRecord[] = [];
   let offset = 0;
+  const MAX_PAGES = 50;
   let hasMore = true;
+  let page = 0;
 
-  while (hasMore) {
+  while (hasMore && page < MAX_PAGES) {
+    page++;
     const params = new URLSearchParams({
       where,
       outFields: "*",

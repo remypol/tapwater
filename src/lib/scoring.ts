@@ -4,8 +4,8 @@
  * Computes a 0-10 safety score from environmental readings.
  * See /about/methodology for the public-facing explanation.
  *
- * Phase 1: Uses EA environmental data only (supplementary layer).
- * Phase 2: Will incorporate DWI drinking water data (primary layer, 80% weight).
+ * Uses dual-layer data: Stream Water Data Portal (drinking water, primary)
+ * and EA environmental data (supplementary layer).
  */
 
 import type { ContaminantReading } from "./types";
