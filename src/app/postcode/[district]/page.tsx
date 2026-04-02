@@ -88,6 +88,11 @@ export default async function PostcodePage({ params }: Props) {
     })),
   );
 
+  // Check data freshness
+  const lastSampleDate = new Date(data.lastSampleDate);
+  const monthsOld = Math.floor((Date.now() - lastSampleDate.getTime()) / (30 * 24 * 60 * 60 * 1000));
+  const isStale = monthsOld > 12;
+
   // Compute filter recommendations based on flagged contaminants
   const flaggedNames = data.readings
     .filter((r) => r.status !== "pass")
@@ -237,6 +242,14 @@ export default async function PostcodePage({ params }: Props) {
                 {data.sampleCount > 0 && <> · {data.sampleCount.toLocaleString()} samples</>}
                 {data.dataSource === "ea-only" && <> · Tap water tests not yet available for {data.supplier}</>}
               </p>
+              {isStale && (
+                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-2">
+                  This data is {monthsOld > 24 ? `over ${Math.floor(monthsOld / 12)} years` : `${monthsOld} months`} old.
+                  {data.dataSource === "ea-only"
+                    ? ` The Environment Agency hasn't sampled near ${data.district} recently. Scores reflect the most recent available data.`
+                    : " Newer data may be available soon."}
+                </p>
+              )}
             </div>
 
             <hr className="border-rule mt-10" />

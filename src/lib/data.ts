@@ -250,13 +250,18 @@ export async function getAllPostcodeDistricts(): Promise<string[]> {
 }
 
 /**
- * Returns only postcode districts with a valid safety score (>= 0).
- * Use this for generating static pages — avoids thin/empty pages.
+ * Returns only postcode districts with a valid safety score (>= 0)
+ * AND data from the last 3 years. Stale pages hurt credibility.
+ * Use this for generating static pages and sitemap — avoids thin/stale pages.
  */
 export async function getScoredPostcodeDistricts(): Promise<string[]> {
   const cache = await loadData();
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 3);
+  const cutoffStr = cutoff.toISOString().split("T")[0];
+
   return Array.from(cache.entries())
-    .filter(([, data]) => data.safetyScore >= 0)
+    .filter(([, data]) => data.safetyScore >= 0 && data.lastSampleDate >= cutoffStr)
     .map(([district]) => district)
     .sort();
 }
