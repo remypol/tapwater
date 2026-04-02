@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/seed-postcodes.ts && next build",
-    "build:quick": "next build",
+    "build": "next build",
     "seed": "tsx scripts/seed-postcodes.ts",
     "start": "next start"
   },
