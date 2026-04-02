@@ -77,26 +77,16 @@ async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
       lastSampleDate: lastDate,
       readings: score.readings,
       nearbyPostcodes: nearby,
-      historicalScores: buildHistoricalScores(score.safetyScore),
+      dataSource: "ea-only",
+      drinkingWaterReadings: [],
+      environmentalReadings: score.readings.map((r) => ({ ...r, source: "environmental" as const })),
+      sampleCount: 0,
+      dateRange: null,
     });
   }
 
   jsonFallbackCache = cache;
   return cache;
-}
-
-function buildHistoricalScores(
-  currentScore: number,
-): { year: number; score: number }[] {
-  const currentYear = new Date().getFullYear();
-  const baseScore = Math.max(2, currentScore - 1.5);
-  return Array.from({ length: 7 }, (_, i) => ({
-    year: currentYear - 6 + i,
-    score:
-      Math.round(
-        (baseScore + (currentScore - baseScore) * (i / 6)) * 10,
-      ) / 10,
-  }));
 }
 
 // ── Supabase data layer ──
@@ -123,6 +113,11 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         environmental_context,
         nearby_postcodes,
         last_data_update,
+        data_source,
+        drinking_water_readings,
+        sample_count,
+        date_range_from,
+        date_range_to,
         postcode_districts!inner (
           area_name,
           city,
@@ -153,7 +148,8 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         ? await getSupplierById(pd.supplier_id)
         : getSupplier(pd.city);
 
-      const readings = (row.all_readings ?? []) as ContaminantReading[];
+      const drinkingReadings = (row.drinking_water_readings ?? []) as ContaminantReading[];
+      const envReadings = (row.all_readings ?? []) as ContaminantReading[];
       const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
 
       cache.set(row.postcode_district.toUpperCase(), {
@@ -175,9 +171,15 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         pfasSource: row.pfas_source as PostcodeData["pfasSource"],
         lastUpdated: lastDate,
         lastSampleDate: lastDate,
-        readings,
+        readings: drinkingReadings.length > 0 ? drinkingReadings : envReadings,
         nearbyPostcodes: row.nearby_postcodes ?? [],
-        historicalScores: buildHistoricalScores(row.safety_score),
+        dataSource: (row.data_source ?? "ea-only") as PostcodeData["dataSource"],
+        drinkingWaterReadings: drinkingReadings,
+        environmentalReadings: envReadings.map((r) => ({ ...r, source: "environmental" as const })),
+        sampleCount: row.sample_count ?? 0,
+        dateRange: row.date_range_from && row.date_range_to
+          ? { from: row.date_range_from.split("T")[0], to: row.date_range_to.split("T")[0] }
+          : null,
       });
     }
 
