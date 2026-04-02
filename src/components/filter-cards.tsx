@@ -2,6 +2,36 @@ import { FilterProduct } from "@/lib/types";
 import Link from "next/link";
 import { Award, Check, Star, ArrowUpRight, ShieldCheck } from "lucide-react";
 
+const MOBILE_REMOVES_LIMIT = 3;
+
+function RemovesList({ removes }: { removes: string[] }) {
+  const overflow = removes.length - MOBILE_REMOVES_LIMIT;
+
+  return (
+    <div className="px-5">
+      <p className="text-xs font-medium text-ink mb-1.5">Removes</p>
+      <ul className="space-y-1">
+        {/* On mobile show up to 3, on sm+ show all */}
+        {removes.map((contaminant, i) => (
+          <li
+            key={contaminant}
+            className={[
+              "flex items-center gap-1.5 text-sm text-body",
+              i >= MOBILE_REMOVES_LIMIT ? "hidden sm:flex" : "",
+            ].join(" ")}
+          >
+            <Check className="w-3.5 h-3.5 text-safe shrink-0" />
+            {contaminant.charAt(0).toUpperCase() + contaminant.slice(1)}
+          </li>
+        ))}
+      </ul>
+      {overflow > 0 && (
+        <p className="text-xs text-muted mt-1 sm:hidden">+{overflow} more</p>
+      )}
+    </div>
+  );
+}
+
 interface FilterCardsProps {
   filters: FilterProduct[];
   postcode: string;
@@ -80,7 +110,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
               {/* Product info */}
               <div className="mt-3 px-5">
                 <p className="text-sm text-muted">{filter.brand}</p>
-                <p className="font-semibold text-ink text-base leading-snug">
+                <p className="font-semibold text-ink text-sm sm:text-base leading-snug">
                   {filter.model}
                 </p>
                 <p className="text-xs text-muted mt-0.5">
@@ -93,21 +123,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
 
               {/* Removes */}
               {filter.removes.length > 0 && (
-                <div className="px-5">
-                  <p className="text-xs font-medium text-ink mb-1.5">Removes</p>
-                  <ul className="space-y-1">
-                    {filter.removes.map((contaminant) => (
-                      <li
-                        key={contaminant}
-                        className="flex items-center gap-1.5 text-sm text-body"
-                      >
-                        <Check className="w-3.5 h-3.5 text-safe shrink-0" />
-                        {contaminant.charAt(0).toUpperCase() +
-                          contaminant.slice(1)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <RemovesList removes={filter.removes} />
               )}
 
               {/* Certifications */}
@@ -142,7 +158,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
                   href={filter.affiliateUrl}
                   target="_blank"
                   rel="noopener noreferrer sponsored"
-                  className="mt-3 w-full bg-ink text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-gray-800 transition-colors"
+                  className="mt-3 w-full bg-ink text-white py-2 sm:py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-gray-800 transition-colors"
                 >
                   Check Price
                   <ArrowUpRight className="w-3.5 h-3.5" />

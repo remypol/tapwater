@@ -1,14 +1,16 @@
 import Link from "next/link";
+import { MobileNav } from "@/components/mobile-nav";
 
 const navLinks = [
   { label: "Guides", href: "/guides" },
   { label: "About", href: "/about" },
   { label: "Methodology", href: "/about/methodology" },
+  { label: "Data Sources", href: "/about/data-sources" },
 ];
 
 export function Header() {
   return (
-    <header className="w-full bg-[var(--color-surface)] shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+    <header className="w-full bg-[var(--color-surface)] shadow-[0_1px_3px_rgba(0,0,0,0.04)] relative z-50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link
           href="/"
@@ -19,6 +21,7 @@ export function Header() {
           <span className="text-xl text-[var(--color-accent)]">.uk</span>
         </Link>
 
+        {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-7">
           {navLinks.map((link) => (
             <Link
@@ -31,6 +34,9 @@ export function Header() {
             </Link>
           ))}
         </nav>
+
+        {/* Mobile hamburger + slide-down panel */}
+        <MobileNav navLinks={navLinks} />
       </div>
     </header>
   );

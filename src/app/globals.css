@@ -236,3 +236,14 @@ body {
 .badge-warning { background: var(--color-warning-light); color: var(--color-warning); }
 .badge-danger { background: var(--color-danger-light); color: var(--color-danger); }
 .badge-pfas { background: var(--color-pfas-light); color: var(--color-pfas); }
+
+/* ── Scrollbar Hide ── */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

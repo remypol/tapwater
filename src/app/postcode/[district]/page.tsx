@@ -8,6 +8,7 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { FilterCards } from "@/components/filter-cards";
 import { EmailCapture } from "@/components/email-capture";
+import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
@@ -163,10 +164,20 @@ export default async function PostcodePage({ params }: Props) {
 
         {hasData ? (
           <>
+            {/* Sticky mobile score bar — appears once score ring scrolls out of view */}
+            <StickyScore
+              district={data.district}
+              areaName={data.areaName}
+              score={data.safetyScore}
+            />
+
             {/* Score */}
             <div className="flex justify-center py-10 lg:py-14 animate-fade-in delay-3">
               <SafetyScore score={data.safetyScore} size={200} parameterCount={data.contaminantsTested} />
             </div>
+
+            {/* Sentinel: triggers sticky bar once scrolled past */}
+            <ScoreSentinel />
 
             {/* Stat Cards */}
             <StatCards
@@ -310,13 +321,13 @@ export default async function PostcodePage({ params }: Props) {
           <h2 className="font-display text-2xl text-ink italic">
             Nearby areas
           </h2>
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="flex overflow-x-auto gap-2 pb-2 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 mt-4">
             {nearbyData.map(({ code, data: pcData }) =>
               pcData ? (
                 <Link
                   key={code}
                   href={`/postcode/${code}/`}
-                  className="card py-2 px-3 inline-flex items-center gap-2"
+                  className="card py-2 px-3 inline-flex items-center gap-2 snap-start shrink-0"
                 >
                   <MapPin className="w-3 h-3 text-faint shrink-0" />
                   <span className="text-sm text-ink font-medium">{code}</span>
@@ -326,7 +337,7 @@ export default async function PostcodePage({ params }: Props) {
                   </span>
                 </Link>
               ) : (
-                <Link key={code} href={`/postcode/${code}/`} className="pill">
+                <Link key={code} href={`/postcode/${code}/`} className="pill snap-start shrink-0">
                   <MapPin className="w-3 h-3 text-faint mr-1.5" />
                   {code}
                 </Link>
