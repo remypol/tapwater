@@ -36,15 +36,11 @@ export const MOCK_POSTCODE: PostcodeData = {
   lastSampleDate: "2026-03-14",
   readings: MOCK_READINGS,
   nearbyPostcodes: ["SW1B", "SW1E", "SW1H", "SW1P", "SW1V", "SW1W", "SW1X", "SW1Y", "W1", "WC2"],
-  historicalScores: [
-    { year: 2020, score: 5.8 },
-    { year: 2021, score: 6.1 },
-    { year: 2022, score: 6.5 },
-    { year: 2023, score: 6.9 },
-    { year: 2024, score: 7.0 },
-    { year: 2025, score: 7.1 },
-    { year: 2026, score: 7.2 },
-  ],
+  dataSource: "ea-only",
+  drinkingWaterReadings: [],
+  environmentalReadings: [],
+  sampleCount: 0,
+  dateRange: null,
 };
 
 export const MOCK_POSTCODES: Record<string, PostcodeData> = {
@@ -62,15 +58,6 @@ export const MOCK_POSTCODES: Record<string, PostcodeData> = {
       r.name === "PFAS (total)" ? { ...r, value: 0.09 } : r.name === "Lead" ? { ...r, value: 0.007 } : r
     ),
     nearbyPostcodes: ["E2", "E3", "E14", "EC1", "EC2", "EC3"],
-    historicalScores: [
-      { year: 2020, score: 5.2 },
-      { year: 2021, score: 5.5 },
-      { year: 2022, score: 5.9 },
-      { year: 2023, score: 6.2 },
-      { year: 2024, score: 6.5 },
-      { year: 2025, score: 6.7 },
-      { year: 2026, score: 6.8 },
-    ],
   },
   M1: {
     ...MOCK_POSTCODE,
@@ -88,15 +75,6 @@ export const MOCK_POSTCODES: Record<string, PostcodeData> = {
     pfasLevel: null,
     pfasSource: null,
     nearbyPostcodes: ["M2", "M3", "M4", "M5", "M6", "M7", "M8"],
-    historicalScores: [
-      { year: 2020, score: 7.5 },
-      { year: 2021, score: 7.6 },
-      { year: 2022, score: 7.8 },
-      { year: 2023, score: 7.9 },
-      { year: 2024, score: 8.0 },
-      { year: 2025, score: 8.0 },
-      { year: 2026, score: 8.1 },
-    ],
   },
   B1: {
     ...MOCK_POSTCODE,
@@ -114,15 +92,6 @@ export const MOCK_POSTCODES: Record<string, PostcodeData> = {
     pfasLevel: 0.06,
     pfasSource: "environmental",
     nearbyPostcodes: ["B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9"],
-    historicalScores: [
-      { year: 2020, score: 5.5 },
-      { year: 2021, score: 5.8 },
-      { year: 2022, score: 6.0 },
-      { year: 2023, score: 6.1 },
-      { year: 2024, score: 6.2 },
-      { year: 2025, score: 6.3 },
-      { year: 2026, score: 6.4 },
-    ],
   },
   LS1: {
     ...MOCK_POSTCODE,
@@ -140,15 +109,6 @@ export const MOCK_POSTCODES: Record<string, PostcodeData> = {
     pfasLevel: null,
     pfasSource: null,
     nearbyPostcodes: ["LS2", "LS3", "LS4", "LS5", "LS6", "LS7"],
-    historicalScores: [
-      { year: 2020, score: 6.8 },
-      { year: 2021, score: 7.0 },
-      { year: 2022, score: 7.2 },
-      { year: 2023, score: 7.4 },
-      { year: 2024, score: 7.5 },
-      { year: 2025, score: 7.7 },
-      { year: 2026, score: 7.8 },
-    ],
   },
 };
 
