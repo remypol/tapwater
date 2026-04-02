@@ -1,210 +1,192 @@
 import Link from "next/link";
-import { ExternalLink, ShieldCheck, Check, Star, Award, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Check, Star, ArrowRight, ChevronDown } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
-import { ScrollReveal } from "@/components/scroll-reveal";
 
-/* ── Helpers ────────────────────────────────────────────────────────────── */
+/* ── Types ─────────────────────────────────────────────────────────────── */
 
-const MOBILE_REMOVES_LIMIT = 3;
-
-const STRIP_COLOR: Record<FilterProduct["badge"], string> = {
-  "best-match": "bg-blue-600",
-  budget: "bg-emerald-600",
-  "whole-house": "bg-violet-600",
+type RecommendedFilter = FilterProduct & {
+  matchedCount: number;
+  matchedContaminants: string[];
 };
 
-const BADGE_CONFIG: Record<
-  FilterProduct["badge"],
-  { label: string; className: string; icon: React.ReactNode }
-> = {
-  "best-match": {
-    label: "Best Match",
-    className: "bg-blue-50 text-blue-700",
-    icon: <Award className="w-3 h-3" />,
-  },
-  budget: {
-    label: "Budget Pick",
-    className: "bg-emerald-50 text-emerald-700",
-    icon: null,
-  },
-  "whole-house": {
-    label: "Whole House",
-    className: "bg-violet-50 text-violet-700",
-    icon: null,
-  },
-};
+/* ── Hero Recommendation — the single "our pick for you" ──────────────── */
 
-/* ── Sub-components ─────────────────────────────────────────────────────── */
-
-function RemovesList({ removes }: { removes: string[] }) {
-  const overflow = removes.length - MOBILE_REMOVES_LIMIT;
-
-  return (
-    <div className="px-5">
-      <p className="text-xs font-medium text-ink mb-1.5">Removes</p>
-      <ul className="space-y-1">
-        {removes.map((contaminant, i) => (
-          <li
-            key={contaminant}
-            className={[
-              "flex items-center gap-1.5 text-sm text-body",
-              i >= MOBILE_REMOVES_LIMIT ? "hidden sm:flex" : "",
-            ].join(" ")}
-          >
-            <Check className="w-3.5 h-3.5 text-safe shrink-0" />
-            {contaminant.charAt(0).toUpperCase() + contaminant.slice(1)}
-          </li>
-        ))}
-      </ul>
-      {overflow > 0 && (
-        <p className="text-xs text-muted mt-1 sm:hidden">+{overflow} more</p>
-      )}
-    </div>
-  );
-}
-
-/* ── FilterCard — used in postcode pages (contaminant-matched) ──────── */
-
-interface FilterCardProps {
-  filter: FilterProduct & {
-    matchedCount: number;
-    matchedContaminants: string[];
-  };
+function HeroRecommendation({
+  filter,
+  postcodeDistrict,
+  flaggedNames,
+}: {
+  filter: RecommendedFilter;
   postcodeDistrict: string;
-  index: number;
-}
-
-function FilterCard({ filter, postcodeDistrict, index }: FilterCardProps) {
-  const badge = BADGE_CONFIG[filter.badge];
-  const stripColor = STRIP_COLOR[filter.badge];
+  flaggedNames: string[];
+}) {
+  // Build the narrative
+  const removesFromHere = filter.matchedContaminants;
+  const removesCount = removesFromHere.length;
 
   return (
-    <ScrollReveal delay={index * 100}>
-      <div className="card-elevated overflow-hidden flex flex-col w-[280px] shrink-0 snap-start md:w-auto md:shrink h-full">
-        {/* Colored top strip */}
-        <div className={`h-[3px] w-full ${stripColor}`} />
+    <div className="card-elevated overflow-hidden">
+      {/* Top accent */}
+      <div className="h-1 w-full bg-accent" />
 
-        {/* Badge */}
-        <div className="mt-4 mx-5">
-          <span
-            className={`inline-flex items-center gap-1 text-xs font-medium rounded-full px-2 py-0.5 ${badge.className}`}
-          >
-            {badge.icon}
-            {badge.label}
-          </span>
-        </div>
+      <div className="p-5 sm:p-6">
+        {/* Label */}
+        <p className="text-xs font-medium text-accent uppercase tracking-wider">
+          Our pick for {postcodeDistrict}
+        </p>
 
-        {/* Product info */}
-        <div className="mt-3 px-5">
-          <p className="text-sm text-muted">{filter.brand}</p>
-          <p className="font-semibold text-ink text-sm sm:text-base leading-snug">
-            {filter.model}
+        {/* Product name */}
+        <div className="mt-3">
+          <p className="font-display text-xl sm:text-2xl text-ink italic">
+            {filter.brand} {filter.model}
           </p>
-          <p className="text-xs text-muted mt-0.5">
+          <p className="text-sm text-muted mt-0.5">
             {CATEGORY_LABELS[filter.category]}
+            {filter.certifications.length > 0 && (
+              <> · {filter.certifications.join(", ")}</>
+            )}
           </p>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-rule mx-5 my-3" />
+        {/* Why this one — the narrative */}
+        <div className="mt-4 p-4 bg-wash rounded-lg">
+          <p className="text-sm text-body leading-relaxed">
+            {removesCount > 0 ? (
+              <>
+                {removesCount === 1 ? (
+                  <>
+                    The {filter.brand} {filter.model} is certified to remove{" "}
+                    <strong className="text-ink">{removesFromHere[0]}</strong>,
+                    which was flagged in {postcodeDistrict}.
+                  </>
+                ) : removesCount === 2 ? (
+                  <>
+                    Removes both{" "}
+                    <strong className="text-ink">{removesFromHere[0]}</strong> and{" "}
+                    <strong className="text-ink">{removesFromHere[1]}</strong> —
+                    the two contaminants flagged in {postcodeDistrict}.
+                  </>
+                ) : (
+                  <>
+                    Removes{" "}
+                    <strong className="text-ink">
+                      {removesFromHere.slice(0, -1).join(", ")}
+                    </strong>{" "}
+                    and{" "}
+                    <strong className="text-ink">
+                      {removesFromHere[removesFromHere.length - 1]}
+                    </strong>{" "}
+                    — all {removesCount} contaminants flagged in {postcodeDistrict}.
+                  </>
+                )}
+                {" "}
+                {filter.category === "jug"
+                  ? "No installation needed — just fill and pour."
+                  : filter.category === "countertop"
+                    ? "Sits on your worktop — no plumber needed."
+                    : filter.category === "under_sink"
+                      ? "Fits under your kitchen sink for filtered water on tap."
+                      : "Protects every tap in your home."}
+              </>
+            ) : (
+              <>
+                A solid all-round filter for {postcodeDistrict}. Removes{" "}
+                {filter.removes.slice(0, 3).join(", ")} and more.{" "}
+                {filter.category === "jug"
+                  ? "No installation needed."
+                  : "Professional-grade filtration."}
+              </>
+            )}
+          </p>
+        </div>
 
-        {/* Matched contaminants for this postcode */}
-        {filter.matchedContaminants.length > 0 ? (
-          <div className="px-5">
-            <p className="text-xs font-medium text-ink mb-1.5">
-              Removes from {postcodeDistrict}
+        {/* What it removes — checklist */}
+        {removesFromHere.length > 0 && (
+          <div className="mt-4">
+            <p className="text-xs font-medium text-faint uppercase tracking-wider mb-2">
+              Removes from your water
             </p>
-            <ul className="space-y-1">
-              {filter.matchedContaminants
-                .slice(0, MOBILE_REMOVES_LIMIT)
-                .map((c) => (
-                  <li
-                    key={c}
-                    className="flex items-center gap-1.5 text-sm text-body"
-                  >
-                    <Check className="w-3.5 h-3.5 text-safe shrink-0" />
-                    {c}
-                  </li>
-                ))}
-              {filter.matchedContaminants.length > MOBILE_REMOVES_LIMIT && (
-                <>
-                  {filter.matchedContaminants
-                    .slice(MOBILE_REMOVES_LIMIT)
-                    .map((c) => (
-                      <li
-                        key={c}
-                        className="hidden sm:flex items-center gap-1.5 text-sm text-body"
-                      >
-                        <Check className="w-3.5 h-3.5 text-safe shrink-0" />
-                        {c}
-                      </li>
-                    ))}
-                  <li className="text-xs text-muted mt-1 sm:hidden">
-                    +{filter.matchedContaminants.length - MOBILE_REMOVES_LIMIT}{" "}
-                    more
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
-        ) : (
-          <RemovesList removes={filter.removes} />
-        )}
-
-        {/* Certifications */}
-        {filter.certifications.length > 0 && (
-          <div className="px-5 mt-3 flex flex-wrap gap-1">
-            {filter.certifications.map((cert) => (
-              <span
-                key={cert}
-                className="bg-gray-100 text-faint text-[10px] rounded px-1.5 py-0.5"
-              >
-                {cert}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Bottom area */}
-        <div className="px-5 pb-5 mt-auto pt-3">
-          {/* Price + rating */}
-          <div className="flex justify-between items-baseline">
-            <div className="flex items-baseline gap-1">
-              <span className="font-data text-xl font-bold text-ink">
-                &pound;{filter.priceGbp}
-              </span>
-              <span className="text-xs text-faint">approx.</span>
+            <div className="flex flex-wrap gap-2">
+              {removesFromHere.map((c) => (
+                <span
+                  key={c}
+                  className="inline-flex items-center gap-1 text-sm bg-emerald-50 text-emerald-700 rounded-full px-2.5 py-0.5"
+                >
+                  <Check className="w-3 h-3" />
+                  {c}
+                </span>
+              ))}
             </div>
-            <span className="flex items-center gap-1 text-sm text-muted">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              {filter.rating.toFixed(1)}
-            </span>
           </div>
+        )}
 
-          {/* CTA */}
+        {/* Price + CTA row */}
+        <div className="mt-5 flex items-center gap-4">
           <a
             href={filter.affiliateUrl}
             target="_blank"
             rel="noopener noreferrer sponsored"
-            className="mt-3 w-full bg-ink text-white py-2 sm:py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-gray-800 transition-colors"
+            className="flex-1 bg-ink text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors"
           >
-            Check price &amp; reviews
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            Check price & reviews
+            <ArrowRight className="w-4 h-4" />
           </a>
+          <div className="text-right shrink-0">
+            <p className="font-data text-xl font-bold text-ink">
+              £{filter.priceGbp}
+            </p>
+            <div className="flex items-center gap-1 justify-end">
+              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <span className="text-xs text-muted">{filter.rating}/5</span>
+            </div>
+          </div>
         </div>
       </div>
-    </ScrollReveal>
+    </div>
   );
 }
 
-/* ── FilterRecommendations — postcode-matched section ───────────────── */
+/* ── Alternative cards — compact, below the hero ──────────────────────── */
+
+function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
+  return (
+    <div className="card p-4 flex items-center gap-4">
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-faint">{CATEGORY_LABELS[filter.category]}</p>
+        <p className="font-semibold text-ink text-sm truncate">
+          {filter.brand} {filter.model}
+        </p>
+        {filter.matchedContaminants.length > 0 && (
+          <p className="text-xs text-muted mt-0.5 truncate">
+            Removes {filter.matchedContaminants.join(", ")}
+          </p>
+        )}
+      </div>
+      <div className="text-right shrink-0">
+        <p className="font-data font-bold text-ink">£{filter.priceGbp}</p>
+        <div className="flex items-center gap-0.5 justify-end">
+          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+          <span className="text-[11px] text-muted">{filter.rating}</span>
+        </div>
+      </div>
+      <a
+        href={filter.affiliateUrl}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className="shrink-0 p-2 rounded-lg border border-rule hover:border-accent hover:text-accent transition-colors"
+        aria-label={`View ${filter.brand} ${filter.model}`}
+      >
+        <ExternalLink className="w-4 h-4" />
+      </a>
+    </div>
+  );
+}
+
+/* ── FilterRecommendations — the full section ─────────────────────────── */
 
 interface FilterRecommendationsProps {
-  recommendations: (FilterProduct & {
-    matchedCount: number;
-    matchedContaminants: string[];
-  })[];
+  recommendations: RecommendedFilter[];
   postcodeDistrict: string;
   contaminantsFlagged: number;
 }
@@ -216,46 +198,61 @@ export function FilterRecommendations({
 }: FilterRecommendationsProps) {
   if (recommendations.length === 0) return null;
 
+  const hero = recommendations[0];
+  const alternatives = recommendations.slice(1);
+  const flaggedNames = hero.matchedContaminants;
+
   return (
     <section className="mt-10">
-      <div>
-        <h2 className="font-display text-2xl text-ink italic">
-          {contaminantsFlagged > 0
-            ? `What removes these from your water`
-            : `Filters for ${postcodeDistrict}`}
-        </h2>
-        <p className="mt-1.5 text-sm text-body max-w-2xl">
-          {contaminantsFlagged > 0
-            ? `We found ${contaminantsFlagged} contaminant${contaminantsFlagged !== 1 ? "s" : ""} above recommended levels in ${postcodeDistrict}. These filters are specifically matched to what was found in your area.`
-            : `General-purpose filters suitable for your area, based on common UK tap water concerns.`}
+      {/* Section header */}
+      <h2 className="font-display text-2xl text-ink italic">
+        {contaminantsFlagged > 0
+          ? "What removes these from your water"
+          : `Filters for ${postcodeDistrict}`}
+      </h2>
+      {contaminantsFlagged > 0 && (
+        <p className="text-sm text-body mt-1.5 max-w-2xl mb-6">
+          {contaminantsFlagged} contaminant{contaminantsFlagged !== 1 ? "s" : ""} flagged
+          in {postcodeDistrict}. These filters are matched to what was found in your water.
         </p>
-      </div>
+      )}
+      {contaminantsFlagged === 0 && (
+        <p className="text-sm text-muted mt-1.5 mb-6">
+          General-purpose filters for common UK tap water concerns.
+        </p>
+      )}
 
-      <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-3 mt-6">
-        {recommendations.map((filter, i) => (
-          <FilterCard
-            key={filter.id}
-            filter={filter}
-            postcodeDistrict={postcodeDistrict}
-            index={i}
-          />
-        ))}
-      </div>
+      {/* Hero recommendation — THE one pick */}
+      <HeroRecommendation
+        filter={hero}
+        postcodeDistrict={postcodeDistrict}
+        flaggedNames={flaggedNames}
+      />
 
+      {/* Alternatives */}
+      {alternatives.length > 0 && (
+        <details className="mt-4 group">
+          <summary className="cursor-pointer text-sm text-accent font-medium flex items-center gap-1 hover:underline">
+            <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+            {alternatives.length} more option{alternatives.length !== 1 ? "s" : ""}
+          </summary>
+          <div className="mt-3 space-y-2">
+            {alternatives.map((filter) => (
+              <AlternativeCard key={filter.id} filter={filter} />
+            ))}
+          </div>
+        </details>
+      )}
+
+      {/* Disclosure */}
       <p className="text-xs text-faint mt-4">
-        We may earn a commission through affiliate links, at no extra cost to
-        you. Recommendations are based on contaminant data, not sponsorship.{" "}
-        <Link
-          href="/affiliate-disclosure"
-          className="text-accent hover:underline"
-        >
+        Recommendations matched to your area&apos;s water data, not sponsorship.
+        We may earn a commission at no extra cost to you.{" "}
+        <Link href="/affiliate-disclosure" className="text-accent hover:underline">
           Affiliate disclosure
-        </Link>{" "}
-        &middot;{" "}
-        <Link
-          href="/guides/best-water-filters-uk"
-          className="text-accent hover:underline"
-        >
+        </Link>
+        {" · "}
+        <Link href="/guides/best-water-filters-uk" className="text-accent hover:underline">
           Full filter guide
         </Link>
       </p>
@@ -263,7 +260,7 @@ export function FilterRecommendations({
   );
 }
 
-/* ── FilterCards — standalone (used in guide pages) ─────────────────── */
+/* ── FilterCards — standalone (used in guide pages) ───────────────────── */
 
 interface FilterCardsProps {
   filters: FilterProduct[];
@@ -273,91 +270,38 @@ interface FilterCardsProps {
 export function FilterCards({ filters, postcode }: FilterCardsProps) {
   return (
     <section>
-      <div>
-        <h2 className="font-display text-2xl text-ink italic">
-          Filters for your area
-        </h2>
-        <p className="mt-1.5 text-sm text-muted flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-          Picked to match what we found in your water
-        </p>
-      </div>
-
-      <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory scrollbar-hide md:grid md:grid-cols-3 mt-6">
-        {filters.map((filter, i) => {
-          const badge = BADGE_CONFIG[filter.badge];
-          const stripColor = STRIP_COLOR[filter.badge];
-
-          return (
-            <ScrollReveal key={filter.id} delay={i * 100}>
-              <div className="card-elevated overflow-hidden flex flex-col w-[280px] shrink-0 snap-start md:w-auto md:shrink">
-                <div className={`h-[3px] w-full ${stripColor}`} />
-                <div className="mt-4 mx-5">
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs font-medium rounded-full px-2 py-0.5 ${badge.className}`}
-                  >
-                    {badge.icon}
-                    {badge.label}
-                  </span>
-                </div>
-                <div className="mt-3 px-5">
-                  <p className="text-sm text-muted">{filter.brand}</p>
-                  <p className="font-semibold text-ink text-sm sm:text-base leading-snug">
-                    {filter.model}
-                  </p>
-                  <p className="text-xs text-muted mt-0.5">
-                    {CATEGORY_LABELS[filter.category]}
-                  </p>
-                </div>
-                <div className="border-t border-rule mx-5 my-3" />
-                {filter.removes.length > 0 && (
-                  <RemovesList removes={filter.removes} />
-                )}
-                {filter.certifications.length > 0 && (
-                  <div className="px-5 mt-3 flex flex-wrap gap-1">
-                    {filter.certifications.map((cert) => (
-                      <span
-                        key={cert}
-                        className="bg-gray-100 text-faint text-[10px] rounded px-1.5 py-0.5"
-                      >
-                        {cert}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                <div className="px-5 pb-5 mt-auto pt-3">
-                  <div className="flex justify-between items-baseline">
-                    <span className="font-data text-xl font-bold text-ink">
-                      &pound;{filter.priceGbp}
-                    </span>
-                    <span className="flex items-center gap-1 text-sm text-muted">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      {filter.rating.toFixed(1)}
-                    </span>
-                  </div>
-                  <a
-                    href={filter.affiliateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer sponsored"
-                    className="mt-3 w-full bg-ink text-white py-2 sm:py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-gray-800 transition-colors"
-                  >
-                    Check Price
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
+      <div className="space-y-3">
+        {filters.map((filter) => (
+          <div key={filter.id} className="card p-4 flex items-center gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-faint">{CATEGORY_LABELS[filter.category]}</p>
+              <p className="font-semibold text-ink text-sm">{filter.brand} {filter.model}</p>
+              {filter.certifications.length > 0 && (
+                <p className="text-xs text-muted mt-0.5">{filter.certifications.join(", ")}</p>
+              )}
+            </div>
+            <div className="text-right shrink-0">
+              <p className="font-data font-bold text-ink">£{filter.priceGbp}</p>
+              <div className="flex items-center gap-0.5 justify-end">
+                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                <span className="text-[11px] text-muted">{filter.rating}</span>
               </div>
-            </ScrollReveal>
-          );
-        })}
+            </div>
+            <a
+              href={filter.affiliateUrl}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="shrink-0 text-sm font-medium text-accent hover:underline flex items-center gap-1"
+            >
+              View
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        ))}
       </div>
-
       <p className="text-xs text-faint mt-4">
-        We may earn a commission through affiliate links, at no extra cost to
-        you. Recommendations are based on contaminant data, not sponsorship.{" "}
-        <Link
-          href="/affiliate-disclosure"
-          className="text-accent hover:underline"
-        >
+        We may earn a commission through affiliate links.{" "}
+        <Link href="/affiliate-disclosure" className="text-accent hover:underline">
           Affiliate disclosure
         </Link>
       </p>
