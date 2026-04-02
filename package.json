@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "seed": "tsx scripts/seed-postcodes.ts",
+    "seed:lsoa": "tsx scripts/seed-lsoa.ts",
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest"
