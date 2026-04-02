@@ -9,22 +9,8 @@ import { getSupplier } from "./suppliers";
 import { computeScore } from "./scoring";
 import type { PostcodeSeedData } from "./ea-fetcher";
 import { TARGET_POSTCODES } from "./postcodes";
-
-interface PageDataRow {
-  postcode_district: string;
-  safety_score: number;
-  score_grade: string;
-  contaminants_tested: number;
-  contaminants_flagged: number;
-  pfas_detected: boolean;
-  pfas_level: number | null;
-  pfas_source: string | null;
-  all_readings: unknown;
-  environmental_context: unknown;
-  nearby_postcodes: string[];
-  last_data_update: string | null;
-  summary_text: string | null;
-}
+import type { StreamRecord } from "./stream-api";
+import type { ScoreResult } from "./scoring";
 
 /**
  * Upsert a postcode district into the database.
@@ -63,30 +49,85 @@ export async function upsertPostcodeDistrict(seedData: PostcodeSeedData): Promis
 }
 
 /**
- * Compute score from seed data and upsert into page_data.
+ * Bulk insert Stream tap water readings into drinking_water_readings table.
  */
-export async function upsertPageData(seedData: PostcodeSeedData): Promise<void> {
+export async function writeStreamReadings(
+  district: string,
+  supplierId: string,
+  records: StreamRecord[],
+): Promise<void> {
   const db = getSupabase();
 
-  // Compute score
-  const observations = seedData.topReadings.map((r) => ({
+  // Delete previous readings for this district to avoid duplicates
+  await db
+    .from("drinking_water_readings")
+    .delete()
+    .eq("postcode_district", district)
+    .eq("source", "stream_portal");
+
+  if (records.length === 0) return;
+
+  const rows = records.map((r) => ({
+    postcode_district: district,
+    supplier_id: supplierId,
+    supply_zone: null,
+    determinand: r.determinand,
+    value: r.value,
+    unit: r.unit,
+    uk_limit: null,
+    who_guideline: null,
+    sample_date: r.sampleDate,
+    source: "stream_portal",
+    source_ref: r.sampleId,
+  }));
+
+  // Batch insert in chunks of 1000
+  for (let i = 0; i < rows.length; i += 1000) {
+    const chunk = rows.slice(i, i + 1000);
+    const { error } = await db.from("drinking_water_readings").insert(chunk);
+    if (error) {
+      console.error(`[db-writer] drinking_water_readings insert failed for ${district}:`, error);
+    }
+  }
+}
+
+/**
+ * Compute score from seed data (and optional Stream data) and upsert into page_data.
+ */
+export async function upsertPageData(
+  seedData: PostcodeSeedData,
+  streamRecords?: StreamRecord[],
+): Promise<void> {
+  const db = getSupabase();
+
+  // Score EA environmental readings
+  const eaObservations = seedData.topReadings.map((r) => ({
     determinand: r.determinand,
     value: r.value,
     unit: r.unit,
     date: r.date,
   }));
-  const score = computeScore(observations);
+  const eaScore: ScoreResult = computeScore(eaObservations);
 
-  // Find nearby postcodes (same city or geographically close)
-  // We check against all target postcodes to find neighbors
-  // For a more accurate result, we'd query the DB, but this is fast enough
-  const allPostcodes = TARGET_POSTCODES as readonly string[];
+  // Score Stream drinking water readings (if available)
+  const hasStream = streamRecords && streamRecords.length > 0;
+  let drinkingScore: ScoreResult | null = null;
+
+  if (hasStream) {
+    const drinkingObs = streamRecords.map((r) => ({
+      determinand: r.determinand,
+      value: r.value,
+      unit: r.unit,
+      date: r.sampleDate,
+    }));
+    drinkingScore = computeScore(drinkingObs);
+  }
+
+  // Primary score: drinking water if available, else EA
+  const primaryScore = drinkingScore ?? eaScore;
+
+  // Nearby postcodes
   const nearby: string[] = [];
-
-  // We'll store a basic nearby list based on the target postcodes
-  // The full nearby computation happens in the data layer at read time
-  // For now, store empty — the data layer computes it
-  // Actually, let's compute a basic version by querying existing postcode_districts
   const { data: allDistricts } = await db
     .from("postcode_districts")
     .select("id, city, latitude, longitude")
@@ -104,24 +145,40 @@ export async function upsertPageData(seedData: PostcodeSeedData): Promise<void> 
     }
   }
 
-  // Most recent observation date
-  const dates = seedData.topReadings
-    .map((r) => r.date?.split("T")[0])
-    .filter(Boolean)
-    .sort()
-    .reverse();
-  const lastDataUpdate = dates[0] ?? null;
+  // Date range from Stream records
+  let dateRangeFrom: string | null = null;
+  let dateRangeTo: string | null = null;
+  if (hasStream) {
+    const dates = streamRecords
+      .map((r) => r.sampleDate)
+      .filter(Boolean)
+      .sort();
+    dateRangeFrom = dates[0] ?? null;
+    dateRangeTo = dates[dates.length - 1] ?? null;
+  }
 
-  const row: PageDataRow = {
+  // Most recent date (from whichever source has data)
+  const allDates = [
+    ...(hasStream ? streamRecords.map((r) => r.sampleDate) : []),
+    ...seedData.topReadings.map((r) => r.date?.split("T")[0]).filter(Boolean),
+  ].sort().reverse();
+  const lastDataUpdate = allDates[0] ?? null;
+
+  const dataSource = hasStream ? "stream" : "ea-only";
+
+  const row = {
     postcode_district: seedData.district,
-    safety_score: score.safetyScore,
-    score_grade: score.scoreGrade,
-    contaminants_tested: score.contaminantsTested,
-    contaminants_flagged: score.contaminantsFlagged,
-    pfas_detected: score.pfasDetected,
-    pfas_level: score.pfasLevel,
-    pfas_source: score.pfasDetected ? "environmental" : null,
-    all_readings: score.readings,
+    safety_score: primaryScore.safetyScore,
+    score_grade: primaryScore.scoreGrade,
+    contaminants_tested: primaryScore.contaminantsTested,
+    contaminants_flagged: primaryScore.contaminantsFlagged,
+    pfas_detected: primaryScore.pfasDetected,
+    pfas_level: primaryScore.pfasLevel,
+    pfas_source: primaryScore.pfasDetected
+      ? (hasStream ? "drinking" : "environmental")
+      : null,
+    all_readings: eaScore.readings,
+    drinking_water_readings: drinkingScore?.readings ?? null,
     environmental_context: {
       samplingPointCount: seedData.samplingPointCount,
       recentObservations: seedData.recentObservations,
@@ -130,9 +187,15 @@ export async function upsertPageData(seedData: PostcodeSeedData): Promise<void> 
     nearby_postcodes: nearby,
     last_data_update: lastDataUpdate,
     summary_text: null,
+    data_source: dataSource,
+    sample_count: hasStream ? streamRecords.length : 0,
+    date_range_from: dateRangeFrom,
+    date_range_to: dateRangeTo,
   };
 
-  const { error } = await db.from("page_data").upsert(row, { onConflict: "postcode_district" });
+  const { error } = await db
+    .from("page_data")
+    .upsert(row, { onConflict: "postcode_district" });
 
   if (error) {
     console.error(`[db-writer] page_data upsert failed for ${seedData.district}:`, error);
@@ -144,7 +207,16 @@ export async function upsertPageData(seedData: PostcodeSeedData): Promise<void> 
  * Process and store a single postcode's data.
  * Calls upsertPostcodeDistrict then upsertPageData in sequence.
  */
-export async function writePostcodeData(seedData: PostcodeSeedData): Promise<void> {
+export async function writePostcodeData(
+  seedData: PostcodeSeedData,
+  streamRecords?: StreamRecord[],
+): Promise<void> {
   await upsertPostcodeDistrict(seedData);
-  await upsertPageData(seedData);
+
+  if (streamRecords && streamRecords.length > 0) {
+    const supplier = getSupplier(seedData.city);
+    await writeStreamReadings(seedData.district, supplier.id, streamRecords);
+  }
+
+  await upsertPageData(seedData, streamRecords);
 }
