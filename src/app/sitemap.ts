@@ -13,6 +13,8 @@ const GUIDE_SLUGS = [
   "water-hardness-map",
   "understanding-your-water-supplier",
   "how-to-test-your-water",
+  "microplastics-uk-water",
+  "tap-water-vs-bottled-water",
 ];
 
 /**

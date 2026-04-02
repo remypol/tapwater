@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Guides — UK Water Quality Research",
@@ -53,6 +53,22 @@ const GUIDES = [
     icon: TestTube,
     iconColor: "text-emerald-600",
     iconBg: "bg-emerald-50",
+  },
+  {
+    slug: "microplastics-uk-water",
+    title: "Microplastics in UK Tap Water",
+    subtitle: "What the research says and how to reduce exposure",
+    icon: Microscope,
+    iconColor: "text-cyan-600",
+    iconBg: "bg-cyan-50",
+  },
+  {
+    slug: "tap-water-vs-bottled-water",
+    title: "Tap Water vs Bottled Water",
+    subtitle: "Testing, contamination, cost, and environmental impact compared",
+    icon: Scale,
+    iconColor: "text-indigo-600",
+    iconBg: "bg-indigo-50",
   },
 ];
 
