@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 
-const BATCH_SIZE = 12;
+const BATCH_SIZE = 6;
 
 export async function POST(request: NextRequest) {
   // Auth check

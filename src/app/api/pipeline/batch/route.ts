@@ -9,7 +9,7 @@ import { fetchStreamData } from "@/lib/stream-api";
 import { getLsoasForDistrict } from "@/lib/lsoa-lookup";
 import { getSupplier } from "@/lib/suppliers";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   // Auth check
