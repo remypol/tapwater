@@ -19,7 +19,7 @@ function gradeLabel(grade: string): string {
 
 export default async function Image({ params }: { params: Promise<{ district: string }> }) {
   const { district } = await params;
-  const data = getPostcodeData(district);
+  const data = await getPostcodeData(district);
 
   if (!data) {
     return new ImageResponse(

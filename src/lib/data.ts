@@ -1,70 +1,217 @@
 /**
  * Data layer for TapWater.uk
  *
- * Phase 1: Reads from seed JSON files (static data)
- * Phase 2: Will query Supabase directly
+ * Reads from Supabase (primary) with JSON seed fallback.
+ * All functions are async — pages must await them.
  */
 
-import seedData from "@/data/seed-postcodes.json";
+import { supabase } from "./supabase";
+import { getSupplier } from "./suppliers";
 import { computeScore, type ScoreResult } from "./scoring";
-import type { PostcodeData } from "./types";
+import type { PostcodeData, ContaminantReading } from "./types";
 
-// ── Water supplier mapping (simplified Phase 1) ──
+// ── JSON fallback (used when Supabase is not configured) ──
 
-const SUPPLIER_MAP: Record<string, { name: string; id: string }> = {
-  Westminster: { name: "Thames Water", id: "thames-water" },
-  Southwark: { name: "Thames Water", id: "thames-water" },
-  Greenwich: { name: "Thames Water", id: "thames-water" },
-  Hackney: { name: "Thames Water", id: "thames-water" },
-  "Tower Hamlets": { name: "Thames Water", id: "thames-water" },
-  Camden: { name: "Thames Water", id: "thames-water" },
-  "Kensington and Chelsea": { name: "Thames Water", id: "thames-water" },
-  "Hammersmith and Fulham": { name: "Thames Water", id: "thames-water" },
-  Barnet: { name: "Thames Water", id: "thames-water" },
-  Manchester: { name: "United Utilities", id: "united-utilities" },
-  Salford: { name: "United Utilities", id: "united-utilities" },
-  Liverpool: { name: "United Utilities", id: "united-utilities" },
-  Birmingham: { name: "Severn Trent", id: "severn-trent" },
-  Nottingham: { name: "Severn Trent", id: "severn-trent" },
-  Leeds: { name: "Yorkshire Water", id: "yorkshire-water" },
-  Sheffield: { name: "Yorkshire Water", id: "yorkshire-water" },
-  "Bristol, City of": { name: "Bristol Water", id: "bristol-water" },
-  "North Somerset": { name: "Bristol Water", id: "bristol-water" },
-  "Newcastle upon Tyne": { name: "Northumbrian Water", id: "northumbrian-water" },
-  Oxford: { name: "Thames Water", id: "thames-water" },
-  "South Oxfordshire": { name: "Thames Water", id: "thames-water" },
-  Reading: { name: "Thames Water", id: "thames-water" },
-  "West Berkshire": { name: "Thames Water", id: "thames-water" },
-  Wokingham: { name: "Thames Water", id: "thames-water" },
-  Cambridge: { name: "Anglian Water", id: "anglian-water" },
-  "South Cambridgeshire": { name: "Anglian Water", id: "anglian-water" },
-  Norwich: { name: "Anglian Water", id: "anglian-water" },
-  Broadland: { name: "Anglian Water", id: "anglian-water" },
-  "City of Edinburgh": { name: "Scottish Water", id: "scottish-water" },
-  Glasgow: { name: "Scottish Water", id: "scottish-water" },
-  "Glasgow City": { name: "Scottish Water", id: "scottish-water" },
-  "Aberdeen City": { name: "Scottish Water", id: "scottish-water" },
-  Cardiff: { name: "Dŵr Cymru Welsh Water", id: "welsh-water" },
-  Swansea: { name: "Dŵr Cymru Welsh Water", id: "welsh-water" },
-  "Brighton and Hove": { name: "Southern Water", id: "southern-water" },
-  Southampton: { name: "Southern Water", id: "southern-water" },
-  Portsmouth: { name: "Portsmouth Water", id: "portsmouth-water" },
-  Exeter: { name: "South West Water", id: "south-west-water" },
-  Plymouth: { name: "South West Water", id: "south-west-water" },
-  "Bath and North East Somerset": { name: "Wessex Water", id: "wessex-water" },
-  Leicester: { name: "Severn Trent", id: "severn-trent" },
-  Coventry: { name: "Severn Trent", id: "severn-trent" },
-  Derby: { name: "Severn Trent", id: "severn-trent" },
-  "Amber Valley": { name: "Severn Trent", id: "severn-trent" },
-  York: { name: "Yorkshire Water", id: "yorkshire-water" },
-  "Broxtowe": { name: "Severn Trent", id: "severn-trent" },
-};
+let jsonFallbackCache: Map<string, PostcodeData> | null = null;
 
-function getSupplier(city: string): { name: string; id: string } {
-  return SUPPLIER_MAP[city] ?? { name: "Unknown", id: "unknown" };
+async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
+  if (jsonFallbackCache) return jsonFallbackCache;
+
+  let seedData: SeedEntry[];
+  try {
+    const mod = await import("@/data/seed-postcodes.json");
+    seedData = (mod.default ?? mod) as SeedEntry[];
+  } catch {
+    // JSON file doesn't exist — return empty
+    jsonFallbackCache = new Map();
+    return jsonFallbackCache;
+  }
+
+  const cache = new Map<string, PostcodeData>();
+
+  for (const entry of seedData) {
+    const supplier = getSupplier(entry.city);
+    const observations = entry.topReadings.map((r) => ({
+      determinand: r.determinand,
+      value: r.value,
+      unit: r.unit,
+      date: r.date,
+    }));
+    const score: ScoreResult = computeScore(observations);
+
+    const nearby = seedData
+      .filter(
+        (other) =>
+          other.district !== entry.district &&
+          (other.city === entry.city ||
+            Math.abs(other.latitude - entry.latitude) < 0.05),
+      )
+      .map((o) => o.district)
+      .slice(0, 10);
+
+    const dates = entry.topReadings
+      .map((r) => r.date?.split("T")[0])
+      .filter(Boolean)
+      .sort()
+      .reverse();
+    const lastDate = dates[0] ?? "2000-01-01";
+
+    cache.set(entry.district.toUpperCase(), {
+      district: entry.district,
+      areaName: entry.areaName,
+      city: entry.city,
+      region: entry.region,
+      latitude: entry.latitude,
+      longitude: entry.longitude,
+      supplier: supplier.name,
+      supplierId: supplier.id,
+      supplyZone: `${entry.city} Central`,
+      safetyScore: score.safetyScore,
+      scoreGrade: score.scoreGrade,
+      contaminantsTested: score.contaminantsTested,
+      contaminantsFlagged: score.contaminantsFlagged,
+      pfasDetected: score.pfasDetected,
+      pfasLevel: score.pfasLevel,
+      pfasSource: score.pfasDetected ? "environmental" : null,
+      lastUpdated: lastDate,
+      lastSampleDate: lastDate,
+      readings: score.readings,
+      nearbyPostcodes: nearby,
+      historicalScores: buildHistoricalScores(score.safetyScore),
+    });
+  }
+
+  jsonFallbackCache = cache;
+  return cache;
 }
 
-// ── Build scored data from seed ──
+function buildHistoricalScores(
+  currentScore: number,
+): { year: number; score: number }[] {
+  const currentYear = new Date().getFullYear();
+  const baseScore = Math.max(2, currentScore - 1.5);
+  return Array.from({ length: 7 }, (_, i) => ({
+    year: currentYear - 6 + i,
+    score:
+      Math.round(
+        (baseScore + (currentScore - baseScore) * (i / 6)) * 10,
+      ) / 10,
+  }));
+}
+
+// ── Supabase data layer ──
+
+let supabaseCache: Map<string, PostcodeData> | null = null;
+
+async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
+  if (supabaseCache) return supabaseCache;
+  if (!supabase) return null;
+
+  try {
+    const { data: rows, error } = await supabase
+      .from("page_data")
+      .select(`
+        postcode_district,
+        safety_score,
+        score_grade,
+        contaminants_tested,
+        contaminants_flagged,
+        pfas_detected,
+        pfas_level,
+        pfas_source,
+        all_readings,
+        environmental_context,
+        nearby_postcodes,
+        last_data_update,
+        postcode_districts!inner (
+          area_name,
+          city,
+          region,
+          latitude,
+          longitude,
+          supplier_id,
+          supply_zone
+        )
+      `);
+
+    if (error || !rows || rows.length === 0) return null;
+
+    const cache = new Map<string, PostcodeData>();
+
+    for (const row of rows) {
+      const pd = row.postcode_districts as unknown as {
+        area_name: string;
+        city: string;
+        region: string;
+        latitude: number;
+        longitude: number;
+        supplier_id: string | null;
+        supply_zone: string | null;
+      };
+
+      const supplier = pd.supplier_id
+        ? await getSupplierById(pd.supplier_id)
+        : getSupplier(pd.city);
+
+      const readings = (row.all_readings ?? []) as ContaminantReading[];
+      const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
+
+      cache.set(row.postcode_district.toUpperCase(), {
+        district: row.postcode_district,
+        areaName: pd.area_name,
+        city: pd.city,
+        region: pd.region,
+        latitude: pd.latitude,
+        longitude: pd.longitude,
+        supplier: supplier.name,
+        supplierId: supplier.id,
+        supplyZone: pd.supply_zone ?? `${pd.city} Central`,
+        safetyScore: row.safety_score,
+        scoreGrade: row.score_grade as PostcodeData["scoreGrade"],
+        contaminantsTested: row.contaminants_tested,
+        contaminantsFlagged: row.contaminants_flagged,
+        pfasDetected: row.pfas_detected,
+        pfasLevel: row.pfas_level,
+        pfasSource: row.pfas_source as PostcodeData["pfasSource"],
+        lastUpdated: lastDate,
+        lastSampleDate: lastDate,
+        readings,
+        nearbyPostcodes: row.nearby_postcodes ?? [],
+        historicalScores: buildHistoricalScores(row.safety_score),
+      });
+    }
+
+    supabaseCache = cache;
+    return cache;
+  } catch (err) {
+    console.error("[data] Supabase load failed, falling back to JSON:", err);
+    return null;
+  }
+}
+
+async function getSupplierById(
+  id: string,
+): Promise<{ name: string; id: string }> {
+  if (!supabase) return { name: "Unknown", id };
+
+  const { data } = await supabase
+    .from("water_suppliers")
+    .select("name")
+    .eq("id", id)
+    .single();
+
+  return { name: data?.name ?? "Unknown", id };
+}
+
+// ── Unified loader: Supabase first, JSON fallback ──
+
+async function loadData(): Promise<Map<string, PostcodeData>> {
+  const fromDb = await loadFromSupabase();
+  if (fromDb && fromDb.size > 0) return fromDb;
+  return loadJsonFallback();
+}
+
+// ── Seed entry type (for JSON fallback) ──
 
 interface SeedEntry {
   district: string;
@@ -85,97 +232,26 @@ interface SeedEntry {
   }[];
 }
 
-const typed = seedData as SeedEntry[];
+// ── Public API (all async) ──
 
-// Precompute all postcode data at module load
-const postcodeCache = new Map<string, PostcodeData>();
-
-for (const entry of typed) {
-  const supplier = getSupplier(entry.city);
-
-  // Compute score from observations
-  const observations = entry.topReadings.map((r) => ({
-    determinand: r.determinand,
-    value: r.value,
-    unit: r.unit,
-    date: r.date,
-  }));
-
-  const score: ScoreResult = computeScore(observations);
-
-  // Find nearby postcodes (same city or geographically close)
-  const nearby = typed
-    .filter(
-      (other) =>
-        other.district !== entry.district &&
-        (other.city === entry.city ||
-          Math.abs(other.latitude - entry.latitude) < 0.05)
-    )
-    .map((o) => o.district)
-    .slice(0, 10);
-
-  const data: PostcodeData = {
-    district: entry.district,
-    areaName: entry.areaName,
-    city: entry.city,
-    region: entry.region,
-    latitude: entry.latitude,
-    longitude: entry.longitude,
-    supplier: supplier.name,
-    supplierId: supplier.id,
-    supplyZone: `${entry.city} Central`,
-    safetyScore: score.safetyScore,
-    scoreGrade: score.scoreGrade,
-    contaminantsTested: score.contaminantsTested,
-    contaminantsFlagged: score.contaminantsFlagged,
-    pfasDetected: score.pfasDetected,
-    pfasLevel: score.pfasLevel,
-    pfasSource: score.pfasDetected ? "environmental" : null,
-    lastUpdated: (() => {
-      // Use the most recent observation date, not today's date
-      const dates = entry.topReadings
-        .map((r) => r.date?.split("T")[0])
-        .filter(Boolean)
-        .sort()
-        .reverse();
-      return dates[0] ?? "2000-01-01";
-    })(),
-    lastSampleDate: (() => {
-      const dates = entry.topReadings
-        .map((r) => r.date?.split("T")[0])
-        .filter(Boolean)
-        .sort()
-        .reverse();
-      return dates[0] ?? "2000-01-01";
-    })(),
-    readings: score.readings,
-    nearbyPostcodes: nearby,
-    historicalScores: (() => {
-      const currentYear = 2026;
-      const baseScore = Math.max(2, score.safetyScore - 1.5);
-      return Array.from({ length: 7 }, (_, i) => ({
-        year: currentYear - 6 + i,
-        score: Math.round((baseScore + (score.safetyScore - baseScore) * (i / 6)) * 10) / 10,
-      }));
-    })(),
-  };
-
-  postcodeCache.set(entry.district.toUpperCase(), data);
+export async function getPostcodeData(
+  district: string,
+): Promise<PostcodeData | null> {
+  const cache = await loadData();
+  return cache.get(district.toUpperCase()) ?? null;
 }
 
-// ── Public API ──
-
-export function getPostcodeData(district: string): PostcodeData | null {
-  return postcodeCache.get(district.toUpperCase()) ?? null;
+export async function getAllPostcodeDistricts(): Promise<string[]> {
+  const cache = await loadData();
+  return Array.from(cache.keys()).sort();
 }
 
-export function getAllPostcodeDistricts(): string[] {
-  return Array.from(postcodeCache.keys()).sort();
-}
-
-export function getPostcodesByCity(city: string): PostcodeData[] {
-  return Array.from(postcodeCache.values()).filter(
-    (p) => p.city.toLowerCase() === city.toLowerCase()
+export async function getPostcodesByCity(
+  city: string,
+): Promise<PostcodeData[]> {
+  const cache = await loadData();
+  return Array.from(cache.values()).filter(
+    (p) => p.city.toLowerCase() === city.toLowerCase(),
   );
 }
 
@@ -188,16 +264,14 @@ export interface MapPostcode {
   scoreGrade: string;
 }
 
-export function getMapPostcodes(): MapPostcode[] {
-  return typed.map((entry) => {
-    const data = postcodeCache.get(entry.district.toUpperCase());
-    return {
-      district: entry.district,
-      areaName: entry.areaName,
-      lat: entry.latitude,
-      lng: entry.longitude,
-      score: data?.safetyScore ?? -1,
-      scoreGrade: data?.scoreGrade ?? "insufficient-data",
-    };
-  });
+export async function getMapPostcodes(): Promise<MapPostcode[]> {
+  const cache = await loadData();
+  return Array.from(cache.values()).map((data) => ({
+    district: data.district,
+    areaName: data.areaName,
+    lat: data.latitude,
+    lng: data.longitude,
+    score: data.safetyScore,
+    scoreGrade: data.scoreGrade,
+  }));
 }

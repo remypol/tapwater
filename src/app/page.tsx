@@ -32,12 +32,12 @@ export const metadata: Metadata = {
   },
 };
 
-function buildTrustMetrics() {
-  const districts = getAllPostcodeDistricts();
+async function buildTrustMetrics() {
+  const districts = await getAllPostcodeDistricts();
   let validCount = 0;
   let pfasCount = 0;
   for (const d of districts) {
-    const data = getPostcodeData(d);
+    const data = await getPostcodeData(d);
     if (data && data.safetyScore >= 0) {
       validCount++;
       if (data.pfasDetected) pfasCount++;
@@ -65,15 +65,15 @@ function scoreTextClass(score: number): string {
   return "text-danger";
 }
 
-function buildRankedPostcodes(): {
+async function buildRankedPostcodes(): Promise<{
   worst: PostcodeData[];
   best: PostcodeData[];
-} {
-  const districts = getAllPostcodeDistricts();
+}> {
+  const districts = await getAllPostcodeDistricts();
 
   const all: PostcodeData[] = [];
   for (const d of districts) {
-    const data = getPostcodeData(d);
+    const data = await getPostcodeData(d);
     if (data && data.safetyScore >= 0) {
       all.push(data);
     }
@@ -87,10 +87,24 @@ function buildRankedPostcodes(): {
   };
 }
 
-export default function HomePage() {
-  const { worst, best } = buildRankedPostcodes();
-  const mapPostcodes = getMapPostcodes();
-  const TRUST_METRICS = buildTrustMetrics();
+export default async function HomePage() {
+  const { worst, best } = await buildRankedPostcodes();
+  const mapPostcodes = await getMapPostcodes();
+  const TRUST_METRICS = await buildTrustMetrics();
+
+  // Pre-fetch popular searches
+  const popularSearches = (
+    await Promise.all(
+      MOST_CHECKED.map(async (district) => ({
+        district,
+        data: await getPostcodeData(district),
+      })),
+    )
+  )
+    .filter((row): row is { district: string; data: PostcodeData } =>
+      row.data !== null && row.data.safetyScore >= 0,
+    )
+    .slice(0, 6);
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
@@ -280,11 +294,7 @@ export default function HomePage() {
         </h2>
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
-          {MOST_CHECKED
-            .map((district) => ({ district, data: getPostcodeData(district) }))
-            .filter(({ data }) => data && data.safetyScore >= 0)
-            .slice(0, 6)
-            .map(({ district, data }) => (
+          {popularSearches.map(({ district, data }) => (
               <Link
                 key={district}
                 href={`/postcode/${district}/`}
@@ -294,10 +304,10 @@ export default function HomePage() {
                   {district}
                 </span>
                 <span className="text-sm text-muted flex-1 truncate">
-                  {data!.areaName}
+                  {data.areaName}
                 </span>
-                <span className={`${scoreBadgeClass(data!.safetyScore)} font-data shrink-0`}>
-                  {data!.safetyScore.toFixed(1)}
+                <span className={`${scoreBadgeClass(data.safetyScore)} font-data shrink-0`}>
+                  {data.safetyScore.toFixed(1)}
                 </span>
                 <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
               </Link>

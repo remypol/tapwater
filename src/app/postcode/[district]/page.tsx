@@ -17,13 +17,14 @@ interface Props {
   params: Promise<{ district: string }>;
 }
 
-export function generateStaticParams() {
-  return getAllPostcodeDistricts().map((district) => ({ district }));
+export async function generateStaticParams() {
+  const districts = await getAllPostcodeDistricts();
+  return districts.map((district) => ({ district }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { district } = await params;
-  const data = getPostcodeData(district);
+  const data = await getPostcodeData(district);
   if (!data) return { title: "Not Found" };
 
   const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free 2026 report for ${data.areaName}.`;
@@ -76,7 +77,7 @@ function getScoreBadgeColor(score: number): string {
 
 export default async function PostcodePage({ params }: Props) {
   const { district } = await params;
-  const data = getPostcodeData(district);
+  const data = await getPostcodeData(district);
   if (!data) notFound();
 
   const hasData = data.safetyScore >= 0;
@@ -84,10 +85,12 @@ export default async function PostcodePage({ params }: Props) {
   const gradientClass = GRADIENT_CLASS[scoreColor];
 
   // Pre-fetch nearby postcode data for the enriched nearby section
-  const nearbyData = data.nearbyPostcodes.map((pc) => ({
-    code: pc,
-    data: getPostcodeData(pc),
-  }));
+  const nearbyData = await Promise.all(
+    data.nearbyPostcodes.map(async (pc) => ({
+      code: pc,
+      data: await getPostcodeData(pc),
+    })),
+  );
 
   return (
     <div className={gradientClass}>

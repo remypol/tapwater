@@ -77,18 +77,27 @@ export default async function SupplierPage({ params }: Props) {
   }
 
   // Resolve real scores for all postcode areas
-  const postcodeRows = supplier.postcodeAreas
-    .map((area) => ({
-      area,
-      data: getPostcodeData(area),
-    }))
+  const postcodeRows = (
+    await Promise.all(
+      supplier.postcodeAreas.map(async (area) => ({
+        area,
+        data: await getPostcodeData(area),
+      })),
+    )
+  )
     .filter((row) => row.data !== null)
     .sort((a, b) => (a.data!.safetyScore ?? 0) - (b.data!.safetyScore ?? 0));
 
   // Areas with no data (not in seed)
-  const unknownAreas = supplier.postcodeAreas.filter(
-    (area) => getPostcodeData(area) === null
+  const allAreaData = await Promise.all(
+    supplier.postcodeAreas.map(async (area) => ({
+      area,
+      data: await getPostcodeData(area),
+    })),
   );
+  const unknownAreas = allAreaData
+    .filter((row) => row.data === null)
+    .map((row) => row.area);
 
   // Aggregate quality stats
   const scoredRows = postcodeRows.filter((r) => r.data !== null);
@@ -292,8 +301,7 @@ export default async function SupplierPage({ params }: Props) {
               All postcode districts within {supplier.name}&apos;s supply network.
             </p>
             <div className="flex flex-wrap gap-2">
-              {supplier.postcodeAreas.map((area) => {
-                const pd = getPostcodeData(area);
+              {allAreaData.map(({ area, data: pd }) => {
                 return pd ? (
                   <Link
                     key={area}

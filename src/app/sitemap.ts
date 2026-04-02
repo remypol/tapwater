@@ -18,10 +18,10 @@ const GUIDE_SLUGS = [
  * Get the most recent data date across all postcodes for static pages.
  * Falls back to a fixed date rather than `new Date()` to avoid misleading freshness.
  */
-function getLatestDataDate(): Date {
+async function getLatestDataDate(): Promise<Date> {
   let latest = "2024-01-01";
-  for (const district of getAllPostcodeDistricts()) {
-    const data = getPostcodeData(district);
+  for (const district of await getAllPostcodeDistricts()) {
+    const data = await getPostcodeData(district);
     if (data && data.lastUpdated > latest) {
       latest = data.lastUpdated;
     }
@@ -29,19 +29,22 @@ function getLatestDataDate(): Date {
   return new Date(latest);
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const latestDataDate = getLatestDataDate();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const latestDataDate = await getLatestDataDate();
+  const districts = await getAllPostcodeDistricts();
 
-  const postcodePaths = getAllPostcodeDistricts().map((district) => {
-    const data = getPostcodeData(district);
-    const lastMod = data?.lastUpdated ? new Date(data.lastUpdated) : latestDataDate;
-    return {
-      url: `${BASE_URL}/postcode/${district}/`,
-      lastModified: lastMod,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    };
-  });
+  const postcodePaths = await Promise.all(
+    districts.map(async (district) => {
+      const data = await getPostcodeData(district);
+      const lastMod = data?.lastUpdated ? new Date(data.lastUpdated) : latestDataDate;
+      return {
+        url: `${BASE_URL}/postcode/${district}/`,
+        lastModified: lastMod,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      };
+    }),
+  );
 
   const supplierPaths = MOCK_SUPPLIERS.map((s) => ({
     url: `${BASE_URL}/supplier/${s.id}/`,

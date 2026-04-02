@@ -1,50 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Daily cron endpoint — triggers a fresh Vercel deployment.
- *
- * The redeployment re-runs the build, which fetches the latest EA Water
- * Quality data via the seed script. This keeps postcode scores current
- * without needing a database.
- *
- * Requires:
- *   CRON_SECRET     — set automatically by Vercel for cron jobs
- *   DEPLOY_HOOK_URL — create a Deploy Hook in Vercel Dashboard → Settings → Git → Deploy Hooks
+ * Daily cron job (4am UTC) — triggers the EA data pipeline.
+ * The pipeline fetches fresh data from the EA API in batches,
+ * writes to Supabase, then fires the deploy hook to rebuild the site.
  */
 export async function GET(request: NextRequest) {
-  // Verify the request is from Vercel Cron
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const hookUrl = process.env.DEPLOY_HOOK_URL;
-  if (!hookUrl) {
-    console.error("[cron/refresh] DEPLOY_HOOK_URL not configured");
-    return NextResponse.json(
-      { error: "Deploy hook not configured" },
-      { status: 500 }
-    );
-  }
+  // Determine base URL for internal call
+  const proto = request.headers.get("x-forwarded-proto") ?? "https";
+  const host = request.headers.get("host") ?? process.env.VERCEL_URL ?? "localhost:3000";
+  const baseUrl = `${proto}://${host}`;
 
   try {
-    const res = await fetch(hookUrl, { method: "POST" });
+    const res = await fetch(`${baseUrl}/api/pipeline/start`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CRON_SECRET}`,
+      },
+    });
+
+    const data = await res.json();
+
     if (!res.ok) {
-      console.error("[cron/refresh] Deploy hook failed:", res.status);
+      console.error("[cron/refresh] Pipeline start failed:", data);
       return NextResponse.json(
-        { error: "Deploy hook failed", status: res.status },
-        { status: 502 }
+        { error: "Pipeline start failed", details: data },
+        { status: res.status },
       );
     }
 
-    console.log("[cron/refresh] Triggered fresh deployment");
+    console.log("[cron/refresh] Pipeline started:", data);
     return NextResponse.json({
       ok: true,
-      message: "Deployment triggered",
-      timestamp: new Date().toISOString(),
+      message: "Pipeline started",
+      ...data,
     });
   } catch (err) {
     console.error("[cron/refresh] Error:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to trigger pipeline" },
+      { status: 500 },
+    );
   }
 }
