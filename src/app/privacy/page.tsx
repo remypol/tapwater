@@ -18,7 +18,7 @@ export default function PrivacyPage() {
           under UK data protection law, including the UK GDPR and the Data Protection Act 2018.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Information We Collect</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Information We Collect</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           We collect limited information in order to provide and improve our service:
         </p>
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
           </li>
         </ul>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">How We Use Your Information</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">How We Use Your Information</h2>
         <p className="text-base text-body leading-relaxed mb-4">We use the information we collect to:</p>
         <ul className="list-disc pl-5 mb-6 space-y-2 text-base text-body leading-relaxed">
           <li>Provide and operate the TapWater.uk service</li>
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
           email provider to send alert emails).
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Your Rights</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Your Rights</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Under UK data protection law, you have the right to:
         </p>
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
           .
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Changes to This Policy</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Changes to This Policy</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           We may update this policy from time to time. When we do, we will update the date at the
           top of this page. We encourage you to review this policy periodically.

@@ -183,7 +183,7 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 4. Health Effects */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-ink mb-3">
+        <h2 className="font-display text-xl italic text-ink mb-3">
           Health Effects
         </h2>
         <p className="text-base text-body leading-relaxed">
@@ -193,7 +193,7 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 5. Where It Comes From */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-ink mb-3">
+        <h2 className="font-display text-xl italic text-ink mb-3">
           Where It Comes From
         </h2>
         <p className="text-base text-body leading-relaxed">
@@ -203,7 +203,7 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 6. Regulatory Standards */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-ink mb-4">
+        <h2 className="font-display text-xl italic text-ink mb-4">
           Regulatory Standards
         </h2>
         <div className="overflow-x-auto">
@@ -274,7 +274,7 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 7. How to Remove */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-ink mb-4">
+        <h2 className="font-display text-xl italic text-ink mb-4">
           How to Remove {contaminant.name}
         </h2>
         <ul className="space-y-3">
@@ -298,7 +298,7 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 8. Check Your Area */}
       <section className="mt-10 bg-wash rounded-xl border border-rule p-6">
-        <h2 className="text-xl font-bold text-ink mb-2">
+        <h2 className="font-display text-xl italic text-ink mb-2">
           Check Your Area
         </h2>
         <p className="text-base text-body mb-4">

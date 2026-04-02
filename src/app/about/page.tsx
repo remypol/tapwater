@@ -27,7 +27,7 @@ export default function AboutPage() {
           area in England and Wales.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Our Mission</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Our Mission</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Water quality data in the UK is public, but it is scattered across multiple government
           portals, presented in technical formats, and difficult for ordinary households to
@@ -41,7 +41,7 @@ export default function AboutPage() {
           is updated regularly and completely free to use.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">How It Works</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">How It Works</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Our reports are built from three complementary data layers:
         </p>
@@ -74,7 +74,7 @@ export default function AboutPage() {
           page.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">What We Are Not</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">What We Are Not</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           TapWater.uk is an independent research project. We are not affiliated with any water
           company, government body, or regulator. Nothing on this site constitutes medical or health
@@ -87,7 +87,7 @@ export default function AboutPage() {
           source for supply issues and can carry out testing at your property.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Contact</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Contact</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           For questions, corrections, or data feedback, email us at{' '}
           <a

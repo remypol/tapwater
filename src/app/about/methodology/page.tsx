@@ -25,7 +25,7 @@ export default function MethodologyPage() {
           How We Calculate Water Quality Scores
         </h1>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Overview</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Overview</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Each area on TapWater.uk receives a safety score between 0 and 10. A score of 10 means
           every measured parameter is well within its regulatory limit; a score of 0 would indicate
@@ -38,7 +38,7 @@ export default function MethodologyPage() {
           between measured levels and the limits set by the Drinking Water Inspectorate.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Data Sources</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Data Sources</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           The overall score is derived from two layers of data, combined with fixed weights:
         </p>
@@ -63,7 +63,7 @@ export default function MethodologyPage() {
           not reflect the output of the treatment process.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Scoring Formula</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Scoring Formula</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           For each measured parameter, we calculate a parameter score based on how close the
           measured value is to its regulatory limit:
@@ -107,7 +107,7 @@ export default function MethodologyPage() {
           overall_score = (drinking_score × 0.8) + (env_score × 0.2)
         </div>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Grade Scale</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Grade Scale</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Scores are mapped to a five-band grade for easier interpretation:
         </p>
@@ -150,7 +150,7 @@ export default function MethodologyPage() {
           </table>
         </div>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Transparency</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Transparency</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Every report page shows the individual parameter readings that contribute to the score,
           so you can see exactly which substances were measured, at what concentration, and how that
@@ -163,7 +163,7 @@ export default function MethodologyPage() {
           data is extensive, we flag this on the report.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Limitations</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Limitations</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Our score is a useful summary, but it does not capture everything. Key limitations to be
           aware of:

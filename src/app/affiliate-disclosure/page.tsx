@@ -18,7 +18,7 @@ export default function AffiliateDisclosurePage() {
           explains what that means for you.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">How Affiliate Links Work</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">How Affiliate Links Work</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           Some links on this website — particularly links to water filters and related products —
           are affiliate links. This means that if you click on a link and subsequently make a
@@ -31,7 +31,7 @@ export default function AffiliateDisclosurePage() {
           used only for products we have assessed as genuinely relevant to our readers.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Our Editorial Independence</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Our Editorial Independence</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           Affiliate relationships do not influence our editorial content. We do not accept payment
           to feature, rank, or recommend specific products. Our product recommendations are based
@@ -44,7 +44,7 @@ export default function AffiliateDisclosurePage() {
           contaminants detected in your area.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Compliance</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Compliance</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           This disclosure is made in accordance with the UK Competition and Markets Authority
           (CMA) guidance on online endorsements and the ASA/CAP code on advertising disclosure.
@@ -52,7 +52,7 @@ export default function AffiliateDisclosurePage() {
           influence content on this site.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Questions</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Questions</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           If you have any questions about our affiliate relationships or how they may affect our
           content, please contact us at{' '}

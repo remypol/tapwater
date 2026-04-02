@@ -31,7 +31,7 @@ export default function DataSourcesPage() {
           like this.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
           Drinking Water Inspectorate (DWI)
         </h2>
         <p className="text-base text-body leading-relaxed mb-4">
@@ -55,7 +55,7 @@ export default function DataSourcesPage() {
           the most recent available result for each parameter when calculating scores.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
           Water Company Postcode Lookups
         </h2>
         <p className="text-base text-body leading-relaxed mb-4">
@@ -73,7 +73,7 @@ export default function DataSourcesPage() {
           to the correct zone.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
           Environment Agency Water Quality API
         </h2>
         <p className="text-base text-body leading-relaxed mb-4">
@@ -107,7 +107,7 @@ export default function DataSourcesPage() {
           .
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Postcode Mapping</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Postcode Mapping</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Translating a postcode search into the correct water supply zone involves two reference
           datasets:
@@ -125,7 +125,7 @@ export default function DataSourcesPage() {
           </li>
         </ul>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Update Frequency</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Update Frequency</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           Different data sources are refreshed on different schedules, reflecting the cadence at
           which upstream data is published:
@@ -147,7 +147,7 @@ export default function DataSourcesPage() {
           </li>
         </ul>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Open Data</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Open Data</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           The Environment Agency water quality data is published under the Open Government Licence
           and is freely available to anyone. DWI drinking water reports are public documents

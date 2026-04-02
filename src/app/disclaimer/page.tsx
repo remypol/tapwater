@@ -12,7 +12,7 @@ export default function DisclaimerPage() {
         <h1 className="text-3xl font-bold font-display italic text-ink mb-2">Disclaimer</h1>
         <p className="text-sm text-muted mb-8">Last updated: April 2026</p>
 
-        <h2 className="text-xl font-bold text-ink mb-4">Educational Information Only</h2>
+        <h2 className="font-display text-xl italic text-ink mb-4">Educational Information Only</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           The information provided on TapWater.uk is intended for general educational and
           informational purposes only. Nothing on this website constitutes medical, health, or
@@ -21,7 +21,7 @@ export default function DisclaimerPage() {
           or other relevant expert.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Accuracy of Data</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Accuracy of Data</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           TapWater.uk aggregates data from publicly available UK government sources, including the
           Drinking Water Inspectorate, the Environment Agency, and individual water companies. While
@@ -44,7 +44,7 @@ export default function DisclaimerPage() {
           .
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">No Warranty</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">No Warranty</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           This website is provided &ldquo;as is&rdquo; without any representations or warranties, express or
           implied. We make no warranties in relation to the accuracy, completeness, suitability,
@@ -52,21 +52,21 @@ export default function DisclaimerPage() {
           website for any purpose.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Limitation of Liability</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Limitation of Liability</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           To the extent permitted by law, TapWater.uk will not be liable for any loss or damage
           — including, without limitation, indirect or consequential loss or damage — arising out
           of or in connection with the use of this website or any information contained on it.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">External Links</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">External Links</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           This website may contain links to external websites. We have no control over the content
           of those sites and accept no responsibility for them or for any loss or damage that may
           arise from your use of them.
         </p>
 
-        <h2 className="text-xl font-bold text-ink mt-10 mb-4">Contact</h2>
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Contact</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           If you have any questions about this disclaimer, please contact us at{' '}
           <a href="mailto:hello@tapwater.uk" className="text-accent underline underline-offset-2 hover:text-accent-hover">
