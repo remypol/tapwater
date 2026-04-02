@@ -185,6 +185,246 @@ export const CITIES: CityInfo[] = [
       "Portsmouth Water draws from chalk springs and boreholes in the Hampshire Downs, one of the UK's smallest water companies.",
     matches: ["Portsmouth"],
   },
+  {
+    slug: "leicester",
+    name: "Leicester",
+    region: "England",
+    description:
+      "Severn Trent supplies Leicester from Rutland Water, the largest reservoir by surface area in England.",
+    matches: ["Leicester"],
+  },
+  {
+    slug: "coventry",
+    name: "Coventry",
+    region: "England",
+    description:
+      "Severn Trent serves Coventry with water drawn from the River Severn and Derwent Valley reservoirs.",
+    matches: ["Coventry"],
+  },
+  {
+    slug: "derby",
+    name: "Derby",
+    region: "England",
+    description:
+      "Severn Trent supplies Derby from the Derwent Valley reservoirs, which also supply much of the East Midlands.",
+    matches: ["Derby", "Amber Valley"],
+  },
+  {
+    slug: "stoke-on-trent",
+    name: "Stoke-on-Trent",
+    region: "England",
+    description:
+      "Severn Trent supplies Stoke-on-Trent, drawing water from reservoirs in the Peak District uplands.",
+    matches: ["Stoke-on-Trent"],
+  },
+  {
+    slug: "wolverhampton",
+    name: "Wolverhampton",
+    region: "England",
+    description:
+      "South Staffordshire Water serves Wolverhampton, drawing primarily from the River Severn and local groundwater.",
+    matches: ["Wolverhampton", "South Staffordshire"],
+  },
+  {
+    slug: "plymouth",
+    name: "Plymouth",
+    region: "England",
+    description:
+      "South West Water supplies Plymouth from Burrator Reservoir on Dartmoor, a source used since Victorian times.",
+    matches: ["Plymouth"],
+  },
+  {
+    slug: "southampton",
+    name: "Southampton",
+    region: "England",
+    description:
+      "Southern Water supplies Southampton from chalk aquifers in the Test Valley and river abstraction points.",
+    matches: ["Southampton", "Eastleigh"],
+  },
+  {
+    slug: "reading",
+    name: "Reading",
+    region: "England",
+    description:
+      "Thames Water supplies Reading from the River Thames and groundwater sources in the Thames Valley.",
+    matches: ["Reading", "West Berkshire", "Wokingham"],
+  },
+  {
+    slug: "northampton",
+    name: "Northampton",
+    region: "England",
+    description:
+      "Anglian Water supplies Northampton from the Ruthamford system, a network of reservoirs and river abstraction points.",
+    matches: ["Northampton", "Northamptonshire"],
+  },
+  {
+    slug: "sunderland",
+    name: "Sunderland",
+    region: "England",
+    description:
+      "Northumbrian Water serves Sunderland with water from Kielder Water and the River Wear catchment.",
+    matches: ["Sunderland"],
+  },
+  {
+    slug: "warrington",
+    name: "Warrington",
+    region: "England",
+    description:
+      "United Utilities supplies Warrington from Lake District and Peak District reservoirs via an extensive treatment network.",
+    matches: ["Warrington"],
+  },
+  {
+    slug: "huddersfield",
+    name: "Huddersfield",
+    region: "England",
+    description:
+      "Yorkshire Water serves Huddersfield from Pennine reservoirs including Digley, Butterley, and Wessenden.",
+    matches: ["Kirklees"],
+  },
+  {
+    slug: "blackpool",
+    name: "Blackpool",
+    region: "England",
+    description:
+      "United Utilities supplies Blackpool from Lake District reservoirs, with water treated at Franklaw works.",
+    matches: ["Blackpool", "Fylde", "Wyre"],
+  },
+  {
+    slug: "ipswich",
+    name: "Ipswich",
+    region: "England",
+    description:
+      "Anglian Water supplies Ipswich from the River Orwell and groundwater sources in the Gipping Valley.",
+    matches: ["Ipswich", "Suffolk Coastal"],
+  },
+  {
+    slug: "norwich",
+    name: "Norwich",
+    region: "England",
+    description:
+      "Anglian Water supplies Norwich from chalk aquifers beneath Norfolk, producing moderately hard water.",
+    matches: ["Norwich", "Broadland"],
+  },
+  {
+    slug: "preston",
+    name: "Preston",
+    region: "England",
+    description:
+      "United Utilities serves Preston from Thirlmere and Haweswater in the Lake District, via the Pennine aqueduct.",
+    matches: ["Preston", "South Ribble"],
+  },
+  {
+    slug: "gloucester",
+    name: "Gloucester",
+    region: "England",
+    description:
+      "Severn Trent supplies Gloucester from the River Severn, with treatment at Mythe and Tewkesbury works.",
+    matches: ["Gloucester", "Tewkesbury"],
+  },
+  {
+    slug: "cheltenham",
+    name: "Cheltenham",
+    region: "England",
+    description:
+      "Severn Trent serves Cheltenham from Severn river sources and the Cotswold aquifer.",
+    matches: ["Cheltenham"],
+  },
+  {
+    slug: "lincoln",
+    name: "Lincoln",
+    region: "England",
+    description:
+      "Anglian Water supplies Lincoln from the River Witham and Lincoln Edge limestone aquifer.",
+    matches: ["Lincoln", "North Kesteven"],
+  },
+  {
+    slug: "dundee",
+    name: "Dundee",
+    region: "Scotland",
+    description:
+      "Scottish Water supplies Dundee from Loch Earn and the River Tay catchment in Perthshire.",
+    matches: ["Dundee City"],
+  },
+  {
+    slug: "aberdeen",
+    name: "Aberdeen",
+    region: "Scotland",
+    description:
+      "Scottish Water serves Aberdeen from the River Dee, widely rated as one of Scotland's cleanest water sources.",
+    matches: ["Aberdeen City"],
+  },
+  {
+    slug: "inverness",
+    name: "Inverness",
+    region: "Scotland",
+    description:
+      "Scottish Water supplies Inverness from Loch Ness and the River Ness catchment in the Great Glen.",
+    matches: ["Highland"],
+  },
+  {
+    slug: "middlesbrough",
+    name: "Middlesbrough",
+    region: "England",
+    description:
+      "Northumbrian Water serves Middlesbrough from Scaling Dam and other Teesside reservoirs fed by the North Yorkshire Moors.",
+    matches: ["Middlesbrough", "Stockton-on-Tees"],
+  },
+  {
+    slug: "bradford",
+    name: "Bradford",
+    region: "England",
+    description:
+      "Yorkshire Water supplies Bradford from Pennine moorland reservoirs including Grimwith, Chelker, and Barden.",
+    matches: ["Bradford"],
+  },
+  {
+    slug: "hull",
+    name: "Hull",
+    region: "England",
+    description:
+      "Yorkshire Water supplies Hull primarily from the chalk aquifer beneath the Yorkshire Wolds.",
+    matches: ["Kingston upon Hull, City of", "East Riding of Yorkshire"],
+  },
+  {
+    slug: "blackburn",
+    name: "Blackburn",
+    region: "England",
+    description:
+      "United Utilities serves Blackburn from Pennine reservoirs including Jumbles and the Rivington group.",
+    matches: ["Blackburn with Darwen"],
+  },
+  {
+    slug: "wigan",
+    name: "Wigan",
+    region: "England",
+    description:
+      "United Utilities supplies Wigan from Lake District and Peak District sources via the integrated northwest grid.",
+    matches: ["Wigan"],
+  },
+  {
+    slug: "stockport",
+    name: "Stockport",
+    region: "England",
+    description:
+      "United Utilities serves Stockport from Peak District reservoirs including Longdendale and Kinder.",
+    matches: ["Stockport"],
+  },
+  {
+    slug: "swindon",
+    name: "Swindon",
+    region: "England",
+    description:
+      "Thames Water supplies Swindon from the River Thames and Cotswold groundwater sources.",
+    matches: ["Swindon"],
+  },
+  {
+    slug: "bournemouth",
+    name: "Bournemouth",
+    region: "England",
+    description:
+      "Bournemouth Water (part of South West Water) draws from the River Stour and Hampshire Basin aquifer.",
+    matches: ["Bournemouth", "Christchurch", "Poole"],
+  },
 ];
 
 export function getCityBySlug(slug: string): CityInfo | undefined {
