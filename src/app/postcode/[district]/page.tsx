@@ -13,6 +13,8 @@ import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
 
+export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
+
 interface Props {
   params: Promise<{ district: string }>;
 }

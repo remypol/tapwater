@@ -371,9 +371,9 @@ export default async function SupplierPage({ params }: Props) {
                   <p className={`font-data text-xl font-bold ${getScoreBadgeColor(avgScore)}`}>
                     {avgScore}/10
                   </p>
-                  <p className="text-xs text-muted">average environmental score</p>
+                  <p className="text-xs text-muted">average water quality score</p>
                   <p className="text-xs text-faint mt-0.5">
-                    Based on EA monitoring data
+                    Based on water quality tests
                   </p>
                 </div>
               </div>
@@ -399,16 +399,17 @@ export default async function SupplierPage({ params }: Props) {
             </h2>
             <p className="text-sm text-body leading-relaxed">
               {supplier.name} is a regulated UK water company operating
-              across {supplier.region}. As a licensed water and wastewater
-              provider, the company is responsible for treating, testing,
+              across {supplier.region}, responsible for treating, testing,
               and delivering safe drinking water to homes and businesses
               throughout its supply area.
             </p>
             <p className="text-sm text-body leading-relaxed mt-3">
-              The scores on this page reflect environmental water quality
-              from EA monitoring points — rivers, groundwater, and
-              reservoirs that feed into {supplier.name}&apos;s treatment
-              works. These are not direct measures of treated tap water.
+              Scores on this page are based on{" "}
+              {scoredRows.some((r) => r.data?.dataSource === "stream")
+                ? "real drinking water quality tests from the Stream Water Data Portal, supplemented by"
+                : ""}{" "}
+              Environment Agency environmental monitoring — rivers,
+              groundwater, and reservoirs near {supplier.name}&apos;s supply area.
             </p>
             <a
               href={supplier.website}
@@ -426,8 +427,8 @@ export default async function SupplierPage({ params }: Props) {
 
       {/* Methodology footer */}
       <footer className="mt-12 pt-6 border-t border-rule text-sm text-faint leading-relaxed">
-        Postcode scores are calculated from Environment Agency environmental
-        water monitoring data — not treated tap water. See our{" "}
+        Postcode scores are based on drinking water quality tests where available,
+        supplemented by Environment Agency environmental monitoring. See our{" "}
         <Link
           href="/about/methodology"
           className="underline underline-offset-2 hover:text-muted transition-colors"

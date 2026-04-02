@@ -17,7 +17,7 @@ import {
 export const metadata: Metadata = {
   title: "TapWater.uk — Check Your Tap Water Quality by Postcode",
   description:
-    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and 48 other contaminants. Based on Environment Agency and Drinking Water Inspectorate data.",
+    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and 100+ other contaminants. Based on real drinking water tests and Environment Agency monitoring.",
   openGraph: {
     title: "What's in your tap water?",
     description:
@@ -36,16 +36,25 @@ async function buildTrustMetrics() {
   const districts = await getAllPostcodeDistricts();
   let validCount = 0;
   let pfasCount = 0;
+  let totalSamples = 0;
+  let streamCount = 0;
   for (const d of districts) {
     const data = await getPostcodeData(d);
     if (data && data.safetyScore >= 0) {
       validCount++;
       if (data.pfasDetected) pfasCount++;
+      totalSamples += data.sampleCount;
+      if (data.dataSource === "stream") streamCount++;
     }
   }
+  const testLabel = totalSamples > 1000
+    ? `${Math.round(totalSamples / 1000)}k+`
+    : totalSamples > 0
+      ? totalSamples.toLocaleString()
+      : "25,000+";
   return [
     { value: validCount.toLocaleString(), label: "Areas covered" },
-    { value: "25,000+", label: "Water tests" },
+    { value: testLabel, label: "Water tests" },
     { value: pfasCount > 0 ? `${pfasCount}+` : "Monitoring", label: "PFAS alerts" },
     { value: "Daily", label: "Updates" },
   ];
@@ -117,7 +126,7 @@ export default async function HomePage() {
           </h1>
 
           <p className="animate-fade-up delay-2 text-lg text-muted mt-4 max-w-lg mx-auto leading-relaxed">
-            Free reports for every UK postcode, based on government tests.
+            Free reports for every UK postcode, based on real drinking water tests.
           </p>
 
           <div className="animate-fade-up delay-3 max-w-xl mx-auto mt-8">
