@@ -115,9 +115,9 @@ function normalizeDeterminand(label: string): string | null {
  * must be rejected.
  */
 const WATER_UNITS = new Set([
-  "mg/l", "µg/l", "ug/l", "ng/l",
+  "mg/l", "µg/l", "ug/l", "μg/l", "?g/l", "ng/l",
   "ph", "ntu", "°c", "cel",
-  "µs/cm", "us/cm", "ms/cm",
+  "µs/cm", "us/cm", "?s/cm", "ms/cm",
   "count/100ml", "no/100ml", "no. /100ml", "no./100ml", "cfu/100ml",
   "mg/l as",  // EA sometimes uses "mg/l as N" etc.
 ]);
@@ -135,9 +135,10 @@ function normalizeUnit(value: number, obsUnit: string, limitUnit: string): numbe
   const obs = obsUnit.toLowerCase();
   const lim = limitUnit.toLowerCase();
 
-  const obsIsUg = obs.includes("ug") || obs.includes("µg");
+  // Handle mangled unicode: ?g/L, µg/L, ug/L, μg/L all mean micrograms/litre
+  const obsIsUg = obs.includes("ug") || obs.includes("µg") || obs.includes("μg") || obs.includes("?g");
   const obsIsMg = obs.includes("mg");
-  const limIsUg = lim.includes("ug") || lim.includes("µg");
+  const limIsUg = lim.includes("ug") || lim.includes("µg") || lim.includes("μg");
   const limIsMg = lim.includes("mg");
 
   if (obsIsUg && limIsMg) {
