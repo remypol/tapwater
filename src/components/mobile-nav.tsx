@@ -27,7 +27,7 @@ export function MobileNav({ navLinks }: MobileNavProps) {
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
-        className="sm:hidden flex items-center justify-center w-9 h-9 rounded-md text-[var(--color-muted)] hover:text-[var(--color-ink)] hover:bg-[var(--color-rule)] transition-colors"
+        className="sm:hidden flex items-center justify-center w-9 h-9 rounded-md text-muted hover:text-ink hover:bg-[var(--color-rule)] transition-colors"
       >
         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
@@ -35,7 +35,7 @@ export function MobileNav({ navLinks }: MobileNavProps) {
       {/* Slide-down panel */}
       <div
         className={[
-          "sm:hidden fixed inset-x-0 bg-[var(--color-surface)]/90 backdrop-blur-lg border-b border-[var(--color-rule)] z-40 transition-all duration-200 ease-in-out overflow-hidden",
+          "sm:hidden fixed inset-x-0 bg-surface/90 backdrop-blur-lg border-b border-rule z-40 transition-all duration-200 ease-in-out overflow-hidden",
           open ? "opacity-100 max-h-screen top-16" : "opacity-0 max-h-0 top-16 pointer-events-none",
         ].join(" ")}
         aria-hidden={!open}
@@ -49,9 +49,9 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={[
-                  "block py-3 px-5 text-body hover:text-[var(--color-accent)] transition-colors border-l-2",
+                  "block py-3 px-5 text-body hover:text-accent transition-colors border-l-2",
                   active
-                    ? "text-[var(--color-accent)] font-medium border-l-[var(--color-accent)]"
+                    ? "text-accent font-medium border-l-[var(--color-accent)]"
                     : "border-l-transparent",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
@@ -62,7 +62,7 @@ export function MobileNav({ navLinks }: MobileNavProps) {
           })}
         </nav>
         {/* Postcode search */}
-        <div className="border-t border-[var(--color-rule)] px-5 py-4">
+        <div className="border-t border-rule px-5 py-4">
           <PostcodeSearch size="sm" />
         </div>
       </div>

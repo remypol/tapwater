@@ -111,7 +111,7 @@ export function StickyScore({ district, areaName, score }: StickyScoreProps) {
       onClick={handleClick}
       className={[
         "lg:hidden fixed top-0 inset-x-0 h-12 z-40 cursor-pointer",
-        "bg-[var(--color-surface)]/95 backdrop-blur-sm shadow-sm",
+        "bg-surface/95 backdrop-blur-sm shadow-sm",
         "flex items-center justify-between px-5",
         "transition-all duration-200 ease-in-out",
         visible
@@ -122,10 +122,10 @@ export function StickyScore({ district, areaName, score }: StickyScoreProps) {
       {/* Left: district + area name */}
       <div className="flex items-center gap-2 min-w-0">
         <WaterDropIndicator score={score} />
-        <span className="font-data font-bold text-[var(--color-ink)] shrink-0">
+        <span className="font-data font-bold text-ink shrink-0">
           {district}
         </span>
-        <span className="text-sm text-[var(--color-muted)] truncate">
+        <span className="text-sm text-muted truncate">
           {areaName}
         </span>
       </div>

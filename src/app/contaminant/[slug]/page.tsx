@@ -114,10 +114,10 @@ export default async function ContaminantPage({ params }: Props) {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* 1. Breadcrumb */}
-      <nav className="text-sm text-[var(--color-muted)] mb-6" aria-label="Breadcrumb">
+      <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center gap-1.5">
           <li>
-            <Link href="/" className="hover:text-[var(--color-body)] transition-colors">
+            <Link href="/" className="hover:text-body transition-colors">
               Home
             </Link>
           </li>
@@ -125,52 +125,52 @@ export default async function ContaminantPage({ params }: Props) {
           <li>
             <Link
               href="/contaminant"
-              className="hover:text-[var(--color-body)] transition-colors"
+              className="hover:text-body transition-colors"
             >
               Contaminants
             </Link>
           </li>
           <li aria-hidden="true">/</li>
-          <li className="font-medium text-[var(--color-body)]" aria-current="page">
+          <li className="font-medium text-body" aria-current="page">
             {contaminant.name}
           </li>
         </ol>
       </nav>
 
       {/* 2. H1 */}
-      <h1 className="text-2xl lg:text-3xl font-bold font-display italic text-[var(--color-ink)] mb-6">
+      <h1 className="text-2xl lg:text-3xl font-bold font-display italic text-ink mb-6">
         {contaminant.name} in UK Drinking Water
       </h1>
 
       {/* 3. Quick facts card */}
-      <div className="bg-[var(--color-accent-light)] rounded-xl p-6 mb-10">
-        <h2 className="text-sm font-semibold text-[var(--color-accent)] uppercase tracking-wide mb-4">
+      <div className="bg-accent-light rounded-xl p-6 mb-10">
+        <h2 className="text-sm font-semibold text-accent uppercase tracking-wide mb-4">
           Quick Facts
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <p className="text-xs text-[var(--color-muted)] mb-1">UK Legal Limit</p>
-            <p className="text-base font-bold font-data text-[var(--color-ink)]">
+            <p className="text-xs text-muted mb-1">UK Legal Limit</p>
+            <p className="text-base font-bold font-data text-ink">
               {contaminant.ukLimit ?? (
                 <span className="text-warning">No UK limit set</span>
               )}
             </p>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-muted)] mb-1">WHO Guideline</p>
-            <p className="text-base font-bold font-data text-[var(--color-ink)]">
+            <p className="text-xs text-muted mb-1">WHO Guideline</p>
+            <p className="text-base font-bold font-data text-ink">
               {contaminant.whoGuideline}
             </p>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-muted)] mb-1">EU Standard</p>
-            <p className="text-base font-bold font-data text-[var(--color-ink)]">
+            <p className="text-xs text-muted mb-1">EU Standard</p>
+            <p className="text-base font-bold font-data text-ink">
               {contaminant.euLimit}
             </p>
           </div>
           <div>
-            <p className="text-xs text-[var(--color-muted)] mb-1">Primary Sources</p>
-            <p className="text-base font-semibold text-[var(--color-ink)] leading-snug">
+            <p className="text-xs text-muted mb-1">Primary Sources</p>
+            <p className="text-base font-semibold text-ink leading-snug">
               {slug === "pfas"
                 ? "Industry, firefighting foam"
                 : slug === "lead"
@@ -183,77 +183,77 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 4. Health Effects */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-[var(--color-ink)] mb-3">
+        <h2 className="text-xl font-bold text-ink mb-3">
           Health Effects
         </h2>
-        <p className="text-base text-[var(--color-body)] leading-relaxed">
+        <p className="text-base text-body leading-relaxed">
           {contaminant.healthEffects}
         </p>
       </section>
 
       {/* 5. Where It Comes From */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-[var(--color-ink)] mb-3">
+        <h2 className="text-xl font-bold text-ink mb-3">
           Where It Comes From
         </h2>
-        <p className="text-base text-[var(--color-body)] leading-relaxed">
+        <p className="text-base text-body leading-relaxed">
           {contaminant.sources}
         </p>
       </section>
 
       {/* 6. Regulatory Standards */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-[var(--color-ink)] mb-4">
+        <h2 className="text-xl font-bold text-ink mb-4">
           Regulatory Standards
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm border-collapse">
             <thead>
-              <tr className="border-b border-[var(--color-rule)]">
-                <th className="text-left py-2 pr-6 font-semibold text-[var(--color-body)]">
+              <tr className="border-b border-rule">
+                <th className="text-left py-2 pr-6 font-semibold text-body">
                   Jurisdiction
                 </th>
-                <th className="text-left py-2 pr-6 font-semibold text-[var(--color-body)]">
+                <th className="text-left py-2 pr-6 font-semibold text-body">
                   Limit / Guideline
                 </th>
-                <th className="text-left py-2 font-semibold text-[var(--color-body)]">
+                <th className="text-left py-2 font-semibold text-body">
                   Notes
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--color-rule)]">
+            <tbody className="divide-y divide-rule">
               <tr>
-                <td className="py-3 pr-6 text-[var(--color-body)] font-medium">
+                <td className="py-3 pr-6 text-body font-medium">
                   UK (DWI)
                 </td>
-                <td className="py-3 pr-6 font-data text-[var(--color-ink)]">
+                <td className="py-3 pr-6 font-data text-ink">
                   {contaminant.ukLimit ?? (
                     <span className="text-warning font-semibold">
                       No legal limit
                     </span>
                   )}
                 </td>
-                <td className="py-3 text-[var(--color-muted)]">
+                <td className="py-3 text-muted">
                   {contaminant.ukLimit
                     ? "Regulated under the Water Supply (Water Quality) Regulations 2016"
                     : "The UK has not yet set a statutory limit. Guidance is voluntary."}
                 </td>
               </tr>
               <tr>
-                <td className="py-3 pr-6 text-[var(--color-body)] font-medium">WHO</td>
-                <td className="py-3 pr-6 font-data text-[var(--color-ink)]">
+                <td className="py-3 pr-6 text-body font-medium">WHO</td>
+                <td className="py-3 pr-6 font-data text-ink">
                   {contaminant.whoGuideline}
                 </td>
-                <td className="py-3 text-[var(--color-muted)]">
+                <td className="py-3 text-muted">
                   World Health Organization Guidelines for Drinking-water Quality
                 </td>
               </tr>
               <tr>
-                <td className="py-3 pr-6 text-[var(--color-body)] font-medium">EU</td>
-                <td className="py-3 pr-6 font-data text-[var(--color-ink)]">
+                <td className="py-3 pr-6 text-body font-medium">EU</td>
+                <td className="py-3 pr-6 font-data text-ink">
                   {contaminant.euLimit}
                 </td>
-                <td className="py-3 text-[var(--color-muted)]">
+                <td className="py-3 text-muted">
                   EU Drinking Water Directive (2020/2184). The UK no longer
                   automatically mirrors EU standards post-Brexit.
                 </td>
@@ -262,7 +262,7 @@ export default async function ContaminantPage({ params }: Props) {
           </table>
         </div>
         {!contaminant.ukLimit && (
-          <p className="mt-4 text-sm text-[var(--color-muted)] bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <p className="mt-4 text-sm text-muted bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
             The UK currently has no statutory limit for {contaminant.name}.
             This means water companies are not legally required to monitor or
             report levels, even though both the WHO and EU have set guidelines.
@@ -274,19 +274,19 @@ export default async function ContaminantPage({ params }: Props) {
 
       {/* 7. How to Remove */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-[var(--color-ink)] mb-4">
+        <h2 className="text-xl font-bold text-ink mb-4">
           How to Remove {contaminant.name}
         </h2>
         <ul className="space-y-3">
           {contaminant.removal.map((method) => (
             <li
               key={method}
-              className="flex gap-3 bg-white rounded-lg border border-[var(--color-rule)] p-4"
+              className="flex gap-3 bg-white rounded-lg border border-rule p-4"
             >
-              <span className="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-[var(--color-accent)] mt-2" />
+              <span className="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-accent mt-2" />
               <div>
-                <p className="font-semibold text-[var(--color-ink)]">{method}</p>
-                <p className="text-sm text-[var(--color-muted)] mt-0.5">
+                <p className="font-semibold text-ink">{method}</p>
+                <p className="text-sm text-muted mt-0.5">
                   {REMOVAL_DESCRIPTIONS[method] ??
                     "An effective water treatment method for removing this contaminant."}
                 </p>
@@ -297,11 +297,11 @@ export default async function ContaminantPage({ params }: Props) {
       </section>
 
       {/* 8. Check Your Area */}
-      <section className="mt-10 bg-[var(--color-wash)] rounded-xl border border-[var(--color-rule)] p-6">
-        <h2 className="text-xl font-bold text-[var(--color-ink)] mb-2">
+      <section className="mt-10 bg-wash rounded-xl border border-rule p-6">
+        <h2 className="text-xl font-bold text-ink mb-2">
           Check Your Area
         </h2>
-        <p className="text-base text-[var(--color-body)] mb-4">
+        <p className="text-base text-body mb-4">
           Want to know the {contaminant.name} levels in your water? Enter your
           postcode to get a free report for your area.
         </p>
@@ -312,7 +312,7 @@ export default async function ContaminantPage({ params }: Props) {
       <div className="mt-8">
         <Link
           href={`/contaminant/${slug}`}
-          className="inline-flex items-center gap-2 text-[var(--color-accent)] font-medium hover:underline"
+          className="inline-flex items-center gap-2 text-accent font-medium hover:underline"
         >
           View filters that remove {contaminant.name} &rarr;
         </Link>

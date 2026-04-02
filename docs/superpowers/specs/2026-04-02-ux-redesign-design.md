@@ -28,7 +28,7 @@ Replace hard-edged radial-gradient backgrounds with layered fluid gradient blobs
 ### Design System Token Enforcement
 
 Fix ALL pages currently using hardcoded Tailwind colours:
-- About page: all `text-slate-*` → `text-[var(--color-*)]`
+- About page: all `text-slate-*` → `text-{token}`
 - Methodology page: same treatment + responsive tables
 - Contaminant pages: same treatment
 - Supplier pages: already mostly done, needs final pass

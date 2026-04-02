@@ -31,7 +31,7 @@ export function Footer() {
                 className="text-lg text-white tracking-tight"
                 style={{ fontFamily: "var(--font-instrument-serif)" }}
               >
-                tapwater<span className="text-[var(--color-accent)]">.uk</span>
+                tapwater<span className="text-accent">.uk</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed text-gray-400">

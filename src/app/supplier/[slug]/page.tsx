@@ -209,7 +209,7 @@ export default async function SupplierPage({ params }: Props) {
               <div className="card overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[var(--color-rule)] bg-[var(--color-wash)]">
+                    <tr className="border-b border-rule bg-wash">
                       <th className="text-left px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold">
                         Postcode
                       </th>
@@ -231,8 +231,8 @@ export default async function SupplierPage({ params }: Props) {
                     {scoredRows.map(({ area, data }, i) => (
                       <tr
                         key={area}
-                        className={`border-b border-[var(--color-rule)] last:border-0 hover:bg-[var(--color-wash)] transition-colors ${
-                          i % 2 === 0 ? "" : "bg-[var(--color-wash)]/40"
+                        className={`border-b border-rule last:border-0 hover:bg-wash transition-colors ${
+                          i % 2 === 0 ? "" : "bg-wash/40"
                         }`}
                       >
                         <td className="px-4 py-3.5">
@@ -334,7 +334,7 @@ export default async function SupplierPage({ params }: Props) {
             </h3>
 
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[var(--color-accent-light)] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-accent-light flex items-center justify-center shrink-0">
                 <Users className="w-4 h-4 text-accent" />
               </div>
               <div>
@@ -362,7 +362,7 @@ export default async function SupplierPage({ params }: Props) {
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[var(--color-wash)] border border-[var(--color-rule)] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-wash border border-rule flex items-center justify-center shrink-0">
                 <Building2 className="w-4 h-4 text-faint" />
               </div>
               <div>
@@ -371,12 +371,12 @@ export default async function SupplierPage({ params }: Props) {
               </div>
             </div>
 
-            <div className="pt-1 border-t border-[var(--color-rule)]">
+            <div className="pt-1 border-t border-rule">
               <a
                 href={supplier.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-accent hover:text-[var(--color-accent-hover)] transition-colors font-medium"
+                className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent-hover transition-colors font-medium"
               >
                 Official website
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -412,7 +412,7 @@ export default async function SupplierPage({ params }: Props) {
               href={supplier.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-4 text-sm text-accent hover:text-[var(--color-accent-hover)] transition-colors"
+              className="inline-flex items-center gap-1.5 mt-4 text-sm text-accent hover:text-accent-hover transition-colors"
             >
               Visit {supplier.name}
               <ExternalLink className="w-3.5 h-3.5" />
@@ -423,7 +423,7 @@ export default async function SupplierPage({ params }: Props) {
       </div>
 
       {/* Methodology footer */}
-      <footer className="mt-12 pt-6 border-t border-[var(--color-rule)] text-sm text-faint leading-relaxed">
+      <footer className="mt-12 pt-6 border-t border-rule text-sm text-faint leading-relaxed">
         Supplier compliance rates are sourced from the Drinking Water
         Inspectorate (DWI) annual reports. Postcode scores are calculated from
         Environment Agency monitoring data. See our{" "}
