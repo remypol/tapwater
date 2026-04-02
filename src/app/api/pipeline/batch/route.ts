@@ -3,6 +3,11 @@ import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
 import { writePostcodeData } from "@/lib/db-writer";
+import type { StreamRecord } from "@/lib/stream-api";
+import { getStreamSource } from "@/lib/stream-sources";
+import { fetchStreamData } from "@/lib/stream-api";
+import { getLsoasForDistrict } from "@/lib/lsoa-lookup";
+import { getSupplier } from "@/lib/suppliers";
 
 export const maxDuration = 60;
 
@@ -48,8 +53,28 @@ export async function POST(request: NextRequest) {
     for (const district of batch) {
       try {
         const seedData = await processPostcode(district);
+
+        // Fetch Stream tap water data
+        let streamRecords: StreamRecord[] = [];
+        try {
+          if (seedData) {
+            const supplier = getSupplier(seedData.city);
+            const streamSource = getStreamSource(supplier.id);
+            if (streamSource) {
+              const lsoas = await getLsoasForDistrict(district);
+              if (lsoas.length > 0) {
+                streamRecords = await fetchStreamData(streamSource, lsoas);
+                console.log(`  → ${district}: ${streamRecords.length} Stream records from ${lsoas.length} LSOAs`);
+              }
+            }
+          }
+        } catch (err) {
+          console.error(`  ⚠ ${district} Stream fetch error:`, err);
+          // Continue with EA-only data
+        }
+
         if (seedData) {
-          await writePostcodeData(seedData);
+          await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined);
           console.log(`  ✓ ${district}`);
         } else {
           console.log(`  ✗ ${district} — no data from EA/postcodes.io`);
