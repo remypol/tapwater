@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Guides — UK Water Quality Research",
@@ -14,6 +14,14 @@ export const metadata: Metadata = {
 };
 
 const GUIDES = [
+  {
+    slug: "best-water-filters-uk",
+    title: "Best Water Filters UK",
+    subtitle: "Tested against real contaminant data, not marketing claims",
+    icon: ShieldCheck,
+    iconColor: "text-blue-600",
+    iconBg: "bg-blue-50",
+  },
   {
     slug: "pfas-uk-explained",
     title: "PFAS in UK Drinking Water",

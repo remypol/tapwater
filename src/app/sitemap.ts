@@ -8,6 +8,7 @@ const BASE_URL = "https://tapwater.uk";
 const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli"];
 
 const GUIDE_SLUGS = [
+  "best-water-filters-uk",
   "pfas-uk-explained",
   "lead-pipes-uk",
   "water-hardness-map",

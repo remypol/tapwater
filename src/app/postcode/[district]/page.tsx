@@ -11,6 +11,8 @@ import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
 import { getPostcodeData, getScoredPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
+import { recommendFilters } from "@/lib/filters";
+import { FilterRecommendations } from "@/components/filter-cards";
 import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
@@ -85,6 +87,12 @@ export default async function PostcodePage({ params }: Props) {
       data: await getPostcodeData(pc),
     })),
   );
+
+  // Compute filter recommendations based on flagged contaminants
+  const flaggedNames = data.readings
+    .filter((r) => r.status !== "pass")
+    .map((r) => r.name);
+  const filterRecs = recommendFilters(flaggedNames, 3);
 
   return (
     <div className={gradientClass}>
@@ -283,6 +291,18 @@ export default async function PostcodePage({ params }: Props) {
                 <EmailCapture postcode={data.district} />
               </div>
             </ScrollReveal>
+
+            {/* Filter Recommendations — matched to local contaminants */}
+            {filterRecs.length > 0 && (
+              <ScrollReveal delay={100}>
+                <hr className="border-rule mt-10" />
+                <FilterRecommendations
+                  recommendations={filterRecs}
+                  postcodeDistrict={data.district}
+                  contaminantsFlagged={data.contaminantsFlagged}
+                />
+              </ScrollReveal>
+            )}
 
           </>
         ) : (
