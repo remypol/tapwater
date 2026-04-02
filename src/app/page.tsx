@@ -8,7 +8,6 @@ import { HomepageMap } from "@/components/homepage-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import {
-  Activity,
   ChevronRight,
   AlertTriangle,
   ShieldCheck,
@@ -34,8 +33,8 @@ export const metadata: Metadata = {
 };
 
 const TRUST_METRICS = [
-  { value: "2,979", label: "Postcode areas" },
-  { value: "58M+", label: "Government tests" },
+  { value: "2,979", label: "Areas covered" },
+  { value: "25,000+", label: "Water tests" },
   { value: "50+", label: "PFAS alerts" },
   { value: "Daily", label: "Updates" },
 ];
@@ -71,8 +70,8 @@ function buildRankedPostcodes(): {
   all.sort((a, b) => a.safetyScore - b.safetyScore);
 
   return {
-    worst: all.slice(0, 5),
-    best: all.slice(-5).reverse(),
+    worst: all.slice(0, 3),
+    best: all.slice(-3).reverse(),
   };
 }
 
@@ -86,27 +85,22 @@ export default function HomePage() {
       {/* Hero */}
       <section className="bg-hero noise-overlay pt-20 pb-16 lg:pt-28 lg:pb-20 -mx-5 sm:-mx-6 lg:-mx-8 px-5 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="animate-fade-up delay-1 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-accent font-semibold">
-            <Activity className="w-3.5 h-3.5" />
-            Check your tap water
-          </p>
-
-          <h1 className="animate-fade-up delay-2 font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic mt-4">
+          <h1 className="animate-fade-up delay-1 font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic">
             What&apos;s in your tap water?
           </h1>
 
-          <p className="animate-fade-up delay-3 text-lg text-muted mt-4 max-w-lg mx-auto leading-relaxed">
-            Find out what&apos;s really in your water. Free reports based on government tests.
+          <p className="animate-fade-up delay-2 text-lg text-muted mt-4 max-w-lg mx-auto leading-relaxed">
+            Free reports for every UK postcode, based on government tests.
           </p>
 
-          <div className="animate-fade-up delay-4 max-w-xl mx-auto mt-8">
+          <div className="animate-fade-up delay-3 max-w-xl mx-auto mt-8">
             <PostcodeSearch size="lg" />
           </div>
         </div>
       </section>
 
       {/* Trust metrics */}
-      <div className="mt-16 max-w-3xl mx-auto">
+      <div className="mt-10 max-w-3xl mx-auto">
         <div className="flex flex-wrap justify-center items-center gap-y-4">
           {TRUST_METRICS.map(({ value, label }, i) => (
             <Fragment key={label}>
@@ -129,7 +123,7 @@ export default function HomePage() {
       </div>
 
       {/* Interactive Map */}
-      <section className="mt-20">
+      <section className="mt-12">
         <h2 className="font-display text-2xl text-ink italic">
           Water quality across the UK
         </h2>
@@ -139,22 +133,86 @@ export default function HomePage() {
         <HomepageMap postcodes={mapPostcodes} />
       </section>
 
-      {/* Areas to watch */}
-      <section className="mt-20">
-        <div className="flex items-center gap-2 mb-1">
-          <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
-          <h2 className="font-display text-2xl text-ink italic">
-            Areas to watch
-          </h2>
-        </div>
-        <p className="text-sm text-muted mt-1 mb-5">
-          These areas had the most issues in recent water tests.
-        </p>
+      {/* Areas to watch + Cleanest water — side by side on desktop */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {worst.map((item) => {
-            const flagged = item.readings.find((r) => r.status !== "pass");
-            return (
+        {/* Areas to watch */}
+        <section>
+          <div className="flex items-center gap-2 mb-1">
+            <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
+            <h2 className="font-display text-2xl text-ink italic">
+              Areas to watch
+            </h2>
+          </div>
+          <p className="text-sm text-muted mt-1 mb-5">
+            These areas had the most issues in recent water tests.
+          </p>
+
+          <div className="flex flex-col gap-3">
+            {worst.map((item) => {
+              const flagged = item.readings.find((r) => r.status !== "pass");
+              return (
+                <Link
+                  key={item.district}
+                  href={`/postcode/${item.district}/`}
+                  className="card p-4 group block"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-data font-bold text-sm text-ink">
+                          {item.district}
+                        </span>
+                        <span className="text-sm text-muted truncate">
+                          {item.areaName}
+                        </span>
+                      </div>
+                      {flagged && (
+                        <p className="text-xs text-muted mt-1.5 truncate">
+                          <span className="text-danger font-medium">{flagged.name}</span>
+                          {" "}detected at{" "}
+                          <span className="font-data">
+                            {flagged.value} {flagged.unit}
+                          </span>
+                        </p>
+                      )}
+                      {!flagged && item.contaminantsFlagged === 0 && (
+                        <p className="text-xs text-muted mt-1.5">
+                          Low score based on multiple readings
+                        </p>
+                      )}
+                    </div>
+                    <div className="shrink-0 flex flex-col items-end gap-1">
+                      <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
+                        {item.safetyScore.toFixed(1)}
+                      </span>
+                      <span className="text-[10px] text-faint uppercase tracking-wider">/10</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">
+                    <span className="text-xs text-faint">{item.city}</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Cleanest water */}
+        <section>
+          <div className="flex items-center gap-2 mb-1">
+            <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
+            <h2 className="font-display text-2xl text-ink italic">
+              Cleanest water
+            </h2>
+          </div>
+          <p className="text-sm text-muted mt-1 mb-5">
+            These areas scored highest in our checks.
+          </p>
+
+          <div className="flex flex-col gap-3">
+            {best.map((item) => (
               <Link
                 key={item.district}
                 href={`/postcode/${item.district}/`}
@@ -170,20 +228,13 @@ export default function HomePage() {
                         {item.areaName}
                       </span>
                     </div>
-                    {flagged && (
-                      <p className="text-xs text-muted mt-1.5 truncate">
-                        <span className="text-danger font-medium">{flagged.name}</span>
-                        {" "}detected at{" "}
-                        <span className="font-data">
-                          {flagged.value} {flagged.unit}
-                        </span>
-                      </p>
-                    )}
-                    {!flagged && item.contaminantsFlagged === 0 && (
-                      <p className="text-xs text-muted mt-1.5">
-                        Low score based on multiple readings
-                      </p>
-                    )}
+                    <p className="text-xs text-muted mt-1.5">
+                      {item.contaminantsFlagged === 0
+                        ? "No contaminants flagged"
+                        : `${item.contaminantsFlagged} contaminant${item.contaminantsFlagged !== 1 ? "s" : ""} flagged`}
+                      {" — "}
+                      {item.contaminantsTested} tested
+                    </p>
                   </div>
                   <div className="shrink-0 flex flex-col items-end gap-1">
                     <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
@@ -197,74 +248,24 @@ export default function HomePage() {
                   <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition" />
                 </div>
               </Link>
-            );
-          })}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
 
-      {/* Cleanest water */}
-      <section className="mt-12">
-        <div className="flex items-center gap-2 mb-1">
-          <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
-          <h2 className="font-display text-2xl text-ink italic">
-            Cleanest water
-          </h2>
-        </div>
-        <p className="text-sm text-muted mt-1 mb-5">
-          These areas scored highest in our checks.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {best.map((item) => (
-            <Link
-              key={item.district}
-              href={`/postcode/${item.district}/`}
-              className="card p-4 group block"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-data font-bold text-sm text-ink">
-                      {item.district}
-                    </span>
-                    <span className="text-sm text-muted truncate">
-                      {item.areaName}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted mt-1.5">
-                    {item.contaminantsFlagged === 0
-                      ? "No contaminants flagged"
-                      : `${item.contaminantsFlagged} contaminant${item.contaminantsFlagged !== 1 ? "s" : ""} flagged`}
-                    {" — "}
-                    {item.contaminantsTested} tested
-                  </p>
-                </div>
-                <div className="shrink-0 flex flex-col items-end gap-1">
-                  <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
-                    {item.safetyScore.toFixed(1)}
-                  </span>
-                  <span className="text-[10px] text-faint uppercase tracking-wider">/10</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">
-                <span className="text-xs text-faint">{item.city}</span>
-                <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition" />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      </div>
 
       {/* Popular searches */}
-      <section className="mt-16">
+      <section className="mt-12">
         <h2 className="font-display text-xl text-ink italic mb-4">
           Popular searches
         </h2>
 
-        <div className="flex flex-col gap-2">
-          {MOST_CHECKED.map((district) => {
-            const data = getPostcodeData(district);
-            return (
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
+          {MOST_CHECKED
+            .map((district) => ({ district, data: getPostcodeData(district) }))
+            .filter(({ data }) => data && data.safetyScore >= 0)
+            .slice(0, 6)
+            .map(({ district, data }) => (
               <Link
                 key={district}
                 href={`/postcode/${district}/`}
@@ -274,26 +275,19 @@ export default function HomePage() {
                   {district}
                 </span>
                 <span className="text-sm text-muted flex-1 truncate">
-                  {data?.areaName ?? ""}
+                  {data!.areaName}
                 </span>
-                {data && data.safetyScore >= 0 ? (
-                  <span className={`${scoreBadgeClass(data.safetyScore)} font-data shrink-0`}>
-                    {data.safetyScore.toFixed(1)}
-                  </span>
-                ) : (
-                  <span className="font-data text-sm text-faint shrink-0">
-                    —
-                  </span>
-                )}
+                <span className={`${scoreBadgeClass(data!.safetyScore)} font-data shrink-0`}>
+                  {data!.safetyScore.toFixed(1)}
+                </span>
                 <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
               </Link>
-            );
-          })}
+            ))}
         </div>
       </section>
 
       {/* Water companies */}
-      <section className="mt-16 mb-20">
+      <section className="mt-12 mb-12">
         <h2 className="font-display text-xl text-ink italic">
           Water companies
         </h2>
@@ -302,11 +296,11 @@ export default function HomePage() {
         </p>
 
         <div className="card divide-y divide-rule">
-          {MOCK_SUPPLIERS.map((supplier) => (
+          {MOCK_SUPPLIERS.slice(0, 6).map((supplier) => (
             <Link
               key={supplier.id}
               href={`/supplier/${supplier.id}/`}
-              className="flex items-center gap-3 px-4 py-3 group hover:bg-wash transition-colors first:rounded-t-xl last:rounded-b-xl"
+              className="flex items-center gap-3 px-4 py-3 group hover:bg-wash transition-colors first:rounded-t-xl"
             >
               <Building2 className="w-4 h-4 text-faint shrink-0" />
               <span className="font-medium text-sm text-ink group-hover:text-accent transition flex-1">
@@ -321,6 +315,12 @@ export default function HomePage() {
               <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
             </Link>
           ))}
+        </div>
+
+        <div className="mt-3 text-right">
+          <Link href="/about" className="text-sm text-accent hover:underline">
+            View all companies →
+          </Link>
         </div>
       </section>
 
