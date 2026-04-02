@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED, MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData, getAllPostcodeDistricts, getMapPostcodes } from "@/lib/data";
-import { LazyMap } from "@/components/lazy-map";
+import { HomepageMap } from "@/components/homepage-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import {
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 
 const TRUST_METRICS = [
   { value: "2,979", label: "Postcode areas" },
-  { value: "58M+", label: "Measurements" },
-  { value: "50+", label: "PFAS compounds" },
+  { value: "58M+", label: "Government tests" },
+  { value: "50+", label: "PFAS alerts" },
   { value: "Daily", label: "Updates" },
 ];
 
@@ -78,6 +78,7 @@ function buildRankedPostcodes(): {
 
 export default function HomePage() {
   const { worst, best } = buildRankedPostcodes();
+  const mapPostcodes = getMapPostcodes();
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
@@ -87,7 +88,7 @@ export default function HomePage() {
         <div className="max-w-2xl mx-auto text-center">
           <p className="animate-fade-up delay-1 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-accent font-semibold">
             <Activity className="w-3.5 h-3.5" />
-            UK Water Quality Data
+            Check your tap water
           </p>
 
           <h1 className="animate-fade-up delay-2 font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic mt-4">
@@ -95,7 +96,7 @@ export default function HomePage() {
           </h1>
 
           <p className="animate-fade-up delay-3 text-lg text-muted mt-4 max-w-lg mx-auto leading-relaxed">
-            Independent reports for every UK postcode, based on government monitoring data.
+            Find out what&apos;s really in your water. Free reports based on government tests.
           </p>
 
           <div className="animate-fade-up delay-4 max-w-xl mx-auto mt-8">
@@ -132,22 +133,22 @@ export default function HomePage() {
         <h2 className="font-display text-2xl text-ink italic">
           Water quality across the UK
         </h2>
-        <p className="text-sm text-muted mt-1 mb-4">
-          Click any marker to see the full water quality report for that area.
+        <p className="text-sm text-muted mt-1 mb-6">
+          Tap a region to explore water quality data.
         </p>
-        <LazyMap postcodes={getMapPostcodes()} />
+        <HomepageMap postcodes={mapPostcodes} />
       </section>
 
-      {/* Areas of concern */}
+      {/* Areas to watch */}
       <section className="mt-20">
         <div className="flex items-center gap-2 mb-1">
           <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
           <h2 className="font-display text-2xl text-ink italic">
-            Areas of concern
+            Areas to watch
           </h2>
         </div>
         <p className="text-sm text-muted mt-1 mb-5">
-          Postcodes with the lowest water quality scores based on current monitoring data.
+          These areas had the most issues in recent water tests.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -201,16 +202,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Highest rated areas */}
+      {/* Cleanest water */}
       <section className="mt-12">
         <div className="flex items-center gap-2 mb-1">
           <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
           <h2 className="font-display text-2xl text-ink italic">
-            Highest rated areas
+            Cleanest water
           </h2>
         </div>
         <p className="text-sm text-muted mt-1 mb-5">
-          Postcodes with the cleanest water quality scores in our dataset.
+          These areas scored highest in our checks.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -254,10 +255,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Most checked postcodes */}
+      {/* Popular searches */}
       <section className="mt-16">
         <h2 className="font-display text-xl text-ink italic mb-4">
-          Most checked areas
+          Popular searches
         </h2>
 
         <div className="flex flex-col gap-2">
@@ -291,10 +292,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Water suppliers */}
+      {/* Water companies */}
       <section className="mt-16 mb-20">
         <h2 className="font-display text-xl text-ink italic">
-          Water suppliers
+          Water companies
         </h2>
         <p className="text-sm text-muted mt-1 mb-4">
           We track data from all major UK water companies

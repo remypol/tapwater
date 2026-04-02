@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin, Building2, ExternalLink, ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
-import { SafetyScore } from "@/components/safety-score";
+import { ChevronRight, MapPin, Building2, ExternalLink } from "lucide-react";
+import { WaterDropScore } from "@/components/water-drop-score";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { StatCards } from "@/components/stat-cards";
 import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
@@ -51,52 +52,6 @@ const GRADIENT_CLASS = {
   warning: "bg-score-warning",
   danger: "bg-score-danger",
 } as const;
-
-function getWhatThisMeans(score: number, district: string): {
-  text: string;
-  borderColor: string;
-  textColor: string;
-  Icon: React.ElementType;
-} {
-  if (score >= 9) {
-    return {
-      text: `Water quality in ${district} is excellent. All tested parameters are well within regulatory limits.`,
-      borderColor: "border-l-[var(--color-safe)]",
-      textColor: "text-[var(--color-safe)]",
-      Icon: ShieldCheck,
-    };
-  }
-  if (score >= 7) {
-    return {
-      text: `Water quality in ${district} is good. Most parameters are within limits, though some are worth monitoring.`,
-      borderColor: "border-l-[var(--color-safe)]",
-      textColor: "text-[var(--color-safe)]",
-      Icon: ShieldCheck,
-    };
-  }
-  if (score >= 5) {
-    return {
-      text: `Water quality in ${district} is fair. Several parameters are elevated and may warrant attention.`,
-      borderColor: "border-l-[var(--color-warning)]",
-      textColor: "text-[var(--color-warning)]",
-      Icon: ShieldAlert,
-    };
-  }
-  if (score >= 3) {
-    return {
-      text: `Water quality in ${district} is poor. Multiple contaminants exceed recommended guidelines.`,
-      borderColor: "border-l-[var(--color-danger)]",
-      textColor: "text-[var(--color-danger)]",
-      Icon: ShieldX,
-    };
-  }
-  return {
-    text: `Water quality in ${district} is very poor. Significant contamination has been detected in environmental monitoring.`,
-    borderColor: "border-l-[var(--color-danger)]",
-    textColor: "text-[var(--color-danger)]",
-    Icon: ShieldX,
-  };
-}
 
 function getTrendNote(historicalScores: { year: number; score: number }[]): string {
   if (historicalScores.length < 2) return "";
@@ -155,10 +110,10 @@ export default async function PostcodePage({ params }: Props) {
             {data.city}, {data.region}
           </p>
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
-            Tap Water Quality in {data.district}
+            Your water in {data.district}
           </h1>
           <p className="text-muted mt-1 animate-fade-up delay-3">
-            {data.areaName} &mdash; 2026 Report
+            {data.areaName}, {data.city}
           </p>
         </header>
 
@@ -173,7 +128,12 @@ export default async function PostcodePage({ params }: Props) {
 
             {/* Score */}
             <div className="flex justify-center py-10 lg:py-14 animate-fade-in delay-3">
-              <SafetyScore score={data.safetyScore} size={200} parameterCount={data.contaminantsTested} />
+              <WaterDropScore
+                score={data.safetyScore}
+                size={200}
+                tested={data.contaminantsTested}
+                flagged={data.contaminantsFlagged}
+              />
             </div>
 
             {/* Sentinel: triggers sticky bar once scrolled past */}
@@ -201,7 +161,7 @@ export default async function PostcodePage({ params }: Props) {
             {/* Summary — GEO-optimised for AI citation */}
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
-                According to Environment Agency monitoring data, tap water in{" "}
+                Based on government water tests, your water in{" "}
                 {data.district} ({data.areaName}) is supplied by{" "}
                 <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
                   {data.supplier}
@@ -225,91 +185,88 @@ export default async function PostcodePage({ params }: Props) {
               </p>
             </div>
 
-            {/* What this means — contextual callout */}
-            {(() => {
-              const { text, borderColor, textColor, Icon } = getWhatThisMeans(data.safetyScore, data.district);
-              return (
-                <div className={`card p-5 mt-5 max-w-3xl border-l-3 ${borderColor} flex items-start gap-3`}>
-                  <Icon className={`w-4 h-4 mt-0.5 shrink-0 ${textColor}`} />
-                  <p className="text-sm text-body leading-relaxed">{text}</p>
-                </div>
-              );
-            })()}
-
             <hr className="border-rule mt-10" />
 
             {/* Contaminant Data */}
-            <section className="bg-surface -mx-5 px-5 py-8 mt-0">
-              <h2 className="font-display text-2xl text-ink italic">
-                What&apos;s in your water
-              </h2>
-              <p className="text-sm text-muted mt-1 mb-5">
-                All readings from the latest monitoring data for your supply zone.
-              </p>
-              <ContaminantTable readings={data.readings} />
-            </section>
+            <ScrollReveal delay={0}>
+              <section className="bg-surface -mx-5 px-5 py-8 mt-0">
+                <h2 className="font-display text-2xl text-ink italic">
+                  What we found
+                </h2>
+                <p className="text-sm text-muted mt-1 mb-5">
+                  Here&apos;s what government tests found in water near you.
+                </p>
+                <ContaminantTable readings={data.readings} />
+              </section>
+            </ScrollReveal>
 
             <hr className="border-rule" />
 
             {/* Trend Chart — simple bar visualisation */}
-            <section className="mt-8">
-              <h2 className="font-display text-2xl text-ink italic">
-                Water quality trend
-              </h2>
-              <p className="text-sm text-muted mt-1">
-                {data.district} quality score, 2020&ndash;2026
-              </p>
-              <div className="card-elevated mt-4 p-8 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
-                <div className="flex items-end gap-2">
-                  {data.historicalScores.map((h) => {
-                    const height = Math.max(24, (h.score / 10) * 140);
-                    const color =
-                      h.score >= 7
-                        ? "bg-[var(--color-safe)]"
-                        : h.score >= 5
-                          ? "bg-[var(--color-warning)]"
-                          : "bg-[var(--color-danger)]";
-                    return (
-                      <div key={h.year} className="flex flex-col items-center gap-1.5">
-                        <span className="font-data text-[10px] text-faint">{h.score}</span>
-                        <div
-                          className={`w-7 sm:w-9 rounded-t-sm ${color} opacity-80`}
-                          style={{ height }}
-                        />
-                        <span className="text-[10px] text-faint font-data">{h.year}</span>
-                      </div>
-                    );
-                  })}
+            <ScrollReveal delay={100}>
+              <section className="mt-8">
+                <h2 className="font-display text-2xl text-ink italic">
+                  How it&apos;s changed
+                </h2>
+                <p className="text-sm text-muted mt-1">
+                  {data.district} quality score, 2020&ndash;2026
+                </p>
+                <div className="card-elevated mt-4 p-8 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
+                  <div className="flex items-end gap-2">
+                    {data.historicalScores.map((h) => {
+                      const height = Math.max(24, (h.score / 10) * 140);
+                      const color =
+                        h.score >= 7
+                          ? "bg-[var(--color-safe)]"
+                          : h.score >= 5
+                            ? "bg-[var(--color-warning)]"
+                            : "bg-[var(--color-danger)]";
+                      return (
+                        <div key={h.year} className="flex flex-col items-center gap-1.5">
+                          <span className="font-data text-[10px] text-faint">{h.score}</span>
+                          <div
+                            className={`w-7 sm:w-9 rounded-t-sm ${color} opacity-80`}
+                            style={{ height }}
+                          />
+                          <span className="text-[10px] text-faint font-data">{h.year}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {(() => {
+                    const note = getTrendNote(data.historicalScores);
+                    return note ? (
+                      <p className="text-sm text-muted italic mt-2">{note}</p>
+                    ) : null;
+                  })()}
                 </div>
-                {(() => {
-                  const note = getTrendNote(data.historicalScores);
-                  return note ? (
-                    <p className="text-sm text-muted italic mt-2">{note}</p>
-                  ) : null;
-                })()}
-              </div>
-            </section>
+              </section>
+            </ScrollReveal>
 
             <hr className="border-rule mt-10" />
 
             {/* Email Capture — lighter ask, comes before filter recommendations */}
-            <div className="mt-8">
-              <EmailCapture postcode={data.district} />
-            </div>
+            <ScrollReveal delay={0}>
+              <div className="mt-8">
+                <EmailCapture postcode={data.district} />
+              </div>
+            </ScrollReveal>
 
             <hr className="border-rule mt-10" />
 
             {/* Filter Recommendations */}
-            <div className="mt-8">
-              <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
-            </div>
+            <ScrollReveal delay={100}>
+              <div className="mt-8">
+                <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
+              </div>
+            </ScrollReveal>
           </>
         ) : (
           /* Insufficient data state */
           <div className="mt-10 card-elevated rounded-2xl p-8 max-w-2xl">
-            <p className="font-display text-2xl text-ink italic">Insufficient monitoring data</p>
+            <p className="font-display text-2xl text-ink italic">Not enough data yet</p>
             <p className="text-base text-body leading-relaxed mt-3">
-              We don&apos;t have enough Environment Agency data for this area to calculate a score. This doesn&apos;t mean your water is unsafe.
+              We don&apos;t have enough test results for this area yet to calculate a score. This doesn&apos;t mean your water is unsafe.
             </p>
           </div>
         )}
@@ -317,34 +274,36 @@ export default async function PostcodePage({ params }: Props) {
         <hr className="border-rule mt-10" />
 
         {/* Nearby Areas — enriched with score previews */}
-        <section className="mt-8">
-          <h2 className="font-display text-2xl text-ink italic">
-            Nearby areas
-          </h2>
-          <div className="flex overflow-x-auto gap-2 pb-2 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 mt-4">
-            {nearbyData.map(({ code, data: pcData }) =>
-              pcData ? (
-                <Link
-                  key={code}
-                  href={`/postcode/${code}/`}
-                  className="card py-2 px-3 inline-flex items-center gap-2 snap-start shrink-0"
-                >
-                  <MapPin className="w-3 h-3 text-faint shrink-0" />
-                  <span className="text-sm text-ink font-medium">{code}</span>
-                  <span className="text-xs text-muted">{pcData.areaName}</span>
-                  <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pcData.safetyScore)}`}>
-                    {pcData.safetyScore}
-                  </span>
-                </Link>
-              ) : (
-                <Link key={code} href={`/postcode/${code}/`} className="pill snap-start shrink-0">
-                  <MapPin className="w-3 h-3 text-faint mr-1.5" />
-                  {code}
-                </Link>
-              )
-            )}
-          </div>
-        </section>
+        <ScrollReveal delay={0}>
+          <section className="mt-8">
+            <h2 className="font-display text-2xl text-ink italic">
+              Compare nearby
+            </h2>
+            <div className="flex overflow-x-auto gap-2 pb-2 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 mt-4">
+              {nearbyData.map(({ code, data: pcData }) =>
+                pcData ? (
+                  <Link
+                    key={code}
+                    href={`/postcode/${code}/`}
+                    className="card py-2 px-3 inline-flex items-center gap-2 snap-start shrink-0"
+                  >
+                    <MapPin className="w-3 h-3 text-faint shrink-0" />
+                    <span className="text-sm text-ink font-medium">{code}</span>
+                    <span className="text-xs text-muted">{pcData.areaName}</span>
+                    <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pcData.safetyScore)}`}>
+                      {pcData.safetyScore}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link key={code} href={`/postcode/${code}/`} className="pill snap-start shrink-0">
+                    <MapPin className="w-3 h-3 text-faint mr-1.5" />
+                    {code}
+                  </Link>
+                )
+              )}
+            </div>
+          </section>
+        </ScrollReveal>
 
         {/* Supplier Card — always shown */}
         <div className="mt-10">
@@ -369,7 +328,7 @@ export default async function PostcodePage({ params }: Props) {
 
         {/* Methodology Footer */}
         <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
-          {hasData ? <>Based on {data.contaminantsTested} regulated parameters. </> : null}
+          {hasData ? <>Based on {data.contaminantsTested} government tests. </> : null}
           See our{" "}
           <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
             methodology
