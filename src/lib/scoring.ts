@@ -176,16 +176,12 @@ export function computeScore(
   observations: { determinand: string; value: number; unit: string; date: string }[],
   source: "drinking" | "environmental" = "drinking",
 ): ScoreResult {
-  // Filter out readings older than 3 years
-  const cutoffDate = new Date();
-  cutoffDate.setFullYear(cutoffDate.getFullYear() - 3);
-  const cutoff = cutoffDate.toISOString().split("T")[0];
-
-  // Deduplicate: keep most recent per determinand, rejecting non-water units
+  // Deduplicate: keep most recent per determinand, rejecting non-water units.
+  // The dedup naturally keeps the freshest reading — no hard cutoff needed.
+  // We only flag staleness in the output, not by filtering data out entirely,
+  // so the site never goes empty even if no new data arrives for years.
   const latest = new Map<string, { value: number; unit: string; date: string }>();
   for (const obs of observations) {
-    // Skip stale readings
-    if (obs.date && obs.date < cutoff) continue;
     // Skip biota/sediment readings (ug/kg, mg/kg, %, g, UNITLESS, etc.)
     if (!isWaterUnit(obs.unit)) continue;
 

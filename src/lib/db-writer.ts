@@ -58,14 +58,15 @@ export async function writeStreamReadings(
 ): Promise<void> {
   const db = getSupabase();
 
-  // Delete previous readings for this district to avoid duplicates
+  // Only replace existing data if we have new data — prevents data loss on API outages
+  if (records.length === 0) return;
+
+  // Delete previous readings ONLY when we have replacements
   await db
     .from("drinking_water_readings")
     .delete()
     .eq("postcode_district", district)
     .eq("source", "stream_portal");
-
-  if (records.length === 0) return;
 
   const rows = records.map((r) => ({
     postcode_district: district,

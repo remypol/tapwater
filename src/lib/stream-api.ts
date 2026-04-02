@@ -144,16 +144,61 @@ export async function queryStreamService(
 }
 
 /**
+ * Discover available drinking water quality services for an ArcGIS org.
+ * Queries the org's service listing and filters for water quality datasets.
+ * Returns service names sorted by year descending (newest first).
+ */
+async function discoverServices(orgId: string): Promise<string[]> {
+  try {
+    const url = `${ARCGIS_BASE}/${orgId}/ArcGIS/rest/services?f=json`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const json = await res.json() as { services?: { name: string; type: string }[] };
+    const services = (json.services ?? [])
+      .filter((s) => s.type === "FeatureServer")
+      .map((s) => s.name)
+      .filter((name) => {
+        const lower = name.toLowerCase();
+        return (
+          (lower.includes("drinking") || lower.includes("domestic")) &&
+          lower.includes("water") &&
+          lower.includes("quality")
+        );
+      })
+      // Sort by year descending (extract year from name)
+      .sort((a, b) => {
+        const yearA = parseInt(a.match(/\d{4}/)?.[0] ?? "0", 10);
+        const yearB = parseInt(b.match(/\d{4}/)?.[0] ?? "0", 10);
+        return yearB - yearA;
+      });
+    return services;
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Fetch the most recent year's data for a supplier and set of LSOAs.
- * Tries services in order (newest first) until one returns data.
+ * First tries hardcoded services (fast), then discovers new ones if none work.
  */
 export async function fetchStreamData(
   source: StreamSource,
   lsoaCodes: string[],
 ): Promise<StreamRecord[]> {
+  // Try hardcoded services first (fast path)
   for (const service of source.services) {
     const records = await queryStreamService(source, service.serviceName, lsoaCodes);
     if (records.length > 0) return records;
   }
+
+  // Fallback: discover services dynamically (handles new yearly datasets)
+  const discovered = await discoverServices(source.orgId);
+  for (const serviceName of discovered) {
+    // Skip services we already tried
+    if (source.services.some((s) => s.serviceName === serviceName)) continue;
+    const records = await queryStreamService(source, serviceName, lsoaCodes);
+    if (records.length > 0) return records;
+  }
+
   return [];
 }
