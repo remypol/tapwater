@@ -264,10 +264,21 @@ export default async function PostcodePage({ params }: Props) {
               </section>
             </ScrollReveal>
 
+            {/* Filter Recommendations — immediately after contaminant data, while concern is highest */}
+            {filterRecs.length > 0 && (
+              <ScrollReveal delay={100}>
+                <FilterRecommendations
+                  recommendations={filterRecs}
+                  postcodeDistrict={data.district}
+                  contaminantsFlagged={data.contaminantsFlagged}
+                />
+              </ScrollReveal>
+            )}
+
             {/* Environmental Water Quality — EA data, clearly labelled */}
             {data.environmentalReadings.length > 0 && (
               <>
-                <hr className="border-rule" />
+                <hr className="border-rule mt-10" />
                 <ScrollReveal delay={100}>
                   <section className="mt-8">
                     <h2 className="font-display text-2xl text-ink italic">
@@ -285,24 +296,12 @@ export default async function PostcodePage({ params }: Props) {
 
             <hr className="border-rule mt-10" />
 
-            {/* Email Capture — lighter ask, comes before filter recommendations */}
+            {/* Email Capture — after filters, lighter ask */}
             <ScrollReveal delay={0}>
               <div className="mt-8">
                 <EmailCapture postcode={data.district} />
               </div>
             </ScrollReveal>
-
-            {/* Filter Recommendations — matched to local contaminants */}
-            {filterRecs.length > 0 && (
-              <ScrollReveal delay={100}>
-                <hr className="border-rule mt-10" />
-                <FilterRecommendations
-                  recommendations={filterRecs}
-                  postcodeDistrict={data.district}
-                  contaminantsFlagged={data.contaminantsFlagged}
-                />
-              </ScrollReveal>
-            )}
 
           </>
         ) : (

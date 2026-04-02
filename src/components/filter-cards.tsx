@@ -189,7 +189,7 @@ function FilterCard({ filter, postcodeDistrict, index }: FilterCardProps) {
             rel="noopener noreferrer sponsored"
             className="mt-3 w-full bg-ink text-white py-2 sm:py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-gray-800 transition-colors"
           >
-            View on Amazon
+            Check price &amp; reviews
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -217,16 +217,17 @@ export function FilterRecommendations({
   if (recommendations.length === 0) return null;
 
   return (
-    <section className="mt-8">
+    <section className="mt-10">
       <div>
         <h2 className="font-display text-2xl text-ink italic">
-          Filters for {postcodeDistrict}
-        </h2>
-        <p className="mt-1.5 text-sm text-muted flex items-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
           {contaminantsFlagged > 0
-            ? `Matched to ${contaminantsFlagged} contaminant${contaminantsFlagged !== 1 ? "s" : ""} flagged in your area`
-            : "General recommendations for your area"}
+            ? `What removes these from your water`
+            : `Filters for ${postcodeDistrict}`}
+        </h2>
+        <p className="mt-1.5 text-sm text-body max-w-2xl">
+          {contaminantsFlagged > 0
+            ? `We found ${contaminantsFlagged} contaminant${contaminantsFlagged !== 1 ? "s" : ""} above recommended levels in ${postcodeDistrict}. These filters are specifically matched to what was found in your area.`
+            : `General-purpose filters suitable for your area, based on common UK tap water concerns.`}
         </p>
       </div>
 
