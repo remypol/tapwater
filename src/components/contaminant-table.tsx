@@ -12,9 +12,16 @@ function getBarColorClass(percent: number): string {
   return 'bg-safe';
 }
 
+function cleanNumber(value: number): string {
+  // Fix floating point noise: 0.0000149999999 → 0.0000150
+  if (value === 0) return '0';
+  const precision = value < 0.001 ? 3 : value < 0.1 ? 4 : value < 10 ? 3 : 2;
+  return parseFloat(value.toPrecision(precision)).toString();
+}
+
 function formatValue(value: number | null, unit?: string): string {
   if (value === null) return '—';
-  return unit ? `${value} ${unit}` : String(value);
+  return unit ? `${cleanNumber(value)} ${unit}` : cleanNumber(value);
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────
@@ -91,6 +98,7 @@ function ProgressBar({ percent, visible }: ProgressBarProps) {
 export function ContaminantTable({ readings }: { readings: ContaminantReading[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [showAllSafe, setShowAllSafe] = useState(false);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -109,6 +117,12 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // Split readings into flagged (shown always) and safe (collapsed)
+  const flagged = readings.filter((r) => r.status !== 'pass');
+  const safe = readings.filter((r) => r.status === 'pass');
+  const hasFlagged = flagged.length > 0;
+  const visibleReadings = showAllSafe ? readings : (hasFlagged ? flagged : readings.slice(0, 6));
 
   return (
     <div ref={containerRef}>
@@ -136,7 +150,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
             </tr>
           </thead>
           <tbody>
-            {readings.map((reading, i) => {
+            {visibleReadings.map((reading, i) => {
               const percent = getPercentOfLimit(reading);
               const hasLimit = reading.ukLimit !== null || reading.whoGuideline !== null;
               const isEven = i % 2 === 0;
@@ -158,7 +172,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   {/* Your Level */}
                   <td className="py-4 px-4 align-top">
                     <span className="font-data text-sm text-body">
-                      {reading.belowDetectionLimit ? `< ${reading.value}` : reading.value} {reading.unit}
+                      {reading.belowDetectionLimit ? `< ${cleanNumber(reading.value)}` : cleanNumber(reading.value)} {reading.unit}
                     </span>
                     {hasLimit && <ProgressBar percent={percent} visible={visible} />}
                   </td>
@@ -198,7 +212,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
 
       {/* ── Mobile cards (below md) ── */}
       <div className="md:hidden flex overflow-x-auto gap-3 pb-3 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 sm:gap-3">
-        {readings.map((reading) => {
+        {visibleReadings.map((reading) => {
           const percent = getPercentOfLimit(reading);
           const hasLimit = reading.ukLimit !== null || reading.whoGuideline !== null;
 
@@ -225,7 +239,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                       Found
                     </div>
                     <div className="font-data text-sm text-ink">
-                      {reading.belowDetectionLimit ? `< ${reading.value}` : reading.value} {reading.unit}
+                      {reading.belowDetectionLimit ? `< ${cleanNumber(reading.value)}` : cleanNumber(reading.value)} {reading.unit}
                     </div>
                   </div>
                   <div>
@@ -265,8 +279,29 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
         })}
       </div>
 
-      {/* Attribution — shown once, not per-item */}
-      <p className="text-xs text-faint mt-3">Source: Environment Agency</p>
+      {/* Show/hide safe results */}
+      {!showAllSafe && safe.length > 0 && hasFlagged && (
+        <button
+          onClick={() => setShowAllSafe(true)}
+          className="mt-4 w-full text-sm text-accent font-medium py-2.5 rounded-lg border border-rule hover:border-accent hover:bg-accent-light transition-colors flex items-center justify-center gap-1.5"
+        >
+          <CheckCircle2 className="w-4 h-4 text-safe" />
+          Show {safe.length} safe result{safe.length !== 1 ? 's' : ''}
+        </button>
+      )}
+      {!showAllSafe && !hasFlagged && readings.length > 6 && (
+        <button
+          onClick={() => setShowAllSafe(true)}
+          className="mt-4 w-full text-sm text-accent font-medium py-2.5 rounded-lg border border-rule hover:border-accent hover:bg-accent-light transition-colors"
+        >
+          Show all {readings.length} results
+        </button>
+      )}
+
+      {/* Attribution */}
+      <p className="text-xs text-faint mt-3">
+        Source: {readings.some((r) => r.source === 'drinking') ? 'Stream Water Data Portal' : 'Environment Agency'}
+      </p>
 
     </div>
   );
