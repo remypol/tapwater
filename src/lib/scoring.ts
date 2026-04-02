@@ -24,6 +24,8 @@ const LIMITS: Record<string, LimitEntry> = {
   // Tier 1 (weight 3.0) — acute/chronic health risk
   lead: { ukLimit: 0.01, whoGuideline: 0.01, unit: "mg/L", tier: 1, displayName: "Lead" },
   arsenic: { ukLimit: 0.01, whoGuideline: 0.01, unit: "µg/L", tier: 1, displayName: "Arsenic" },
+  "e.coli": { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "E. coli" },
+  coliforms: { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "Coliform Bacteria" },
 
   // Tier 2 (weight 2.0) — significant concern at elevated levels
   nitrate: { ukLimit: 50, whoGuideline: 50, unit: "mg/L", tier: 2, displayName: "Nitrate" },
@@ -35,6 +37,11 @@ const LIMITS: Record<string, LimitEntry> = {
   ammonia: { ukLimit: 0.5, whoGuideline: null, unit: "mg/L", tier: 2, displayName: "Ammonia" },
   phosphate: { ukLimit: null, whoGuideline: null, unit: "mg/L", tier: 2, displayName: "Phosphate" },
   nickel: { ukLimit: 0.02, whoGuideline: 0.07, unit: "mg/L", tier: 2, displayName: "Nickel" },
+  trihalomethanes: { ukLimit: 0.1, whoGuideline: null, unit: "mg/L", tier: 2, displayName: "Trihalomethanes" },
+  bromate: { ukLimit: 0.01, whoGuideline: 0.01, unit: "mg/L", tier: 2, displayName: "Bromate" },
+  fluoride: { ukLimit: 1.5, whoGuideline: 1.5, unit: "mg/L", tier: 2, displayName: "Fluoride" },
+  antimony: { ukLimit: 0.005, whoGuideline: 0.02, unit: "mg/L", tier: 2, displayName: "Antimony" },
+  selenium: { ukLimit: 0.04, whoGuideline: 0.04, unit: "mg/L", tier: 2, displayName: "Selenium" },
 
   // Tier 3 (weight 1.0) — aesthetic/indirect
   iron: { ukLimit: 0.2, whoGuideline: 0.3, unit: "mg/L", tier: 3, displayName: "Iron" },
@@ -46,6 +53,8 @@ const LIMITS: Record<string, LimitEntry> = {
   temperature: { ukLimit: null, whoGuideline: null, unit: "°C", tier: 3, displayName: "Temperature" },
   turbidity: { ukLimit: 4, whoGuideline: 4, unit: "NTU", tier: 3, displayName: "Turbidity" },
   conductivity: { ukLimit: null, whoGuideline: null, unit: "µS/cm", tier: 3, displayName: "Conductivity" },
+  aluminium: { ukLimit: 0.2, whoGuideline: null, unit: "mg/L", tier: 3, displayName: "Aluminium" },
+  colour: { ukLimit: 20, whoGuideline: null, unit: "mg/L Pt/Co", tier: 3, displayName: "Colour" },
 };
 
 const TIER_WEIGHTS = { 1: 3.0, 2: 2.0, 3: 1.0 };
@@ -84,6 +93,17 @@ function normalizeDeterminand(label: string): string | null {
   if (lower.includes("turbidity")) return "turbidity";
   if (lower.includes("conductivity")) return "conductivity";
 
+  // Stream Water Data Portal determinand names
+  if (lower.includes("e.coli") || lower.includes("e. coli") || lower.includes("escherichia")) return "e.coli";
+  if (lower.includes("coliform") && !lower.includes("e.coli") && !lower.includes("e. coli")) return "coliforms";
+  if (lower.includes("trihalomethane")) return "trihalomethanes";
+  if (lower.includes("bromate")) return "bromate";
+  if (lower.includes("fluoride")) return "fluoride";
+  if (lower.includes("antimony")) return "antimony";
+  if (lower.includes("selenium")) return "selenium";
+  if (lower.includes("aluminium")) return "aluminium";
+  if (lower.includes("colour") && !lower.includes("colourless")) return "colour";
+
   return null;
 }
 
@@ -98,7 +118,7 @@ const WATER_UNITS = new Set([
   "mg/l", "µg/l", "ug/l", "ng/l",
   "ph", "ntu", "°c", "cel",
   "µs/cm", "us/cm", "ms/cm",
-  "count/100ml", "no/100ml", "cfu/100ml",
+  "count/100ml", "no/100ml", "no. /100ml", "no./100ml", "cfu/100ml",
   "mg/l as",  // EA sometimes uses "mg/l as N" etc.
 ]);
 
