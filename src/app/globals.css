@@ -64,9 +64,10 @@ body {
 }
 
 .font-data {
-  font-family: var(--font-space-mono), 'Courier New', monospace;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums slashed-zero;
   letter-spacing: -0.02em;
+  font-weight: 600;
 }
 
 /* ── Atmospheric Backgrounds ── */

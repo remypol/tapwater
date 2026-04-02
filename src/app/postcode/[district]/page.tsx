@@ -214,35 +214,29 @@ export default async function PostcodePage({ params }: Props) {
               </p>
             </div>
 
-            {/* Data provenance — transparency about where this comes from */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
-              {data.dataSource === "stream" || data.dataSource === "mixed" ? (
-                <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-safe" />
-                  Drinking water quality data
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-warning" />
-                  Environmental monitoring only
-                </span>
-              )}
-              <span>Last sampled: <span className="font-data text-ink">{data.lastSampleDate}</span></span>
-              {data.sampleCount > 0 && (
-                <>
-                  <span>·</span>
-                  <span>{data.sampleCount.toLocaleString()} samples</span>
-                </>
-              )}
-              {data.dataSource === "ea-only" && (
-                <>
-                  <span>·</span>
-                  <span>Tap water test data not yet available for {data.supplier}</span>
-                </>
-              )}
-              <Link href="/about/data-sources" className="text-accent hover:underline">
-                How we score
-              </Link>
+            {/* Data provenance — clean, two-row layout */}
+            <div className="mt-6 space-y-2">
+              <div className="flex items-center gap-3">
+                {data.dataSource === "stream" || data.dataSource === "mixed" ? (
+                  <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1 text-xs font-medium text-emerald-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    Drinking water tests
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 text-xs font-medium text-amber-700">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    Environmental monitoring
+                  </span>
+                )}
+                <Link href="/about/data-sources" className="text-xs text-accent hover:underline">
+                  How we score
+                </Link>
+              </div>
+              <p className="text-xs text-muted">
+                Last sampled <span className="text-ink font-medium">{data.lastSampleDate}</span>
+                {data.sampleCount > 0 && <> · {data.sampleCount.toLocaleString()} samples</>}
+                {data.dataSource === "ea-only" && <> · Tap water tests not yet available for {data.supplier}</>}
+              </p>
             </div>
 
             <hr className="border-rule mt-10" />
@@ -250,7 +244,7 @@ export default async function PostcodePage({ params }: Props) {
             {/* Contaminant Data */}
             <ScrollReveal delay={0}>
               <section id="what-we-found" className="bg-surface -mx-5 px-5 py-8 mt-0 scroll-mt-20">
-                <h2 className="font-display text-2xl text-ink italic">
+                <h2 className="text-xl font-semibold text-ink tracking-tight">
                   {data.dataSource === "stream" || data.dataSource === "mixed"
                     ? "What\u2019s in your tap water"
                     : "What we found"}

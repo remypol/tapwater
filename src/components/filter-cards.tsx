@@ -205,7 +205,7 @@ export function FilterRecommendations({
   return (
     <section className="mt-10">
       {/* Section header */}
-      <h2 className="font-display text-2xl text-ink italic">
+      <h2 className="text-xl font-semibold text-ink tracking-tight">
         {contaminantsFlagged > 0
           ? "What removes these from your water"
           : `Filters for ${postcodeDistrict}`}
