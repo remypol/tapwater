@@ -158,7 +158,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   {/* Your Level */}
                   <td className="py-4 px-4 align-top">
                     <span className="font-data text-sm text-body">
-                      {reading.value} {reading.unit}
+                      {reading.belowDetectionLimit ? `< ${reading.value}` : reading.value} {reading.unit}
                     </span>
                     {hasLimit && <ProgressBar percent={percent} visible={visible} />}
                   </td>
@@ -225,7 +225,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                       Found
                     </div>
                     <div className="font-data text-sm text-ink">
-                      {reading.value} {reading.unit}
+                      {reading.belowDetectionLimit ? `< ${reading.value}` : reading.value} {reading.unit}
                     </div>
                   </div>
                   <div>

@@ -58,16 +58,6 @@ const GRADIENT_CLASS = {
   danger: "bg-score-danger",
 } as const;
 
-function getTrendNote(historicalScores: { year: number; score: number }[]): string {
-  if (historicalScores.length < 2) return "";
-  const oldest = historicalScores[0].score;
-  const newest = historicalScores[historicalScores.length - 1].score;
-  const delta = newest - oldest;
-  if (delta > 0.5) return "Water quality has improved over the past 6 years.";
-  if (delta < -0.5) return "Water quality has declined — worth monitoring.";
-  return "Water quality has remained stable.";
-}
-
 function getScoreBadgeColor(score: number): string {
   const color = getScoreColor(score);
   if (color === "safe") return "text-[var(--color-safe)]";
@@ -182,7 +172,11 @@ export default async function PostcodePage({ params }: Props) {
             {/* Summary — GEO-optimised for AI citation */}
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
-                Based on government water tests, your water in{" "}
+                {data.dataSource === "stream" || data.dataSource === "mixed" ? (
+                  <>Based on drinking water tests</>
+                ) : (
+                  <>Based on environmental water monitoring</>
+                )}, your water in{" "}
                 {data.district} ({data.areaName}) is supplied by{" "}
                 <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
                   {data.supplier}
@@ -197,8 +191,10 @@ export default async function PostcodePage({ params }: Props) {
                 {data.pfasDetected && data.pfasLevel != null && (
                   <>
                     . PFAS (forever chemicals) were detected at{" "}
-                    <span className="font-data">{data.pfasLevel}</span> µg/L in
-                    nearby environmental monitoring — the UK currently has no
+                    <span className="font-data">{data.pfasLevel}</span> µg/L
+                    {data.pfasSource === "drinking"
+                      ? " in local tap water tests"
+                      : " in nearby environmental monitoring"} — the UK currently has no
                     legal limit for PFAS in drinking water
                   </>
                 )}
@@ -208,13 +204,30 @@ export default async function PostcodePage({ params }: Props) {
 
             {/* Data provenance — transparency about where this comes from */}
             <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
-              <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-safe" />
-                Environment Agency data
-              </span>
+              {data.dataSource === "stream" || data.dataSource === "mixed" ? (
+                <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-safe" />
+                  Drinking water quality data
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-warning" />
+                  Environmental monitoring only
+                </span>
+              )}
               <span>Last sampled: <span className="font-data text-ink">{data.lastSampleDate}</span></span>
-              <span>·</span>
-              <span>Environmental water (rivers, groundwater) — not treated tap water</span>
+              {data.sampleCount > 0 && (
+                <>
+                  <span>·</span>
+                  <span>{data.sampleCount.toLocaleString()} samples</span>
+                </>
+              )}
+              {data.dataSource === "ea-only" && (
+                <>
+                  <span>·</span>
+                  <span>Tap water test data not yet available for {data.supplier}</span>
+                </>
+              )}
               <Link href="/about/data-sources" className="text-accent hover:underline">
                 How we score
               </Link>
@@ -226,66 +239,37 @@ export default async function PostcodePage({ params }: Props) {
             <ScrollReveal delay={0}>
               <section id="what-we-found" className="bg-surface -mx-5 px-5 py-8 mt-0 scroll-mt-20">
                 <h2 className="font-display text-2xl text-ink italic">
-                  What we found
+                  {data.dataSource === "stream" || data.dataSource === "mixed"
+                    ? "What\u2019s in your tap water"
+                    : "What we found"}
                 </h2>
                 <p className="text-sm text-muted mt-1 mb-5">
-                  Here&apos;s what government tests found in water near you.
+                  {data.dataSource === "stream" || data.dataSource === "mixed"
+                    ? `Results from drinking water tests in ${data.areaName}.`
+                    : "Here\u2019s what government tests found in water near you."}
                 </p>
                 <ContaminantTable readings={data.readings} />
               </section>
             </ScrollReveal>
 
-            <hr className="border-rule" />
-
-            {/* Trend Chart — simple bar visualisation */}
-            <ScrollReveal delay={100}>
-              <section className="mt-8">
-                <h2 className="font-display text-2xl text-ink italic">
-                  How it&apos;s changed
-                </h2>
-                <p className="text-sm text-muted mt-1">
-                  {data.district}{" "}quality score, 2020&ndash;2026
-                </p>
-                <div className="card-elevated mt-4 p-6 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
-                  {(() => {
-                    const maxScore = Math.max(...data.historicalScores.map((h) => h.score), 1);
-                    const maxBarHeight = 140;
-                    return (
-                      <div className="flex items-end gap-2">
-                        {data.historicalScores.map((h) => {
-                          const height = Math.max(28, (h.score / maxScore) * maxBarHeight);
-                          const colorBase =
-                            h.score >= 7
-                              ? "var(--color-safe)"
-                              : h.score >= 5
-                                ? "var(--color-warning)"
-                                : "var(--color-danger)";
-                          return (
-                            <div key={h.year} className="flex flex-col items-center gap-1.5">
-                              <span className="font-data text-[11px] font-medium text-faint">{h.score}</span>
-                              <div
-                                className="w-8 sm:w-10 rounded-md"
-                                style={{
-                                  height,
-                                  background: `linear-gradient(to top, color-mix(in srgb, ${colorBase} 80%, transparent), ${colorBase})`,
-                                }}
-                              />
-                              <span className="text-[11px] text-faint font-data">{h.year}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })()}
-                  {(() => {
-                    const note = getTrendNote(data.historicalScores);
-                    return note ? (
-                      <p className="text-sm text-muted italic mt-4">{note}</p>
-                    ) : null;
-                  })()}
-                </div>
-              </section>
-            </ScrollReveal>
+            {/* Environmental Water Quality — EA data, clearly labelled */}
+            {data.environmentalReadings.length > 0 && (
+              <>
+                <hr className="border-rule" />
+                <ScrollReveal delay={100}>
+                  <section className="mt-8">
+                    <h2 className="font-display text-2xl text-ink italic">
+                      Environmental water nearby
+                    </h2>
+                    <p className="text-sm text-muted mt-1 mb-5">
+                      Rivers, groundwater and reservoirs near {data.district}. This is
+                      environmental monitoring — not your tap water.
+                    </p>
+                    <ContaminantTable readings={data.environmentalReadings} />
+                  </section>
+                </ScrollReveal>
+              </>
+            )}
 
             <hr className="border-rule mt-10" />
 
@@ -388,20 +372,15 @@ export default async function PostcodePage({ params }: Props) {
 
         {/* Methodology Footer */}
         <footer id="methodology-footer" className="mt-10 pb-4 text-sm text-faint leading-relaxed scroll-mt-20">
-          {hasData ? <>Based on {data.contaminantsTested} government tests. </> : null}
+          {hasData ? <>Based on {data.contaminantsTested} tests. </> : null}
+          {data.dataSource === "stream" || data.dataSource === "mixed"
+            ? "Drinking water quality data from your water company via the Stream Water Data Portal. "
+            : "Environmental water monitoring data from the Environment Agency. "}
           See our{" "}
           <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
             methodology
           </Link>{" "}
-          for how scores are calculated. Source:{" "}
-          <Link href="/about/data-sources" className="underline underline-offset-2 hover:text-muted transition-colors">
-            Environment Agency Water Quality Archive
-          </Link>
-          . Environmental water data — not treated tap water.{" "}
-          <Link href="/about/data-sources" className="underline underline-offset-2 hover:text-muted transition-colors">
-            Learn more
-          </Link>
-          .
+          for how scores are calculated.
         </footer>
       </div>
     </div>
