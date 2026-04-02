@@ -13,6 +13,8 @@ export interface PostcodeData {
   areaName: string;
   city: string;
   region: string;
+  latitude: number;
+  longitude: number;
   supplier: string;
   supplierId: string;
   supplyZone: string;

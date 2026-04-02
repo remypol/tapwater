@@ -20,6 +20,8 @@ export const MOCK_POSTCODE: PostcodeData = {
   areaName: "Westminster",
   city: "London",
   region: "Greater London",
+  latitude: 51.5014,
+  longitude: -0.1419,
   supplier: "Thames Water",
   supplierId: "thames-water",
   supplyZone: "London Central",

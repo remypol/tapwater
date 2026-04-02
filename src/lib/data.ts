@@ -119,6 +119,8 @@ for (const entry of typed) {
     areaName: entry.areaName,
     city: entry.city,
     region: entry.region,
+    latitude: entry.latitude,
+    longitude: entry.longitude,
     supplier: supplier.name,
     supplierId: supplier.id,
     supplyZone: `${entry.city} Central`,
@@ -129,8 +131,23 @@ for (const entry of typed) {
     pfasDetected: score.pfasDetected,
     pfasLevel: score.pfasLevel,
     pfasSource: score.pfasDetected ? "environmental" : null,
-    lastUpdated: new Date().toISOString().split("T")[0],
-    lastSampleDate: entry.topReadings[0]?.date?.split("T")[0] ?? "2026-03-01",
+    lastUpdated: (() => {
+      // Use the most recent observation date, not today's date
+      const dates = entry.topReadings
+        .map((r) => r.date?.split("T")[0])
+        .filter(Boolean)
+        .sort()
+        .reverse();
+      return dates[0] ?? "2000-01-01";
+    })(),
+    lastSampleDate: (() => {
+      const dates = entry.topReadings
+        .map((r) => r.date?.split("T")[0])
+        .filter(Boolean)
+        .sort()
+        .reverse();
+      return dates[0] ?? "2000-01-01";
+    })(),
     readings: score.readings,
     nearbyPostcodes: nearby,
     historicalScores: (() => {

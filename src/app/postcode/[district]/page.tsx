@@ -13,7 +13,7 @@ import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
-import { PostcodeDatasetSchema } from "@/components/json-ld";
+import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
 
 interface Props {
   params: Promise<{ district: string }>;
@@ -43,6 +43,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: `${data.district} Water Quality: Is It Safe?`,
       description,
+    },
+    other: {
+      "geo.position": `${data.latitude};${data.longitude}`,
+      "geo.placename": `${data.areaName}, ${data.region}`,
+      "geo.region": "GB",
+      "ICBM": `${data.latitude}, ${data.longitude}`,
     },
   };
 }
@@ -91,10 +97,23 @@ export default async function PostcodePage({ params }: Props) {
         <PostcodeDatasetSchema
           district={data.district}
           areaName={data.areaName}
+          city={data.city}
+          region={data.region}
+          latitude={data.latitude}
+          longitude={data.longitude}
           supplier={data.supplier}
           score={data.safetyScore}
           lastUpdated={data.lastUpdated}
           contaminantsTested={data.contaminantsTested}
+          readings={data.readings}
+        />
+        <BreadcrumbSchema
+          items={[
+            { name: "Home", url: "https://tapwater.uk" },
+            { name: data.region, url: `https://tapwater.uk/postcode/${data.district}/` },
+            { name: data.areaName, url: `https://tapwater.uk/postcode/${data.district}/` },
+            { name: data.district, url: `https://tapwater.uk/postcode/${data.district}/` },
+          ]}
         />
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
@@ -184,6 +203,20 @@ export default async function PostcodePage({ params }: Props) {
                 )}
                 .
               </p>
+            </div>
+
+            {/* Data provenance — transparency about where this comes from */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted">
+              <span className="inline-flex items-center gap-1.5 bg-wash border border-rule rounded-full px-3 py-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-safe" />
+                Environment Agency data
+              </span>
+              <span>Last sampled: <span className="font-data text-ink">{data.lastSampleDate}</span></span>
+              <span>·</span>
+              <span>Environmental water (rivers, groundwater) — not treated tap water</span>
+              <Link href="/about/data-sources" className="text-accent hover:underline">
+                How we score
+              </Link>
             </div>
 
             <hr className="border-rule mt-10" />
@@ -349,13 +382,13 @@ export default async function PostcodePage({ params }: Props) {
           <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
             methodology
           </Link>{" "}
-          for how scores are calculated. Data sources:{" "}
+          for how scores are calculated. Source:{" "}
           <Link href="/about/data-sources" className="underline underline-offset-2 hover:text-muted transition-colors">
             Environment Agency Water Quality Archive
           </Link>
-          ,{" "}
+          . Environmental water data — not treated tap water.{" "}
           <Link href="/about/data-sources" className="underline underline-offset-2 hover:text-muted transition-colors">
-            Drinking Water Inspectorate
+            Learn more
           </Link>
           .
         </footer>

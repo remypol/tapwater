@@ -4,7 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Data Sources — TapWater.uk',
   description:
-    'A transparent overview of every data source used by TapWater.uk, including the Drinking Water Inspectorate, water company postcode lookups, and the Environment Agency water quality API.',
+    'Where TapWater.uk gets its data: Environment Agency Water Quality API for river, groundwater and lake monitoring across England. Fully transparent, open government data.',
 }
 
 export default function DataSourcesPage() {
@@ -24,140 +24,124 @@ export default function DataSourcesPage() {
         <h1 className="text-3xl font-bold font-display italic text-ink mb-6">Our Data Sources</h1>
 
         <p className="text-base text-body leading-relaxed mb-4">
-          TapWater.uk is built entirely on publicly available data from UK government and regulatory
-          bodies. We do not collect our own water samples or conduct laboratory analysis. This page
-          explains exactly where our data comes from, what it covers, and how it is kept up to date
-          — because we believe full transparency about data provenance is essential for a project
-          like this.
+          TapWater.uk is built entirely on publicly available data from UK government bodies.
+          We do not collect our own water samples or conduct laboratory analysis. This page
+          explains exactly where our data comes from and what it does (and doesn&apos;t) tell you.
         </p>
 
-        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
-          Drinking Water Inspectorate (DWI)
-        </h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">This is our primary source.</strong> The Drinking Water
-          Inspectorate is the independent regulator for drinking water quality in England and Wales.
-          It publishes the most comprehensive and authoritative dataset on the quality of treated
-          tap water supplied to homes and businesses.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          The DWI dataset covers 48 regulated parameters — including microbiological indicators
-          (E. coli, total coliform), heavy metals (lead, arsenic, copper), organic compounds
-          (pesticides, trihalomethanes, PFAS), and aesthetic parameters (turbidity, pH, hardness,
-          chlorine, iron). Sampling takes place at treatment works, service reservoirs, and at
-          consumers' taps, giving a broad picture of water quality throughout the distribution
-          system.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          Data is published on both an annual and a quarterly basis depending on the parameter.
-          Annual reports cover the full set of 48 parameters at the supply zone level; quarterly
-          releases focus on the most health-critical parameters. We ingest both schedules and use
-          the most recent available result for each parameter when calculating scores.
-        </p>
-
-        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
-          Water Company Postcode Lookups
-        </h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          England and Wales are served by approximately 20 licensed water companies, each
-          responsible for one or more supply zones. To map a postcode to the correct set of DWI
-          data, we maintain a regularly updated lookup table sourced directly from each water
-          company's published supply zone information.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          This water company layer provides the most granular geographic mapping available —
-          more precise than regional or local authority boundaries — because supply zones are drawn
-          to reflect the physical infrastructure of the water distribution network. A single
-          postcode district can sometimes span two different supply zones with meaningfully
-          different water characteristics; the water company lookup ensures we assign each postcode
-          to the correct zone.
-        </p>
-
+        {/* What we use now */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
           Environment Agency Water Quality API
         </h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">This is a supplementary source.</strong> The
-          Environment Agency (EA) operates one of the most extensive environmental monitoring
-          networks in Europe. Their open data API provides access to over 72 million water quality
-          observations from more than 58,000 sampling points across rivers, lakes, estuaries, and
-          groundwater in England.
+          <strong className="text-ink">This is our current data source.</strong> The
+          Environment Agency (EA) operates one of the most extensive environmental water
+          monitoring networks in Europe. Their open data API provides access to millions of
+          water quality observations from sampling points across rivers, lakes, reservoirs,
+          and groundwater boreholes in England.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          The EA dataset includes measurements for 50+ PFAS (per- and polyfluoroalkyl substance)
-          compounds, nitrates, pesticides, heavy metals, biological oxygen demand, and many other
-          determinands. The coverage of PFAS is particularly notable given growing scientific
-          interest in this class of compounds.
+          We specifically query <strong className="text-ink">water-type sampling points only</strong> —
+          freshwater rivers, lakes, reservoirs, groundwater boreholes, and springs. We exclude
+          sewage discharge points, trade/industrial discharges, biota tissue analysis, and
+          sediment monitoring, as these don&apos;t reflect water quality relevant to your supply.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">
-            Important distinction: EA data measures environmental water, not treated drinking water.
-          </strong>{' '}
-          A river or groundwater source with elevated contaminants does not mean your tap water
-          contains those contaminants — water treatment is specifically designed to remove or reduce
-          them. We use EA data as contextual background (weighted at 20% in our overall score) to
-          indicate the environmental quality of source waters in your area, not as a direct measure
-          of drinking water safety.
+          The EA dataset includes measurements for metals (lead, arsenic, cadmium, mercury,
+          copper, nickel, iron, manganese), nutrients (nitrate, nitrite, ammonia, phosphate),
+          and physical parameters (pH, turbidity, conductivity, dissolved oxygen, temperature).
+          PFAS (forever chemicals) monitoring data is also available for some areas.
         </p>
+
+        <div className="card p-5 my-6">
+          <p className="text-sm text-ink font-semibold mb-2">
+            Important: environmental water, not treated tap water
+          </p>
+          <p className="text-sm text-body leading-relaxed">
+            EA data measures rivers, lakes, and groundwater — the raw sources before treatment.
+            Your tap water goes through extensive treatment to remove or reduce contaminants.
+            Our scores reflect the quality of source water in your area, which gives an indication
+            of what your water company needs to treat. A low score doesn&apos;t mean your tap water
+            is unsafe — it means there&apos;s more for the treatment works to handle.
+          </p>
+        </div>
+
         <p className="text-base text-body leading-relaxed mb-4">
           The EA Water Quality API is publicly accessible at{' '}
           <span className="font-mono text-sm bg-wash px-1.5 py-0.5 rounded text-body border border-rule">
-            environment.data.gov.uk/water-quality/api
-          </span>
-          .
+            environment.data.gov.uk/water-quality
+          </span>{' '}
+          under the Open Government Licence.
         </p>
 
-        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Postcode Mapping</h2>
+        {/* Postcode mapping */}
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">
+          Postcode Mapping
+        </h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          Translating a postcode search into the correct water supply zone involves two reference
-          datasets:
+          We use <strong className="text-ink">postcodes.io</strong> (powered by the ONS Postcode
+          Directory) to resolve each postcode district to geographic coordinates and administrative
+          area information. This tells us the latitude, longitude, local authority, city, and region
+          for each postcode — which we then use to find nearby EA sampling points.
         </p>
-        <ul className="list-disc pl-5 mb-4 space-y-1 text-base text-body leading-relaxed">
-          <li>
-            <strong className="text-ink">Water UK postcode lookup</strong> — maps postcodes
-            to water company and supply zone identifiers, maintained by the industry body Water UK.
-          </li>
-          <li>
-            <strong className="text-ink">ONS Postcode Directory (ONSPD)</strong> — the Office
-            for National Statistics' definitive postcode reference, used to validate postcodes,
-            resolve geographic coordinates, and link to local authority and region boundaries for
-            contextual display.
-          </li>
-        </ul>
+        <p className="text-base text-body leading-relaxed mb-4">
+          Water company assignment is currently based on a city-to-supplier mapping covering the
+          major UK water companies. This will be refined to use supply zone-level mapping as we
+          integrate more data sources.
+        </p>
 
+        {/* Update frequency */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Update Frequency</h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          Different data sources are refreshed on different schedules, reflecting the cadence at
-          which upstream data is published:
+          Our data pipeline runs automatically on a daily schedule:
         </p>
         <ul className="list-disc pl-5 mb-4 space-y-1 text-base text-body leading-relaxed">
           <li>
-            <strong className="text-ink">Environment Agency API</strong> — checked daily for
-            new observations; new measurements are incorporated within 24 hours of publication.
+            <strong className="text-ink">EA Water Quality API</strong> — queried daily for
+            each covered postcode area. New observations from the EA are incorporated
+            automatically when they appear in the API.
           </li>
           <li>
-            <strong className="text-ink">Water company postcode lookups</strong> — re-scraped
-            weekly to capture supply zone boundary changes and new postcode assignments.
+            <strong className="text-ink">Postcode data</strong> — refreshed monthly from
+            postcodes.io to capture any boundary or administrative changes.
+          </li>
+        </ul>
+        <p className="text-base text-body leading-relaxed mb-4">
+          Each postcode page shows when its data was last sampled by the EA. Some areas
+          have very recent data; others may show older observations depending on the EA&apos;s
+          monitoring schedule for that location.
+        </p>
+
+        {/* Coming next */}
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Coming Next</h2>
+        <p className="text-base text-body leading-relaxed mb-4">
+          We&apos;re actively working to integrate additional data sources:
+        </p>
+        <ul className="list-disc pl-5 mb-4 space-y-1 text-base text-body leading-relaxed">
+          <li>
+            <strong className="text-ink">Drinking Water Inspectorate (DWI)</strong> — the
+            independent regulator for drinking water quality in England and Wales. DWI data
+            covers treated tap water at the point of supply, giving the most direct measure
+            of what comes out of your tap. DWI publishes annual compliance data covering 48
+            regulated parameters per supply zone.
           </li>
           <li>
-            <strong className="text-ink">DWI drinking water data</strong> — ingested on a
-            quarterly basis, aligned with the DWI's own publication schedule. Annual reports are
-            processed as soon as they are released, typically in the spring following the reference
-            year.
+            <strong className="text-ink">SEPA (Scottish Environment Protection Agency)</strong> —
+            environmental monitoring data for Scotland, where the EA doesn&apos;t operate.
+          </li>
+          <li>
+            <strong className="text-ink">Water company supply zone mapping</strong> — precise
+            postcode-to-supply-zone lookups for more accurate geographic assignment.
           </li>
         </ul>
 
+        {/* Open data */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Open Data</h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          The Environment Agency water quality data is published under the Open Government Licence
-          and is freely available to anyone. DWI drinking water reports are public documents
-          available on the DWI website. Water company postcode mapping data is published by each
-          company as part of their regulatory obligations.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          TapWater.uk does not claim ownership of any underlying data. We are a presentation and
-          analysis layer on top of publicly funded, publicly available information. Our value lies
-          in combining, normalising, and making this data accessible — not in the data itself.
+          All data used by TapWater.uk is published under open licences and is freely available
+          to anyone. We do not claim ownership of any underlying data. Our value is in combining,
+          scoring, and presenting this information in a way that&apos;s useful to real people —
+          not in the data itself.
         </p>
       </div>
     </div>
