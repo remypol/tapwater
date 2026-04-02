@@ -4,24 +4,27 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "The UK's Lead Pipe Problem: Which Areas Are Most Affected? (2026)",
-  description:
-    "Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household.",
-  openGraph: {
-    title: "The UK's Lead Pipe Problem: Which Areas Are Most Affected? (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear();
+  return {
+    title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
     description:
-      "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
-    url: "https://tapwater.uk/guides/lead-pipes-uk/",
-    type: "article",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The UK's Lead Pipe Problem: Which Areas Are Most Affected? (2026)",
-    description:
-      "An estimated 6–7 million UK homes still have lead service pipes. Here is what that means for your tap water.",
-  },
-};
+      "Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household.",
+    openGraph: {
+      title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
+      description:
+        "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
+      url: "https://tapwater.uk/guides/lead-pipes-uk/",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
+      description:
+        "An estimated 6–7 million UK homes still have lead service pipes. Here is what that means for your tap water.",
+    },
+  };
+}
 
 export default function LeadPipesGuide() {
   return (
@@ -64,7 +67,7 @@ export default function LeadPipesGuide() {
           description="Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household."
           url="https://tapwater.uk/guides/lead-pipes-uk/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
@@ -76,7 +79,7 @@ export default function LeadPipesGuide() {
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>

@@ -4,24 +4,27 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Scale, ShieldCheck, Leaf, PiggyBank, BookOpen } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Tap Water vs Bottled Water: Which Is Safer in the UK? (2026)",
-  description:
-    "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you.",
-  openGraph: {
-    title: "Tap Water vs Bottled Water: Which Is Safer in the UK? (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear();
+  return {
+    title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
     description:
-      "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost.",
-    url: "https://tapwater.uk/guides/tap-water-vs-bottled-water/",
-    type: "article",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Tap Water vs Bottled Water: Which Is Safer in the UK? (2026)",
-    description:
-      "Compare quality testing, contamination levels, environmental impact, and cost of UK tap water vs bottled water.",
-  },
-};
+      "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you.",
+    openGraph: {
+      title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
+      description:
+        "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost.",
+      url: "https://tapwater.uk/guides/tap-water-vs-bottled-water/",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
+      description:
+        "Compare quality testing, contamination levels, environmental impact, and cost of UK tap water vs bottled water.",
+    },
+  };
+}
 
 export default function TapVsBottledGuide() {
   return (
@@ -71,7 +74,7 @@ export default function TapVsBottledGuide() {
           description="Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you."
           url="https://tapwater.uk/guides/tap-water-vs-bottled-water/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
@@ -83,7 +86,7 @@ export default function TapVsBottledGuide() {
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>

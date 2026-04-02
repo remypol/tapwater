@@ -4,24 +4,27 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Microscope, Waves, ShieldQuestion, BookOpen } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Microplastics in UK Tap Water: What We Know So Far (2026)",
-  description:
-    "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
-  openGraph: {
-    title: "Microplastics in UK Tap Water: What We Know So Far (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear();
+  return {
+    title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
     description:
-      "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water.",
-    url: "https://tapwater.uk/guides/microplastics-uk-water/",
-    type: "article",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Microplastics in UK Tap Water: What We Know So Far (2026)",
-    description:
-      "What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
-  },
-};
+      "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
+    openGraph: {
+      title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
+      description:
+        "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water.",
+      url: "https://tapwater.uk/guides/microplastics-uk-water/",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
+      description:
+        "What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
+    },
+  };
+}
 
 export default function MicroplasticsGuide() {
   return (
@@ -71,7 +74,7 @@ export default function MicroplasticsGuide() {
           description="Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure."
           url="https://tapwater.uk/guides/microplastics-uk-water/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
@@ -83,7 +86,7 @@ export default function MicroplasticsGuide() {
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>
@@ -157,7 +160,7 @@ export default function MicroplasticsGuide() {
           The EU's revised Drinking Water Directive (2020/2184), which came into force across member states in January 2023, takes a different approach. It requires EU countries to develop and implement methodologies for monitoring microplastics in drinking water — but has not yet set binding concentration limits. The monitoring requirement is itself significant: it acknowledges that the problem needs systematic measurement before limits can be set.
         </p>
         <p className="text-base text-body leading-relaxed">
-          The UK, having left the EU, is not bound by this directive. As of April 2026, there is no published UK government plan to introduce microplastic monitoring requirements for drinking water suppliers. This places the UK behind the EU on a precautionary measure that many public health researchers consider overdue.
+          The UK, having left the EU, is not bound by this directive. As of {new Date().getFullYear()}, there is no published UK government plan to introduce microplastic monitoring requirements for drinking water suppliers. This places the UK behind the EU on a precautionary measure that many public health researchers consider overdue.
         </p>
 
         <div className="card p-5 mt-6">

@@ -3,17 +3,20 @@ import Link from "next/link"
 import { FileText, AlertTriangle } from "lucide-react"
 import { ArticleSchema } from "@/components/json-ld"
 
-export const metadata: Metadata = {
-  title: "Understanding Your Water Company's Quality Report (2026)",
-  description:
-    "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
-  openGraph: {
-    title: "Understanding Your Water Company's Quality Report (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear()
+  return {
+    title: `Understanding Your Water Company's Quality Report (${year})`,
     description:
       "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
-    url: "https://tapwater.uk/guides/understanding-your-water-supplier/",
-    type: "article",
-  },
+    openGraph: {
+      title: `Understanding Your Water Company's Quality Report (${year})`,
+      description:
+        "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
+      url: "https://tapwater.uk/guides/understanding-your-water-supplier/",
+      type: "article",
+    },
+  }
 }
 
 const SUPPLIERS = [
@@ -50,22 +53,22 @@ export default function UnderstandingYourWaterSupplierPage() {
         </nav>
 
         <ArticleSchema
-          headline="Understanding Your Water Company's Quality Report (2026)"
+          headline={`Understanding Your Water Company's Quality Report (${new Date().getFullYear()})`}
           description="How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards."
           url="https://tapwater.uk/guides/understanding-your-water-supplier/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          Understanding Your Water Company&apos;s Quality Report (2026)
+          Understanding Your Water Company&apos;s Quality Report ({new Date().getFullYear()})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>

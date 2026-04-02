@@ -4,24 +4,27 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { AlertTriangle, FlaskConical, ShieldAlert, BookOpen } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "PFAS in UK Drinking Water: Everything You Need to Know (2026)",
-  description:
-    "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data.",
-  openGraph: {
-    title: "PFAS in UK Drinking Water: Everything You Need to Know (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear();
+  return {
+    title: `PFAS in UK Drinking Water: Everything You Need to Know (${year})`,
     description:
-      "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them?",
-    url: "https://tapwater.uk/guides/pfas-uk-explained/",
-    type: "article",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "PFAS in UK Drinking Water: Everything You Need to Know (2026)",
-    description:
-      "A comprehensive guide to PFAS forever chemicals in UK tap water, based on Environment Agency data.",
-  },
-};
+      "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data.",
+    openGraph: {
+      title: `PFAS in UK Drinking Water: Everything You Need to Know (${year})`,
+      description:
+        "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them?",
+      url: "https://tapwater.uk/guides/pfas-uk-explained/",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `PFAS in UK Drinking Water: Everything You Need to Know (${year})`,
+      description:
+        "A comprehensive guide to PFAS forever chemicals in UK tap water, based on Environment Agency data.",
+    },
+  };
+}
 
 export default function PFASGuide() {
   return (
@@ -64,7 +67,7 @@ export default function PFASGuide() {
           description="What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data."
           url="https://tapwater.uk/guides/pfas-uk-explained/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
@@ -76,7 +79,7 @@ export default function PFASGuide() {
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>

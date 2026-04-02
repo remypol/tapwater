@@ -4,17 +4,20 @@ import { FlaskConical } from "lucide-react"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { ArticleSchema } from "@/components/json-ld"
 
-export const metadata: Metadata = {
-  title: "How to Test Your Tap Water at Home (2026 Guide)",
-  description:
-    "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
-  openGraph: {
-    title: "How to Test Your Tap Water at Home (2026 Guide)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear()
+  return {
+    title: `How to Test Your Tap Water at Home (${year} Guide)`,
     description:
       "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
-    url: "https://tapwater.uk/guides/how-to-test-your-water/",
-    type: "article",
-  },
+    openGraph: {
+      title: `How to Test Your Tap Water at Home (${year} Guide)`,
+      description:
+        "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
+      url: "https://tapwater.uk/guides/how-to-test-your-water/",
+      type: "article",
+    },
+  }
 }
 
 export default function HowToTestYourWaterPage() {
@@ -32,22 +35,22 @@ export default function HowToTestYourWaterPage() {
         </nav>
 
         <ArticleSchema
-          headline="How to Test Your Tap Water at Home (2026 Guide)"
+          headline={`How to Test Your Tap Water at Home (${new Date().getFullYear()} Guide)`}
           description="Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis."
           url="https://tapwater.uk/guides/how-to-test-your-water/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          How to Test Your Tap Water at Home (2026 Guide)
+          How to Test Your Tap Water at Home ({new Date().getFullYear()} Guide)
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>

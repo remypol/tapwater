@@ -3,17 +3,20 @@ import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { FAQSchema, ArticleSchema } from "@/components/json-ld"
 
-export const metadata: Metadata = {
-  title: "UK Water Hardness Map: Is Your Water Hard or Soft? (2026)",
-  description:
-    "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
-  openGraph: {
-    title: "UK Water Hardness Map: Is Your Water Hard or Soft? (2026)",
+export function generateMetadata(): Metadata {
+  const year = new Date().getFullYear()
+  return {
+    title: `UK Water Hardness Map: Is Your Water Hard or Soft? (${year})`,
     description:
       "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
-    url: "https://tapwater.uk/guides/water-hardness-map/",
-    type: "article",
-  },
+    openGraph: {
+      title: `UK Water Hardness Map: Is Your Water Hard or Soft? (${year})`,
+      description:
+        "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
+      url: "https://tapwater.uk/guides/water-hardness-map/",
+      type: "article",
+    },
+  }
 }
 
 export default function WaterHardnessMapPage() {
@@ -47,22 +50,22 @@ export default function WaterHardnessMapPage() {
         </nav>
 
         <ArticleSchema
-          headline="UK Water Hardness Map: Is Your Water Hard or Soft? (2026)"
+          headline={`UK Water Hardness Map: Is Your Water Hard or Soft? (${new Date().getFullYear()})`}
           description="Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener."
           url="https://tapwater.uk/guides/water-hardness-map/"
           datePublished="2026-04-01"
-          dateModified="2026-04-02"
+          dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
           authorUrl="https://tapwater.uk/about"
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          UK Water Hardness Map: Is Your Water Hard or Soft? (2026)
+          UK Water Hardness Map: Is Your Water Hard or Soft? ({new Date().getFullYear()})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">Remy</span></span>
           <span>·</span>
-          <time dateTime="2026-04-02">April 2026</time>
+          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
           <span>Independent research</span>
         </div>
