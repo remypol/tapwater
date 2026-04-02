@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PersonSchema } from '@/components/json-ld'
 
 export const metadata: Metadata = {
   title: 'About TapWater.uk',
@@ -10,6 +11,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <PersonSchema
+        name="Remy"
+        url="https://tapwater.uk/about"
+        description="Independent water quality researcher and founder of TapWater.uk"
+      />
       <div className="max-w-3xl mx-auto">
         <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5">
@@ -26,6 +32,31 @@ export default function AboutPage() {
           government sources to provide free, postcode-searchable water quality reports for every
           area in England and Wales.
         </p>
+
+        <section className="mt-10">
+          <h2 className="font-display text-xl italic text-ink mb-4">
+            Who&apos;s behind this
+          </h2>
+          <p className="text-base text-body leading-relaxed mb-4">
+            TapWater.uk is built by <strong className="text-ink">Remy</strong>, an
+            independent data researcher focused on making public environmental data
+            accessible to normal people. The project grew from a simple question:
+            what&apos;s actually in my tap water, and why is it so hard to find out?
+          </p>
+          <p className="text-base text-body leading-relaxed mb-4">
+            We aggregate data from the Stream Water Data Portal (real drinking water
+            test results from UK water companies), the Environment Agency Water Quality
+            Archive, and the ONS postcode database. Every score is computed transparently
+            using our{" "}
+            <Link href="/about/methodology">published methodology</Link>
+            {" "}&mdash; no black boxes, no hidden algorithms.
+          </p>
+          <p className="text-base text-body leading-relaxed">
+            This is not a water filter company. We don&apos;t sell filters, we don&apos;t
+            take money from water companies, and we don&apos;t run ads. The data speaks
+            for itself.
+          </p>
+        </section>
 
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Our Mission</h2>
         <p className="text-base text-body leading-relaxed mb-4">

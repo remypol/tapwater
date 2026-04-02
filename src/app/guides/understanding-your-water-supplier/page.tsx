@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { FileText, AlertTriangle } from "lucide-react"
+import { ArticleSchema } from "@/components/json-ld"
 
 export const metadata: Metadata = {
   title: "Understanding Your Water Company's Quality Report (2026)",
@@ -48,11 +49,26 @@ export default function UnderstandingYourWaterSupplierPage() {
           <span className="text-body">Understanding Your Water Supplier</span>
         </nav>
 
+        <ArticleSchema
+          headline="Understanding Your Water Company's Quality Report (2026)"
+          description="How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards."
+          url="https://tapwater.uk/guides/understanding-your-water-supplier/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
           Understanding Your Water Company&apos;s Quality Report (2026)
         </h1>
-
-        <p className="text-sm text-muted mb-8">Updated April 2026 &mdash; TapWater.uk editorial team</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         <p className="text-base text-body leading-relaxed mb-4">
           Every year, every water company in England and Wales is required to publish a detailed

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
-import { FAQSchema } from "@/components/json-ld"
+import { FAQSchema, ArticleSchema } from "@/components/json-ld"
 
 export const metadata: Metadata = {
   title: "UK Water Hardness Map: Is Your Water Hard or Soft? (2026)",
@@ -46,11 +46,26 @@ export default function WaterHardnessMapPage() {
           <span className="text-body">Water Hardness Map</span>
         </nav>
 
+        <ArticleSchema
+          headline="UK Water Hardness Map: Is Your Water Hard or Soft? (2026)"
+          description="Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener."
+          url="https://tapwater.uk/guides/water-hardness-map/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
           UK Water Hardness Map: Is Your Water Hard or Soft? (2026)
         </h1>
-
-        <p className="text-sm text-muted mb-8">Updated April 2026 &mdash; TapWater.uk editorial team</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         <p className="text-base text-body leading-relaxed mb-4">
           Turn on a tap in central London and the water that comes out has travelled through chalk

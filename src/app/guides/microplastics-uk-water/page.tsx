@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
+import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Microscope, Waves, ShieldQuestion, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -66,11 +66,27 @@ export default function MicroplasticsGuide() {
           </ol>
         </nav>
 
+        <ArticleSchema
+          headline="Microplastics in UK Tap Water: What We Know So Far"
+          description="Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure."
+          url="https://tapwater.uk/guides/microplastics-uk-water/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         {/* H1 */}
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           Microplastics in UK Tap Water: What We Know So Far
         </h1>
-        <p className="text-sm text-faint mt-2 mb-8">Updated April 2026</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         {/* The scale of the problem */}
         <p className="text-base text-body leading-relaxed">

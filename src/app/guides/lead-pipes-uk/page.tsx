@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { FAQSchema } from "@/components/json-ld";
+import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -59,11 +59,27 @@ export default function LeadPipesGuide() {
           </ol>
         </nav>
 
+        <ArticleSchema
+          headline="The UK's Lead Pipe Problem: Which Areas Are Most Affected?"
+          description="Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household."
+          url="https://tapwater.uk/guides/lead-pipes-uk/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         {/* H1 */}
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           The UK&apos;s Lead Pipe Problem: Which Areas Are Most Affected?
         </h1>
-        <p className="text-sm text-faint mt-2 mb-8">Updated April 2026</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         {/* Opening */}
         <p className="text-base text-body leading-relaxed mb-4">
@@ -129,6 +145,15 @@ export default function LeadPipesGuide() {
         <p className="text-base text-body leading-relaxed">
           You can check whether lead has been detected in environmental monitoring near your postcode using the tool at the bottom of this page. Our{" "}
           <Link href="/contaminant/lead" className="text-accent hover:underline font-medium">lead contaminant page</Link>{" "}also shows postcode-level data drawn from Environment Agency and Drinking Water Inspectorate monitoring.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          Areas with the oldest housing stock — and highest lead pipe risk — include{" "}
+          <Link href="/city/london/" className="text-accent hover:underline">London</Link>,{" "}
+          <Link href="/city/glasgow/" className="text-accent hover:underline">Glasgow</Link>,{" "}
+          <Link href="/city/edinburgh/" className="text-accent hover:underline">Edinburgh</Link>,{" "}
+          <Link href="/city/birmingham/" className="text-accent hover:underline">Birmingham</Link>, and{" "}
+          <Link href="/city/manchester/" className="text-accent hover:underline">Manchester</Link>.{" "}
+          Check your specific postcode for lead levels in your area.
         </p>
 
         {/* How lead gets into water */}

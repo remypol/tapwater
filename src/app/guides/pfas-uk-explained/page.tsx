@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { FAQSchema } from "@/components/json-ld";
+import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { AlertTriangle, FlaskConical, ShieldAlert, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -59,11 +59,27 @@ export default function PFASGuide() {
           </ol>
         </nav>
 
+        <ArticleSchema
+          headline="PFAS in UK Drinking Water: Everything You Need to Know"
+          description="What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data."
+          url="https://tapwater.uk/guides/pfas-uk-explained/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         {/* H1 */}
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           PFAS in UK Drinking Water: Everything You Need to Know
         </h1>
-        <p className="text-sm text-faint mt-2 mb-8">Updated April 2026</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         {/* Opening */}
         <p className="text-base text-body leading-relaxed">
@@ -102,6 +118,14 @@ export default function PFASGuide() {
         <p className="text-base text-body leading-relaxed">
           You can check whether PFAS compounds have been detected in environmental monitoring near your postcode using the tool at the bottom of this page, or by visiting our dedicated{" "}
           <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2 font-medium">PFAS contaminant page</Link>.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          Areas where PFAS has been detected in nearby water monitoring include{" "}
+          <Link href="/postcode/LS1/" className="text-accent hover:underline">LS1 (Leeds)</Link>,{" "}
+          <Link href="/postcode/B1/" className="text-accent hover:underline">B1 (Birmingham)</Link>,{" "}
+          <Link href="/postcode/M1/" className="text-accent hover:underline">M1 (Manchester)</Link>, and{" "}
+          <Link href="/postcode/BS1/" className="text-accent hover:underline">BS1 (Bristol)</Link>.{" "}
+          <Link href="/compare/" className="text-accent hover:underline">See the full UK rankings</Link>.
         </p>
 
         {/* UK vs EU regulation */}

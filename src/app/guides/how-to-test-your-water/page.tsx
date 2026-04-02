@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { FlaskConical } from "lucide-react"
 import { PostcodeSearch } from "@/components/postcode-search"
+import { ArticleSchema } from "@/components/json-ld"
 
 export const metadata: Metadata = {
   title: "How to Test Your Tap Water at Home (2026 Guide)",
@@ -30,11 +31,26 @@ export default function HowToTestYourWaterPage() {
           <span className="text-body">How to Test Your Water</span>
         </nav>
 
+        <ArticleSchema
+          headline="How to Test Your Tap Water at Home (2026 Guide)"
+          description="Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis."
+          url="https://tapwater.uk/guides/how-to-test-your-water/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
           How to Test Your Tap Water at Home (2026 Guide)
         </h1>
-
-        <p className="text-sm text-muted mb-8">Updated April 2026 &mdash; TapWater.uk editorial team</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         <p className="text-base text-body leading-relaxed mb-4">
           The Drinking Water Inspectorate monitors tap water quality at thousands of points across

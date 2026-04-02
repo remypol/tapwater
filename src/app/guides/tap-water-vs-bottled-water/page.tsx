@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
+import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Scale, ShieldCheck, Leaf, PiggyBank, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -66,11 +66,27 @@ export default function TapVsBottledGuide() {
           </ol>
         </nav>
 
+        <ArticleSchema
+          headline="Tap Water vs Bottled Water: Which Is Safer in the UK?"
+          description="Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you."
+          url="https://tapwater.uk/guides/tap-water-vs-bottled-water/"
+          datePublished="2026-04-01"
+          dateModified="2026-04-02"
+          authorName="Remy"
+          authorUrl="https://tapwater.uk/about"
+        />
+
         {/* H1 */}
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           Tap Water vs Bottled Water: Which Is Safer in the UK?
         </h1>
-        <p className="text-sm text-faint mt-2 mb-8">Updated April 2026</p>
+        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>·</span>
+          <time dateTime="2026-04-02">April 2026</time>
+          <span>·</span>
+          <span>Independent research</span>
+        </div>
 
         {/* The short answer */}
         <p className="text-base text-body leading-relaxed mb-4">

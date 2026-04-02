@@ -98,6 +98,75 @@ export function FAQSchema({ faqs }: { faqs: { question: string; answer: string }
   );
 }
 
+export function PersonSchema({ name, url, description }: { name: string; url: string; description: string }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name,
+    url,
+    description,
+    sameAs: [url],
+    knowsAbout: [
+      "Water quality",
+      "Environmental data analysis",
+      "PFAS contamination",
+      "UK drinking water regulation",
+      "Environment Agency data",
+    ],
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+export function ArticleSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+  dateModified,
+  authorName,
+  authorUrl,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified: string;
+  authorName: string;
+  authorUrl: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    url,
+    datePublished,
+    dateModified,
+    author: {
+      "@type": "Person",
+      name: authorName,
+      url: authorUrl,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "TapWater.uk",
+      url: "https://tapwater.uk",
+    },
+    mainEntityOfPage: url,
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export function PostcodeDatasetSchema({
   district,
   areaName,
