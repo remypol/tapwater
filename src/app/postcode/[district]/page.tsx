@@ -7,11 +7,9 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { StatCards } from "@/components/stat-cards";
 import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
-import { FilterCards } from "@/components/filter-cards";
 import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
-import { MOCK_FILTERS } from "@/lib/mock-data";
 import { getScoreColor } from "@/lib/types";
 import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
 
@@ -297,11 +295,21 @@ export default async function PostcodePage({ params }: Props) {
 
             <hr className="border-rule mt-10" />
 
-            {/* Filter Recommendations */}
+            {/* Filter Recommendations — coming soon */}
             <ScrollReveal delay={100}>
-              <div className="mt-8">
-                <FilterCards filters={MOCK_FILTERS} postcode={data.district} />
-              </div>
+              <section className="mt-8">
+                <h2 className="font-display text-2xl text-ink italic">
+                  Filters for your area
+                </h2>
+                <div className="mt-4 card p-6 border-dashed">
+                  <p className="text-sm text-body">
+                    We&apos;re reviewing water filters matched to the contaminants found in <span className="font-medium text-ink">{data.district}</span>. Personalised recommendations are coming soon.
+                  </p>
+                  <p className="text-xs text-muted mt-2">
+                    Sign up above to be notified when filter picks are ready for your area.
+                  </p>
+                </div>
+              </section>
             </ScrollReveal>
           </>
         ) : (

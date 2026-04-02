@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   Building2,
-  Users,
   Award,
   ExternalLink,
   ChevronRight,
@@ -28,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Not Found" };
   }
 
-  const description = `${supplier.name} serves ${supplier.customersM} million customers across ${supplier.region}. View compliance rates, supply zones, and postcode areas served.`;
+  const description = `${supplier.name} water quality data across ${supplier.region}. View environmental water scores and postcode areas served.`;
 
   return {
     title: `${supplier.name} Water Quality Report`,
@@ -334,42 +333,43 @@ export default async function SupplierPage({ params }: Props) {
             </h3>
 
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-accent-light flex items-center justify-center shrink-0">
-                <Users className="w-4 h-4 text-accent" />
-              </div>
-              <div>
-                <p className="font-data text-xl font-bold text-ink">
-                  {supplier.customersM}M
-                </p>
-                <p className="text-xs text-muted">customers served</p>
-                <p className="text-xs text-faint mt-0.5">{supplier.region}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[var(--color-safe-light)] flex items-center justify-center shrink-0">
-                <Award className="w-4 h-4 text-[var(--color-safe)]" />
-              </div>
-              <div>
-                <p className="font-data text-xl font-bold text-[var(--color-safe)]">
-                  {supplier.complianceRate}%
-                </p>
-                <p className="text-xs text-muted">compliance rate</p>
-                <p className="text-xs text-faint mt-0.5">
-                  DWI annual compliance data
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-wash border border-rule flex items-center justify-center shrink-0">
                 <Building2 className="w-4 h-4 text-faint" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-ink">{supplier.region}</p>
-                <p className="text-xs text-muted">service region</p>
+                <p className="text-sm font-semibold text-ink">{supplier.name}</p>
+                <p className="text-xs text-muted">{supplier.region}</p>
               </div>
             </div>
+
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-accent-light flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <p className="font-data text-xl font-bold text-ink">
+                  {supplier.postcodeAreas.length}
+                </p>
+                <p className="text-xs text-muted">postcode areas monitored</p>
+              </div>
+            </div>
+
+            {avgScore !== null && (
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[var(--color-safe-light)] flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4 text-[var(--color-safe)]" />
+                </div>
+                <div>
+                  <p className={`font-data text-xl font-bold ${getScoreBadgeColor(avgScore)}`}>
+                    {avgScore}/10
+                  </p>
+                  <p className="text-xs text-muted">average environmental score</p>
+                  <p className="text-xs text-faint mt-0.5">
+                    Based on EA monitoring data
+                  </p>
+                </div>
+              </div>
+            )}
 
             <div className="pt-1 border-t border-rule">
               <a
@@ -390,23 +390,17 @@ export default async function SupplierPage({ params }: Props) {
               About {supplier.name}
             </h2>
             <p className="text-sm text-body leading-relaxed">
-              {supplier.name} is a regulated UK water company serving approximately{" "}
-              <span className="font-data font-semibold text-ink">
-                {supplier.customersM} million
-              </span>{" "}
-              customers across {supplier.region}. As a licensed water and
-              wastewater provider, the company is responsible for treating,
-              testing, and delivering safe drinking water to homes and
-              businesses throughout its supply area.
+              {supplier.name} is a regulated UK water company operating
+              across {supplier.region}. As a licensed water and wastewater
+              provider, the company is responsible for treating, testing,
+              and delivering safe drinking water to homes and businesses
+              throughout its supply area.
             </p>
             <p className="text-sm text-body leading-relaxed mt-3">
-              All water quality data is monitored against standards set by the
-              Drinking Water Inspectorate (DWI) and the Environment Agency.
-              {supplier.name}&apos;s current compliance rate of{" "}
-              <span className="font-data font-semibold text-[var(--color-safe)]">
-                {supplier.complianceRate}%
-              </span>{" "}
-              is based on DWI annual compliance data.
+              The scores on this page reflect environmental water quality
+              from EA monitoring points — rivers, groundwater, and
+              reservoirs that feed into {supplier.name}&apos;s treatment
+              works. These are not direct measures of treated tap water.
             </p>
             <a
               href={supplier.website}
@@ -424,9 +418,8 @@ export default async function SupplierPage({ params }: Props) {
 
       {/* Methodology footer */}
       <footer className="mt-12 pt-6 border-t border-rule text-sm text-faint leading-relaxed">
-        Supplier compliance rates are sourced from the Drinking Water
-        Inspectorate (DWI) annual reports. Postcode scores are calculated from
-        Environment Agency monitoring data. See our{" "}
+        Postcode scores are calculated from Environment Agency environmental
+        water monitoring data — not treated tap water. See our{" "}
         <Link
           href="/about/methodology"
           className="underline underline-offset-2 hover:text-muted transition-colors"

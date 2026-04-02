@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { Bell, ArrowRight, Check, AlertCircle } from "lucide-react";
 
 interface EmailCaptureProps {
   postcode: string;
@@ -9,65 +10,66 @@ interface EmailCaptureProps {
 
 export function EmailCapture({ postcode }: EmailCaptureProps) {
   const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const [fadingOut, setFadingOut] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !consent) return;
 
-    // Fade out the form first
-    setFadingOut(true);
-    setTimeout(() => {
-      setSubscribed(true);
-      setShowSuccess(false);
-      // Trigger enter animation on next frame
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setShowSuccess(true);
-        });
+    setStatus("submitting");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, postcode }),
       });
-    }, 300);
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Failed to subscribe");
+    }
   }
 
   return (
     <div className="card p-6 lg:p-8">
       <div className="lg:flex lg:items-start lg:gap-6">
-        {/* Icon */}
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
           <Bell className="w-5 h-5 text-blue-600" />
         </div>
 
-        {/* Content */}
         <div className="flex-1 mt-4 lg:mt-0">
           <h2 className="text-lg font-semibold text-ink">
             Get alerts for your area
           </h2>
           <p className="text-sm text-muted mt-1">
-            We&apos;ll let you know if anything changes with the water in your area.
+            We&apos;ll email you when water quality data changes for {postcode}.
           </p>
 
-          {subscribed ? (
-            <div
-              className={[
-                "mt-4 flex items-center gap-2 transition-all duration-300",
-                showSuccess ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
-              ].join(" ")}
-            >
-              <Check className="w-5 h-5 text-safe shrink-0" />
-              <p className="text-sm text-safe">
-                You&apos;re subscribed. We&apos;ll email you when data changes for{" "}
-                {postcode}.
-              </p>
+          {status === "success" ? (
+            <div className="mt-4 flex items-start gap-2 animate-fade-up">
+              <Check className="w-5 h-5 text-safe shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-safe font-medium">
+                  Check your inbox
+                </p>
+                <p className="text-xs text-muted mt-1">
+                  We&apos;ve sent a confirmation email to <span className="font-medium text-ink">{email}</span>.
+                  Click the link to activate your alerts for {postcode}.
+                </p>
+              </div>
             </div>
           ) : (
-            <div
-              className={[
-                "transition-all duration-300",
-                fadingOut ? "opacity-0 scale-95" : "opacity-100 scale-100",
-              ].join(" ")}
-            >
+            <div>
               <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
                 <input
                   type="email"
@@ -75,19 +77,41 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
                   placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 border border-rule rounded-lg px-4 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+                  disabled={status === "submitting"}
+                  className="flex-1 border border-rule rounded-lg px-4 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
                 />
                 <button
                   type="submit"
-                  className="bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium flex items-center gap-1.5 hover:bg-gray-800 transition-colors"
+                  disabled={status === "submitting" || !consent}
+                  className="bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium flex items-center gap-1.5 hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Subscribe
+                  {status === "submitting" ? "Sending\u2026" : "Subscribe"}
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </form>
-              <p className="text-xs text-faint mt-2">
-                Monthly updates + breaking alerts. No spam ever.
-              </p>
+
+              <label className="flex items-start gap-2 mt-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-0.5 rounded border-rule text-accent focus:ring-accent/20"
+                />
+                <span className="text-xs text-muted leading-relaxed">
+                  I agree to receive water quality alerts by email. You can
+                  unsubscribe at any time. See our{" "}
+                  <Link href="/privacy" className="underline underline-offset-2 hover:text-ink">
+                    privacy policy
+                  </Link>.
+                </span>
+              </label>
+
+              {status === "error" && (
+                <div className="mt-3 flex items-center gap-2 text-xs text-[var(--color-danger)]">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  {errorMsg || "Something went wrong. Please try again."}
+                </div>
+              )}
             </div>
           )}
         </div>
