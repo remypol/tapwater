@@ -132,6 +132,13 @@ export default async function HomePage() {
           <div className="animate-fade-up delay-3 max-w-xl mx-auto mt-8">
             <PostcodeSearch size="lg" />
           </div>
+
+          {/* GEO: Crawlable summary — visually subtle, semantically rich */}
+          <p className="text-sm text-muted mt-4 max-w-lg mx-auto">
+            Independent water quality reports for every UK postcode. Scores based
+            on real drinking water tests from UK water companies and Environment
+            Agency monitoring of 100+ contaminants.
+          </p>
         </div>
       </section>
 

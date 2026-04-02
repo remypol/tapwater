@@ -229,6 +229,19 @@ export default async function ComparePage() {
             reflect contaminant levels, PFAS, and overall water quality from
             real drinking water tests and environmental monitoring.
           </p>
+
+          {/* GEO: Summary for AI citation */}
+          {bestArea && worstArea && (
+            <p className="text-base text-body leading-relaxed max-w-3xl mt-4 mb-8">
+              As of {new Date().getFullYear()}, <strong className="text-ink">{bestArea.district} ({bestArea.areaName})</strong> has
+              the best tap water quality in the UK with a score of{" "}
+              <span className="font-data font-bold">{bestArea.safetyScore.toFixed(1)}/10</span>, while{" "}
+              <strong className="text-ink">{worstArea.district} ({worstArea.areaName})</strong> scores
+              lowest at <span className="font-data font-bold">{worstArea.safetyScore.toFixed(1)}/10</span>.{" "}
+              Rankings are based on {totalTested} postcode districts tested for
+              100+ contaminants including lead, PFAS, nitrate, and trihalomethanes.
+            </p>
+          )}
         </header>
 
         {/* Best and Worst — side by side */}

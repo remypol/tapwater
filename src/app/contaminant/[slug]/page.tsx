@@ -266,6 +266,33 @@ export default async function ContaminantPage({ params }: Props) {
         </div>
       </div>
 
+      {/* GEO: Key takeaway for AI citation */}
+      <div className="card p-5 border-l-4 border-l-accent mb-10">
+        <p className="text-base text-body leading-relaxed">
+          <strong className="text-ink">
+            {contaminant.ukLimit
+              ? `${contaminant.name} in UK drinking water is regulated at ${contaminant.ukLimit}.`
+              : `The UK has no legal limit for ${contaminant.name} in drinking water.`}
+          </strong>{" "}
+          {contaminant.ukLimit
+            ? `The WHO guideline is ${contaminant.whoGuideline} and the EU standard is ${contaminant.euLimit}. `
+            : `The WHO recommends a guideline of ${contaminant.whoGuideline} and the EU has set a standard of ${contaminant.euLimit}. `}
+          {slug === "pfas"
+            ? "PFAS are man-made chemicals that persist in the environment and the human body. The UK government published a PFAS Action Plan in February 2026 but has not yet set binding limits."
+            : slug === "lead"
+              ? "Lead contamination in UK tap water comes primarily from lead pipes in homes built before 1970, not from the water supply itself."
+              : slug === "ecoli"
+                ? "UK regulations require zero E. coli in treated drinking water. Any detection triggers immediate investigation by the water company and the Drinking Water Inspectorate."
+                : slug === "trihalomethanes"
+                  ? "THMs form when chlorine used to disinfect water reacts with organic matter. Levels are typically higher in summer and in areas using surface water sources."
+                  : slug === "fluoride"
+                    ? "About 10% of the English population receives deliberately fluoridated water, primarily in the West Midlands and North East."
+                    : slug === "chlorine"
+                      ? "Chlorine is deliberately added to UK tap water as a disinfectant. At the levels used (typically 0.2-0.5 mg/L), it is not harmful to health."
+                      : `Enter your postcode on TapWater.uk to check ${contaminant.name} levels in your area.`}
+        </p>
+      </div>
+
       {/* 4. Health Effects */}
       <section className="mt-8">
         <h2 className="font-display text-xl italic text-ink mb-3">

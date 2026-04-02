@@ -260,27 +260,52 @@ export default async function CityPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Summary */}
+            {/* GEO: Direct answer summary — optimized for AI citation */}
             <div className="mt-8 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
-                Across {scored.length} postcode areas in {city.name}, the
-                average water quality score is{" "}
-                <span className="font-data font-bold">
-                  {avgScore.toFixed(1)}/10
-                </span>
-                . Water is primarily supplied by{" "}
-                <Link
-                  href={`/supplier/${primarySupplier.id}/`}
-                  className="font-medium text-ink hover:text-accent transition-colors"
-                >
-                  {primarySupplier.name}
-                </Link>
-                .{" "}
-                {totalFlagged > 0
-                  ? `${totalFlagged} contaminant issue${totalFlagged > 1 ? "s were" : " was"} flagged across the city.`
-                  : "No contaminants were flagged above recommended levels."}{" "}
-                {pfasCount > 0 &&
-                  `PFAS (forever chemicals) were detected in ${pfasCount} area${pfasCount > 1 ? "s" : ""}.`}
+                {avgScore >= 7 ? (
+                  <>
+                    <strong className="text-ink">Yes, {city.name} tap water is safe to drink.</strong>{" "}
+                    Based on {scored.length} areas tested, {city.name} has an average water quality
+                    score of <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>.{" "}
+                    {totalFlagged === 0
+                      ? "No contaminants were found above recommended levels."
+                      : `${totalFlagged} contaminant${totalFlagged !== 1 ? "s were" : " was"} flagged above recommended levels across all areas.`}{" "}
+                    Water is supplied by{" "}
+                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                      {primarySupplier.name}
+                    </Link>
+                    . {city.description}
+                  </>
+                ) : avgScore >= 5 ? (
+                  <>
+                    <strong className="text-ink">{city.name} tap water is mostly safe, but some areas have concerns.</strong>{" "}
+                    The average water quality score across {scored.length} areas is{" "}
+                    <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>, with{" "}
+                    {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
+                    Water is supplied by{" "}
+                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                      {primarySupplier.name}
+                    </Link>
+                    . {city.description}
+                  </>
+                ) : (
+                  <>
+                    <strong className="text-ink">{city.name} tap water has some quality concerns.</strong>{" "}
+                    The average water quality score across {scored.length} areas is{" "}
+                    <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>, with{" "}
+                    {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
+                    Check your specific postcode for detailed results.{" "}
+                    Water is supplied by{" "}
+                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                      {primarySupplier.name}
+                    </Link>
+                    . {city.description}
+                  </>
+                )}
+                {pfasCount > 0 && (
+                  <>{" "}PFAS (forever chemicals) were detected in {pfasCount} of {scored.length} areas monitored.</>
+                )}
               </p>
             </div>
 
