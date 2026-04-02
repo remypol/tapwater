@@ -4,7 +4,7 @@ import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 
 const BASE_URL = "https://tapwater.uk";
 
-const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate"];
+const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli"];
 
 const GUIDE_SLUGS = [
   "pfas-uk-explained",

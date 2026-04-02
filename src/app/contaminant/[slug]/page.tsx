@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { PostcodeSearch } from "@/components/postcode-search";
+import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 
 type ContaminantEntry = {
   name: string;
@@ -55,6 +56,71 @@ const CONTAMINANTS: Record<string, ContaminantEntry> = {
     euLimit: "50 mg/L",
     removal: ["Reverse osmosis", "Ion exchange", "Distillation"],
   },
+  copper: {
+    name: "Copper",
+    description:
+      "Copper is an essential trace mineral, but excessive levels in drinking water can cause health problems. In the UK, copper contamination typically comes from copper plumbing rather than the water supply itself. Soft, acidic water is more likely to dissolve copper from pipes, particularly in new-build properties where pipes haven't yet developed a protective mineral coating.",
+    healthEffects:
+      "Short-term exposure to high copper levels can cause nausea, vomiting, and stomach cramps. Long-term exposure above safe limits has been linked to liver and kidney damage. People with Wilson's disease, a genetic condition affecting copper metabolism, are particularly vulnerable. Infants and young children are more sensitive to copper than adults.",
+    sources:
+      "The main source of copper in UK tap water is internal plumbing. Copper pipes have been standard in UK construction since the 1950s. New copper pipes are more likely to leach copper into water, especially in areas with soft or acidic water. Industrial discharge and agricultural fungicides can also contribute to copper in source water.",
+    ukLimit: "2 mg/L",
+    whoGuideline: "2 mg/L",
+    euLimit: "2 mg/L",
+    removal: ["Reverse osmosis", "Ion exchange", "Activated carbon"],
+  },
+  chlorine: {
+    name: "Chlorine",
+    description:
+      "Chlorine is deliberately added to UK drinking water as a disinfectant to kill harmful bacteria and viruses. It's the most common water treatment chemical in the world and has been responsible for virtually eliminating waterborne diseases like cholera and typhoid in developed countries. The amount used in UK water is carefully controlled by water companies and regulated by the DWI.",
+    healthEffects:
+      "At the levels used in UK drinking water (typically 0.2-0.5 mg/L), chlorine is not harmful to health. However, chlorine reacts with organic matter in water to form disinfection byproducts (DBPs), including trihalomethanes, which are linked to health risks at elevated levels. Some people find the taste and smell of chlorinated water unpleasant.",
+    sources:
+      "Chlorine is added at water treatment works as the final step before distribution. UK water companies use either free chlorine or chloramine (combined chlorine) to maintain disinfection throughout the pipe network. The level is highest at the treatment works and decreases as water travels through the distribution system.",
+    ukLimit: "5 mg/L (residual)",
+    whoGuideline: "5 mg/L",
+    euLimit: "No specific limit",
+    removal: ["Activated carbon", "Carbon block filters", "Reverse osmosis"],
+  },
+  fluoride: {
+    name: "Fluoride",
+    description:
+      "Fluoride occurs naturally in some UK water sources and is also deliberately added to water supplies in some areas to help prevent tooth decay. Around 10% of the English population receives fluoridated water — mainly in the West Midlands, the North East, and parts of the East Midlands. The practice remains controversial, with debates about public consent and potential health effects at higher concentrations.",
+    healthEffects:
+      "At levels of 0.7-1.0 mg/L, fluoride helps prevent tooth decay, particularly in children. However, excessive fluoride intake during childhood can cause dental fluorosis (white spots or streaks on teeth). At very high levels (above 4 mg/L over many years), skeletal fluorosis can occur, causing joint pain and bone damage. The balance between benefit and risk depends on the total fluoride intake from all sources.",
+    sources:
+      "Fluoride enters UK water from two sources: naturally dissolving from minerals in rocks (particularly in areas with granite geology), and deliberate fluoridation by water companies under direction from the Secretary of State for Health. Naturally fluoridated areas include parts of Hartlepool, and deliberately fluoridated areas include Birmingham, Newcastle, and parts of Nottingham.",
+    ukLimit: "1.5 mg/L",
+    whoGuideline: "1.5 mg/L",
+    euLimit: "1.5 mg/L",
+    removal: ["Reverse osmosis", "Activated carbon", "Distillation"],
+  },
+  trihalomethanes: {
+    name: "Trihalomethanes (THMs)",
+    description:
+      "Trihalomethanes are a group of chemical compounds formed as an unintended byproduct when chlorine used to disinfect water reacts with naturally occurring organic matter. The four main THMs are chloroform, bromodichloromethane, dibromochloromethane, and bromoform. THM levels tend to be higher in areas that use surface water (rivers and reservoirs) rather than groundwater, because surface water typically contains more organic matter.",
+    healthEffects:
+      "Long-term exposure to elevated trihalomethane levels has been associated with an increased risk of bladder cancer and potentially other cancers. Some studies have also suggested links to adverse reproductive outcomes, including miscarriage and low birth weight, though evidence is still evolving. The International Agency for Research on Cancer (IARC) classifies chloroform as 'possibly carcinogenic to humans' (Group 2B).",
+    sources:
+      "THMs form when chlorine reacts with humic and fulvic acids — natural organic compounds from decomposing plant material that dissolve into rivers, reservoirs, and lakes. THM levels are typically higher in summer (more organic matter, higher temperatures increase reaction rates) and in water systems that rely heavily on surface water sources.",
+    ukLimit: "0.1 mg/L (total THMs)",
+    whoGuideline: "Varies by compound",
+    euLimit: "0.1 mg/L (total)",
+    removal: ["Activated carbon", "Reverse osmosis", "Carbon block filters"],
+  },
+  ecoli: {
+    name: "E. coli",
+    description:
+      "Escherichia coli (E. coli) is a bacterium that normally lives in the intestines of humans and animals. Its presence in drinking water is a critical indicator of faecal contamination — meaning the water has been in contact with human or animal waste. UK drinking water regulations have a zero-tolerance policy for E. coli: any detection in treated water triggers immediate investigation and potentially a boil-water notice.",
+    healthEffects:
+      "While most E. coli strains are harmless, some produce toxins that can cause severe illness. E. coli O157:H7, the most dangerous strain, can cause bloody diarrhoea, kidney failure (haemolytic uraemic syndrome), and in rare cases death — particularly in children and elderly people. Any detection in treated water is treated as a serious public health event.",
+    sources:
+      "E. coli reaches water sources through sewage discharges, agricultural runoff carrying animal waste, and combined sewer overflows during heavy rainfall. In treated water, detection usually indicates a failure in the treatment or distribution system — such as a broken pipe, cross-contamination, or a treatment plant malfunction.",
+    ukLimit: "0 per 100ml",
+    whoGuideline: "0 per 100ml",
+    euLimit: "0 per 100ml",
+    removal: ["UV disinfection", "Reverse osmosis", "Chlorination"],
+  },
 };
 
 const REMOVAL_DESCRIPTIONS: Record<string, string> = {
@@ -68,6 +134,10 @@ const REMOVAL_DESCRIPTIONS: Record<string, string> = {
     "Dense blocks of activated carbon that physically block particles and adsorb chemicals. More effective than granular carbon for lead and other heavy metals.",
   Distillation:
     "Water is boiled and the steam condensed, leaving most contaminants behind. Highly effective but slow and energy-intensive — typically used in countertop units.",
+  "UV disinfection":
+    "Ultraviolet light at 254nm wavelength damages the DNA of bacteria and viruses, preventing them from reproducing. Highly effective against microorganisms without adding chemicals to the water.",
+  Chlorination:
+    "Adding chlorine or chloramine to water kills bacteria and viruses. The standard disinfection method used by UK water companies. Effective against E. coli and most waterborne pathogens.",
 };
 
 type Props = { params: Promise<{ slug: string }> };
@@ -113,6 +183,21 @@ export default async function ContaminantPage({ params }: Props) {
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://tapwater.uk" },
+          { name: "Contaminants", url: "https://tapwater.uk/contaminant/" },
+          { name: contaminant.name, url: `https://tapwater.uk/contaminant/${slug}/` },
+        ]}
+      />
+      <FAQSchema
+        faqs={[
+          { question: `What is ${contaminant.name} and why is it in UK drinking water?`, answer: contaminant.description.slice(0, 300) },
+          { question: `What are the health effects of ${contaminant.name} in drinking water?`, answer: contaminant.healthEffects.slice(0, 300) },
+          { question: `What is the UK legal limit for ${contaminant.name}?`, answer: contaminant.ukLimit ? `The UK legal limit for ${contaminant.name} in drinking water is ${contaminant.ukLimit}, set under the Water Supply (Water Quality) Regulations.` : `The UK currently has no legal limit for ${contaminant.name} in drinking water, though the WHO guideline is ${contaminant.whoGuideline} and the EU standard is ${contaminant.euLimit}.` },
+          { question: `How do I remove ${contaminant.name} from my tap water?`, answer: `The most effective methods to remove ${contaminant.name} from tap water are: ${contaminant.removal.join(", ")}. Check your postcode on TapWater.uk to see current levels in your area.` },
+        ]}
+      />
       {/* 1. Breadcrumb */}
       <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center gap-1.5">
