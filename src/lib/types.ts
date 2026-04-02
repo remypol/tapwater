@@ -6,6 +6,8 @@ export interface ContaminantReading {
   whoGuideline: number | null;
   status: "pass" | "warning" | "fail";
   isPfas?: boolean;
+  source?: "drinking" | "environmental";
+  belowDetectionLimit?: boolean;
 }
 
 export interface PostcodeData {
@@ -29,7 +31,11 @@ export interface PostcodeData {
   lastSampleDate: string;
   readings: ContaminantReading[];
   nearbyPostcodes: string[];
-  historicalScores: { year: number; score: number }[];
+  dataSource: "stream" | "ea-only" | "mixed";
+  drinkingWaterReadings: ContaminantReading[];
+  environmentalReadings: ContaminantReading[];
+  sampleCount: number;
+  dateRange: { from: string; to: string } | null;
 }
 
 export interface FilterProduct {
