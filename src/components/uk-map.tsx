@@ -12,7 +12,9 @@ interface PostcodeEntry {
 
 interface RegionStats {
   avgScore: number;
+  worstScore: number;
   count: number;
+  flaggedCount: number;
 }
 
 interface TooltipState {
@@ -64,25 +66,26 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
 
   // Compute region stats from postcodes
   const regionStats = useMemo(() => {
-    const acc: Record<string, { total: number; count: number }> = {};
+    const acc: Record<string, { total: number; count: number; worst: number; flagged: number }> = {};
 
     for (const pc of postcodes) {
       if (pc.score < 0) continue;
       const prefix = postcodePrefix(pc.district);
-      // Try longest match first (e.g. "NW" before "N")
       const regionId =
         POSTCODE_TO_REGION[prefix] ??
         POSTCODE_TO_REGION[prefix.slice(0, 1)] ??
         null;
       if (!regionId) continue;
-      if (!acc[regionId]) acc[regionId] = { total: 0, count: 0 };
+      if (!acc[regionId]) acc[regionId] = { total: 0, count: 0, worst: 10, flagged: 0 };
       acc[regionId].total += pc.score;
       acc[regionId].count += 1;
+      acc[regionId].worst = Math.min(acc[regionId].worst, pc.score);
+      if (pc.score < 7) acc[regionId].flagged += 1;
     }
 
     const result: Record<string, RegionStats> = {};
-    for (const [id, { total, count }] of Object.entries(acc)) {
-      result[id] = { avgScore: total / count, count };
+    for (const [id, { total, count, worst, flagged }] of Object.entries(acc)) {
+      result[id] = { avgScore: total / count, worstScore: worst, count, flaggedCount: flagged };
     }
     return result;
   }, [postcodes]);
@@ -134,7 +137,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
 
         {UK_REGIONS.map((region) => {
           const stats = regionStats[region.id];
-          const fill = stats ? scoreToColor(stats.avgScore) : NO_DATA_COLOR;
+          const fill = stats ? scoreToColor(stats.worstScore) : NO_DATA_COLOR;
           const isSelected = selectedRegion === region.id;
           const isHovered = hoveredRegion === region.id;
 
@@ -202,7 +205,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
               fill="var(--color-ink)"
               style={{ pointerEvents: "none", opacity: 0.7 }}
             >
-              {stats.avgScore.toFixed(1)}
+              {stats.count}
             </text>
           );
         })}
@@ -221,11 +224,10 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
           <p className="font-semibold text-ink">{tooltipRegion.name}</p>
           {tooltipStats ? (
             <p className="text-muted mt-0.5">
-              Average:{" "}
-              <span className="font-data font-bold">
-                {tooltipStats.avgScore.toFixed(1)}/10
-              </span>{" "}
-              &mdash; {tooltipStats.count} area{tooltipStats.count !== 1 ? "s" : ""} checked
+              {tooltipStats.count} area{tooltipStats.count !== 1 ? "s" : ""} checked
+              {tooltipStats.flaggedCount > 0
+                ? ` · ${tooltipStats.flaggedCount} with issues`
+                : " · All looking good"}
             </p>
           ) : (
             <p className="text-faint mt-0.5">No data</p>
@@ -243,21 +245,21 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
             className="w-2.5 h-2.5 rounded-sm shrink-0"
             style={{ backgroundColor: scoreToColor(10) }}
           />
-          Good
+          All safe
         </span>
         <span className="flex items-center gap-1 text-muted">
           <span
             className="w-2.5 h-2.5 rounded-sm shrink-0"
             style={{ backgroundColor: scoreToColor(5) }}
           />
-          Fair
+          Some issues
         </span>
         <span className="flex items-center gap-1 text-muted">
           <span
             className="w-2.5 h-2.5 rounded-sm shrink-0"
-            style={{ backgroundColor: scoreToColor(0) }}
+            style={{ backgroundColor: scoreToColor(2) }}
           />
-          Poor
+          Needs attention
         </span>
         <span className="flex items-center gap-1 text-muted">
           <span
