@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { DM_Sans, Instrument_Serif, Space_Mono } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { OrganizationSchema, WebSiteSchema } from "@/components/json-ld";
 import "./globals.css";
+
+const GA_ID = "G-XB7714S0QN";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -50,6 +53,18 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${instrumentSerif.variable} ${spaceMono.variable}`}
     >
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_ID}');
+        `}
+      </Script>
       <body className="min-h-screen flex flex-col antialiased">
         <Header />
         <OrganizationSchema />
