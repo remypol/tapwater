@@ -32,12 +32,24 @@ export const metadata: Metadata = {
   },
 };
 
-const TRUST_METRICS = [
-  { value: "2,979", label: "Areas covered" },
-  { value: "25,000+", label: "Water tests" },
-  { value: "50+", label: "PFAS alerts" },
-  { value: "Daily", label: "Updates" },
-];
+function buildTrustMetrics() {
+  const districts = getAllPostcodeDistricts();
+  let validCount = 0;
+  let pfasCount = 0;
+  for (const d of districts) {
+    const data = getPostcodeData(d);
+    if (data && data.safetyScore >= 0) {
+      validCount++;
+      if (data.pfasDetected) pfasCount++;
+    }
+  }
+  return [
+    { value: validCount.toLocaleString(), label: "Areas covered" },
+    { value: "25,000+", label: "Water tests" },
+    { value: pfasCount > 0 ? `${pfasCount}+` : "Monitoring", label: "PFAS alerts" },
+    { value: "Daily", label: "Updates" },
+  ];
+}
 
 function scoreBadgeClass(score: number): string {
   const c = getScoreColor(score);
@@ -78,6 +90,7 @@ function buildRankedPostcodes(): {
 export default function HomePage() {
   const { worst, best } = buildRankedPostcodes();
   const mapPostcodes = getMapPostcodes();
+  const TRUST_METRICS = buildTrustMetrics();
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">

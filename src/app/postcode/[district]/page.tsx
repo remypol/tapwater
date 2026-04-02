@@ -144,6 +144,7 @@ export default async function PostcodePage({ params }: Props) {
               contaminantsTested={data.contaminantsTested}
               contaminantsFlagged={data.contaminantsFlagged}
               supplier={data.supplier}
+              supplierId={data.supplierId}
               lastUpdated={data.lastUpdated}
             />
 
@@ -189,7 +190,7 @@ export default async function PostcodePage({ params }: Props) {
 
             {/* Contaminant Data */}
             <ScrollReveal delay={0}>
-              <section className="bg-surface -mx-5 px-5 py-8 mt-0">
+              <section id="what-we-found" className="bg-surface -mx-5 px-5 py-8 mt-0 scroll-mt-20">
                 <h2 className="font-display text-2xl text-ink italic">
                   What we found
                 </h2>
@@ -209,37 +210,43 @@ export default async function PostcodePage({ params }: Props) {
                   How it&apos;s changed
                 </h2>
                 <p className="text-sm text-muted mt-1">
-                  {data.district} quality score, 2020&ndash;2026
+                  {data.district}{" "}quality score, 2020&ndash;2026
                 </p>
                 <div className="card-elevated mt-4 p-6 flex flex-col items-center justify-center" style={{ minHeight: 240 }}>
-                  <div className="flex items-end gap-2">
-                    {data.historicalScores.map((h) => {
-                      const height = Math.max(24, (h.score / 10) * 140);
-                      const colorBase =
-                        h.score >= 7
-                          ? "var(--color-safe)"
-                          : h.score >= 5
-                            ? "var(--color-warning)"
-                            : "var(--color-danger)";
-                      return (
-                        <div key={h.year} className="flex flex-col items-center gap-1.5">
-                          <span className="font-data text-[11px] font-medium text-faint">{h.score}</span>
-                          <div
-                            className="w-8 sm:w-10 rounded-md"
-                            style={{
-                              height,
-                              background: `linear-gradient(to top, ${colorBase}cc, ${colorBase})`,
-                            }}
-                          />
-                          <span className="text-[11px] text-faint font-data">{h.year}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  {(() => {
+                    const maxScore = Math.max(...data.historicalScores.map((h) => h.score), 1);
+                    const maxBarHeight = 140;
+                    return (
+                      <div className="flex items-end gap-2">
+                        {data.historicalScores.map((h) => {
+                          const height = Math.max(28, (h.score / maxScore) * maxBarHeight);
+                          const colorBase =
+                            h.score >= 7
+                              ? "var(--color-safe)"
+                              : h.score >= 5
+                                ? "var(--color-warning)"
+                                : "var(--color-danger)";
+                          return (
+                            <div key={h.year} className="flex flex-col items-center gap-1.5">
+                              <span className="font-data text-[11px] font-medium text-faint">{h.score}</span>
+                              <div
+                                className="w-8 sm:w-10 rounded-md"
+                                style={{
+                                  height,
+                                  background: `linear-gradient(to top, ${colorBase}cc, ${colorBase})`,
+                                }}
+                              />
+                              <span className="text-[11px] text-faint font-data">{h.year}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                   {(() => {
                     const note = getTrendNote(data.historicalScores);
                     return note ? (
-                      <p className="text-sm text-muted italic mt-2">{note}</p>
+                      <p className="text-sm text-muted italic mt-4">{note}</p>
                     ) : null;
                   })()}
                 </div>
@@ -336,7 +343,7 @@ export default async function PostcodePage({ params }: Props) {
         </div>
 
         {/* Methodology Footer */}
-        <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
+        <footer id="methodology-footer" className="mt-10 pb-4 text-sm text-faint leading-relaxed scroll-mt-20">
           {hasData ? <>Based on {data.contaminantsTested} government tests. </> : null}
           See our{" "}
           <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">

@@ -24,8 +24,6 @@ const LIMITS: Record<string, LimitEntry> = {
   // Tier 1 (weight 3.0) — acute/chronic health risk
   lead: { ukLimit: 0.01, whoGuideline: 0.01, unit: "mg/L", tier: 1, displayName: "Lead" },
   arsenic: { ukLimit: 0.01, whoGuideline: 0.01, unit: "µg/L", tier: 1, displayName: "Arsenic" },
-  "e coli": { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "E. coli" },
-  "coliform bacteria": { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "Coliform bacteria" },
 
   // Tier 2 (weight 2.0) — significant concern at elevated levels
   nitrate: { ukLimit: 50, whoGuideline: 50, unit: "mg/L", tier: 2, displayName: "Nitrate" },
@@ -63,8 +61,9 @@ function normalizeDeterminand(label: string): string | null {
   // Common EA label variations
   if (lower.includes("lead") && !lower.includes("mislead")) return "lead";
   if (lower.includes("arsenic")) return "arsenic";
-  if (lower.includes("e.coli") || lower.includes("e coli") || lower.includes("escherichia coli")) return "e coli";
-  if (lower.includes("coliform")) return "coliform bacteria";
+  // Bacteria excluded — EA monitors raw environmental water, not treated tap water.
+  // Coliforms/E.coli in rivers are expected; water treatment removes them completely.
+  // Will be re-added in Phase 2 with DWI treated-water data.
   if (lower.includes("nitrate") && !lower.includes("nitrite")) return "nitrate";
   if (lower.includes("nitrite")) return "nitrite";
   if (lower.includes("nitrogen, total oxidised")) return "nitrate";
@@ -88,7 +87,25 @@ function normalizeDeterminand(label: string): string | null {
   return null;
 }
 
-// ── Unit conversion helpers ──
+// ── Unit validation & conversion helpers ──
+
+/**
+ * Water-compatible units whitelist. Readings in other units (e.g. ug/kg from
+ * biota/sediment samples) are not comparable to drinking water limits and
+ * must be rejected.
+ */
+const WATER_UNITS = new Set([
+  "mg/l", "µg/l", "ug/l", "ng/l",
+  "ph", "ntu", "°c", "cel",
+  "µs/cm", "us/cm", "ms/cm",
+  "count/100ml", "no/100ml", "cfu/100ml",
+  "mg/l as",  // EA sometimes uses "mg/l as N" etc.
+]);
+
+function isWaterUnit(unit: string): boolean {
+  const lower = unit.toLowerCase().trim();
+  return [...WATER_UNITS].some((wu) => lower.startsWith(wu) || lower.includes("/l"));
+}
 
 /**
  * Normalizes the observation value to match the unit expected by the LIMITS entry.
@@ -99,16 +116,14 @@ function normalizeUnit(value: number, obsUnit: string, limitUnit: string): numbe
   const lim = limitUnit.toLowerCase();
 
   const obsIsUg = obs.includes("ug") || obs.includes("µg");
-  const limIsUg = lim.includes("ug") || lim.includes("µg");
   const obsIsMg = obs.includes("mg");
+  const limIsUg = lim.includes("ug") || lim.includes("µg");
   const limIsMg = lim.includes("mg");
 
   if (obsIsUg && limIsMg) {
-    // Convert µg/L → mg/L
     return value / 1000;
   }
   if (obsIsMg && limIsUg) {
-    // Convert mg/L → µg/L
     return value * 1000;
   }
 
@@ -135,9 +150,12 @@ export interface ScoreResult {
 export function computeScore(
   observations: { determinand: string; value: number; unit: string; date: string }[]
 ): ScoreResult {
-  // Deduplicate: keep most recent per determinand
+  // Deduplicate: keep most recent per determinand, rejecting non-water units
   const latest = new Map<string, { value: number; unit: string; date: string }>();
   for (const obs of observations) {
+    // Skip biota/sediment readings (ug/kg, mg/kg, %, g, UNITLESS, etc.)
+    if (!isWaterUnit(obs.unit)) continue;
+
     const key = normalizeDeterminand(obs.determinand);
     if (!key) continue;
     const existing = latest.get(key);
@@ -200,10 +218,11 @@ export function computeScore(
     });
   }
 
-  // Check PFAS in raw observations
+  // Check PFAS in raw observations (water units only)
   let pfasDetected = false;
   let pfasLevel: number | null = null;
   for (const obs of observations) {
+    if (!isWaterUnit(obs.unit)) continue;
     const lower = obs.determinand.toLowerCase();
     if (
       lower.includes("perfluoro") ||
@@ -234,8 +253,14 @@ export function computeScore(
   let safetyScore: number;
   let scoreGrade: ScoreResult["scoreGrade"];
 
-  if (totalWeight === 0) {
-    // No recognized readings with limits — cannot produce a meaningful score
+  // Count how many parameters actually contributed to the score
+  const scoredCount = readings.filter((r) => {
+    const limit = r.ukLimit ?? r.whoGuideline;
+    return limit !== null;
+  }).length;
+
+  if (totalWeight === 0 || scoredCount < 2) {
+    // Not enough data for a meaningful score
     safetyScore = -1;
     scoreGrade = "insufficient-data";
   } else {
