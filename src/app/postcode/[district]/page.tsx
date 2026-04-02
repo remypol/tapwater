@@ -9,7 +9,7 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
-import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { getPostcodeData, getScoredPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
 
@@ -20,7 +20,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const districts = await getAllPostcodeDistricts();
+  // Only build pages for postcodes with a real score — avoids thin pages
+  const districts = await getScoredPostcodeDistricts();
   return districts.map((district) => ({ district }));
 }
 

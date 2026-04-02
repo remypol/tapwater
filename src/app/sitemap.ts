@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPostcodeDistricts, getPostcodeData } from "@/lib/data";
+import { getScoredPostcodeDistricts, getPostcodeData } from "@/lib/data";
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { CITIES } from "@/lib/cities";
 
@@ -23,7 +23,7 @@ const GUIDE_SLUGS = [
  */
 async function getLatestDataDate(): Promise<Date> {
   let latest = "2024-01-01";
-  for (const district of await getAllPostcodeDistricts()) {
+  for (const district of await getScoredPostcodeDistricts()) {
     const data = await getPostcodeData(district);
     if (data && data.lastUpdated > latest) {
       latest = data.lastUpdated;
@@ -34,7 +34,7 @@ async function getLatestDataDate(): Promise<Date> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
-  const districts = await getAllPostcodeDistricts();
+  const districts = await getScoredPostcodeDistricts();
 
   const postcodePaths = await Promise.all(
     districts.map(async (district) => {
@@ -112,6 +112,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/contact/`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     {
       url: `${BASE_URL}/privacy/`,

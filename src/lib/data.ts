@@ -249,6 +249,18 @@ export async function getAllPostcodeDistricts(): Promise<string[]> {
   return Array.from(cache.keys()).sort();
 }
 
+/**
+ * Returns only postcode districts with a valid safety score (>= 0).
+ * Use this for generating static pages — avoids thin/empty pages.
+ */
+export async function getScoredPostcodeDistricts(): Promise<string[]> {
+  const cache = await loadData();
+  return Array.from(cache.entries())
+    .filter(([, data]) => data.safetyScore >= 0)
+    .map(([district]) => district)
+    .sort();
+}
+
 export async function getPostcodesByCity(
   city: string,
 ): Promise<PostcodeData[]> {
