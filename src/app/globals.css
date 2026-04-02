@@ -305,6 +305,13 @@ body {
 .badge-danger { background: var(--color-danger-light); color: var(--color-danger); }
 .badge-pfas { background: var(--color-pfas-light); color: var(--color-pfas); }
 
+/* ── Touch Feedback ── */
+
+button:active, a.card:active, .pill:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
 /* ── Scrollbar Hide ── */
 
 .scrollbar-hide::-webkit-scrollbar {

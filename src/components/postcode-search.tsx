@@ -69,7 +69,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
               </div>
               <button
                 type="submit"
-                className="bg-ink text-white rounded-xl py-4 px-7 text-base font-medium flex items-center gap-2 hover:bg-gray-800 transition-colors shrink-0"
+                className="bg-ink text-white rounded-xl py-4 px-7 text-base font-medium flex items-center gap-2 hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 shrink-0"
               >
                 Check
                 <ArrowRight className="w-4 h-4" />
@@ -87,7 +87,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
                   onChange={(e) => setValue(e.target.value)}
                   placeholder="Enter your postcode..."
                   aria-label="Postcode"
-                  className="w-full text-sm py-2.5 pl-9 pr-3 bg-transparent text-ink focus:outline-none placeholder:text-faint"
+                  className="w-full text-sm py-2.5 pl-9 pr-3 bg-transparent text-ink focus:outline-none placeholder:text-faint transition-[box-shadow] duration-200 ease-out focus:ring-2 focus:ring-accent/20 rounded-lg"
                 />
               </div>
               <button
