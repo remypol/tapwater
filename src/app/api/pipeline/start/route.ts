@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { after } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 
@@ -23,8 +24,8 @@ export async function POST(request: NextRequest) {
 
   if (running && running.length > 0) {
     const runAge = Date.now() - new Date(running[0].started_at).getTime();
-    // If a run has been "running" for over 30 minutes, it's stale — allow a new one
-    if (runAge < 30 * 60 * 1000) {
+    // If a run has been "running" for over 12 hours, it's stale — allow a new one
+    if (runAge < 12 * 60 * 60 * 1000) {
       return NextResponse.json(
         { error: "Pipeline already running", runId: running[0].id },
         { status: 409 },
@@ -52,21 +53,24 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to create pipeline run" }, { status: 500 });
   }
 
-  // Determine base URL for self-invocation
+  // Fire first batch using after() — runs after response is sent
   const proto = request.headers.get("x-forwarded-proto") ?? "https";
   const host = request.headers.get("host") ?? process.env.VERCEL_URL ?? "localhost:3000";
   const baseUrl = `${proto}://${host}`;
 
-  // Fire first batch (fire-and-forget)
-  fetch(`${baseUrl}/api/pipeline/batch`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.CRON_SECRET}`,
-    },
-    body: JSON.stringify({ runId: run.id, batchIndex: 0 }),
-  }).catch((err) => {
-    console.error("[pipeline/start] Failed to fire first batch:", err);
+  after(async () => {
+    try {
+      await fetch(`${baseUrl}/api/pipeline/batch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.CRON_SECRET}`,
+        },
+        body: JSON.stringify({ runId: run.id, batchIndex: 0 }),
+      });
+    } catch (err) {
+      console.error("[pipeline/start] Failed to fire first batch:", err);
+    }
   });
 
   return NextResponse.json({

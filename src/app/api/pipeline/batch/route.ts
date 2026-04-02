@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
@@ -101,20 +101,24 @@ export async function POST(request: NextRequest) {
     const hasMore = nextBatchIndex * batchSize < TARGET_POSTCODES.length;
 
     if (hasMore) {
-      // Fire next batch (fire-and-forget)
+      // Fire next batch using after() — continues after response is sent
       const proto = request.headers.get("x-forwarded-proto") ?? "https";
       const host = request.headers.get("host") ?? process.env.VERCEL_URL ?? "localhost:3000";
       const baseUrl = `${proto}://${host}`;
 
-      fetch(`${baseUrl}/api/pipeline/batch`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.CRON_SECRET}`,
-        },
-        body: JSON.stringify({ runId, batchIndex: nextBatchIndex }),
-      }).catch((err) => {
-        console.error("[pipeline/batch] Failed to fire next batch:", err);
+      after(async () => {
+        try {
+          await fetch(`${baseUrl}/api/pipeline/batch`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${process.env.CRON_SECRET}`,
+            },
+            body: JSON.stringify({ runId, batchIndex: nextBatchIndex }),
+          });
+        } catch (err) {
+          console.error("[pipeline/batch] Failed to fire next batch:", err);
+        }
       });
 
       return NextResponse.json({
