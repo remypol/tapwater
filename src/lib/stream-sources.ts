@@ -110,6 +110,34 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "camel",
     dateFormat: "string",
   },
+  // ── Companies added from Stream portal discovery ──
+  "affinity-water": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2024, serviceName: "Affinity_Water_Domestic_Water_Quality" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "camel",
+    dateFormat: "string",
+  },
+  "south-east-water": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2025, serviceName: "SES_Water_Water_Quality_250515" },
+    ],
+    geoField: "lsoa21cd",
+    fieldCase: "camel",
+    dateFormat: "epoch",
+  },
+  "south-staffs-water": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2024, serviceName: "South_Staffs_Domestic_Water_Quality" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "upper",
+    dateFormat: "string",
+  },
 };
 
 export function getStreamSource(supplierId: string): StreamSource | null {

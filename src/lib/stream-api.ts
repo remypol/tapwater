@@ -76,7 +76,7 @@ export function normalizeStreamRecord(
     unit: rawUnit.replace("\u03bc", "\u00b5"),  // normalize greek mu to micro sign
     belowDetectionLimit: rawOperator === "<",
     value: Number(getField(attrs, fieldCase, "RESULT", "Result") ?? 0),
-    lsoa: String(attrs.LSOA ?? ""),  // LSOA field is always uppercase
+    lsoa: String(attrs.LSOA ?? attrs.lsoa21cd ?? attrs.lsoa ?? ""),
   };
 }
 
