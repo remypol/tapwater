@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Methodology — How We Calculate Water Quality Scores',
@@ -10,6 +11,16 @@ export default function MethodologyPage() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <div className="max-w-3xl mx-auto">
+        <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-1.5">
+            <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
+            <li aria-hidden="true">/</li>
+            <li><Link href="/about" className="hover:text-accent transition-colors">About</Link></li>
+            <li aria-hidden="true">/</li>
+            <li className="font-medium text-ink" aria-current="page">Methodology</li>
+          </ol>
+        </nav>
+
         <h1 className="text-3xl font-bold font-display italic text-ink mb-6">
           How We Calculate Water Quality Scores
         </h1>
@@ -112,27 +123,27 @@ export default function MethodologyPage() {
             <tbody className="text-body divide-y divide-rule">
               <tr>
                 <td className="px-4 py-3">9.0 – 10</td>
-                <td className="px-4 py-3 font-medium text-emerald-700">Excellent</td>
+                <td className="px-4 py-3 font-medium text-safe">Excellent</td>
                 <td className="px-4 py-3">All parameters well within limits; very high margin.</td>
               </tr>
               <tr>
                 <td className="px-4 py-3">7.0 – 8.9</td>
-                <td className="px-4 py-3 font-medium text-green-700">Good</td>
+                <td className="px-4 py-3 font-medium text-safe">Good</td>
                 <td className="px-4 py-3">Parameters comfortably within limits.</td>
               </tr>
               <tr>
                 <td className="px-4 py-3">5.0 – 6.9</td>
-                <td className="px-4 py-3 font-medium text-yellow-700">Fair</td>
+                <td className="px-4 py-3 font-medium text-warning">Fair</td>
                 <td className="px-4 py-3">Some parameters closer to limits; worth monitoring.</td>
               </tr>
               <tr>
                 <td className="px-4 py-3">3.0 – 4.9</td>
-                <td className="px-4 py-3 font-medium text-orange-700">Poor</td>
+                <td className="px-4 py-3 font-medium text-warning">Poor</td>
                 <td className="px-4 py-3">One or more parameters significantly elevated.</td>
               </tr>
               <tr>
                 <td className="px-4 py-3">0 – 2.9</td>
-                <td className="px-4 py-3 font-medium text-red-700">Very Poor</td>
+                <td className="px-4 py-3 font-medium text-danger">Very Poor</td>
                 <td className="px-4 py-3">Parameters near or at regulatory limits.</td>
               </tr>
             </tbody>

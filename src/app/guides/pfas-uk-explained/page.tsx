@@ -34,7 +34,7 @@ export default function PFASGuide() {
             <li aria-hidden="true">/</li>
             <li><Link href="/guides" className="hover:text-accent transition-colors">Guides</Link></li>
             <li aria-hidden="true">/</li>
-            <li className="font-medium text-ink" aria-current="page">PFAS in UK Water</li>
+            <li className="font-medium text-ink" aria-current="page">PFAS in UK Drinking Water</li>
           </ol>
         </nav>
 
@@ -80,7 +80,7 @@ export default function PFASGuide() {
         </p>
         <p className="text-base text-body leading-relaxed">
           You can check whether PFAS compounds have been detected in environmental monitoring near your postcode using the tool at the bottom of this page, or by visiting our dedicated{" "}
-          <Link href="/contaminant/pfas" className="text-accent hover:underline font-medium">PFAS contaminant page</Link>.
+          <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2 font-medium">PFAS contaminant page</Link>.
         </p>
 
         {/* UK vs EU regulation */}
@@ -164,7 +164,7 @@ export default function PFASGuide() {
         <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">Reverse osmosis (most effective)</h3>
         <p className="text-base text-body leading-relaxed mb-4">
           Reverse osmosis (RO) systems force water through a semi-permeable membrane under pressure, physically blocking PFAS molecules. Independent testing shows RO removes between 90 and 99 percent of most PFAS compounds. Under-sink RO units typically cost between £150 and £400 and require annual filter cartridge replacement. This is the most evidence-backed option for households in affected areas. See our{" "}
-          <Link href="/contaminant/pfas" className="text-accent hover:underline font-medium">PFAS filter recommendations</Link>{" "}for certified products.
+          <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2 font-medium">PFAS filter recommendations</Link>{" "}for certified products.
         </p>
 
         <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">Activated carbon (partial reduction)</h3>
@@ -188,7 +188,7 @@ export default function PFASGuide() {
           <PostcodeSearch size="sm" />
           <p className="text-xs text-faint mt-3">
             We monitor 220 postcode areas for PFAS and other contaminants.{" "}
-            <Link href="/contaminant/pfas" className="text-accent hover:underline">View the full PFAS dataset</Link>.
+            <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2">View the full PFAS dataset</Link>.
           </p>
         </div>
 
@@ -206,15 +206,15 @@ export default function PFASGuide() {
         <ul className="space-y-2 text-base text-body leading-relaxed">
           <li className="flex gap-2">
             <span className="mt-2 w-1.5 h-1.5 rounded-full bg-rule-strong shrink-0" aria-hidden="true" />
-            <Link href="/about/methodology" className="text-accent hover:underline">Our full scoring methodology</Link>
+            <Link href="/about/methodology" className="text-accent hover:underline underline-offset-2">Our full scoring methodology</Link>
           </li>
           <li className="flex gap-2">
             <span className="mt-2 w-1.5 h-1.5 rounded-full bg-rule-strong shrink-0" aria-hidden="true" />
-            <Link href="/about/data-sources" className="text-accent hover:underline">Data sources and update frequency</Link>
+            <Link href="/about/data-sources" className="text-accent hover:underline underline-offset-2">Data sources and update frequency</Link>
           </li>
           <li className="flex gap-2">
             <span className="mt-2 w-1.5 h-1.5 rounded-full bg-rule-strong shrink-0" aria-hidden="true" />
-            <Link href="/contaminant/pfas" className="text-accent hover:underline">PFAS contaminant detail page</Link>
+            <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2">PFAS contaminant detail page</Link>
           </li>
         </ul>
 

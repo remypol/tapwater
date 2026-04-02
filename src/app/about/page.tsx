@@ -11,6 +11,14 @@ export default function AboutPage() {
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <div className="max-w-3xl mx-auto">
+        <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-1.5">
+            <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
+            <li aria-hidden="true">/</li>
+            <li className="font-medium text-ink" aria-current="page">About</li>
+          </ol>
+        </nav>
+
         <h1 className="text-3xl font-bold font-display italic text-ink mb-6">About TapWater.uk</h1>
 
         <p className="text-base text-body leading-relaxed mb-4">
@@ -56,11 +64,11 @@ export default function AboutPage() {
         </ul>
         <p className="text-base text-body leading-relaxed mb-4">
           You can read more about how we combine these sources on our{' '}
-          <Link href="/about/data-sources" className="text-accent underline hover:text-accent-hover">
+          <Link href="/about/data-sources" className="text-accent underline underline-offset-2 hover:text-accent-hover">
             data sources
           </Link>{' '}
           page, and how we calculate quality scores on our{' '}
-          <Link href="/about/methodology" className="text-accent underline hover:text-accent-hover">
+          <Link href="/about/methodology" className="text-accent underline underline-offset-2 hover:text-accent-hover">
             methodology
           </Link>{' '}
           page.
@@ -84,7 +92,7 @@ export default function AboutPage() {
           For questions, corrections, or data feedback, email us at{' '}
           <a
             href="mailto:hello@tapwater.uk"
-            className="text-accent underline hover:text-accent-hover"
+            className="text-accent underline underline-offset-2 hover:text-accent-hover"
           >
             hello@tapwater.uk
           </a>
