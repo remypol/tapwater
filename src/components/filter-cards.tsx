@@ -1,6 +1,7 @@
 import { FilterProduct } from "@/lib/types";
 import Link from "next/link";
 import { Award, Check, Star, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 const MOBILE_REMOVES_LIMIT = 3;
 
@@ -85,13 +86,13 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        {filters.map((filter) => {
+        {filters.map((filter, i) => {
           const badge = BADGE_CONFIG[filter.badge];
           const stripColor = STRIP_COLOR[filter.badge];
 
           return (
+            <ScrollReveal key={filter.id} delay={i * 100}>
             <div
-              key={filter.id}
               className="card-elevated overflow-hidden flex flex-col"
             >
               {/* Colored top strip */}
@@ -165,6 +166,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
                 </a>
               </div>
             </div>
+            </ScrollReveal>
           );
         })}
       </div>

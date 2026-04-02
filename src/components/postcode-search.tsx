@@ -21,6 +21,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
   const router = useRouter()
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
+  const [focused, setFocused] = useState(false)
 
   const isLg = size === "lg"
 
@@ -49,9 +50,21 @@ export function PostcodeSearch({ size = "lg" }: Props) {
                   type="text"
                   value={value}
                   onChange={(e) => setValue(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
                   placeholder="Enter your postcode..."
                   aria-label="Postcode"
-                  className="w-full text-lg py-4 pl-12 pr-4 bg-transparent text-ink focus:outline-none placeholder:text-faint"
+                  className={[
+                    "w-full text-lg py-4 pl-12 pr-4 bg-transparent text-ink focus:outline-none",
+                    "transition-opacity duration-300",
+                    focused ? "placeholder:opacity-40" : "placeholder:text-faint",
+                  ].join(" ")}
+                />
+                {/* Wave focus bar */}
+                <span
+                  aria-hidden="true"
+                  className="absolute bottom-0 left-0 h-[2px] bg-[#0891b2] transition-all duration-300 ease-out"
+                  style={{ width: focused ? "100%" : "0%" }}
                 />
               </div>
               <button

@@ -9,11 +9,53 @@ interface StickyScoreProps {
   score: number;
 }
 
-function getScoreTextColor(score: number): string {
+function getScoreLabel(score: number): { text: string; className: string } {
+  if (score >= 7) return { text: "Safe ✓", className: "text-[var(--color-safe)]" };
+  if (score >= 5) return { text: "Watch", className: "text-amber-500" };
+  return { text: "Issues", className: "text-[var(--color-danger)]" };
+}
+
+function WaterDropIndicator({ score }: { score: number }) {
   const color = getScoreColor(score);
-  if (color === "safe") return "text-[var(--color-safe)]";
-  if (color === "warning") return "text-[var(--color-warning)]";
-  return "text-[var(--color-danger)]";
+  const fillColor =
+    color === "safe" ? "var(--color-safe)" :
+    color === "warning" ? "#f59e0b" :
+    "var(--color-danger)";
+
+  // Fill level: score/10, clamped 0–1
+  const fillFraction = Math.min(1, Math.max(0, score / 10));
+  // SVG teardrop path: 16x20px viewBox
+  // The filled portion is clipped from the bottom
+  const clipY = 20 * (1 - fillFraction);
+
+  return (
+    <svg
+      width="16"
+      height="20"
+      viewBox="0 0 16 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Teardrop outline */}
+      <path
+        d="M8 1 C8 1, 1 8, 1 13 A7 7 0 0 0 15 13 C15 8, 8 1, 8 1Z"
+        stroke={fillColor}
+        strokeWidth="1.5"
+        fill="none"
+        opacity="0.4"
+      />
+      {/* Filled portion via clipPath */}
+      <clipPath id={`drop-fill-${Math.round(score * 10)}`}>
+        <rect x="0" y={clipY} width="16" height="20" />
+      </clipPath>
+      <path
+        d="M8 1 C8 1, 1 8, 1 13 A7 7 0 0 0 15 13 C15 8, 8 1, 8 1Z"
+        fill={fillColor}
+        clipPath={`url(#drop-fill-${Math.round(score * 10)})`}
+      />
+    </svg>
+  );
 }
 
 /**
@@ -50,15 +92,25 @@ export function StickyScore({ district, areaName, score }: StickyScoreProps) {
     return () => observer.disconnect();
   }, []);
 
-  const scoreColor = getScoreTextColor(score);
+  const scoreLabel = getScoreLabel(score);
+
+  function handleClick() {
+    const sentinel = document.getElementById("score-sentinel");
+    if (sentinel) {
+      sentinel.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
 
   return (
     <div
       role="banner"
       aria-label={`${district} water quality score`}
       aria-hidden={!visible}
+      onClick={handleClick}
       className={[
-        "lg:hidden fixed top-0 inset-x-0 h-12 z-40",
+        "lg:hidden fixed top-0 inset-x-0 h-12 z-40 cursor-pointer",
         "bg-[var(--color-surface)]/95 backdrop-blur-sm shadow-sm",
         "flex items-center justify-between px-5",
         "transition-all duration-200 ease-in-out",
@@ -68,7 +120,8 @@ export function StickyScore({ district, areaName, score }: StickyScoreProps) {
       ].join(" ")}
     >
       {/* Left: district + area name */}
-      <div className="flex items-baseline gap-2 min-w-0">
+      <div className="flex items-center gap-2 min-w-0">
+        <WaterDropIndicator score={score} />
         <span className="font-data font-bold text-[var(--color-ink)] shrink-0">
           {district}
         </span>
@@ -77,12 +130,11 @@ export function StickyScore({ district, areaName, score }: StickyScoreProps) {
         </span>
       </div>
 
-      {/* Right: score */}
-      <div className="flex items-baseline gap-0.5 shrink-0 ml-3">
-        <span className={`font-data font-bold text-lg ${scoreColor}`}>
-          {score}
+      {/* Right: score label */}
+      <div className="shrink-0 ml-3">
+        <span className={`font-data font-bold text-sm ${scoreLabel.className}`}>
+          {scoreLabel.text}
         </span>
-        <span className="font-data text-sm text-[var(--color-muted)]">/10</span>
       </div>
     </div>
   );

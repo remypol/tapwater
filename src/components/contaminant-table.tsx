@@ -199,7 +199,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
       </div>
 
       {/* ── Mobile cards (below md) ── */}
-      <div className="md:hidden">
+      <div className="md:hidden flex overflow-x-auto gap-3 pb-3 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 sm:gap-3">
         {readings.map((reading) => {
           const percent = getPercentOfLimit(reading);
 
@@ -207,7 +207,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
             <div
               key={reading.name}
               className={[
-                'card p-4 mb-2',
+                'card p-4 snap-start shrink-0 w-[280px] sm:w-auto sm:shrink',
                 reading.isPfas ? 'border-l-[3px] border-l-violet-500' : '',
               ].join(' ')}
             >

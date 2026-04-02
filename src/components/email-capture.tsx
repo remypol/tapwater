@@ -10,11 +10,25 @@ interface EmailCaptureProps {
 export function EmailCapture({ postcode }: EmailCaptureProps) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [fadingOut, setFadingOut] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
-    setSubscribed(true);
+
+    // Fade out the form first
+    setFadingOut(true);
+    setTimeout(() => {
+      setSubscribed(true);
+      setShowSuccess(false);
+      // Trigger enter animation on next frame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setShowSuccess(true);
+        });
+      });
+    }, 300);
   }
 
   return (
@@ -35,15 +49,25 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
           </p>
 
           {subscribed ? (
-            <div className="mt-4 flex items-center gap-2">
+            <div
+              className={[
+                "mt-4 flex items-center gap-2 transition-all duration-300",
+                showSuccess ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+              ].join(" ")}
+            >
               <Check className="w-5 h-5 text-safe shrink-0" />
               <p className="text-sm text-safe">
-                You're subscribed. We'll email you when data changes for{" "}
+                You&apos;re subscribed. We&apos;ll email you when data changes for{" "}
                 {postcode}.
               </p>
             </div>
           ) : (
-            <>
+            <div
+              className={[
+                "transition-all duration-300",
+                fadingOut ? "opacity-0 scale-95" : "opacity-100 scale-100",
+              ].join(" ")}
+            >
               <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
                 <input
                   type="email"
@@ -64,7 +88,7 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
               <p className="text-xs text-faint mt-2">
                 Monthly updates + breaking alerts. No spam ever.
               </p>
-            </>
+            </div>
           )}
         </div>
       </div>

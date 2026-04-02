@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { PostcodeSearch } from "@/components/postcode-search";
 
 interface NavLink {
   label: string;
@@ -34,7 +35,7 @@ export function MobileNav({ navLinks }: MobileNavProps) {
       {/* Slide-down panel */}
       <div
         className={[
-          "sm:hidden fixed inset-x-0 bg-[var(--color-surface)] border-b border-[var(--color-rule)] z-40 transition-all duration-200 ease-in-out overflow-hidden",
+          "sm:hidden fixed inset-x-0 bg-[var(--color-surface)]/90 backdrop-blur-lg border-b border-[var(--color-rule)] z-40 transition-all duration-200 ease-in-out overflow-hidden",
           open ? "opacity-100 max-h-screen top-16" : "opacity-0 max-h-0 top-16 pointer-events-none",
         ].join(" ")}
         aria-hidden={!open}
@@ -48,8 +49,10 @@ export function MobileNav({ navLinks }: MobileNavProps) {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={[
-                  "block py-2.5 px-5 text-body hover:text-[var(--color-accent)] transition-colors",
-                  active ? "text-[var(--color-accent)] font-medium" : "",
+                  "block py-3 px-5 text-body hover:text-[var(--color-accent)] transition-colors border-l-2",
+                  active
+                    ? "text-[var(--color-accent)] font-medium border-l-[var(--color-accent)]"
+                    : "border-l-transparent",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
@@ -58,6 +61,10 @@ export function MobileNav({ navLinks }: MobileNavProps) {
             );
           })}
         </nav>
+        {/* Postcode search */}
+        <div className="border-t border-[var(--color-rule)] px-5 py-4">
+          <PostcodeSearch size="sm" />
+        </div>
       </div>
     </>
   );
