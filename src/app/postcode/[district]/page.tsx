@@ -27,10 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getPostcodeData(district);
   if (!data) return { title: "Not Found" };
 
-  const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free 2026 report for ${data.areaName}.`;
+  const year = new Date().getFullYear();
+  const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free ${year} report for ${data.areaName}.`;
 
   return {
-    title: `${data.district} Water Quality: Is It Safe? | ${data.areaName} 2026`,
+    title: `${data.district} Water Quality: Is It Safe? | ${data.areaName} ${year}`,
     description,
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
