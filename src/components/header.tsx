@@ -2,10 +2,11 @@ import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 
 const navLinks = [
+  { label: "Rankings", href: "/compare" },
+  { label: "Contaminants", href: "/contaminant" },
+  { label: "Suppliers", href: "/supplier" },
   { label: "Guides", href: "/guides" },
   { label: "About", href: "/about" },
-  { label: "Methodology", href: "/about/methodology" },
-  { label: "Data Sources", href: "/about/data-sources" },
 ];
 
 export function Header() {

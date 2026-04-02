@@ -107,7 +107,7 @@ export async function upsertPageData(
     unit: r.unit,
     date: r.date,
   }));
-  const eaScore: ScoreResult = computeScore(eaObservations);
+  const eaScore: ScoreResult = computeScore(eaObservations, "environmental");
 
   // Score Stream drinking water readings (if available)
   const hasStream = streamRecords && streamRecords.length > 0;

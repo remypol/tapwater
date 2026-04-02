@@ -23,7 +23,7 @@ interface LimitEntry {
 const LIMITS: Record<string, LimitEntry> = {
   // Tier 1 (weight 3.0) — acute/chronic health risk
   lead: { ukLimit: 0.01, whoGuideline: 0.01, unit: "mg/L", tier: 1, displayName: "Lead" },
-  arsenic: { ukLimit: 0.01, whoGuideline: 0.01, unit: "µg/L", tier: 1, displayName: "Arsenic" },
+  arsenic: { ukLimit: 0.01, whoGuideline: 0.01, unit: "mg/L", tier: 1, displayName: "Arsenic" },
   "e.coli": { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "E. coli" },
   coliforms: { ukLimit: 0, whoGuideline: 0, unit: "count/100ml", tier: 1, displayName: "Coliform Bacteria" },
 
@@ -167,17 +167,31 @@ export interface ScoreResult {
   pfasLevel: number | null;
 }
 
+// Determinands that should only be scored from drinking water (Stream) data,
+// NOT from EA environmental monitoring. Bacteria in rivers are expected and normal.
+const DRINKING_WATER_ONLY = new Set(["e.coli", "coliforms"]);
+
 export function computeScore(
-  observations: { determinand: string; value: number; unit: string; date: string }[]
+  observations: { determinand: string; value: number; unit: string; date: string }[],
+  source: "drinking" | "environmental" = "drinking",
 ): ScoreResult {
+  // Filter out readings older than 3 years
+  const cutoffDate = new Date();
+  cutoffDate.setFullYear(cutoffDate.getFullYear() - 3);
+  const cutoff = cutoffDate.toISOString().split("T")[0];
+
   // Deduplicate: keep most recent per determinand, rejecting non-water units
   const latest = new Map<string, { value: number; unit: string; date: string }>();
   for (const obs of observations) {
+    // Skip stale readings
+    if (obs.date && obs.date < cutoff) continue;
     // Skip biota/sediment readings (ug/kg, mg/kg, %, g, UNITLESS, etc.)
     if (!isWaterUnit(obs.unit)) continue;
 
     const key = normalizeDeterminand(obs.determinand);
     if (!key) continue;
+    // Skip bacteria from EA environmental data (expected in rivers, not meaningful for tap water)
+    if (source === "environmental" && DRINKING_WATER_ONLY.has(key)) continue;
     const existing = latest.get(key);
     if (!existing || obs.date > existing.date) {
       latest.set(key, { value: obs.value, unit: obs.unit, date: obs.date });

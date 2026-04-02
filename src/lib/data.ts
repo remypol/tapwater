@@ -37,7 +37,7 @@ async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
       unit: r.unit,
       date: r.date,
     }));
-    const score: ScoreResult = computeScore(observations);
+    const score: ScoreResult = computeScore(observations, "environmental");
 
     const nearby = seedData
       .filter(

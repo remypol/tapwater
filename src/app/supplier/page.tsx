@@ -8,7 +8,7 @@ import { getScoreColor } from "@/lib/types";
 import { BreadcrumbSchema } from "@/components/json-ld";
 
 export const metadata: Metadata = {
-  title: "UK Water Companies — Water Quality by Supplier | TapWater.uk",
+  title: "UK Water Companies — Water Quality by Supplier",
   description:
     "Compare water quality scores across all 16 major UK water companies. See which supplier has the best and worst tap water, coverage areas, and detailed postcode reports.",
   openGraph: {

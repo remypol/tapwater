@@ -4,7 +4,7 @@ import { ChevronRight, AlertTriangle, ShieldCheck } from "lucide-react";
 import { BreadcrumbSchema } from "@/components/json-ld";
 
 export const metadata: Metadata = {
-  title: "Contaminants in UK Tap Water — What's Being Tested | TapWater.uk",
+  title: "Contaminants in UK Tap Water — What's Being Tested",
   description:
     "Everything you need to know about contaminants found in UK drinking water: PFAS forever chemicals, lead, nitrate, chlorine, copper, fluoride, trihalomethanes, and E. coli. Health effects, legal limits, and how to remove them.",
   openGraph: {

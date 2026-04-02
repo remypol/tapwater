@@ -283,24 +283,6 @@ export default async function PostcodePage({ params }: Props) {
               </div>
             </ScrollReveal>
 
-            <hr className="border-rule mt-10" />
-
-            {/* Filter Recommendations — coming soon */}
-            <ScrollReveal delay={100}>
-              <section className="mt-8">
-                <h2 className="font-display text-2xl text-ink italic">
-                  Filters for your area
-                </h2>
-                <div className="mt-4 card p-6 border-dashed">
-                  <p className="text-sm text-body">
-                    We&apos;re reviewing water filters matched to the contaminants found in <span className="font-medium text-ink">{data.district}</span>. Personalised recommendations are coming soon.
-                  </p>
-                  <p className="text-xs text-muted mt-2">
-                    Sign up above to be notified when filter picks are ready for your area.
-                  </p>
-                </div>
-              </section>
-            </ScrollReveal>
           </>
         ) : (
           /* Insufficient data state */

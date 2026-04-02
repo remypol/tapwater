@@ -120,7 +120,7 @@ export function PostcodeDatasetSchema({
     .map((r) => ({
       "@type": "PropertyValue",
       name: r.name,
-      value: String(r.value),
+      value: String(parseFloat(r.value.toPrecision(6))),
       unitText: r.unit,
       ...(r.ukLimit != null ? { maxValue: String(r.ukLimit) } : {}),
     }));
