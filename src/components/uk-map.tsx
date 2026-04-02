@@ -172,43 +172,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
           );
         })}
 
-        {/* Region labels */}
-        {UK_REGIONS.map((region) => {
-          const stats = regionStats[region.id];
-          if (!stats) return null;
-          // Approximate center of each region for labeling
-          const centers: Record<string, [number, number]> = {
-            scotland: [245, 160],
-            "north-east": [315, 285],
-            "north-west": [225, 310],
-            yorkshire: [300, 340],
-            "east-midlands": [295, 390],
-            "west-midlands": [220, 390],
-            wales: [130, 385],
-            east: [340, 440],
-            "south-east": [290, 490],
-            london: [278, 468],
-            "south-west": [155, 495],
-          };
-          const center = centers[region.id];
-          if (!center) return null;
-
-          return (
-            <text
-              key={`label-${region.id}`}
-              x={center[0]}
-              y={center[1]}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fontSize={region.id === "london" ? 7 : 10}
-              fontWeight="600"
-              fill="var(--color-ink)"
-              style={{ pointerEvents: "none", opacity: 0.7 }}
-            >
-              {stats.count}
-            </text>
-          );
-        })}
+        {/* No labels — let the colors and interaction speak */}
       </svg>
 
       {/* Tooltip */}
