@@ -281,8 +281,8 @@ export default function HomePage() {
                     {data.safetyScore.toFixed(1)}
                   </span>
                 ) : (
-                  <span className="badge shrink-0 bg-rule text-faint">
-                    N/A
+                  <span className="font-data text-sm text-faint shrink-0">
+                    —
                   </span>
                 )}
                 <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />

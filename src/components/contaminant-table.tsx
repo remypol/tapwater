@@ -76,9 +76,9 @@ interface ProgressBarProps {
 function ProgressBar({ percent, visible }: ProgressBarProps) {
   const colorClass = getBarColorClass(percent);
   return (
-    <div className="h-1 w-full rounded-full bg-gray-100 mt-1.5 overflow-hidden">
+    <div className="h-1.5 w-full rounded-full bg-gray-100 mt-1.5 overflow-hidden">
       <div
-        className={`h-1 rounded-full ${colorClass} ${visible ? 'bar-animated' : ''}`}
+        className={`h-1.5 rounded-full ${colorClass} ${visible ? 'bar-animated' : ''}`}
         style={{ width: `${percent}%` }}
         role="presentation"
       />
@@ -138,6 +138,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
           <tbody>
             {readings.map((reading, i) => {
               const percent = getPercentOfLimit(reading);
+              const hasLimit = reading.ukLimit !== null || reading.whoGuideline !== null;
               const isEven = i % 2 === 0;
 
               return (
@@ -162,7 +163,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                     <span className="font-data text-sm text-body">
                       {reading.value} {reading.unit}
                     </span>
-                    <ProgressBar percent={percent} visible={visible} />
+                    {hasLimit && <ProgressBar percent={percent} visible={visible} />}
                   </td>
 
                   {/* UK Limit */}
@@ -202,6 +203,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
       <div className="md:hidden flex overflow-x-auto gap-3 pb-3 -mx-5 px-5 snap-x snap-mandatory scrollbar-hide sm:flex-wrap sm:overflow-visible sm:mx-0 sm:px-0 sm:gap-3">
         {readings.map((reading) => {
           const percent = getPercentOfLimit(reading);
+          const hasLimit = reading.ukLimit !== null || reading.whoGuideline !== null;
 
           return (
             <div
@@ -252,13 +254,19 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                   </div>
                 </div>
 
-                {/* Progress bar */}
-                <ProgressBar percent={percent} visible={visible} />
-
-                {/* Percentage label */}
-                <div className="text-xs text-muted mt-1.5">
-                  {Math.round(percent)}% of safe level
-                </div>
+                {/* Progress bar + label — only when a reference limit exists */}
+                {hasLimit ? (
+                  <>
+                    <ProgressBar percent={percent} visible={visible} />
+                    <div className="text-xs text-muted mt-1.5">
+                      {Math.round(percent)}% of safe level
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-xs text-faint mt-2">
+                    Informational — no set limit
+                  </div>
+                )}
               </div>
             </div>
           );

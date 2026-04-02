@@ -113,7 +113,7 @@ export default async function PostcodePage({ params }: Props) {
             Your water in {data.district}
           </h1>
           <p className="text-muted mt-1 animate-fade-up delay-3">
-            {data.areaName}, {data.city}
+            {data.areaName === data.city ? data.city : `${data.areaName}, ${data.city}`}
           </p>
         </header>
 
@@ -167,7 +167,7 @@ export default async function PostcodePage({ params }: Props) {
                   {data.supplier}
                 </Link>
                 . Based on the latest data (last sampled {data.lastSampleDate}),{" "}
-                <span className="font-data">{data.contaminantsTested}</span> parameters
+                <span className="font-data">{data.contaminantsTested}</span> things
                 were tested with{" "}
                 <span className="font-data">{data.contaminantsFlagged}</span> exceeding
                 recommended levels.{" "}
@@ -290,9 +290,15 @@ export default async function PostcodePage({ params }: Props) {
                     <MapPin className="w-3 h-3 text-faint shrink-0" />
                     <span className="text-sm text-ink font-medium">{code}</span>
                     <span className="text-xs text-muted">{pcData.areaName}</span>
-                    <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pcData.safetyScore)}`}>
-                      {pcData.safetyScore}
-                    </span>
+                    {pcData.safetyScore >= 0 ? (
+                      <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pcData.safetyScore)}`}>
+                        {pcData.safetyScore}
+                      </span>
+                    ) : (
+                      <span className="font-data text-xs text-faint bg-rule px-1.5 py-0.5 rounded">
+                        N/A
+                      </span>
+                    )}
                   </Link>
                 ) : (
                   <Link key={code} href={`/postcode/${code}/`} className="pill snap-start shrink-0">
