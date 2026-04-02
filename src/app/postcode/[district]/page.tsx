@@ -266,7 +266,7 @@ export default async function PostcodePage({ params }: Props) {
                                 className="w-8 sm:w-10 rounded-md"
                                 style={{
                                   height,
-                                  background: `linear-gradient(to top, ${colorBase}cc, ${colorBase})`,
+                                  background: `linear-gradient(to top, color-mix(in srgb, ${colorBase} 80%, transparent), ${colorBase})`,
                                 }}
                               />
                               <span className="text-[11px] text-faint font-data">{h.year}</span>
