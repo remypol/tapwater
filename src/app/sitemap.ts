@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPostcodeDistricts, getPostcodeData } from "@/lib/data";
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
+import { CITIES } from "@/lib/cities";
 
 const BASE_URL = "https://tapwater.uk";
 
@@ -60,12 +61,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const cityPaths = CITIES.map((city) => ({
+    url: `${BASE_URL}/city/${city.slug}/`,
+    lastModified: latestDataDate,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   return [
     {
       url: `${BASE_URL}/`,
       lastModified: latestDataDate,
       changeFrequency: "daily",
       priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/compare/`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
       url: `${BASE_URL}/supplier/`,
@@ -127,6 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
+    ...cityPaths,
     ...postcodePaths,
     ...supplierPaths,
     ...contaminantPaths,
