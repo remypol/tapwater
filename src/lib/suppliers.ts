@@ -274,6 +274,10 @@ export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
   Medway: { name: "Southern Water", id: "southern-water" },
   Swale: { name: "Southern Water", id: "southern-water" },
   "Tonbridge and Malling": { name: "Southern Water", id: "southern-water" },
+  Gravesham: { name: "Southern Water", id: "southern-water" },
+  Dartford: { name: "Thames Water", id: "thames-water" },
+  Sevenoaks: { name: "South East Water", id: "south-east-water" },
+  "Tunbridge Wells": { name: "South East Water", id: "south-east-water" },
 
   // ─── South West Water ────────────────────────────────────────────────────────
   Exeter: { name: "South West Water", id: "south-west-water" },
