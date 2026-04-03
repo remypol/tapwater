@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   description:
     "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more contaminants near you. Based on official Environment Agency monitoring data.",
   metadataBase: new URL("https://tapwater.uk"),
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/icon.svg",
+  },
   other: {
     "impact-site-verification": "e18f3561-3822-4c00-942c-d4622f421149",
   },

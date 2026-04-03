@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
+import { Logo } from "@/components/logo";
 
 const navLinks = [
   { label: "Rankings", href: "/compare" },
@@ -13,13 +14,8 @@ export function Header() {
   return (
     <header className="w-full bg-surface shadow-[0_1px_3px_rgba(0,0,0,0.04)] relative z-50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-baseline gap-0 tracking-tight"
-          style={{ fontFamily: "var(--font-instrument-serif)" }}
-        >
-          <span className="text-xl text-ink">tapwater</span>
-          <span className="text-xl text-accent">.uk</span>
+        <Link href="/" className="flex items-center">
+          <Logo size="sm" />
         </Link>
 
         {/* Desktop nav */}
@@ -29,7 +25,6 @@ export function Header() {
               key={link.href}
               href={link.href}
               className="text-sm text-muted hover:text-ink underline-offset-4 decoration-1 decoration-[var(--color-rule)] hover:underline transition-colors duration-150"
-              style={{ fontFamily: "var(--font-dm-sans)" }}
             >
               {link.label}
             </Link>
