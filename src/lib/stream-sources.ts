@@ -70,18 +70,19 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     services: [
       { year: 2024, serviceName: "Anglian_Water_Domestic_Water_Quality_2024" },
     ],
-    geoField: "LSOA",
+    geoField: "LSOA21CD",
     fieldCase: "camel",
-    dateFormat: "string",
+    dateFormat: "epoch",
   },
   "south-west-water": {
     orgId: STREAM_ORG,
     services: [
       { year: 2024, serviceName: "South_West_Water_(SWB)_Drinking_Water_Quality_2024" },
+      { year: 2023, serviceName: "South_West_Water_(SWB)_Drinking_Water_Quality_2023" },
     ],
-    geoField: "LSOA",
-    fieldCase: "camel",
-    dateFormat: "string",
+    geoField: "LSOA_Name",
+    fieldCase: "upper",
+    dateFormat: "epoch",
   },
   "portsmouth-water": {
     orgId: STREAM_ORG,
@@ -89,8 +90,8 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
       { year: 2024, serviceName: "Portsmouth_Water_Drinking_Water_Quality_Data_2022_2023_2024" },
     ],
     geoField: "LSOA",
-    fieldCase: "camel",
-    dateFormat: "string",
+    fieldCase: "upper",
+    dateFormat: "epoch",
   },
   "welsh-water": {
     orgId: STREAM_ORG,

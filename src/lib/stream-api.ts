@@ -84,8 +84,9 @@ export function parseStreamDate(
 
 // ── Record normalization ──
 
-function getField(attrs: Record<string, unknown>, fieldCase: "upper" | "camel", upperName: string, camelName: string): unknown {
-  return fieldCase === "upper" ? attrs[upperName] : (attrs[camelName] ?? attrs[upperName]);
+function getField(attrs: Record<string, unknown>, _fieldCase: "upper" | "camel", upperName: string, camelName: string): unknown {
+  // Try both casings — some companies have mixed casing (e.g., South West Water: DETERMINAND + Sample_Date)
+  return attrs[upperName] ?? attrs[camelName];
 }
 
 export function normalizeStreamRecord(
@@ -105,7 +106,7 @@ export function normalizeStreamRecord(
     unit: rawUnit.replace("\u03bc", "\u00b5"),  // normalize greek mu to micro sign
     belowDetectionLimit: rawOperator === "<",
     value: Number(getField(attrs, fieldCase, "RESULT", "Result") ?? 0),
-    lsoa: String(attrs.LSOA ?? attrs.lsoa21cd ?? attrs.lsoa ?? ""),
+    lsoa: String(attrs.LSOA ?? attrs.LSOA_Name ?? attrs.LSOA21CD ?? attrs.lsoa21cd ?? attrs.lsoa ?? ""),
   };
 }
 
@@ -118,7 +119,9 @@ export async function queryStreamService(
 ): Promise<StreamRecord[]> {
   if (lsoaCodes.length === 0) return [];
 
-  const baseUrl = `${ARCGIS_BASE}/${source.orgId}/ArcGIS/rest/services/${encodeURIComponent(serviceName)}/FeatureServer/0/query`;
+  // Don't over-encode: ArcGIS REST paths need spaces encoded but parentheses left as-is
+  const encodedName = serviceName.replace(/ /g, "%20");
+  const baseUrl = `${ARCGIS_BASE}/${source.orgId}/ArcGIS/rest/services/${encodedName}/FeatureServer/0/query`;
   const lsoaList = lsoaCodes.map((c) => `'${c.replace(/'/g, "")}'`).join(",");
   const where = `${source.geoField} IN (${lsoaList})`;
 
