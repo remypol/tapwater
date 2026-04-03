@@ -377,19 +377,19 @@ export default function BestWaterFiltersGuide() {
           Best countertop filter
         </h2>
         <ProductSection
-          filter={getFilter("doulton-duo")}
-          heading="Doulton DUO Countertop"
-          reason="Doulton is a British company that's been making ceramic water filters since 1826. The DUO uses two-stage ceramic and carbon filtration to remove chlorine, lead, PFAS, and even bacteria (E. coli and coliforms). No installation needed — it connects directly to your kitchen tap. NSF 42 and 53 certified."
+          filter={getFilter("waterdrop-fc06")}
+          heading="Waterdrop FC-06 Countertop"
+          reason="The Waterdrop FC-06 is a stainless steel countertop filter that connects directly to your tap — no installation or plumbing needed. It removes chlorine, lead, fluoride, and other common contaminants. Compact design, high flow rate, and NSF 42 certified. A practical option if you rent or can't modify your plumbing."
           pros={[
-            "Removes bacteria as well as chemicals — unusual for a countertop",
-            "No installation required, connects to tap",
-            "British-made, long-established manufacturer",
-            "NSF/ANSI 42 and 53 dual certified",
+            "No installation — connects to any standard tap",
+            "Stainless steel construction, durable",
+            "High flow rate, no waiting",
+            "Very affordable at ~£36",
           ]}
           cons={[
-            "Takes up countertop space",
-            "Slower flow rate than mains pressure",
-            "Ceramic filters need periodic cleaning",
+            "Doesn't remove PFAS or bacteria",
+            "Takes up some counter space near the tap",
+            "Filter replacements needed every 3 months",
           ]}
         />
 
@@ -398,13 +398,13 @@ export default function BestWaterFiltersGuide() {
           Best whole-house system
         </h2>
         <ProductSection
-          filter={getFilter("aquasana-rhino")}
-          heading="Aquasana Rhino Whole House"
-          reason="If you want filtered water from every tap, shower, and appliance, a whole-house system is the answer. The Aquasana Rhino filters chlorine, lead, mercury, PFAS, and trihalomethanes at the point of entry. It's NSF 42 and 53 certified and designed to last up to 10 years before the main tank needs replacing."
+          filter={getFilter("waterdrop-gravity")}
+          heading="Waterdrop King Tank Gravity Filter"
+          reason="The Waterdrop King Tank is a large-capacity gravity-fed filter for households wanting clean water without plumbing work. It removes chlorine, lead, fluoride, mercury, and PFAS through multi-stage filtration. NSF 42 and 53 certified. Ideal for families or as an emergency preparedness solution."
           pros={[
-            "Filtered water from every outlet in your home",
-            "Reduces chlorine in shower water (better for skin and hair)",
-            "Long lifespan — up to 1,000,000 gallons capacity",
+            "Large capacity — enough for a whole family",
+            "No plumbing or installation required",
+            "Removes PFAS, fluoride, and lead",
             "NSF/ANSI 42 and 53 certified",
           ]}
           cons={[
