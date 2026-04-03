@@ -398,14 +398,14 @@ export default function BestWaterFiltersGuide() {
           Best whole-house system
         </h2>
         <ProductSection
-          filter={getFilter("waterdrop-gravity")}
-          heading="Waterdrop King Tank Gravity Filter"
-          reason="The Waterdrop King Tank is a large-capacity gravity-fed filter for households wanting clean water without plumbing work. It removes chlorine, lead, fluoride, mercury, and PFAS through multi-stage filtration. NSF 42 and 53 certified. Ideal for families or as an emergency preparedness solution."
+          filter={getFilter("waterdrop-10ua")}
+          heading="Waterdrop 10UA Under Sink Filter"
+          reason="The Waterdrop 10UA is a high-capacity under-sink filter with 11,000 gallon lifespan — roughly 12 months for a typical household. It removes chlorine, lead, and PFAS. NSF 42 certified. Simple installation with a dedicated faucet."
           pros={[
-            "Large capacity — enough for a whole family",
-            "No plumbing or installation required",
-            "Removes PFAS, fluoride, and lead",
-            "NSF/ANSI 42 and 53 certified",
+            "Massive 11,000 gallon capacity — lasts up to 12 months",
+            "Removes PFAS, lead, and chlorine",
+            "Dedicated filtered water tap",
+            "NSF/ANSI 42 certified",
           ]}
           cons={[
             "Professional installation recommended (\u00a3200-400 extra)",

@@ -134,7 +134,7 @@ function HeroRecommendation({
           </a>
           <div className="text-right shrink-0">
             <p className="font-data text-xl font-bold text-ink">
-              £{filter.priceGbp}
+              {filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}
             </p>
             <div className="flex items-center gap-1 justify-end">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -164,7 +164,7 @@ function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
         )}
       </div>
       <div className="text-right shrink-0">
-        <p className="font-data font-bold text-ink">£{filter.priceGbp}</p>
+        <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}</p>
         <div className="flex items-center gap-0.5 justify-end">
           <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
           <span className="text-[11px] text-muted">{filter.rating}</span>
@@ -281,7 +281,7 @@ export function FilterCards({ filters, postcode }: FilterCardsProps) {
               )}
             </div>
             <div className="text-right shrink-0">
-              <p className="font-data font-bold text-ink">£{filter.priceGbp}</p>
+              <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}</p>
               <div className="flex items-center gap-0.5 justify-end">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 <span className="text-[11px] text-muted">{filter.rating}</span>

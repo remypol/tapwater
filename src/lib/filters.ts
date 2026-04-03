@@ -101,39 +101,37 @@ export const FILTERS: FilterProduct[] = [
     rating: 4.5,
     badge: "best-match",
   },
-  // COUNTERTOP — no installation
+  // TAP-MOUNTED — clips onto your kitchen tap
   {
     id: "waterdrop-fc06",
     brand: "Waterdrop",
-    model: "FC-06 Countertop Stainless Steel",
+    model: "WD-FC-06 Tap Filter",
     category: "countertop",
-    removes: ["Chlorine", "Lead", "Fluoride", "Mercury", "Copper"],
-    certifications: ["NSF/ANSI 42", "NSF/ANSI 372"],
-    priceGbp: 36,
+    removes: ["Chlorine", "Lead", "Fluoride"],
+    certifications: ["NSF/ANSI 42"],
+    priceGbp: 0,
     affiliateUrl: "https://www.amazon.co.uk/dp/B08JPCYHYQ?tag=tapwater21-21",
     imageUrl: "/filters/waterdrop-fc06.jpg",
     rating: 4.3,
     badge: "budget",
   },
-  // WHOLE HOUSE / GRAVITY
+  // UNDER-SINK — high capacity point-of-use
   {
-    id: "waterdrop-gravity",
+    id: "waterdrop-10ua",
     brand: "Waterdrop",
-    model: "King Tank Gravity Filter",
-    category: "whole_house",
+    model: "10UA Under Sink (11,000 gal)",
+    category: "under_sink",
     removes: [
       "Chlorine",
       "Lead",
-      "Fluoride",
-      "Mercury",
       "PFAS (total)",
     ],
-    certifications: ["NSF/ANSI 42", "NSF/ANSI 53"],
-    priceGbp: 90,
+    certifications: ["NSF/ANSI 42"],
+    priceGbp: 0,
     affiliateUrl: "https://www.amazon.co.uk/dp/B083NPW1DN?tag=tapwater21-21",
-    imageUrl: "/filters/waterdrop-gravity.jpg",
+    imageUrl: "/filters/waterdrop-10ua.jpg",
     rating: 4.4,
-    badge: "whole-house",
+    badge: "budget",
   },
 ];
 
