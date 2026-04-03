@@ -126,7 +126,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
     <div className="relative flex justify-center">
       <svg
         ref={svgRef}
-        viewBox="60 200 340 460"
+        viewBox="60 10 340 650"
         className="w-full h-auto mx-auto"
         style={{ maxWidth: 280 }}
         role="img"
