@@ -172,20 +172,16 @@ export default async function HomePage() {
       </div>
 
       {/* Interactive Map */}
-      <section className="mt-8">
-        <div className="lg:flex lg:items-start lg:gap-8">
-          <div className="lg:flex-1 lg:pt-8">
-            <h2 className="font-display text-2xl text-ink italic">
-              Water quality across the UK
-            </h2>
-            <p className="text-sm text-muted mt-1 mb-4 lg:mb-0 lg:mt-2 lg:max-w-sm">
-              Tap a region to see detailed water quality data for that area. Colours show the lowest score found in each region.
-            </p>
-          </div>
-          <div className="lg:w-[320px] lg:shrink-0">
-            <HomepageMap postcodes={mapPostcodes} />
-          </div>
+      <section className="mt-10">
+        <div className="text-center mb-4">
+          <h2 className="font-display text-2xl text-ink italic">
+            Water quality across the UK
+          </h2>
+          <p className="text-sm text-muted mt-1">
+            Tap a region to explore water quality data for that area.
+          </p>
         </div>
+        <HomepageMap postcodes={mapPostcodes} />
       </section>
 
       {/* Areas to watch + Cleanest water — side by side on desktop */}
