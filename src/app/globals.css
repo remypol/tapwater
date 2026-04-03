@@ -45,6 +45,11 @@
   --color-accent: #0891b2;
   --color-accent-hover: #0e7490;
   --color-accent-light: #ecfeff;
+
+  /* Water surface layers — three depths */
+  --color-wave-deep: rgba(8, 145, 178, 0.10);
+  --color-wave-mid: rgba(14, 165, 197, 0.14);
+  --color-wave-surface: rgba(164, 218, 232, 0.35);
 }
 
 body {
@@ -238,13 +243,84 @@ body {
   animation: water-rise 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* ── Water Surface (hero bottom) ── */
+
+@keyframes water-drift-1 {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes water-drift-2 {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes water-drift-3 {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.water-surface {
+  position: relative;
+  width: 100%;
+  height: 64px;
+  overflow: hidden;
+  margin-top: -8px;
+}
+
+.water-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  white-space: nowrap;
+  font-size: 0;
+  line-height: 0;
+}
+
+.water-wave-1 {
+  animation: water-drift-1 12s linear infinite;
+  opacity: 0.7;
+}
+
+.water-wave-2 {
+  animation: water-drift-2 8s linear infinite;
+  animation-delay: -2s;
+  opacity: 0.8;
+}
+
+.water-wave-3 {
+  animation: water-drift-3 6s linear infinite;
+  animation-delay: -4s;
+  opacity: 0.9;
+}
+
+/* ── Hero gradient shift ── */
+
+@keyframes hero-breathe {
+  0%, 100% {
+    background-position: 40% 0%, 85% 15%, 15% 30%, 70% 80%;
+  }
+  50% {
+    background-position: 55% 5%, 70% 20%, 25% 25%, 60% 75%;
+  }
+}
+
+.bg-hero {
+  animation: hero-breathe 16s ease-in-out infinite;
+  background-size: 100% 100%;
+}
+
 /* ── Reduced Motion ── */
 
 @media (prefers-reduced-motion: reduce) {
   .animate-ring,
   .animate-fade-up,
   .animate-fade-in,
-  .bar-animated {
+  .bar-animated,
+  .water-wave,
+  .bg-hero {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

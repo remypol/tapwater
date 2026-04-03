@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Building2,
 } from "lucide-react";
+import { WaterSurface } from "@/components/water-surface";
 
 export const metadata: Metadata = {
   title: "TapWater.uk — Check Your Tap Water Quality by Postcode",
@@ -141,6 +142,11 @@ export default async function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* Water surface — flowing transition from hero */}
+      <div className="-mx-5 sm:-mx-6 lg:-mx-8">
+        <WaterSurface />
+      </div>
 
       {/* Trust metrics */}
       <div className="mt-8 max-w-3xl mx-auto">
