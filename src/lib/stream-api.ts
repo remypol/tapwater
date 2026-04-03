@@ -37,12 +37,41 @@ export function parseStreamDate(
   }
 
   if (format === "string" && typeof raw === "string") {
-    // Format: "1/2/2024 12:00:00 AM" → parse M/D/YYYY
     const datePart = raw.split(" ")[0];
-    const parts = datePart.split("/");
-    if (parts.length !== 3) return "";
-    const [month, day, year] = parts;
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+    // Format A: slash-separated dates
+    // Severn Trent: "1/2/2024 12:00:00 AM" → M/D/YYYY
+    // Welsh Water: "05/04/2024 11:12" → DD/MM/YYYY
+    // Detect by checking if first number > 12 (must be day, not month)
+    if (datePart.includes("/")) {
+      const parts = datePart.split("/");
+      if (parts.length !== 3) return "";
+      const first = parseInt(parts[0], 10);
+      if (first > 12) {
+        // DD/MM/YYYY — European format
+        const [day, month, year] = parts;
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      }
+      // M/D/YYYY — American format (or ambiguous, default to M/D)
+      const [month, day, year] = parts;
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+
+    // Format B: "2024-20-12" → YYYY-DD-MM (Welsh Water)
+    // Detect by checking if middle value > 12 (must be day, not month)
+    if (datePart.includes("-")) {
+      const parts = datePart.split("-");
+      if (parts.length !== 3) return "";
+      const [year, second, third] = parts;
+      if (parseInt(second, 10) > 12) {
+        // YYYY-DD-MM → swap to YYYY-MM-DD
+        return `${year}-${third.padStart(2, "0")}-${second.padStart(2, "0")}`;
+      }
+      // Already YYYY-MM-DD
+      return `${year}-${second.padStart(2, "0")}-${third.padStart(2, "0")}`;
+    }
+
+    return "";
   }
 
   // Fallback: try epoch even if format says string
