@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, Check, Star, ArrowRight, ChevronDown } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
@@ -31,22 +32,39 @@ function HeroRecommendation({
       <div className="h-1 w-full bg-accent" />
 
       <div className="p-5 sm:p-6">
-        {/* Label */}
-        <p className="text-xs font-medium text-accent uppercase tracking-wider">
-          Our pick for {postcodeDistrict}
-        </p>
+        <div className="sm:flex sm:gap-5 sm:items-start">
+          {/* Product image */}
+          {filter.imageUrl && (
+            <div className="hidden sm:block shrink-0 w-28 h-28 rounded-xl bg-wash overflow-hidden">
+              <Image
+                src={filter.imageUrl}
+                alt={`${filter.brand} ${filter.model}`}
+                width={112}
+                height={112}
+                className="object-contain w-full h-full p-2"
+              />
+            </div>
+          )}
 
-        {/* Product name */}
-        <div className="mt-3">
-          <p className="font-display text-xl sm:text-2xl text-ink italic">
-            {filter.brand} {filter.model}
-          </p>
-          <p className="text-sm text-muted mt-0.5">
-            {CATEGORY_LABELS[filter.category]}
-            {filter.certifications.length > 0 && (
-              <> · {filter.certifications.join(", ")}</>
-            )}
-          </p>
+          <div className="flex-1">
+            {/* Label */}
+            <p className="text-xs font-medium text-accent uppercase tracking-wider">
+              Our pick for {postcodeDistrict}
+            </p>
+
+            {/* Product name */}
+            <div className="mt-2">
+              <p className="font-display text-xl sm:text-2xl text-ink italic">
+                {filter.brand} {filter.model}
+              </p>
+              <p className="text-sm text-muted mt-0.5">
+                {CATEGORY_LABELS[filter.category]}
+                {filter.certifications.length > 0 && (
+                  <> · {filter.certifications.join(", ")}</>
+                )}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Why this one — the narrative */}
