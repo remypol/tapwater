@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
-import { ChevronRight, MapPin, X } from "lucide-react";
+import { MapPin, X } from "lucide-react";
 import { UKMap } from "@/components/uk-map";
 import { UK_REGIONS, POSTCODE_TO_REGION } from "@/data/uk-regions";
 import { getScoreColor } from "@/lib/types";

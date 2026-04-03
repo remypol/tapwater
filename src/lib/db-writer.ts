@@ -8,7 +8,6 @@ import { getSupabase } from "./supabase";
 import { getSupplier } from "./suppliers";
 import { computeScore } from "./scoring";
 import type { PostcodeSeedData } from "./ea-fetcher";
-import { TARGET_POSTCODES } from "./postcodes";
 import type { StreamRecord } from "./stream-api";
 import type { ScoreResult } from "./scoring";
 
@@ -88,6 +87,7 @@ export async function writeStreamReadings(
     const { error } = await db.from("drinking_water_readings").insert(chunk);
     if (error) {
       console.error(`[db-writer] drinking_water_readings insert failed for ${district}:`, error);
+      throw new Error(`drinking_water_readings insert failed for ${district}: ${error.message}`);
     }
   }
 }
@@ -127,22 +127,30 @@ export async function upsertPageData(
   // Primary score: drinking water if available, else EA
   const primaryScore = drinkingScore ?? eaScore;
 
-  // Nearby postcodes
-  const nearby: string[] = [];
-  const { data: allDistricts } = await db
+  // Nearby postcodes — same city first, then geographically close
+  const { data: sameCity } = await db
     .from("postcode_districts")
-    .select("id, city, latitude, longitude")
-    .neq("id", seedData.district);
+    .select("id")
+    .eq("city", seedData.city)
+    .neq("id", seedData.district)
+    .limit(10);
 
-  if (allDistricts) {
-    for (const other of allDistricts) {
-      if (
-        other.city === seedData.city ||
-        Math.abs(other.latitude - seedData.latitude) < 0.05
-      ) {
-        nearby.push(other.id);
-      }
-      if (nearby.length >= 10) break;
+  const nearby: string[] = (sameCity ?? []).map((d) => d.id);
+
+  if (nearby.length < 10) {
+    const buffer = 0.05; // ~5.5 km
+    const { data: geoNearby } = await db
+      .from("postcode_districts")
+      .select("id")
+      .neq("id", seedData.district)
+      .gte("latitude", seedData.latitude - buffer)
+      .lte("latitude", seedData.latitude + buffer)
+      .gte("longitude", seedData.longitude - buffer)
+      .lte("longitude", seedData.longitude + buffer)
+      .limit(10 - nearby.length);
+
+    for (const d of geoNearby ?? []) {
+      if (!nearby.includes(d.id)) nearby.push(d.id);
     }
   }
 

@@ -11,7 +11,6 @@ import {
   Check,
   ArrowUpRight,
   Star,
-  Droplets,
   Search,
 } from "lucide-react";
 import { FILTERS, CATEGORY_LABELS } from "@/lib/filters";

@@ -180,7 +180,8 @@ export async function fetchRecentObservations(
         };
       })
       .filter((o) => o.isNumeric && o.determinand && o.isWater)
-      .map(({ isNumeric: _, isWater: _2, ...rest }) => rest);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .map(({ isNumeric, isWater, ...rest }) => rest);
   } catch {
     return [];
   }

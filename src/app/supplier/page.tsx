@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Building2, ChevronRight, MapPin } from "lucide-react";
+import { Building2, ChevronRight } from "lucide-react";
 
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData } from "@/lib/data";

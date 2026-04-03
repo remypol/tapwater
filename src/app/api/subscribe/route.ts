@@ -40,6 +40,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Valid email is required" }, { status: 400 });
   }
 
+  // Validate postcode district format if provided (e.g. "SW1", "EC2A", "B1")
+  if (postcode && !/^[A-Z]{1,2}[0-9][0-9A-Z]?$/.test(postcode)) {
+    return NextResponse.json({ error: "Invalid postcode district" }, { status: 400 });
+  }
+
   const supabase = getSupabase();
   const token = crypto.randomUUID();
 
@@ -51,6 +56,7 @@ export async function POST(request: NextRequest) {
         email,
         postcode_district: postcode,
         verification_token: token,
+        token_created_at: new Date().toISOString(),
         verified: false,
         unsubscribed: false,
       },

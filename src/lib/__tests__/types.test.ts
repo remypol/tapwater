@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getScoreColor, getScoreGrade, getPercentOfLimit } from "../types";
+import { getScoreColor, getPercentOfLimit } from "../types";
 import type { ContaminantReading } from "../types";
 
 describe("getScoreColor", () => {

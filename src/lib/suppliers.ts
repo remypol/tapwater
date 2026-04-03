@@ -395,8 +395,6 @@ export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
   Brentwood: { name: "Affinity Water", id: "affinity-water" },
 
   // ─── South East Water ────────────────────────────────────────────────────────
-  "Tunbridge Wells": { name: "South East Water", id: "south-east-water" },
-  Sevenoaks: { name: "South East Water", id: "south-east-water" },
   Crawley: { name: "South East Water", id: "south-east-water" },
 };
 

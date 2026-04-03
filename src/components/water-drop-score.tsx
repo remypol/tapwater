@@ -133,12 +133,9 @@ export function WaterDropScore({ score, size = 200, tested, flagged, className }
 
   const fontSize = size * 0.22
   const subFontSize = size * 0.09
-  const primaryLineSize = size * 0.09
 
   const gradientId = `drop-gradient-${level}`
   const clipId = `drop-clip`
-  const waveAnimId = `wave-anim`
-  const wave2AnimId = `wave2-anim`
 
   const primaryLine = getPrimaryLine(score)
   const secondaryLine = getSecondaryLine(tested, flagged, score)

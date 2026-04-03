@@ -32,13 +32,6 @@ function scoreTextClass(score: number): string {
   return "text-[var(--color-danger)]";
 }
 
-function scoreBadgeClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "badge badge-safe";
-  if (c === "warning") return "badge badge-warning";
-  return "badge badge-danger";
-}
-
 async function getPostcodesForCity(
   matches: string[],
 ): Promise<PostcodeData[]> {
@@ -105,7 +98,6 @@ export default async function CityPage({ params }: Props) {
 
   const allPostcodes = await getPostcodesForCity(city.matches);
   const scored = allPostcodes.filter((p) => p.safetyScore >= 0);
-  const year = new Date().getFullYear();
 
   // Aggregate stats
   const avgScore =

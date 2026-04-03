@@ -38,14 +38,12 @@ async function buildTrustMetrics() {
   let validCount = 0;
   let pfasCount = 0;
   let totalSamples = 0;
-  let streamCount = 0;
   for (const d of districts) {
     const data = await getPostcodeData(d);
     if (data && data.safetyScore >= 0) {
       validCount++;
       if (data.pfasDetected) pfasCount++;
       totalSamples += data.sampleCount;
-      if (data.dataSource === "stream") streamCount++;
     }
   }
   const testLabel = totalSamples > 1000

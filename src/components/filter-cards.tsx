@@ -16,11 +16,10 @@ type RecommendedFilter = FilterProduct & {
 function HeroRecommendation({
   filter,
   postcodeDistrict,
-  flaggedNames,
 }: {
   filter: RecommendedFilter;
   postcodeDistrict: string;
-  flaggedNames: string[];
+  flaggedNames?: string[];
 }) {
   // Build the narrative
   const removesFromHere = filter.matchedContaminants;
@@ -285,7 +284,7 @@ interface FilterCardsProps {
   postcode: string;
 }
 
-export function FilterCards({ filters, postcode }: FilterCardsProps) {
+export function FilterCards({ filters }: FilterCardsProps) {
   return (
     <section>
       <div className="space-y-3">
