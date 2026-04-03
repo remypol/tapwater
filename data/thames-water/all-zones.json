@@ -1427,7 +1427,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE11"
+    "mapCode": "NLE11",
+    "zone_code": "0011",
+    "zone_name": "WHITECHAPEL",
+    "population": 28692
   },
   {
     "parameters": [
@@ -2857,7 +2860,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE14"
+    "mapCode": "NLE14",
+    "zone_code": "0014",
+    "zone_name": "HIGHBURY",
+    "population": 55327
   },
   {
     "parameters": [
@@ -4287,7 +4293,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE15"
+    "mapCode": "NLE15",
+    "zone_code": "0015",
+    "zone_name": "PENTONVILLE",
+    "population": 49097
   },
   {
     "parameters": [
@@ -5717,7 +5726,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE16"
+    "mapCode": "NLE16",
+    "zone_code": "0016",
+    "zone_name": "BLOOMSBURY",
+    "population": 51148
   },
   {
     "parameters": [
@@ -7147,7 +7159,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE18"
+    "mapCode": "NLE18",
+    "zone_code": "0018",
+    "zone_name": "LEYTON",
+    "population": 38783
   },
   {
     "parameters": [
@@ -8577,7 +8592,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE19"
+    "mapCode": "NLE19",
+    "zone_code": "0019",
+    "zone_name": "LEYTONSTONE",
+    "population": 47836
   },
   {
     "parameters": [
@@ -10007,7 +10025,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE20"
+    "mapCode": "NLE20",
+    "zone_code": "0020",
+    "zone_name": "WANSTEAD PARK",
+    "population": 38952
   },
   {
     "parameters": [
@@ -11437,7 +11458,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE21"
+    "mapCode": "NLE21",
+    "zone_code": "0021",
+    "zone_name": "WEST HAM",
+    "population": 42823
   },
   {
     "parameters": [
@@ -12867,7 +12891,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE26"
+    "mapCode": "NLE26",
+    "zone_code": "0342",
+    "zone_name": "HACKNEY WEST",
+    "population": 50806
   },
   {
     "parameters": [
@@ -14297,7 +14324,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE28"
+    "mapCode": "NLE28",
+    "zone_code": "0344",
+    "zone_name": "HACKNEY SOUTH",
+    "population": 67142
   },
   {
     "parameters": [
@@ -15727,7 +15757,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE29"
+    "mapCode": "NLE29",
+    "zone_code": "0345",
+    "zone_name": "STEPNEY",
+    "population": 67117
   },
   {
     "parameters": [
@@ -17157,7 +17190,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE32"
+    "mapCode": "NLE32",
+    "zone_code": "0371",
+    "zone_name": "MANOR PARK",
+    "population": 51104
   },
   {
     "parameters": [
@@ -18587,7 +18623,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE33"
+    "mapCode": "NLE33",
+    "zone_code": "0372",
+    "zone_name": "UPTON",
+    "population": 64189
   },
   {
     "parameters": [
@@ -20017,7 +20056,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE34"
+    "mapCode": "NLE34",
+    "zone_code": "0373",
+    "zone_name": "HOLLOWAY",
+    "population": 74577
   },
   {
     "parameters": [
@@ -21447,7 +21489,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE35"
+    "mapCode": "NLE35",
+    "zone_code": "0374",
+    "zone_name": "KENTISH TOWN",
+    "population": 35200
   },
   {
     "parameters": [
@@ -22877,7 +22922,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE36"
+    "mapCode": "NLE36",
+    "zone_code": "0375",
+    "zone_name": "STRATFORD EAST",
+    "population": 60492
   },
   {
     "parameters": [
@@ -24307,7 +24355,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE37"
+    "mapCode": "NLE37",
+    "zone_code": "0376",
+    "zone_name": "STRATFORD WEST",
+    "population": 59574
   },
   {
     "parameters": [
@@ -25737,7 +25788,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE38"
+    "mapCode": "NLE38",
+    "zone_code": "0378",
+    "zone_name": "ROYAL DOCKS EAST",
+    "population": 45198
   },
   {
     "parameters": [
@@ -27167,7 +27221,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE39"
+    "mapCode": "NLE39",
+    "zone_code": "0379",
+    "zone_name": "ROYAL DOCKS WEST",
+    "population": 66444
   },
   {
     "parameters": [
@@ -28597,7 +28654,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE40"
+    "mapCode": "NLE40",
+    "zone_code": "0382",
+    "zone_name": "STAMFORD HILL",
+    "population": 69857
   },
   {
     "parameters": [
@@ -30027,7 +30087,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE41"
+    "mapCode": "NLE41",
+    "zone_code": "0383",
+    "zone_name": "SHACKLEWELL & CANONBURY",
+    "population": 32723
   },
   {
     "parameters": [
@@ -31457,7 +31520,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE42"
+    "mapCode": "NLE42",
+    "zone_code": "0386",
+    "zone_name": "GLOBE TOWN",
+    "population": 46010
   },
   {
     "parameters": [
@@ -32887,7 +32953,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE43"
+    "mapCode": "NLE43",
+    "zone_code": "0387",
+    "zone_name": "BOW",
+    "population": 41105
   },
   {
     "parameters": [
@@ -34317,7 +34386,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE44"
+    "mapCode": "NLE44",
+    "zone_code": "0390",
+    "zone_name": "PLASHET PARK",
+    "population": 46190
   },
   {
     "parameters": [
@@ -35747,7 +35819,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE45"
+    "mapCode": "NLE45",
+    "zone_code": "0391",
+    "zone_name": "WALL END",
+    "population": 47069
   },
   {
     "parameters": [
@@ -37177,7 +37252,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE46"
+    "mapCode": "NLE46",
+    "zone_code": "0411",
+    "zone_name": "BROMLEY BY BOW",
+    "population": 46689
   },
   {
     "parameters": [
@@ -38607,7 +38685,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE47"
+    "mapCode": "NLE47",
+    "zone_code": "0412",
+    "zone_name": "POPLAR",
+    "population": 43047
   },
   {
     "parameters": [
@@ -40037,7 +40118,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE48"
+    "mapCode": "NLE48",
+    "zone_code": "0409",
+    "zone_name": "HOMERTON",
+    "population": 36140
   },
   {
     "parameters": [
@@ -41467,7 +41551,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE49"
+    "mapCode": "NLE49",
+    "zone_code": "0410",
+    "zone_name": "LEA BRIDGE",
+    "population": 32778
   },
   {
     "parameters": [
@@ -42897,7 +42984,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLE50"
+    "mapCode": "NLE50",
+    "zone_code": "0413",
+    "zone_name": "WALTHAMSTOW CENTRAL",
+    "population": 51920
   },
   {
     "parameters": [
@@ -44289,7 +44379,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW12"
+    "mapCode": "NLW12",
+    "zone_code": "0037",
+    "zone_name": "HANGER LANE & STONEBRIDGE",
+    "population": 41972
   },
   {
     "parameters": [
@@ -45681,7 +45774,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW13"
+    "mapCode": "NLW13",
+    "zone_code": "0038",
+    "zone_name": "BRENT CROSS",
+    "population": 60664
   },
   {
     "parameters": [
@@ -47073,7 +47169,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW15"
+    "mapCode": "NLW15",
+    "zone_code": "0040",
+    "zone_name": "GUNNERSBURY",
+    "population": 60488
   },
   {
     "parameters": [
@@ -48465,7 +48564,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW17"
+    "mapCode": "NLW17",
+    "zone_code": "0042",
+    "zone_name": "EALING NORTH",
+    "population": 59580
   },
   {
     "parameters": [
@@ -49857,7 +49959,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW20"
+    "mapCode": "NLW20",
+    "zone_code": "0045",
+    "zone_name": "WHITTON",
+    "population": 46732
   },
   {
     "parameters": [
@@ -51249,7 +51354,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW22"
+    "mapCode": "NLW22",
+    "zone_code": "0047",
+    "zone_name": "SYON PARK",
+    "population": 49594
   },
   {
     "parameters": [
@@ -52641,7 +52749,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW23"
+    "mapCode": "NLW23",
+    "zone_code": "0048",
+    "zone_name": "SHEPHERDS BUSH",
+    "population": 47824
   },
   {
     "parameters": [
@@ -54033,7 +54144,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW25"
+    "mapCode": "NLW25",
+    "zone_code": "0050",
+    "zone_name": "HOUNSLOW HEATH",
+    "population": 74761
   },
   {
     "parameters": [
@@ -55425,7 +55539,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW30"
+    "mapCode": "NLW30",
+    "zone_code": "0055",
+    "zone_name": "FULHAM",
+    "population": 58580
   },
   {
     "parameters": [
@@ -56817,7 +56934,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW31"
+    "mapCode": "NLW31",
+    "zone_code": "0056",
+    "zone_name": "HURLINGHAM",
+    "population": 38509
   },
   {
     "parameters": [
@@ -58209,7 +58329,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW33"
+    "mapCode": "NLW33",
+    "zone_code": "0058",
+    "zone_name": "PARLIAMENT",
+    "population": 55282
   },
   {
     "parameters": [
@@ -59601,7 +59724,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW34"
+    "mapCode": "NLW34",
+    "zone_code": "0234",
+    "zone_name": "KILBURN",
+    "population": 76071
   },
   {
     "parameters": [
@@ -60993,7 +61119,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW37"
+    "mapCode": "NLW37",
+    "zone_code": "0247",
+    "zone_name": "KENSINGTON SOUTH",
+    "population": 36322
   },
   {
     "parameters": [
@@ -62385,7 +62514,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW41"
+    "mapCode": "NLW41",
+    "zone_code": "0347",
+    "zone_name": "CHISWICK & HAMMERSMITH",
+    "population": 75591
   },
   {
     "parameters": [
@@ -63777,7 +63909,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW42"
+    "mapCode": "NLW42",
+    "zone_code": "0348",
+    "zone_name": "KNIGHTSBRIDGE",
+    "population": 60539
   },
   {
     "parameters": [
@@ -65169,7 +65304,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW43"
+    "mapCode": "NLW43",
+    "zone_code": "0349",
+    "zone_name": "BRENT SOUTH",
+    "population": 74505
   },
   {
     "parameters": [
@@ -66561,7 +66699,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW44"
+    "mapCode": "NLW44",
+    "zone_code": "0350",
+    "zone_name": "ST JOHNS WOOD & MAYFAIR",
+    "population": 77171
   },
   {
     "parameters": [
@@ -67953,7 +68094,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW45"
+    "mapCode": "NLW45",
+    "zone_code": "0351",
+    "zone_name": "KENSINGTON",
+    "population": 74097
   },
   {
     "parameters": [
@@ -69345,7 +69489,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW46"
+    "mapCode": "NLW46",
+    "zone_code": "0352",
+    "zone_name": "BRONDESBURY",
+    "population": 27232
   },
   {
     "parameters": [
@@ -70737,7 +70884,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW47"
+    "mapCode": "NLW47",
+    "zone_code": "0353",
+    "zone_name": "MUSWELL HILL & HAMPSTEAD HEATH",
+    "population": 69075
   },
   {
     "parameters": [
@@ -72129,7 +72279,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW48"
+    "mapCode": "NLW48",
+    "zone_code": "0354",
+    "zone_name": "HENDON & NEASDEN",
+    "population": 58850
   },
   {
     "parameters": [
@@ -73521,7 +73674,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW49"
+    "mapCode": "NLW49",
+    "zone_code": "0355",
+    "zone_name": "SUNBURY EAST",
+    "population": 34588
   },
   {
     "parameters": [
@@ -74913,7 +75069,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "NLW50"
+    "mapCode": "NLW50",
+    "zone_code": "0356",
+    "zone_name": "SUNBURY WEST",
+    "population": 15665
   },
   {
     "parameters": [
@@ -76343,7 +76502,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX12"
+    "mapCode": "OX12",
+    "zone_code": "0204",
+    "zone_name": "BOARS HILL",
+    "population": 19585
   },
   {
     "parameters": [
@@ -77773,7 +77935,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX13"
+    "mapCode": "OX13",
+    "zone_code": "0205",
+    "zone_name": "OXFORD CENTRAL",
+    "population": 67871
   },
   {
     "parameters": [
@@ -79203,7 +79368,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX15"
+    "mapCode": "OX15",
+    "zone_code": "0207",
+    "zone_name": "THAME",
+    "population": 28647
   },
   {
     "parameters": [
@@ -80595,7 +80763,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX18"
+    "mapCode": "OX18",
+    "zone_code": "0242",
+    "zone_name": "WITNEY",
+    "population": 56699
   },
   {
     "parameters": [
@@ -81987,7 +82158,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX19"
+    "mapCode": "OX19",
+    "zone_code": "0243",
+    "zone_name": "CARTERTON",
+    "population": 23431
   },
   {
     "parameters": [
@@ -83417,7 +83591,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX24"
+    "mapCode": "OX24",
+    "zone_code": "0286",
+    "zone_name": "COWLEY LITTLEMORE & NUNEHAM",
+    "population": 72667
   },
   {
     "parameters": [
@@ -84847,7 +85024,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX25"
+    "mapCode": "OX25",
+    "zone_code": "0292",
+    "zone_name": "FINMERE GODINGTON & LONG MARSTON",
+    "population": 1856
   },
   {
     "parameters": [
@@ -86277,7 +86457,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "OX26"
+    "mapCode": "OX26",
+    "zone_code": "0294",
+    "zone_name": "OXFORD WEST & KIDLINGTON",
+    "population": 38561
   },
   {
     "parameters": [
@@ -87612,7 +87795,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE10"
+    "mapCode": "SLE10",
+    "zone_code": "0068",
+    "zone_name": "EYNSFORD",
+    "population": 12775
   },
   {
     "parameters": [
@@ -88947,7 +89133,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE14"
+    "mapCode": "SLE14",
+    "zone_code": "0072",
+    "zone_name": "PETTS WOOD",
+    "population": 63718
   },
   {
     "parameters": [
@@ -90282,7 +90471,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE15"
+    "mapCode": "SLE15",
+    "zone_code": "0073",
+    "zone_name": "ORPINGTON",
+    "population": 42720
   },
   {
     "parameters": [
@@ -91712,7 +91904,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE16"
+    "mapCode": "SLE16",
+    "zone_code": "0074",
+    "zone_name": "WEST WICKHAM",
+    "population": 33231
   },
   {
     "parameters": [
@@ -93047,7 +93242,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE19"
+    "mapCode": "SLE19",
+    "zone_code": "0077",
+    "zone_name": "NORTH DOWNS",
+    "population": 27942
   },
   {
     "parameters": [
@@ -94439,7 +94637,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE20"
+    "mapCode": "SLE20",
+    "zone_code": "0078",
+    "zone_name": "NEW CROSS",
+    "population": 59060
   },
   {
     "parameters": [
@@ -95869,7 +96070,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE21"
+    "mapCode": "SLE21",
+    "zone_code": "0079",
+    "zone_name": "THAMESMEAD",
+    "population": 58300
   },
   {
     "parameters": [
@@ -97318,7 +97522,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE22"
+    "mapCode": "SLE22",
+    "zone_code": "0080",
+    "zone_name": "SYDENHAM CENTRAL",
+    "population": 40332
   },
   {
     "parameters": [
@@ -98710,7 +98917,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE23"
+    "mapCode": "SLE23",
+    "zone_code": "0081",
+    "zone_name": "SYDENHAM EAST",
+    "population": 49513
   },
   {
     "parameters": [
@@ -100140,7 +100350,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE25"
+    "mapCode": "SLE25",
+    "zone_code": "0083",
+    "zone_name": "BLACKHEATH",
+    "population": 45122
   },
   {
     "parameters": [
@@ -101570,7 +101783,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE26"
+    "mapCode": "SLE26",
+    "zone_code": "0084",
+    "zone_name": "KIDBROOKE",
+    "population": 47485
   },
   {
     "parameters": [
@@ -103000,7 +103216,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE29"
+    "mapCode": "SLE29",
+    "zone_code": "0087",
+    "zone_name": "BEXLEYHEATH",
+    "population": 49895
   },
   {
     "parameters": [
@@ -104430,7 +104649,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE30"
+    "mapCode": "SLE30",
+    "zone_code": "0088",
+    "zone_name": "CHARLTON",
+    "population": 63698
   },
   {
     "parameters": [
@@ -105860,7 +106082,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE31"
+    "mapCode": "SLE31",
+    "zone_code": "0089",
+    "zone_name": "ABBEY WOOD",
+    "population": 79849
   },
   {
     "parameters": [
@@ -107309,7 +107534,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE32"
+    "mapCode": "SLE32",
+    "zone_code": "0090",
+    "zone_name": "CROYDON WOODSIDE",
+    "population": 43226
   },
   {
     "parameters": [
@@ -108720,7 +108948,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE33"
+    "mapCode": "SLE33",
+    "zone_code": "0091",
+    "zone_name": "SOUTH DARENTH",
+    "population": 39045
   },
   {
     "parameters": [
@@ -110055,7 +110286,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE34"
+    "mapCode": "SLE34",
+    "zone_code": "0092",
+    "zone_name": "KESTON & FORESTDALE",
+    "population": 41390
   },
   {
     "parameters": [
@@ -111485,7 +111719,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE35"
+    "mapCode": "SLE35",
+    "zone_code": "0244",
+    "zone_name": "ROTHERHITHE",
+    "population": 43777
   },
   {
     "parameters": [
@@ -112915,7 +113152,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE36"
+    "mapCode": "SLE36",
+    "zone_code": "0318",
+    "zone_name": "BELLINGHAM & MOTTINGHAM",
+    "population": 60364
   },
   {
     "parameters": [
@@ -114345,7 +114585,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE37"
+    "mapCode": "SLE37",
+    "zone_code": "0319",
+    "zone_name": "SIDCUP & ELMSTEAD WOOD",
+    "population": 47221
   },
   {
     "parameters": [
@@ -115775,7 +116018,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE38"
+    "mapCode": "SLE38",
+    "zone_code": "0320",
+    "zone_name": "SWANLEY",
+    "population": 28530
   },
   {
     "parameters": [
@@ -117205,7 +117451,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE39"
+    "mapCode": "SLE39",
+    "zone_code": "0321",
+    "zone_name": "CRAY",
+    "population": 21092
   },
   {
     "parameters": [
@@ -118635,7 +118884,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE40"
+    "mapCode": "SLE40",
+    "zone_code": "0322",
+    "zone_name": "BEXLEY & BLACKFEN",
+    "population": 54194
   },
   {
     "parameters": [
@@ -120065,7 +120317,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE41"
+    "mapCode": "SLE41",
+    "zone_code": "0323",
+    "zone_name": "DARTFORD SOUTH",
+    "population": 49183
   },
   {
     "parameters": [
@@ -121495,7 +121750,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE42"
+    "mapCode": "SLE42",
+    "zone_code": "0324",
+    "zone_name": "DARTFORD NORTH",
+    "population": 28822
   },
   {
     "parameters": [
@@ -122925,7 +123183,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE43"
+    "mapCode": "SLE43",
+    "zone_code": "0325",
+    "zone_name": "LEWISHAM SOUTH",
+    "population": 57338
   },
   {
     "parameters": [
@@ -124355,7 +124616,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE44"
+    "mapCode": "SLE44",
+    "zone_code": "0326",
+    "zone_name": "LEWISHAM NORTH",
+    "population": 43158
   },
   {
     "parameters": [
@@ -125785,7 +126049,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE45"
+    "mapCode": "SLE45",
+    "zone_code": "0327",
+    "zone_name": "PLUMSTEAD",
+    "population": 79392
   },
   {
     "parameters": [
@@ -127215,7 +127482,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLE46"
+    "mapCode": "SLE46",
+    "zone_code": "0328",
+    "zone_name": "SHOOTERS HILL",
+    "population": 7328
   },
   {
     "parameters": [
@@ -128664,7 +128934,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW23"
+    "mapCode": "SLW23",
+    "zone_code": "0115",
+    "zone_name": "CROYDON NORTH",
+    "population": 38060
   },
   {
     "parameters": [
@@ -130113,7 +130386,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW24"
+    "mapCode": "SLW24",
+    "zone_code": "0116",
+    "zone_name": "NORBURY",
+    "population": 39937
   },
   {
     "parameters": [
@@ -131543,7 +131819,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW25"
+    "mapCode": "SLW25",
+    "zone_code": "0117",
+    "zone_name": "BALHAM",
+    "population": 36441
   },
   {
     "parameters": [
@@ -132973,7 +133252,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW26"
+    "mapCode": "SLW26",
+    "zone_code": "0118",
+    "zone_name": "BRIXTON",
+    "population": 48780
   },
   {
     "parameters": [
@@ -134365,7 +134647,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW29"
+    "mapCode": "SLW29",
+    "zone_code": "0121",
+    "zone_name": "MERTON",
+    "population": 62916
   },
   {
     "parameters": [
@@ -135757,7 +136042,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW30"
+    "mapCode": "SLW30",
+    "zone_code": "0122",
+    "zone_name": "TOOTING",
+    "population": 56539
   },
   {
     "parameters": [
@@ -137149,7 +137437,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW31"
+    "mapCode": "SLW31",
+    "zone_code": "0123",
+    "zone_name": "MOLESEY",
+    "population": 37490
   },
   {
     "parameters": [
@@ -138541,7 +138832,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW32"
+    "mapCode": "SLW32",
+    "zone_code": "0329",
+    "zone_name": "LAMBETH NORTH",
+    "population": 82587
   },
   {
     "parameters": [
@@ -139971,7 +140265,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW33"
+    "mapCode": "SLW33",
+    "zone_code": "0330",
+    "zone_name": "BERRYLANDS & LONG DITTON",
+    "population": 55888
   },
   {
     "parameters": [
@@ -141344,7 +141641,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW34"
+    "mapCode": "SLW34",
+    "zone_code": "0331",
+    "zone_name": "EPSOM NORTH",
+    "population": 14221
   },
   {
     "parameters": [
@@ -142717,7 +143017,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW35"
+    "mapCode": "SLW35",
+    "zone_code": "0332",
+    "zone_name": "EPSOM SOUTH",
+    "population": 23036
   },
   {
     "parameters": [
@@ -144147,7 +144450,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW36"
+    "mapCode": "SLW36",
+    "zone_code": "0333",
+    "zone_name": "STREATHAM SOUTH & DULWICH WEST",
+    "population": 69759
   },
   {
     "parameters": [
@@ -145596,7 +145902,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW37"
+    "mapCode": "SLW37",
+    "zone_code": "0334",
+    "zone_name": "WANDSWORTH EAST",
+    "population": 60279
   },
   {
     "parameters": [
@@ -146988,7 +147297,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW38"
+    "mapCode": "SLW38",
+    "zone_code": "0335",
+    "zone_name": "NEW MALDEN",
+    "population": 38280
   },
   {
     "parameters": [
@@ -148437,7 +148749,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW39"
+    "mapCode": "SLW39",
+    "zone_code": "0364",
+    "zone_name": "STREATHAM EAST",
+    "population": 19013
   },
   {
     "parameters": [
@@ -149867,7 +150182,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW40"
+    "mapCode": "SLW40",
+    "zone_code": "0380",
+    "zone_name": "CROYDON WEST UPPER",
+    "population": 42639
   },
   {
     "parameters": [
@@ -151297,7 +151615,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW41"
+    "mapCode": "SLW41",
+    "zone_code": "0381",
+    "zone_name": "CROYDON WEST LOWER",
+    "population": 68396
   },
   {
     "parameters": [
@@ -152689,7 +153010,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW42"
+    "mapCode": "SLW42",
+    "zone_code": "0400",
+    "zone_name": "PUTNEY CENTRAL",
+    "population": 23020
   },
   {
     "parameters": [
@@ -154081,7 +154405,10 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW43"
+    "mapCode": "SLW43",
+    "zone_code": "0401",
+    "zone_name": "WALWORTH",
+    "population": 18204
   },
   {
     "parameters": [
@@ -155473,6 +155800,9 @@
     ],
     "source": "thames_water_zone_report",
     "year": 2025,
-    "mapCode": "SLW44"
+    "mapCode": "SLW44",
+    "zone_code": "0402",
+    "zone_name": "CAMBERWELL",
+    "population": 94444
   }
 ]
