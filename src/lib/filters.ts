@@ -54,7 +54,7 @@ export const FILTERS: FilterProduct[] = [
   {
     id: "waterdrop-g3p800",
     brand: "Waterdrop",
-    model: "G3P800 Reverse Osmosis",
+    model: "G3P600 Reverse Osmosis",
     category: "under_sink",
     removes: [
       "Lead",

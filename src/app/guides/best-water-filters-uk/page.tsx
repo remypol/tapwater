@@ -197,7 +197,7 @@ export default function BestWaterFiltersGuide() {
           {
             question: "What is the best water filter for UK tap water?",
             answer:
-              "For jug filters, the ZeroWater 12-Cup offers the most comprehensive contaminant removal with NSF 53/401 certification, removing lead, PFAS, fluoride, and more. For under-sink systems, the Waterdrop G3P800 reverse osmosis system removes virtually everything including PFAS, certified to NSF 58.",
+              "For jug filters, the ZeroWater 12-Cup offers the most comprehensive contaminant removal with NSF 53/401 certification, removing lead, PFAS, fluoride, and more. For under-sink systems, the Waterdrop G3P600 reverse osmosis system removes virtually everything including PFAS, certified to NSF 58.",
           },
           {
             question: "Do I need a water filter in the UK?",
@@ -335,8 +335,8 @@ export default function BestWaterFiltersGuide() {
         </h2>
         <ProductSection
           filter={getFilter("waterdrop-g3p800")}
-          heading="Waterdrop G3P800 Reverse Osmosis"
-          reason="If you want the most thorough filtration available, reverse osmosis is the technology to use. The Waterdrop G3P800 removes 12 contaminant categories we track, including PFAS, lead, arsenic, fluoride, and trihalomethanes. NSF 58 certified, it produces 800 gallons per day with a tankless design that saves under-sink space."
+          heading="Waterdrop G3P600 Reverse Osmosis"
+          reason="If you want the most thorough filtration available, reverse osmosis is the technology to use. The Waterdrop G3P600 removes 12 contaminant categories we track, including PFAS, lead, arsenic, fluoride, and trihalomethanes. NSF 58 certified, it produces 600 gallons per day with a tankless design that saves under-sink space."
           pros={[
             "Removes virtually everything including PFAS and fluoride",
             "NSF/ANSI 58 certified — the gold standard for RO",
