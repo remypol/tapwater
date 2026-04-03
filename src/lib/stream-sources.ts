@@ -138,6 +138,17 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "upper",
     dateFormat: "string",
   },
+  "hafren-dyfrdwy": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2024, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality_2024" },
+      { year: 2023, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality_2023" },
+      { year: 2022, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "camel",
+    dateFormat: "string",
+  },
 };
 
 export function getStreamSource(supplierId: string): StreamSource | null {
