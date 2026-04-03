@@ -26,16 +26,52 @@ export const UK_REGIONS: UKRegion[] = [
 ];
 
 export const POSTCODE_TO_REGION: Record<string, string> = {
+  // London
   SW: "london", SE: "london", E: "london", N: "london",
-  NW: "london", W: "london",
-  M: "north-west", L: "north-west",
-  LS: "yorkshire", S: "yorkshire", YO: "yorkshire",
-  B: "west-midlands", CV: "west-midlands",
+  NW: "london", W: "london", EC: "london", WC: "london",
+  BR: "london", CR: "london", DA: "london", EN: "london",
+  HA: "london", IG: "london", KT: "london", RM: "london",
+  SM: "london", TW: "london", UB: "london",
+  // North West
+  M: "north-west", L: "north-west", WA: "north-west", WN: "north-west",
+  BL: "north-west", OL: "north-west", SK: "north-west", CW: "north-west",
+  CH: "north-west", PR: "north-west", FY: "north-west", BB: "north-west",
+  LA: "north-west", CA: "north-west",
+  // Yorkshire
+  LS: "yorkshire", S: "yorkshire", YO: "yorkshire", BD: "yorkshire",
+  HX: "yorkshire", HD: "yorkshire", WF: "yorkshire", HU: "yorkshire",
+  DN: "yorkshire", HG: "yorkshire",
+  // West Midlands
+  B: "west-midlands", CV: "west-midlands", WV: "west-midlands",
+  WS: "west-midlands", DY: "west-midlands", ST: "west-midlands",
+  TF: "west-midlands", WR: "west-midlands", HR: "west-midlands",
+  // East Midlands
   NG: "east-midlands", DE: "east-midlands", LE: "east-midlands",
+  NN: "east-midlands", LN: "east-midlands", PE: "east-midlands",
+  // South West
   BS: "south-west", BA: "south-west", EX: "south-west", PL: "south-west",
-  BN: "south-east", SO: "south-east", PO: "south-east", RG: "south-east", OX: "south-east",
-  CB: "east", NR: "east",
-  NE: "north-east",
-  CF: "wales", SA: "wales",
-  EH: "scotland", G: "scotland", AB: "scotland",
+  TA: "south-west", DT: "south-west", SP: "south-west", SN: "south-west",
+  GL: "south-west", BH: "south-west", TR: "south-west", TQ: "south-west",
+  // South East
+  BN: "south-east", SO: "south-east", PO: "south-east", RG: "south-east",
+  OX: "south-east", SL: "south-east", HP: "south-east", GU: "south-east",
+  RH: "south-east", TN: "south-east", CT: "south-east", ME: "south-east",
+  MK: "south-east", AL: "south-east", WD: "south-east", SG: "south-east",
+  LU: "south-east",
+  // East of England
+  CB: "east", NR: "east", IP: "east", CO: "east",
+  CM: "east", SS: "east",
+  // North East
+  NE: "north-east", SR: "north-east", DH: "north-east", DL: "north-east",
+  TS: "north-east",
+  // Wales
+  CF: "wales", SA: "wales", NP: "wales", LL: "wales",
+  LD: "wales", SY: "wales",
+  // Scotland
+  EH: "scotland", G: "scotland", AB: "scotland", DD: "scotland",
+  FK: "scotland", KY: "scotland", ML: "scotland", PA: "scotland",
+  PH: "scotland", IV: "scotland", KW: "scotland", DG: "scotland",
+  TD: "scotland", KA: "scotland", HS: "scotland", ZE: "scotland",
+  // Northern Ireland
+  BT: "scotland", // BT postcodes shown under Scotland region on map (closest geographically)
 };

@@ -32,6 +32,45 @@ function scoreBadgeClass(score: number): string {
   return "badge badge-danger";
 }
 
+const MAX_VISIBLE = 15;
+
+function DesktopRegionList({ postcodes }: { postcodes: MapPostcodeEntry[] }) {
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? postcodes : postcodes.slice(0, MAX_VISIBLE);
+  const hasMore = postcodes.length > MAX_VISIBLE;
+
+  return (
+    <div className="flex flex-col gap-1">
+      {visible.map((pc) => (
+        <Link
+          key={pc.district}
+          href={`/postcode/${pc.district}/`}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-wash transition-colors group card"
+        >
+          <span className="font-data font-bold text-sm text-ink w-14 shrink-0">
+            {pc.district}
+          </span>
+          <span className="text-sm text-muted flex-1 truncate">
+            {pc.areaName}
+          </span>
+          <span className={`${scoreBadgeClass(pc.score)} font-data shrink-0`}>
+            {pc.score.toFixed(1)}
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
+        </Link>
+      ))}
+      {hasMore && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="text-sm text-accent font-medium py-2 hover:underline"
+        >
+          Show all {postcodes.length} areas
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function HomepageMap({ postcodes }: HomepageMapProps) {
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
@@ -93,26 +132,7 @@ export function HomepageMap({ postcodes }: HomepageMapProps) {
                 {regionPostcodes.length} postcode area
                 {regionPostcodes.length !== 1 ? "s" : ""} with data
               </p>
-              <div className="flex flex-col gap-1">
-                {regionPostcodes.map((pc) => (
-                  <Link
-                    key={pc.district}
-                    href={`/postcode/${pc.district}/`}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-wash transition-colors group card"
-                  >
-                    <span className="font-data font-bold text-sm text-ink w-14 shrink-0">
-                      {pc.district}
-                    </span>
-                    <span className="text-sm text-muted flex-1 truncate">
-                      {pc.areaName}
-                    </span>
-                    <span className={`${scoreBadgeClass(pc.score)} font-data shrink-0`}>
-                      {pc.score.toFixed(1)}
-                    </span>
-                    <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-                  </Link>
-                ))}
-              </div>
+              <DesktopRegionList postcodes={regionPostcodes} />
             </div>
           </div>
         )}
