@@ -98,9 +98,14 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
   if (!supabase) return null;
 
   try {
-    const { data: rows, error } = await supabase
-      .from("page_data")
-      .select(`
+    // Paginated fetch — Supabase returns max 1000 rows per request
+    const PAGE_SIZE = 1000;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const allRows: any[] = [];
+    let offset = 0;
+    let hasMore = true;
+
+    const selectQuery = `
         postcode_district,
         safety_score,
         score_grade,
@@ -127,9 +132,22 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
           supplier_id,
           supply_zone
         )
-      `);
+      `;
 
-    if (error || !rows || rows.length === 0) return null;
+    while (hasMore) {
+      const { data: batch, error: batchError } = await supabase
+        .from("page_data")
+        .select(selectQuery)
+        .range(offset, offset + PAGE_SIZE - 1);
+
+      if (batchError || !batch) break;
+      allRows.push(...batch);
+      hasMore = batch.length === PAGE_SIZE;
+      offset += PAGE_SIZE;
+    }
+
+    const rows = allRows;
+    if (rows.length === 0) return null;
 
     const cache = new Map<string, PostcodeData>();
 
