@@ -243,3 +243,54 @@ export function PostcodeDatasetSchema({
     />
   );
 }
+
+export function ProductSchema({
+  name,
+  brand,
+  description,
+  price,
+  currency = "GBP",
+  url,
+  imageUrl,
+  rating,
+  category,
+}: {
+  name: string;
+  brand: string;
+  description: string;
+  price: number;
+  currency?: string;
+  url: string;
+  imageUrl?: string;
+  rating: number;
+  category: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `${brand} ${name}`,
+    brand: { "@type": "Brand", name: brand },
+    description,
+    category,
+    ...(imageUrl ? { image: `https://tapwater.uk${imageUrl}` } : {}),
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: String(rating),
+      bestRating: "5",
+      worstRating: "1",
+    },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: currency,
+      price: String(price),
+      availability: "https://schema.org/InStock",
+      url,
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
