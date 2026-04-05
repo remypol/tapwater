@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getScoredPostcodeDistricts, getPostcodeData } from "@/lib/data";
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { CITIES } from "@/lib/cities";
+import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 
 const BASE_URL = "https://tapwater.uk";
 
@@ -16,6 +17,12 @@ const GUIDE_SLUGS = [
   "how-to-test-your-water",
   "microplastics-uk-water",
   "tap-water-vs-bottled-water",
+  "best-reverse-osmosis-system-uk",
+  "best-shower-filter-uk",
+  "best-whole-house-water-filter-uk",
+  "best-water-testing-kit-uk",
+  "best-water-filter-pfas",
+  "best-water-filter-jug-uk",
 ];
 
 /**
@@ -149,6 +156,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    // Filter pages
+    {
+      url: `${BASE_URL}/filters/`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...CATEGORY_ORDER.map((cat) => ({
+      url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}/`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     ...cityPaths,
     ...postcodePaths,

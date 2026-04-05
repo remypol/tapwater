@@ -4,6 +4,7 @@ import { Logo } from "@/components/logo";
 
 const navLinks = [
   { label: "Rankings", href: "/compare" },
+  { href: "/filters", label: "Filters" },
   { label: "Contaminants", href: "/contaminant" },
   { label: "Suppliers", href: "/supplier" },
   { label: "Guides", href: "/guides" },
