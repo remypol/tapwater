@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { getPostcodeData } from "@/lib/data";
 import { Resend } from "resend";
 import { subscribeLimiter, isMemoryRateLimited } from "@/lib/rate-limit";
 
@@ -56,6 +57,33 @@ export async function POST(request: NextRequest) {
   if (dbError) {
     console.error("[subscribe] DB error:", dbError);
     return NextResponse.json({ error: "Failed to save subscription" }, { status: 500 });
+  }
+
+  // Store water data snapshot for email drip sequence
+  if (postcode) {
+    try {
+      const waterData = await getPostcodeData(postcode);
+      if (waterData) {
+        const snapshot = {
+          safetyScore: waterData.safetyScore,
+          scoreGrade: waterData.scoreGrade,
+          contaminantsFlagged: waterData.contaminantsFlagged,
+          topConcerns: waterData.readings
+            .filter((r) => r.status === "fail" || r.status === "warning")
+            .slice(0, 3)
+            .map((r) => r.name),
+          pfasDetected: waterData.pfasDetected,
+        };
+
+        await supabase
+          .from("subscribers")
+          .update({ water_data_snapshot: snapshot })
+          .eq("email", email);
+      }
+    } catch (err) {
+      // Best-effort — don't let snapshot failure block subscription
+      console.error("[subscribe] Snapshot error:", err);
+    }
   }
 
   // Send verification email via Resend
