@@ -17,6 +17,7 @@ const ACCENT = "#0891b2";
 interface SequenceEmail {
   step: EmailSequenceStep;
   subject: string;
+  html: string;
 }
 
 function getSubject(sub: SubscriberSequenceState, step: EmailSequenceStep): string {
@@ -47,7 +48,7 @@ export function getNextEmail(
   const nextIndex = currentIndex + 1;
   if (nextIndex >= SEQUENCE_STEPS.length) return null;
   const step = SEQUENCE_STEPS[nextIndex];
-  return { step, subject: getSubject(sub, step) };
+  return { step, subject: getSubject(sub, step), html: buildEmailHtml(sub, step) };
 }
 
 export function shouldSendEmail(
