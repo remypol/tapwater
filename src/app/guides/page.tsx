@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Guides — UK Water Quality Research",
@@ -77,6 +77,54 @@ const GUIDES = [
     icon: Scale,
     iconColor: "text-indigo-600",
     iconBg: "bg-indigo-50",
+  },
+  {
+    slug: "best-reverse-osmosis-system-uk",
+    title: "Best Reverse Osmosis System UK",
+    subtitle: "For PFAS, fluoride, and heavy metals",
+    icon: Droplets,
+    iconColor: "text-blue-600",
+    iconBg: "bg-blue-50",
+  },
+  {
+    slug: "best-shower-filter-uk",
+    title: "Best Shower Filter UK",
+    subtitle: "Remove chlorine for better skin and hair",
+    icon: Sparkles,
+    iconColor: "text-cyan-600",
+    iconBg: "bg-cyan-50",
+  },
+  {
+    slug: "best-whole-house-water-filter-uk",
+    title: "Best Whole House Filter UK",
+    subtitle: "Filter every tap in your home",
+    icon: Home,
+    iconColor: "text-emerald-600",
+    iconBg: "bg-emerald-50",
+  },
+  {
+    slug: "best-water-testing-kit-uk",
+    title: "Best Water Testing Kit UK",
+    subtitle: "Test your tap water at home",
+    icon: FlaskConical,
+    iconColor: "text-violet-600",
+    iconBg: "bg-violet-50",
+  },
+  {
+    slug: "best-water-filter-pfas",
+    title: "Best Filter for PFAS Removal",
+    subtitle: "The only filters that remove forever chemicals",
+    icon: ShieldAlert,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
+  },
+  {
+    slug: "best-water-filter-jug-uk",
+    title: "Best Water Filter Jug UK",
+    subtitle: "BRITA vs ZeroWater vs the rest",
+    icon: GlassWater,
+    iconColor: "text-sky-600",
+    iconBg: "bg-sky-50",
   },
 ];
 

@@ -9,24 +9,29 @@ import {
 import {
   ShieldCheck,
   Check,
-  ArrowUpRight,
-  Star,
   Search,
+  ChevronRight,
+  Droplets,
+  Sparkles,
+  Home,
+  FlaskConical,
+  ShieldAlert,
+  GlassWater,
+  X,
+  Minus,
 } from "lucide-react";
-import { FILTERS, CATEGORY_LABELS } from "@/lib/filters";
-import type { FilterProduct } from "@/lib/types";
 
 const year = new Date().getFullYear();
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Water Filters UK: Tested Against Real Contaminant Data (${year})`,
+    title: `Best Water Filters UK: Which Type Do You Actually Need? (${year})`,
     description:
-      "We matched water filters to contaminants actually found in UK tap water. Honest recommendations based on government data, not marketing claims.",
+      "An honest overview of every water filter type available in the UK. Find out which filter removes what, then read our specific buying guides.",
     openGraph: {
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:
-        "Honest water filter recommendations matched to contaminants found in UK tap water, based on government data.",
+        "Which water filter type do you actually need? Compare jug, countertop, under-sink, reverse osmosis, and whole-house systems.",
       url: "https://tapwater.uk/guides/best-water-filters-uk/",
       type: "article",
     },
@@ -34,136 +39,160 @@ export function generateMetadata(): Metadata {
       card: "summary_large_image",
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:
-        "Water filter recommendations matched to real UK water quality data.",
+        "Compare every water filter type and find the right one for your home.",
     },
   };
 }
 
-/* ── Helpers ─────────────────────────────────────────────────────────── */
+/* ── Guide link data ────────────────────────────────────────────────── */
 
-function getFilter(id: string): FilterProduct {
-  const f = FILTERS.find((f) => f.id === id);
-  if (!f) throw new Error(`Filter ${id} not found`);
-  return f;
+const BUYING_GUIDES = [
+  {
+    slug: "best-water-filter-jug-uk",
+    title: "Best Water Filter Jug UK",
+    description:
+      "BRITA vs ZeroWater vs the rest. We test jugs against real contaminant data and tell you which ones are worth the money.",
+    icon: GlassWater,
+    iconColor: "text-sky-600",
+    iconBg: "bg-sky-50",
+  },
+  {
+    slug: "best-reverse-osmosis-system-uk",
+    title: "Best Reverse Osmosis System UK",
+    description:
+      "The most thorough filtration you can get at home. Removes PFAS, fluoride, heavy metals, and virtually everything else.",
+    icon: Droplets,
+    iconColor: "text-blue-600",
+    iconBg: "bg-blue-50",
+  },
+  {
+    slug: "best-water-filter-pfas",
+    title: "Best Filter for PFAS Removal",
+    description:
+      "Not all filters remove forever chemicals. These are the ones with independent certification to actually do it.",
+    icon: ShieldAlert,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
+  },
+  {
+    slug: "best-shower-filter-uk",
+    title: "Best Shower Filter UK",
+    description:
+      "Chlorine in shower water can dry out skin and hair. These filters reduce it at the source.",
+    icon: Sparkles,
+    iconColor: "text-cyan-600",
+    iconBg: "bg-cyan-50",
+  },
+  {
+    slug: "best-whole-house-water-filter-uk",
+    title: "Best Whole House Filter UK",
+    description:
+      "Filter every tap, shower, and appliance in your home with a single system installed at your water main.",
+    icon: Home,
+    iconColor: "text-emerald-600",
+    iconBg: "bg-emerald-50",
+  },
+  {
+    slug: "best-water-testing-kit-uk",
+    title: "Best Water Testing Kit UK",
+    description:
+      "Not sure what is in your water? Test it yourself before spending money on a filter you might not need.",
+    icon: FlaskConical,
+    iconColor: "text-violet-600",
+    iconBg: "bg-violet-50",
+  },
+];
+
+/* ── Comparison table data ──────────────────────────────────────────── */
+
+type Effectiveness = "yes" | "partial" | "no";
+
+interface FilterTypeRow {
+  type: string;
+  chlorine: Effectiveness;
+  lead: Effectiveness;
+  pfas: Effectiveness;
+  fluoride: Effectiveness;
+  bacteria: Effectiveness;
+  hardness: Effectiveness;
 }
 
-function ProductSection({
-  filter,
-  heading,
-  reason,
-  pros,
-  cons,
-}: {
-  filter: FilterProduct;
-  heading: string;
-  reason: string;
-  pros: string[];
-  cons: string[];
-}) {
+const FILTER_TYPES: FilterTypeRow[] = [
+  {
+    type: "Jug (carbon)",
+    chlorine: "yes",
+    lead: "partial",
+    pfas: "no",
+    fluoride: "no",
+    bacteria: "no",
+    hardness: "no",
+  },
+  {
+    type: "Jug (ion exchange)",
+    chlorine: "yes",
+    lead: "yes",
+    pfas: "yes",
+    fluoride: "yes",
+    bacteria: "no",
+    hardness: "partial",
+  },
+  {
+    type: "Countertop",
+    chlorine: "yes",
+    lead: "yes",
+    pfas: "partial",
+    fluoride: "no",
+    bacteria: "partial",
+    hardness: "no",
+  },
+  {
+    type: "Under-sink",
+    chlorine: "yes",
+    lead: "yes",
+    pfas: "partial",
+    fluoride: "no",
+    bacteria: "no",
+    hardness: "no",
+  },
+  {
+    type: "Reverse osmosis",
+    chlorine: "yes",
+    lead: "yes",
+    pfas: "yes",
+    fluoride: "yes",
+    bacteria: "yes",
+    hardness: "yes",
+  },
+  {
+    type: "Whole house",
+    chlorine: "yes",
+    lead: "yes",
+    pfas: "partial",
+    fluoride: "no",
+    bacteria: "no",
+    hardness: "partial",
+  },
+];
+
+function EffectivenessCell({ value }: { value: Effectiveness }) {
+  if (value === "yes") {
+    return (
+      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50">
+        <Check className="w-3 h-3 text-safe" />
+      </span>
+    );
+  }
+  if (value === "partial") {
+    return (
+      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-50">
+        <Minus className="w-3 h-3 text-amber-600" />
+      </span>
+    );
+  }
   return (
-    <div className="card p-6 lg:p-8">
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div>
-          <h3 className="font-display text-xl italic text-ink">{heading}</h3>
-          <p className="text-sm text-muted mt-0.5">
-            {filter.brand} {filter.model} &middot;{" "}
-            {CATEGORY_LABELS[filter.category]}
-          </p>
-        </div>
-        <span className="font-data text-2xl font-bold text-ink">
-          &pound;{filter.priceGbp}
-        </span>
-      </div>
-
-      <p className="text-base text-body leading-relaxed mt-4">{reason}</p>
-
-      {/* What it removes */}
-      <div className="mt-4">
-        <p className="text-xs font-medium text-ink uppercase tracking-wider mb-2">
-          Removes
-        </p>
-        <div className="flex flex-wrap gap-1.5">
-          {filter.removes.map((r) => (
-            <span
-              key={r}
-              className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-700 rounded-full px-2.5 py-1"
-            >
-              <Check className="w-3 h-3" />
-              {r}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Certifications */}
-      {filter.certifications.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {filter.certifications.map((cert) => (
-            <span
-              key={cert}
-              className="text-[10px] bg-gray-100 text-faint rounded px-1.5 py-0.5"
-            >
-              {cert}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Pros / Cons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
-        <div>
-          <p className="text-xs font-medium text-safe uppercase tracking-wider mb-2">
-            Pros
-          </p>
-          <ul className="space-y-1.5">
-            {pros.map((p) => (
-              <li
-                key={p}
-                className="flex items-start gap-1.5 text-sm text-body"
-              >
-                <Check className="w-3.5 h-3.5 text-safe shrink-0 mt-0.5" />
-                {p}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="text-xs font-medium text-warning uppercase tracking-wider mb-2">
-            Cons
-          </p>
-          <ul className="space-y-1.5">
-            {cons.map((c) => (
-              <li
-                key={c}
-                className="flex items-start gap-1.5 text-sm text-body"
-              >
-                <span className="w-3.5 h-3.5 shrink-0 mt-0.5 text-warning">
-                  &ndash;
-                </span>
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Rating + CTA */}
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-rule">
-        <span className="flex items-center gap-1 text-sm text-muted">
-          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-          {filter.rating.toFixed(1)} average rating
-        </span>
-        <a
-          href={filter.affiliateUrl}
-          target="_blank"
-          rel="noopener noreferrer sponsored"
-          className="inline-flex items-center gap-1.5 bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors"
-        >
-          View on Amazon
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </a>
-      </div>
-    </div>
+    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-50">
+      <X className="w-3 h-3 text-faint" />
+    </span>
   );
 }
 
@@ -184,7 +213,7 @@ export default function BestWaterFiltersGuide() {
       />
       <ArticleSchema
         headline={`Best Water Filters for UK Tap Water (${year})`}
-        description="We matched water filters to contaminants actually found in UK tap water. Honest recommendations based on government data, not marketing claims."
+        description="An honest overview of every water filter type available in the UK, with links to specific buying guides for each category."
         url="https://tapwater.uk/guides/best-water-filters-uk/"
         datePublished="2026-04-02"
         dateModified={new Date().toISOString().split("T")[0]}
@@ -196,7 +225,7 @@ export default function BestWaterFiltersGuide() {
           {
             question: "What is the best water filter for UK tap water?",
             answer:
-              "For jug filters, the ZeroWater 12-Cup offers the most comprehensive contaminant removal with NSF 53/401 certification, removing lead, PFAS, fluoride, and more. For under-sink systems, the Waterdrop G3P600 reverse osmosis system removes virtually everything including PFAS, certified to NSF 58.",
+              "It depends on what you want to remove. For basic chlorine and taste improvement, a jug filter like BRITA is fine. For PFAS, fluoride, and heavy metals, you need a reverse osmosis system. Our buying guides cover each category in detail.",
           },
           {
             question: "Do I need a water filter in the UK?",
@@ -206,12 +235,17 @@ export default function BestWaterFiltersGuide() {
           {
             question: "Do water filters remove PFAS?",
             answer:
-              "Yes. Reverse osmosis systems (certified to NSF/ANSI 58) remove 90-99% of PFAS compounds. Activated carbon filters certified to NSF/ANSI 53 offer partial reduction. Not all filters remove PFAS equally — look for specific NSF certifications rather than marketing claims.",
+              "Only certain types. Reverse osmosis systems (certified to NSF/ANSI 58) remove 90-99% of PFAS compounds. Some activated carbon filters certified to NSF/ANSI 53 offer partial reduction. Basic jug filters and countertop filters typically do not remove PFAS.",
           },
           {
             question: "How much does a water filter cost in the UK?",
             answer:
               "Jug filters cost between \u00a320-\u00a345 upfront with replacement cartridges around \u00a35-8 each. Countertop systems range from \u00a3100-\u00a3200. Under-sink reverse osmosis systems cost \u00a3200-\u00a3500. Whole-house systems start at \u00a3500 and can exceed \u00a31,000 for premium models.",
+          },
+          {
+            question: "Which type of water filter removes the most contaminants?",
+            answer:
+              "Reverse osmosis removes the widest range of contaminants including PFAS, fluoride, lead, bacteria, and hardness minerals. It is the most thorough filtration technology available for home use, but it also removes beneficial minerals and wastes some water in the process.",
           },
         ]}
       />
@@ -265,9 +299,10 @@ export default function BestWaterFiltersGuide() {
             UK tap water is safe to drink. It meets strict legal standards.
             But &ldquo;legal&rdquo; and &ldquo;ideal&rdquo; are different things
             &mdash; trace amounts of chlorine, lead from old pipes, PFAS, and
-            nitrates from farming can all be present within legal limits. A good
-            filter reduces what you don&apos;t want, without the cost of bottled
-            water.
+            nitrates from farming can all be present within legal limits. The
+            right filter depends on what is in your water and what you want to
+            remove. This page helps you work out which type you need, then links
+            to our detailed buying guides for each category.
           </p>
         </div>
 
@@ -275,10 +310,10 @@ export default function BestWaterFiltersGuide() {
         <div className="bg-wash border border-rule rounded-xl p-4 mt-6 mb-8 flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-accent shrink-0 mt-0.5" />
           <p className="text-sm text-body">
-            This guide contains affiliate links. If you buy through these links,
-            we earn a small commission at no extra cost to you. This funds our
-            independent water quality research. Our recommendations are based on
-            certifications and contaminant data, not sponsorship.{" "}
+            Our buying guides contain affiliate links. If you buy through these
+            links, we earn a small commission at no extra cost to you. This funds
+            our independent water quality research. Our recommendations are based
+            on certifications and contaminant data, not sponsorship.{" "}
             <Link
               href="/affiliate-disclosure"
               className="text-accent hover:underline"
@@ -288,144 +323,140 @@ export default function BestWaterFiltersGuide() {
           </p>
         </div>
 
-        {/* ── How we choose ─────────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          How we choose
+        {/* ── What each filter type removes ────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-12 mb-3">
+          What each filter type removes
         </h2>
-        <p className="text-base text-body leading-relaxed">
-          We start with real water quality data. Our database tracks{" "}
-          contaminant levels across hundreds of UK postcode areas, sourced from
-          the Environment Agency and water company test results. We then
-          check which filters are independently certified (NSF, WQA, or
-          TUV SUD) to remove the contaminants most commonly flagged in UK
-          water. Finally, we consider price, availability in the UK, and real
-          user reviews.
-        </p>
-        <p className="text-base text-body leading-relaxed mt-4">
-          We don&apos;t accept free products or paid placements. If a filter
-          isn&apos;t certified to remove what it claims, it doesn&apos;t make our
-          list.
+        <p className="text-base text-body leading-relaxed mb-5">
+          Different filter technologies remove different things. This table shows
+          what you can realistically expect from each type, based on independent
+          certifications rather than manufacturer claims.
         </p>
 
-        {/* ── Best overall ──────────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          Best overall jug filter
-        </h2>
-        <ProductSection
-          filter={getFilter("zerowater-12cup")}
-          heading="ZeroWater 12-Cup Ready-Pour"
-          reason="The ZeroWater removes more contaminants than any other jug filter we tested. It's the only jug with NSF/ANSI 53 certification for lead removal and NSF 401 for emerging contaminants including PFAS. The 5-stage filtration produces genuinely pure water — it ships with a TDS meter so you can verify it yourself."
-          pros={[
-            "Removes PFAS, lead, fluoride, and nitrate — rare for a jug",
-            "NSF/ANSI 53 and 401 certified (independently verified)",
-            "Includes TDS meter to check filter performance",
-            "Large 12-cup capacity, ready-pour spout",
-          ]}
-          cons={[
-            "Replacement filters cost more than BRITA (around \u00a38 each)",
-            "Filters need replacing more frequently (every 2-3 months)",
-            "Filtered water can taste flat due to mineral removal",
-          ]}
-        />
+        <div className="overflow-x-auto -mx-4 px-4">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="bg-wash text-left">
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
+                  Filter type
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  Chlorine
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  Lead
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  PFAS
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  Fluoride
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  Bacteria
+                </th>
+                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted text-center">
+                  Hardness
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rule">
+              {FILTER_TYPES.map((row) => (
+                <tr key={row.type}>
+                  <td className="py-2.5 px-3 font-medium text-ink whitespace-nowrap">
+                    {row.type}
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.chlorine} />
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.lead} />
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.pfas} />
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.fluoride} />
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.bacteria} />
+                  </td>
+                  <td className="py-2.5 px-3 text-center">
+                    <EffectivenessCell value={row.hardness} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        {/* ── Best under-sink ───────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          Best under-sink system
-        </h2>
-        <ProductSection
-          filter={getFilter("waterdrop-g3p800")}
-          heading="Waterdrop G3P600 Reverse Osmosis"
-          reason="If you want the most thorough filtration available, reverse osmosis is the technology to use. The Waterdrop G3P600 removes 12 contaminant categories we track, including PFAS, lead, arsenic, fluoride, and trihalomethanes. NSF 58 certified, it produces 600 gallons per day with a tankless design that saves under-sink space."
-          pros={[
-            "Removes virtually everything including PFAS and fluoride",
-            "NSF/ANSI 58 certified — the gold standard for RO",
-            "Tankless design saves space under sink",
-            "Smart LED indicator shows filter status",
-          ]}
-          cons={[
-            "Requires installation (straightforward DIY, but not plug-and-play)",
-            "Higher upfront cost at \u00a3399",
-            "Wastes some water during filtration (typical of RO systems)",
-            "Removes beneficial minerals alongside contaminants",
-          ]}
-        />
+        <div className="flex items-center gap-4 mt-3 text-xs text-muted">
+          <span className="flex items-center gap-1">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-50">
+              <Check className="w-2.5 h-2.5 text-safe" />
+            </span>
+            Removes
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-amber-50">
+              <Minus className="w-2.5 h-2.5 text-amber-600" />
+            </span>
+            Partial
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-50">
+              <X className="w-2.5 h-2.5 text-faint" />
+            </span>
+            No effect
+          </span>
+        </div>
 
-        {/* ── Best budget ───────────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          Best budget pick
+        {/* ── Choose your filter type ──────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-3">
+          Choose your filter type
         </h2>
-        <ProductSection
-          filter={getFilter("brita-maxtra-pro")}
-          heading="BRITA Marella XL + MAXTRA PRO"
-          reason="The UK's most popular filter jug for a reason. The BRITA Marella won't remove PFAS or fluoride, but it handles the basics well: chlorine, lead, copper, and mercury. For most UK postcodes where the main concern is taste and general peace of mind, it's the right choice at a fraction of the price of more advanced systems."
-          pros={[
-            "Most affordable option at \u00a325",
-            "Widely available — replacement cartridges sold everywhere",
-            "Reduces chlorine taste immediately",
-            "MAXTRA PRO cartridges last around 4 weeks each",
-          ]}
-          cons={[
-            "Does not remove PFAS, fluoride, or nitrate",
-            "Limited independent certification compared to ZeroWater",
-            "Not suitable if your area has flagged PFAS or fluoride",
-          ]}
-        />
+        <p className="text-base text-body leading-relaxed mb-6">
+          We have written a detailed buying guide for each filter category,
+          with specific product recommendations tested against real UK water
+          quality data.
+        </p>
 
-        {/* ── Best countertop ───────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          Best countertop filter
+        <div className="space-y-3">
+          {BUYING_GUIDES.map((guide) => {
+            const Icon = guide.icon;
+            return (
+              <Link
+                key={guide.slug}
+                href={`/guides/${guide.slug}`}
+                className="card p-5 flex items-start gap-4 group block"
+              >
+                <div
+                  className={`w-10 h-10 rounded-xl ${guide.iconBg} flex items-center justify-center shrink-0 mt-0.5`}
+                >
+                  <Icon className={`w-5 h-5 ${guide.iconColor}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-ink group-hover:text-accent transition-colors">
+                    {guide.title}
+                  </p>
+                  <p className="text-sm text-muted mt-0.5 leading-relaxed">
+                    {guide.description}
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-faint group-hover:text-accent transition-colors shrink-0 mt-1" />
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* ── NSF certifications ───────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          What NSF certifications mean
         </h2>
-        <ProductSection
-          filter={getFilter("waterdrop-fc06")}
-          heading="Waterdrop FC-06 Countertop"
-          reason="The Waterdrop FC-06 is a stainless steel countertop filter that connects directly to your tap — no installation or plumbing needed. It removes chlorine, lead, fluoride, and other common contaminants. Compact design, high flow rate, and NSF 42 certified. A practical option if you rent or can't modify your plumbing."
-          pros={[
-            "No installation — connects to any standard tap",
-            "Stainless steel construction, durable",
-            "High flow rate, no waiting",
-            "Very affordable at ~£36",
-          ]}
-          cons={[
-            "Doesn't remove PFAS or bacteria",
-            "Takes up some counter space near the tap",
-            "Filter replacements needed every 3 months",
-          ]}
-        />
-
-        {/* ── Best whole house ──────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          Best whole-house system
-        </h2>
-        <ProductSection
-          filter={getFilter("waterdrop-10ua")}
-          heading="Waterdrop 10UA Under Sink Filter"
-          reason="The Waterdrop 10UA is a high-capacity under-sink filter with 11,000 gallon lifespan — roughly 12 months for a typical household. It removes chlorine, lead, and PFAS. NSF 42 certified. Simple installation with a dedicated faucet."
-          pros={[
-            "Massive 11,000 gallon capacity — lasts up to 12 months",
-            "Removes PFAS, lead, and chlorine",
-            "Dedicated filtered water tap",
-            "NSF/ANSI 42 certified",
-          ]}
-          cons={[
-            "Professional installation recommended (\u00a3200-400 extra)",
-            "High upfront cost at \u00a3899",
-            "Requires space for installation at water entry point",
-            "Pre-filters need replacing every 3 months",
-          ]}
-        />
-
-        {/* ── What to look for ──────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
-          What to look for in a water filter
-        </h2>
-
-        <h3 className="font-semibold text-ink text-lg mt-6 mb-2">
-          NSF certifications matter
-        </h3>
         <p className="text-base text-body leading-relaxed">
-          The single most important thing is independent certification.
-          Marketing claims mean nothing without third-party verification. Here
-          are the certifications that matter:
+          The single most important thing when choosing a filter is independent
+          certification. Marketing claims mean nothing without third-party
+          verification. Here are the certifications that matter:
         </p>
         <ul className="mt-3 space-y-2">
           <li className="flex items-start gap-2 text-sm text-body">
@@ -455,82 +486,7 @@ export default function BestWaterFiltersGuide() {
           </li>
         </ul>
 
-        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">
-          What each filter type removes
-        </h3>
-        <p className="text-base text-body leading-relaxed">
-          Not all filters are equal. Here is what to expect from each type:
-        </p>
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-wash text-left">
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  Filter type
-                </th>
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  Chlorine
-                </th>
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  Lead
-                </th>
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  PFAS
-                </th>
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  Fluoride
-                </th>
-                <th className="py-2.5 px-3 text-xs font-medium uppercase tracking-wider text-muted">
-                  Bacteria
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-rule">
-              <tr>
-                <td className="py-2.5 px-3 font-medium text-ink">
-                  Carbon jug
-                </td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Some</td>
-                <td className="py-2.5 px-3 text-faint">No</td>
-                <td className="py-2.5 px-3 text-faint">No</td>
-                <td className="py-2.5 px-3 text-faint">No</td>
-              </tr>
-              <tr>
-                <td className="py-2.5 px-3 font-medium text-ink">
-                  Ion exchange jug
-                </td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-faint">No</td>
-              </tr>
-              <tr>
-                <td className="py-2.5 px-3 font-medium text-ink">
-                  Ceramic countertop
-                </td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Some</td>
-                <td className="py-2.5 px-3 text-faint">No</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-              </tr>
-              <tr>
-                <td className="py-2.5 px-3 font-medium text-ink">
-                  Reverse osmosis
-                </td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-                <td className="py-2.5 px-3 text-safe">Yes</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* ── Check your postcode CTA ───────────────────────────────── */}
+        {/* ── Check your postcode CTA ──────────────────────────────── */}
         <div className="mt-14 card-elevated p-8 text-center rounded-2xl">
           <div className="flex justify-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
@@ -538,11 +494,11 @@ export default function BestWaterFiltersGuide() {
             </div>
           </div>
           <h2 className="font-display text-2xl italic text-ink">
-            Check your postcode
+            Check your postcode first
           </h2>
           <p className="text-base text-muted mt-2 max-w-md mx-auto">
-            See which contaminants are flagged in your area and get filter
-            recommendations matched to your water.
+            See which contaminants are flagged in your area. We will recommend
+            the right filter type for your water.
           </p>
           <div className="mt-6 max-w-sm mx-auto">
             <PostcodeSearch />
@@ -552,11 +508,10 @@ export default function BestWaterFiltersGuide() {
         {/* Methodology footer */}
         <footer className="mt-12 pb-4 text-sm text-faint leading-relaxed border-t border-rule pt-6">
           <p>
-            Product recommendations last reviewed April {year}. Prices are
-            approximate and may vary. Contaminant removal claims are based on
-            manufacturer specifications and independent certifications (NSF,
-            WQA, TUV SUD). We earn a commission from purchases made through
-            affiliate links at no extra cost to you.{" "}
+            Last reviewed April {year}. Contaminant removal claims are based on
+            independent certifications (NSF, WQA, TUV SUD) and manufacturer
+            specifications. We earn a commission from purchases made through
+            affiliate links in our buying guides at no extra cost to you.{" "}
             <Link
               href="/affiliate-disclosure"
               className="underline underline-offset-2 hover:text-muted transition-colors"
