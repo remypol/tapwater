@@ -282,6 +282,32 @@ export default async function PostcodePage({ params }: Props) {
               </ScrollReveal>
             )}
 
+            {/* Supplementary recommendations */}
+            <section className="mt-6 grid gap-3 sm:grid-cols-2">
+              <Link
+                href="/filters/shower/"
+                className="card p-4 group hover:border-accent/30 transition-colors"
+              >
+                <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
+                  Shower filters
+                </p>
+                <p className="text-xs text-muted mt-1">
+                  Remove chlorine for better skin and hair
+                </p>
+              </Link>
+              <Link
+                href="/filters/testing-kits/"
+                className="card p-4 group hover:border-accent/30 transition-colors"
+              >
+                <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
+                  Test your water
+                </p>
+                <p className="text-xs text-muted mt-1">
+                  Confirm exactly what&apos;s in your pipes
+                </p>
+              </Link>
+            </section>
+
             {/* Environmental Water Quality — EA data, clearly labelled */}
             {data.environmentalReadings.length > 0 && (
               <>

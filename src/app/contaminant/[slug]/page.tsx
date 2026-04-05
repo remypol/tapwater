@@ -140,6 +140,17 @@ const REMOVAL_DESCRIPTIONS: Record<string, string> = {
     "Adding chlorine or chloramine to water kills bacteria and viruses. The standard disinfection method used by UK water companies. Effective against E. coli and most waterborne pathogens.",
 };
 
+const CONTAMINANT_GUIDE_MAP: Record<string, { guideTitle: string; guideHref: string; categoryTitle: string; categoryHref: string }> = {
+  pfas: { guideTitle: "Best water filter for PFAS removal", guideHref: "/guides/best-water-filter-pfas/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
+  lead: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink/" },
+  fluoride: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
+  nitrate: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
+  chlorine: { guideTitle: "Best shower filter UK", guideHref: "/guides/best-shower-filter-uk/", categoryTitle: "Jug filters", categoryHref: "/filters/jug/" },
+  copper: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink/" },
+  trihalomethanes: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
+  ecoli: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/testing-kits/" },
+};
+
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
@@ -420,15 +431,22 @@ export default async function ContaminantPage({ params }: Props) {
         <PostcodeSearch size="sm" />
       </section>
 
-      {/* 9. Filter link */}
-      <div className="mt-8">
-        <Link
-          href={`/contaminant/${slug}`}
-          className="inline-flex items-center gap-2 text-accent font-medium hover:underline"
-        >
-          View filters that remove {contaminant.name} &rarr;
-        </Link>
-      </div>
+      {/* 9. Guide & filter cross-links */}
+      {CONTAMINANT_GUIDE_MAP[slug] && (
+        <section className="mt-10">
+          <h2 className="font-display text-xl text-ink italic">How to remove {contaminant.name}</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <Link href={CONTAMINANT_GUIDE_MAP[slug].guideHref} className="card p-4 group hover:border-accent/30 transition-colors">
+              <p className="font-semibold text-ink text-sm group-hover:text-accent">Read our guide</p>
+              <p className="text-xs text-muted mt-1">{CONTAMINANT_GUIDE_MAP[slug].guideTitle}</p>
+            </Link>
+            <Link href={CONTAMINANT_GUIDE_MAP[slug].categoryHref} className="card p-4 group hover:border-accent/30 transition-colors">
+              <p className="font-semibold text-ink text-sm group-hover:text-accent">Browse filters</p>
+              <p className="text-xs text-muted mt-1">{CONTAMINANT_GUIDE_MAP[slug].categoryTitle}</p>
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
