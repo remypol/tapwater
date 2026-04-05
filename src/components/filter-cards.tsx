@@ -102,9 +102,11 @@ function HeroRecommendation({
                   ? "No installation needed — just fill and pour."
                   : filter.category === "countertop"
                     ? "Sits on your worktop — no plumber needed."
-                    : filter.category === "under_sink"
+                    : filter.category === "under_sink" || filter.category === "reverse_osmosis"
                       ? "Fits under your kitchen sink for filtered water on tap."
-                      : "Protects every tap in your home."}
+                      : filter.category === "shower"
+                        ? "Fits onto your shower head for softer, cleaner water."
+                        : "Protects every tap in your home."}
               </>
             ) : (
               <>

@@ -38,18 +38,41 @@ export interface PostcodeData {
   dateRange: { from: string; to: string } | null;
 }
 
+export type ProductCategory =
+  | "jug"
+  | "under_sink"
+  | "reverse_osmosis"
+  | "whole_house"
+  | "shower"
+  | "testing_kit"
+  | "countertop";
+
+export type PriceTier = "budget" | "mid" | "premium";
+
+export type AffiliateProgram = "amazon" | "impact" | "direct";
+
 export interface FilterProduct {
   id: string;
   brand: string;
   model: string;
-  category: "jug" | "under_sink" | "whole_house" | "countertop";
+  slug: string;
+  category: ProductCategory;
   removes: string[];
   certifications: string[];
   priceGbp: number;
+  priceTier: PriceTier;
   affiliateUrl: string;
+  affiliateProgram: AffiliateProgram;
+  affiliateTag: string;
   imageUrl: string;
   rating: number;
-  badge: "best-match" | "budget" | "whole-house";
+  badge: "best-match" | "budget" | "premium" | "best-value";
+  pros: string[];
+  cons: string[];
+  bestFor: string;
+  flowRate?: string;
+  filterLife?: string;
+  annualCost?: number;
 }
 
 export interface SupplierData {
@@ -88,4 +111,21 @@ export function getPercentOfLimit(reading: ContaminantReading): number {
   const limit = reading.ukLimit ?? reading.whoGuideline;
   if (!limit || limit === 0) return 0;
   return Math.min((reading.value / limit) * 100, 100);
+}
+
+export type EmailSequenceStep = 0 | 3 | 7 | 14 | 30;
+
+export interface SubscriberSequenceState {
+  email: string;
+  postcodeDistrict: string;
+  waterDataSnapshot: {
+    safetyScore: number;
+    scoreGrade: string;
+    contaminantsFlagged: number;
+    topConcerns: string[];
+    pfasDetected: boolean;
+  };
+  subscribedAt: string;
+  lastEmailSent: EmailSequenceStep | null;
+  lastEmailSentAt: string | null;
 }
