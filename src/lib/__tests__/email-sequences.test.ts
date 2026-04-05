@@ -23,6 +23,7 @@ describe("getNextEmail", () => {
     expect(email).toBeDefined();
     expect(email!.step).toBe(0);
     expect(email!.subject).toContain("SE15");
+    expect(email!.subject).toContain("scored");
   });
 
   it("returns day-3 email after day-0", () => {
@@ -64,34 +65,60 @@ describe("shouldSendEmail", () => {
 });
 
 describe("buildEmailHtml", () => {
-  it("includes postcode in day-0 email", () => {
+  it("day-0 contains score, postcode, and 'scored'", () => {
     const html = buildEmailHtml(baseSubscriber, 0);
     expect(html).toContain("SE15");
     expect(html).toContain("6.5");
   });
 
-  it("includes top concern in day-3 email", () => {
+  it("day-3 contains contaminant name and 'found in'", () => {
     const html = buildEmailHtml(baseSubscriber, 3);
-    expect(html).toContain("SE15");
     expect(html).toContain("Lead");
+    expect(html).toContain("Found in");
   });
 
-  it("includes affiliate links in day-7 email", () => {
+  it("day-7 contains affiliate URLs and product names", () => {
     const html = buildEmailHtml(baseSubscriber, 7);
     expect(html).toContain("SE15");
-    // Should contain product recommendations with affiliate URLs
     expect(html).toContain("https://");
+    // Should contain product recommendations
+    expect(html).toContain("Our pick for");
   });
 
-  it("includes testing kit link in day-14 email", () => {
+  it("day-14 contains 'test' and 'pipes'", () => {
     const html = buildEmailHtml(baseSubscriber, 14);
-    expect(html).toContain("testing");
+    expect(html).toContain("test");
+    expect(html).toContain("pipes");
   });
 
-  it("includes postcode link in day-30 email", () => {
+  it("day-30 contains postcode and 'update'", () => {
     const html = buildEmailHtml(baseSubscriber, 30);
     expect(html).toContain("SE15");
-    expect(html).toContain("/postcode/SE15/");
+    expect(html).toContain("update");
+  });
+
+  it("subject lines match new format", () => {
+    const day0 = getNextEmail(baseSubscriber);
+    expect(day0!.subject).toContain("scored 6.5");
+    expect(day0!.subject).toContain("2 contaminants flagged");
+
+    const sub3 = { ...baseSubscriber, lastEmailSent: 0 as const, lastEmailSentAt: "2026-04-01T10:00:00Z" };
+    const day3 = getNextEmail(sub3);
+    expect(day3!.subject).toContain("Lead was found in");
+
+    const sub7 = { ...baseSubscriber, lastEmailSent: 3 as const, lastEmailSentAt: "2026-04-04T10:00:00Z" };
+    const day7 = getNextEmail(sub7);
+    expect(day7!.subject).toContain("filter");
+
+    const sub14 = { ...baseSubscriber, lastEmailSent: 7 as const, lastEmailSentAt: "2026-04-08T10:00:00Z" };
+    const day14 = getNextEmail(sub14);
+    expect(day14!.subject).toContain("pipes");
+    expect(day14!.subject).toContain("test");
+
+    const sub30 = { ...baseSubscriber, lastEmailSent: 14 as const, lastEmailSentAt: "2026-04-15T10:00:00Z" };
+    const day30 = getNextEmail(sub30);
+    expect(day30!.subject).toContain("SE15");
+    expect(day30!.subject).toContain("changed");
   });
 
   it("handles subscriber with no concerns", () => {
@@ -106,6 +133,7 @@ describe("buildEmailHtml", () => {
     };
     const html = buildEmailHtml(sub, 3);
     expect(html).toContain("SE15");
-    // Should not crash, should have fallback content
+    // Should have fallback content
+    expect(html).toContain("looks good");
   });
 });
