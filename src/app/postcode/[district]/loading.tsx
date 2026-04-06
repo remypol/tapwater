@@ -1,32 +1,57 @@
 export default function PostcodeLoading() {
   return (
-    <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12 animate-pulse">
-      {/* Breadcrumb */}
-      <div className="h-4 w-48 bg-surface-muted rounded mb-8" />
-
-      {/* Score + Title area */}
-      <div className="flex flex-col lg:flex-row gap-8 mb-12">
-        <div className="w-48 h-48 rounded-full bg-surface-muted shrink-0 mx-auto lg:mx-0" />
-        <div className="flex-1 space-y-4">
-          <div className="h-8 w-64 bg-surface-muted rounded" />
-          <div className="h-5 w-96 bg-surface-muted rounded" />
-          <div className="h-5 w-80 bg-surface-muted rounded" />
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+      {/* Animated water drop */}
+      <div className="relative">
+        <svg
+          viewBox="0 0 60 80"
+          width={60}
+          height={80}
+          className="animate-bounce"
+          style={{ animationDuration: "1.4s" }}
+        >
+          {/* Drop shape */}
+          <path
+            d="M30 4 C30 4 6 40 6 54 C6 67.25 16.75 78 30 78 C43.25 78 54 67.25 54 54 C54 40 30 4 30 4Z"
+            fill="var(--color-accent, #0891b2)"
+            opacity={0.15}
+          />
+          {/* Water fill — animated via CSS */}
+          <clipPath id="drop-clip">
+            <path d="M30 4 C30 4 6 40 6 54 C6 67.25 16.75 78 30 78 C43.25 78 54 67.25 54 54 C54 40 30 4 30 4Z" />
+          </clipPath>
+          <rect
+            x={0}
+            y={30}
+            width={60}
+            height={50}
+            fill="var(--color-accent, #0891b2)"
+            opacity={0.4}
+            clipPath="url(#drop-clip)"
+          >
+            <animate
+              attributeName="y"
+              values="70;30;70"
+              dur="2s"
+              repeatCount="indefinite"
+              calcMode="spline"
+              keySplines="0.4 0 0.2 1;0.4 0 0.2 1"
+            />
+          </rect>
+          {/* Drop outline */}
+          <path
+            d="M30 4 C30 4 6 40 6 54 C6 67.25 16.75 78 30 78 C43.25 78 54 67.25 54 54 C54 40 30 4 30 4Z"
+            fill="none"
+            stroke="var(--color-accent, #0891b2)"
+            strokeWidth={2.5}
+            opacity={0.5}
+          />
+        </svg>
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-24 bg-surface-muted rounded-xl" />
-        ))}
-      </div>
-
-      {/* Table skeleton */}
-      <div className="space-y-3">
-        <div className="h-6 w-48 bg-surface-muted rounded mb-4" />
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-12 bg-surface-muted rounded-lg" />
-        ))}
+      <div className="text-center">
+        <p className="text-sm font-medium text-ink">Loading water report</p>
+        <p className="text-xs text-muted mt-1">Fetching the latest data for this area</p>
       </div>
     </div>
   );
