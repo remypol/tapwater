@@ -286,6 +286,71 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Explore */}
+      <section className="mt-12">
+        <h2 className="font-display text-xl text-ink italic mb-1">Explore</h2>
+        <p className="text-sm text-muted mb-5">Dig deeper into UK water quality</p>
+
+        {/* Feature pages — 2×2 on mobile, 4-col on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {[
+            {
+              href: "/rankings/",
+              title: "UK Water Quality Rankings",
+              desc: "See which cities have the best and worst tap water",
+            },
+            {
+              href: "/hardness/",
+              title: "Water Hardness Checker",
+              desc: "Find out if you have hard or soft water",
+            },
+            {
+              href: "/guides/is-uk-tap-water-safe/",
+              title: "Is UK Tap Water Safe?",
+              desc: "Everything you need to know about tap water safety",
+            },
+            {
+              href: "/guides/water-problems/",
+              title: "Water Problems?",
+              desc: "Troubleshoot taste, colour, and smell issues",
+            },
+          ].map(({ href, title, desc }) => (
+            <Link
+              key={href}
+              href={href}
+              className="card p-4 group block"
+            >
+              <p className="font-medium text-sm text-ink leading-snug group-hover:text-accent transition-colors">
+                {title}
+              </p>
+              <p className="text-xs text-muted mt-1.5 leading-relaxed">
+                {desc}
+              </p>
+              <div className="mt-3 flex items-center gap-1 text-accent">
+                <span className="text-xs font-medium">Read more</span>
+                <ChevronRight className="w-3 h-3" />
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Cities */}
+        <div className="mt-5 flex flex-wrap gap-2">
+          {[
+            { name: "London", slug: "london" },
+            { name: "Manchester", slug: "manchester" },
+            { name: "Birmingham", slug: "birmingham" },
+            { name: "Leeds", slug: "leeds" },
+            { name: "Glasgow", slug: "glasgow" },
+            { name: "Edinburgh", slug: "edinburgh" },
+          ].map(({ name, slug }) => (
+            <Link key={slug} href={`/city/${slug}/`} className="pill">
+              {name}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Water companies */}
       <section className="mt-12 mb-12">
         <h2 className="font-display text-xl text-ink italic">
