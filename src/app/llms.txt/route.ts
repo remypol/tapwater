@@ -43,6 +43,20 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Best Water Filter Jug UK](https://www.tapwater.uk/guides/best-water-filter-jug-uk): Jug filter comparison
 - [How to Test Your Water](https://www.tapwater.uk/guides/how-to-test-your-water): Home testing options
 
+## Regional water quality
+
+- [London](https://www.tapwater.uk/region/london): Water quality across Greater London
+- [South East England](https://www.tapwater.uk/region/south-east): Kent, Sussex, Surrey, Hampshire
+- [South West England](https://www.tapwater.uk/region/south-west): Devon, Cornwall, Somerset, Bristol
+- [East of England](https://www.tapwater.uk/region/east-of-england): Norfolk, Suffolk, Essex, Cambridgeshire
+- [West Midlands](https://www.tapwater.uk/region/west-midlands): Birmingham, Coventry, Black Country
+- [East Midlands](https://www.tapwater.uk/region/east-midlands): Nottingham, Leicester, Derby
+- [Yorkshire](https://www.tapwater.uk/region/yorkshire): Leeds, Sheffield, Bradford, York, Hull
+- [North West England](https://www.tapwater.uk/region/north-west): Manchester, Liverpool, Lancashire
+- [North East England](https://www.tapwater.uk/region/north-east): Newcastle, Sunderland, Durham
+- [Wales](https://www.tapwater.uk/region/wales): Cardiff, Swansea, Newport
+- [Scotland](https://www.tapwater.uk/region/scotland): Edinburgh, Glasgow, Aberdeen
+
 ## Water suppliers
 
 All major UK water companies are tracked:

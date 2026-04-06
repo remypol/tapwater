@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
+import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 
 const BASE_URL = "https://www.tapwater.uk";
@@ -76,6 +77,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: latestDataDate,
     changeFrequency: "weekly" as const,
     priority: 0.8,
+  }));
+
+  const regionPaths = REGIONS.map((r) => ({
+    url: `${BASE_URL}/region/${r.slug}`,
+    lastModified: latestDataDate,
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
   }));
 
   return [
@@ -170,6 +178,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
+    ...regionPaths,
     ...cityPaths,
     ...postcodePaths,
     ...supplierPaths,
