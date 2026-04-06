@@ -13,6 +13,7 @@ import { getPostcodeData, getScoredPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
+import { RelatedGuides } from "@/components/related-guides";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { CITIES } from "@/lib/cities";
 
@@ -389,6 +390,14 @@ export default async function PostcodePage({ params }: Props) {
                 </p>
               </Link>
             </section>
+
+            {/* Contextual guide links — relevant to flagged issues */}
+            <RelatedGuides
+              pfasDetected={data.pfasDetected}
+              hasLeadFlagged={data.readings.some(r => /lead/i.test(r.name) && r.status !== "pass")}
+              isHardWater={(hardnessValue ?? 0) >= 180}
+              hasContaminantsFlagged={data.contaminantsFlagged > 0}
+            />
 
             {/* Environmental Water Quality — EA data, clearly labelled */}
             {data.environmentalReadings.length > 0 && (
