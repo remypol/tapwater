@@ -3,6 +3,17 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Affiliate Disclosure | TapWater.uk',
   description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',
+  openGraph: {
+    title: 'Affiliate Disclosure | TapWater.uk',
+    description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',
+    url: 'https://www.tapwater.uk/affiliate-disclosure',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Affiliate Disclosure | TapWater.uk',
+    description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',
+  },
 }
 
 export default function AffiliateDisclosurePage() {

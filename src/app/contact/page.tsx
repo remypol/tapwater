@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with TapWater.uk. For press enquiries, data corrections, water company feedback, or general questions about UK tap water quality.",
+  openGraph: {
+    title: "Contact Us",
+    description:
+      "Get in touch with TapWater.uk. For press enquiries, data corrections, water company feedback, or general questions about UK tap water quality.",
+    url: "https://www.tapwater.uk/contact",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Contact Us",
+    description:
+      "Get in touch with TapWater.uk. For press enquiries, data corrections, water company feedback, or general questions about UK tap water quality.",
+  },
 };
 
 export default function ContactPage() {

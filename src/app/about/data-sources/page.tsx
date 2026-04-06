@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: 'Data Sources — Where TapWater.uk Gets Its Data',
   description:
     'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+  openGraph: {
+    title: 'Data Sources — Where TapWater.uk Gets Its Data',
+    description:
+      'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+    url: 'https://www.tapwater.uk/about/data-sources',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Data Sources — Where TapWater.uk Gets Its Data',
+    description:
+      'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+  },
 }
 
 export default function DataSourcesPage() {

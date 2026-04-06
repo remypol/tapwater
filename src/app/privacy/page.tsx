@@ -3,6 +3,17 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy | TapWater.uk',
   description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',
+  openGraph: {
+    title: 'Privacy Policy | TapWater.uk',
+    description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',
+    url: 'https://www.tapwater.uk/privacy',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Privacy Policy | TapWater.uk',
+    description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',
+  },
 }
 
 export default function PrivacyPage() {

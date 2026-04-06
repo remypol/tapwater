@@ -3,6 +3,17 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Disclaimer | TapWater.uk',
   description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',
+  openGraph: {
+    title: 'Disclaimer | TapWater.uk',
+    description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',
+    url: 'https://www.tapwater.uk/disclaimer',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Disclaimer | TapWater.uk',
+    description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',
+  },
 }
 
 export default function DisclaimerPage() {

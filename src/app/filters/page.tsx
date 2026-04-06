@@ -10,6 +10,19 @@ export const metadata: Metadata = {
   description:
     "Compare water filters matched to UK water quality data. Jugs, under-sink, reverse osmosis, whole-house, shower filters, and testing kits — with prices, specs, and independent recommendations.",
   alternates: { canonical: "https://www.tapwater.uk/filters" },
+  openGraph: {
+    title: "Water Filters — Find the Right One for Your Area",
+    description:
+      "Compare water filters matched to UK water quality data. Jugs, under-sink, reverse osmosis, whole-house, shower filters, and testing kits — with prices, specs, and independent recommendations.",
+    url: "https://www.tapwater.uk/filters",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Water Filters — Find the Right One for Your Area",
+    description:
+      "Compare water filters matched to UK water quality data. Jugs, under-sink, reverse osmosis, whole-house, shower filters, and testing kits — with prices, specs, and independent recommendations.",
+  },
 };
 
 export default function FiltersHubPage() {

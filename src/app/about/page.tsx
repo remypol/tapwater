@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   title: 'About TapWater.uk',
   description:
     'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+  openGraph: {
+    title: 'About TapWater.uk',
+    description:
+      'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+    url: 'https://www.tapwater.uk/about',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'About TapWater.uk',
+    description:
+      'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+  },
 }
 
 export default async function AboutPage() {

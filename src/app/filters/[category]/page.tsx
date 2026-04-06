@@ -159,10 +159,25 @@ export async function generateMetadata({
   const meta = CATEGORY_META[category];
   const count = getProductsByCategory(category).length;
 
+  const title = `${meta.title} — Compare ${count} Filters`;
+  const description = `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`;
+  const url = `https://www.tapwater.uk/filters/${meta.slug}/`;
+
   return {
-    title: `${meta.title} — Compare ${count} Filters`,
-    description: `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`,
-    alternates: { canonical: `https://www.tapwater.uk/filters/${meta.slug}/` },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

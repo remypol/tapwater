@@ -6,6 +6,19 @@ export const metadata: Metadata = {
   title: 'Methodology — How We Calculate Water Quality Scores',
   description:
     'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+  openGraph: {
+    title: 'Methodology — How We Calculate Water Quality Scores',
+    description:
+      'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+    url: 'https://www.tapwater.uk/about/methodology',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Methodology — How We Calculate Water Quality Scores',
+    description:
+      'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+  },
 }
 
 export default function MethodologyPage() {
