@@ -136,6 +136,19 @@ export default async function PostcodePage({ params }: Props) {
       question: `Is ${data.district} water hard or soft?`,
       answer: `Water in ${data.district} (${data.areaName}) has a hardness of ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}. ${hardnessValue >= 180 ? "Hard water can cause limescale buildup. A water softener or filter jug may help." : hardnessValue < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`,
     }] : []),
+    ...(hasData ? [{
+      question: `Should I use a water filter in ${data.district}?`,
+      answer: `${data.contaminantsFlagged > 0
+        ? `With ${data.contaminantsFlagged} contaminant${data.contaminantsFlagged > 1 ? "s" : ""} above recommended levels in ${data.district}, a water filter could help. ${data.pfasDetected ? "A reverse osmosis or activated carbon filter is recommended for PFAS removal." : "A filter jug or under-sink filter can reduce most common contaminants."}`
+        : `${data.district} water scored ${data.safetyScore}/10 with no contaminants above recommended levels. A filter is optional but can improve taste, especially if you notice a chlorine flavour.`
+      } See our filter recommendations for your area.`,
+    }] : []),
+    ...(hasData ? [{
+      question: `Are there PFAS forever chemicals in ${data.district} water?`,
+      answer: data.pfasDetected
+        ? `Yes, PFAS (per- and polyfluoroalkyl substances) have been detected in ${data.district} at ${data.pfasLevel} µg/L from ${data.pfasSource} monitoring. The UK currently has no legal limit for PFAS in drinking water. Reverse osmosis and activated carbon filters can reduce PFAS levels.`
+        : `No PFAS (forever chemicals) have been detected in ${data.district} based on available monitoring data. PFAS are tested at environmental monitoring sites near your postcode.`,
+    }] : []),
   ] : [];
 
   return (
