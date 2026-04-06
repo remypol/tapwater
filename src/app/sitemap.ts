@@ -103,6 +103,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/hardness/`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/supplier/`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
