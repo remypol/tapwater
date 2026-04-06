@@ -120,7 +120,7 @@ export default async function SupplierPage({ params }: Props) {
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
-          { name: "Suppliers", url: "https://www.tapwater.uk/supplier/" },
+          { name: "Suppliers", url: "https://www.tapwater.uk/supplier" },
           { name: supplier.name, url: `https://www.tapwater.uk/supplier/${supplier.id}/` },
         ]}
       />
@@ -253,7 +253,7 @@ export default async function SupplierPage({ params }: Props) {
                       >
                         <td className="px-4 py-3.5">
                           <Link
-                            href={`/postcode/${area}/`}
+                            href={`/postcode/${area}`}
                             className="font-data font-bold text-ink hover:text-accent transition-colors"
                           >
                             {area}
@@ -313,7 +313,7 @@ export default async function SupplierPage({ params }: Props) {
                 return pd ? (
                   <Link
                     key={area}
-                    href={`/postcode/${area}/`}
+                    href={`/postcode/${area}`}
                     className="card py-2 px-3 inline-flex items-center gap-2"
                   >
                     <MapPin className="w-3 h-3 text-faint shrink-0" />
@@ -326,7 +326,7 @@ export default async function SupplierPage({ params }: Props) {
                 ) : (
                   <Link
                     key={area}
-                    href={`/postcode/${area}/`}
+                    href={`/postcode/${area}`}
                     className="pill"
                   >
                     <MapPin className="w-3 h-3 text-faint mr-1.5" />

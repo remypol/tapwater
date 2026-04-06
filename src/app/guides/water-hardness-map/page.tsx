@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
       title: `UK Water Hardness Map: Is Your Water Hard or Soft? (${year})`,
       description:
         "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
-      url: "https://www.tapwater.uk/guides/water-hardness-map/",
+      url: "https://www.tapwater.uk/guides/water-hardness-map",
       type: "article",
     },
   }
@@ -52,7 +52,7 @@ export default function WaterHardnessMapPage() {
         <ArticleSchema
           headline={`UK Water Hardness Map: Is Your Water Hard or Soft? (${new Date().getFullYear()})`}
           description="Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener."
-          url="https://www.tapwater.uk/guides/water-hardness-map/"
+          url="https://www.tapwater.uk/guides/water-hardness-map"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"

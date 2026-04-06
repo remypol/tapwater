@@ -96,7 +96,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: `Best and Worst Tap Water in the UK — ${year} Rankings`,
       description,
-      url: "https://www.tapwater.uk/compare/",
+      url: "https://www.tapwater.uk/compare",
       type: "article",
     },
     twitter: {
@@ -118,7 +118,7 @@ function RankingCard({
 }) {
   return (
     <Link
-      href={`/postcode/${data.district}/`}
+      href={`/postcode/${data.district}`}
       className="card p-4 group block"
     >
       <div className="flex items-start justify-between gap-3">
@@ -187,7 +187,7 @@ export default async function ComparePage() {
         <BreadcrumbSchema
           items={[
             { name: "Home", url: "https://www.tapwater.uk" },
-            { name: "Compare", url: "https://www.tapwater.uk/compare/" },
+            { name: "Compare", url: "https://www.tapwater.uk/compare" },
           ]}
         />
         <FAQSchema
@@ -312,7 +312,7 @@ export default async function ComparePage() {
               {suppliers.map((s, i) => (
                 <Link
                   key={s.id}
-                  href={`/supplier/${s.id}/`}
+                  href={`/supplier/${s.id}`}
                   className="grid grid-cols-[40px_1fr_auto] sm:grid-cols-[40px_1fr_100px_100px] gap-4 px-4 py-3 border-b border-rule last:border-b-0 hover:bg-wash transition-colors group items-center"
                 >
                   <span className="font-data text-sm text-faint">{i + 1}</span>

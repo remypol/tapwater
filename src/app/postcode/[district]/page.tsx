@@ -213,7 +213,7 @@ export default async function PostcodePage({ params }: Props) {
                   <>Based on environmental water monitoring</>
                 )}, your water in{" "}
                 {data.district} ({data.areaName}) is supplied by{" "}
-                <Link href={`/supplier/${data.supplierId}/`} className="font-medium text-ink hover:text-accent transition-colors">
+                <Link href={`/supplier/${data.supplierId}`} className="font-medium text-ink hover:text-accent transition-colors">
                   {data.supplier}
                 </Link>
                 . Based on the latest data (last sampled {data.lastSampleDate}),{" "}
@@ -303,7 +303,7 @@ export default async function PostcodePage({ params }: Props) {
             {/* Supplementary recommendations */}
             <section className="mt-6 grid gap-3 sm:grid-cols-2">
               <Link
-                href="/filters/shower/"
+                href="/filters/shower"
                 className="card p-4 group hover:border-accent/30 transition-colors"
               >
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
@@ -314,7 +314,7 @@ export default async function PostcodePage({ params }: Props) {
                 </p>
               </Link>
               <Link
-                href="/filters/testing-kits/"
+                href="/filters/testing-kits"
                 className="card p-4 group hover:border-accent/30 transition-colors"
               >
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
@@ -352,23 +352,23 @@ export default async function PostcodePage({ params }: Props) {
               </h2>
               <div className="flex flex-wrap gap-2">
                 {data.pfasDetected && (
-                  <Link href="/contaminant/pfas/" className="pill">PFAS explained</Link>
+                  <Link href="/contaminant/pfas" className="pill">PFAS explained</Link>
                 )}
                 {flaggedNames.some((n) => /lead/i.test(n)) && (
-                  <Link href="/contaminant/lead/" className="pill">Lead in water</Link>
+                  <Link href="/contaminant/lead" className="pill">Lead in water</Link>
                 )}
                 {flaggedNames.some((n) => /nitrate|nitrite/i.test(n)) && (
-                  <Link href="/contaminant/nitrate/" className="pill">Nitrate levels</Link>
+                  <Link href="/contaminant/nitrate" className="pill">Nitrate levels</Link>
                 )}
                 {flaggedNames.some((n) => /chlorine/i.test(n)) && (
-                  <Link href="/contaminant/chlorine/" className="pill">Chlorine</Link>
+                  <Link href="/contaminant/chlorine" className="pill">Chlorine</Link>
                 )}
-                <Link href="/guides/how-to-test-your-water/" className="pill">How to test your water</Link>
-                <Link href="/guides/best-water-filters-uk/" className="pill">Best water filters</Link>
-                <Link href={`/city/${data.city.toLowerCase().replace(/\s+/g, "-")}/`} className="pill">
+                <Link href="/guides/how-to-test-your-water" className="pill">How to test your water</Link>
+                <Link href="/guides/best-water-filters-uk" className="pill">Best water filters</Link>
+                <Link href={`/city/${data.city.toLowerCase().replace(/\s+/g, "-")}`} className="pill">
                   Water in {data.city}
                 </Link>
-                <Link href="/compare/" className="pill">UK water rankings</Link>
+                <Link href="/compare" className="pill">UK water rankings</Link>
               </div>
             </section>
 
@@ -405,7 +405,7 @@ export default async function PostcodePage({ params }: Props) {
                 pcData ? (
                   <Link
                     key={code}
-                    href={`/postcode/${code}/`}
+                    href={`/postcode/${code}`}
                     className="card py-2 px-3 inline-flex items-center gap-2 snap-start shrink-0"
                   >
                     <MapPin className="w-3 h-3 text-faint shrink-0" />
@@ -422,7 +422,7 @@ export default async function PostcodePage({ params }: Props) {
                     )}
                   </Link>
                 ) : (
-                  <Link key={code} href={`/postcode/${code}/`} className="pill snap-start shrink-0">
+                  <Link key={code} href={`/postcode/${code}`} className="pill snap-start shrink-0">
                     <MapPin className="w-3 h-3 text-faint mr-1.5" />
                     {code}
                   </Link>
@@ -435,7 +435,7 @@ export default async function PostcodePage({ params }: Props) {
         {/* Supplier Card — always shown */}
         <div className="mt-10">
           <Link
-            href={`/supplier/${data.supplierId}/`}
+            href={`/supplier/${data.supplierId}`}
             className="card p-4 flex items-center justify-between group"
           >
             <div className="flex items-center gap-3">

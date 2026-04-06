@@ -37,13 +37,13 @@ export function generateMetadata(): Metadata {
     description:
       "We analysed 2,800 UK postcodes — but your specific home could be different. Compare dip strips vs lab tests and find out what is actually in your water before buying a filter.",
     alternates: {
-      canonical: "https://www.tapwater.uk/guides/best-water-testing-kit-uk/",
+      canonical: "https://www.tapwater.uk/guides/best-water-testing-kit-uk",
     },
     openGraph: {
       title: `Best Water Testing Kit UK (${year})`,
       description:
         "Compare dip strips vs lab tests. Find out what is in your water before spending money on a filter.",
-      url: "https://www.tapwater.uk/guides/best-water-testing-kit-uk/",
+      url: "https://www.tapwater.uk/guides/best-water-testing-kit-uk",
       type: "article",
     },
     twitter: {
@@ -181,14 +181,14 @@ export default function BestWaterTestingKitGuide() {
           { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Water Testing Kit UK",
-            url: "https://www.tapwater.uk/guides/best-water-testing-kit-uk/",
+            url: "https://www.tapwater.uk/guides/best-water-testing-kit-uk",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Water Testing Kit UK ${year} \u2014 Test Before You Filter`}
         description="Compare dip strips vs lab tests. Find out what is in your water before spending money on a filter."
-        url="https://www.tapwater.uk/guides/best-water-testing-kit-uk/"
+        url="https://www.tapwater.uk/guides/best-water-testing-kit-uk"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"

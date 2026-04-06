@@ -32,7 +32,7 @@ export function generateMetadata(): Metadata {
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:
         "Which water filter type do you actually need? Compare jug, countertop, under-sink, reverse osmosis, and whole-house systems.",
-      url: "https://www.tapwater.uk/guides/best-water-filters-uk/",
+      url: "https://www.tapwater.uk/guides/best-water-filters-uk",
       type: "article",
     },
     twitter: {
@@ -207,14 +207,14 @@ export default function BestWaterFiltersGuide() {
           { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Water Filters UK",
-            url: "https://www.tapwater.uk/guides/best-water-filters-uk/",
+            url: "https://www.tapwater.uk/guides/best-water-filters-uk",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Water Filters for UK Tap Water (${year})`}
         description="An honest overview of every water filter type available in the UK, with links to specific buying guides for each category."
-        url="https://www.tapwater.uk/guides/best-water-filters-uk/"
+        url="https://www.tapwater.uk/guides/best-water-filters-uk"
         datePublished="2026-04-02"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"

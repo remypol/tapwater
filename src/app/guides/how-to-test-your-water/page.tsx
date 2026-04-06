@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `How to Test Your Tap Water at Home (${year} Guide)`,
       description:
         "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
-      url: "https://www.tapwater.uk/guides/how-to-test-your-water/",
+      url: "https://www.tapwater.uk/guides/how-to-test-your-water",
       type: "article",
     },
   }
@@ -37,7 +37,7 @@ export default function HowToTestYourWaterPage() {
         <ArticleSchema
           headline={`How to Test Your Tap Water at Home (${new Date().getFullYear()} Guide)`}
           description="Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis."
-          url="https://www.tapwater.uk/guides/how-to-test-your-water/"
+          url="https://www.tapwater.uk/guides/how-to-test-your-water"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"

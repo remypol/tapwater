@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
       description:
         "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
-      url: "https://www.tapwater.uk/guides/lead-pipes-uk/",
+      url: "https://www.tapwater.uk/guides/lead-pipes-uk",
       type: "article",
     },
     twitter: {
@@ -65,7 +65,7 @@ export default function LeadPipesGuide() {
         <ArticleSchema
           headline="The UK's Lead Pipe Problem: Which Areas Are Most Affected?"
           description="Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household."
-          url="https://www.tapwater.uk/guides/lead-pipes-uk/"
+          url="https://www.tapwater.uk/guides/lead-pipes-uk"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
@@ -151,11 +151,11 @@ export default function LeadPipesGuide() {
         </p>
         <p className="text-base text-body leading-relaxed mt-4">
           Areas with the oldest housing stock — and highest lead pipe risk — include{" "}
-          <Link href="/city/london/" className="text-accent hover:underline">London</Link>,{" "}
-          <Link href="/city/glasgow/" className="text-accent hover:underline">Glasgow</Link>,{" "}
-          <Link href="/city/edinburgh/" className="text-accent hover:underline">Edinburgh</Link>,{" "}
-          <Link href="/city/birmingham/" className="text-accent hover:underline">Birmingham</Link>, and{" "}
-          <Link href="/city/manchester/" className="text-accent hover:underline">Manchester</Link>.{" "}
+          <Link href="/city/london" className="text-accent hover:underline">London</Link>,{" "}
+          <Link href="/city/glasgow" className="text-accent hover:underline">Glasgow</Link>,{" "}
+          <Link href="/city/edinburgh" className="text-accent hover:underline">Edinburgh</Link>,{" "}
+          <Link href="/city/birmingham" className="text-accent hover:underline">Birmingham</Link>, and{" "}
+          <Link href="/city/manchester" className="text-accent hover:underline">Manchester</Link>.{" "}
           Check your specific postcode for lead levels in your area.
         </p>
 

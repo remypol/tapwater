@@ -154,7 +154,7 @@ export function RegionSheet({
             {sorted.map((pc) => (
               <Link
                 key={pc.district}
-                href={`/postcode/${pc.district}/`}
+                href={`/postcode/${pc.district}`}
                 className="flex items-center gap-3 px-3 py-2.5 -mx-1 rounded-lg hover:bg-wash transition-colors group"
               >
                 <span className="font-data font-bold text-sm text-ink w-14 shrink-0">

@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
       description:
         "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water.",
-      url: "https://www.tapwater.uk/guides/microplastics-uk-water/",
+      url: "https://www.tapwater.uk/guides/microplastics-uk-water",
       type: "article",
     },
     twitter: {
@@ -53,7 +53,7 @@ export default function MicroplasticsGuide() {
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
           { name: "Guides", url: "https://www.tapwater.uk/guides" },
-          { name: "Microplastics in UK Tap Water", url: "https://www.tapwater.uk/guides/microplastics-uk-water/" },
+          { name: "Microplastics in UK Tap Water", url: "https://www.tapwater.uk/guides/microplastics-uk-water" },
         ]}
       />
       <div className="max-w-3xl mx-auto">
@@ -72,7 +72,7 @@ export default function MicroplasticsGuide() {
         <ArticleSchema
           headline="Microplastics in UK Tap Water: What We Know So Far"
           description="Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure."
-          url="https://www.tapwater.uk/guides/microplastics-uk-water/"
+          url="https://www.tapwater.uk/guides/microplastics-uk-water"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"

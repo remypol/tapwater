@@ -44,7 +44,7 @@ export function WebSiteSchema() {
     url: "https://www.tapwater.uk",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://www.tapwater.uk/postcode/{search_term_string}/",
+      target: "https://www.tapwater.uk/postcode/{search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

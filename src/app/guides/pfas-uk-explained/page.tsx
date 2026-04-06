@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `PFAS in UK Drinking Water: Everything You Need to Know (${year})`,
       description:
         "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them?",
-      url: "https://www.tapwater.uk/guides/pfas-uk-explained/",
+      url: "https://www.tapwater.uk/guides/pfas-uk-explained",
       type: "article",
     },
     twitter: {
@@ -65,7 +65,7 @@ export default function PFASGuide() {
         <ArticleSchema
           headline="PFAS in UK Drinking Water: Everything You Need to Know"
           description="What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data."
-          url="https://www.tapwater.uk/guides/pfas-uk-explained/"
+          url="https://www.tapwater.uk/guides/pfas-uk-explained"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
@@ -124,11 +124,11 @@ export default function PFASGuide() {
         </p>
         <p className="text-base text-body leading-relaxed mt-4">
           Areas where PFAS has been detected in nearby water monitoring include{" "}
-          <Link href="/postcode/LS1/" className="text-accent hover:underline">LS1 (Leeds)</Link>,{" "}
-          <Link href="/postcode/B1/" className="text-accent hover:underline">B1 (Birmingham)</Link>,{" "}
-          <Link href="/postcode/M1/" className="text-accent hover:underline">M1 (Manchester)</Link>, and{" "}
-          <Link href="/postcode/BS1/" className="text-accent hover:underline">BS1 (Bristol)</Link>.{" "}
-          <Link href="/compare/" className="text-accent hover:underline">See the full UK rankings</Link>.
+          <Link href="/postcode/LS1" className="text-accent hover:underline">LS1 (Leeds)</Link>,{" "}
+          <Link href="/postcode/B1" className="text-accent hover:underline">B1 (Birmingham)</Link>,{" "}
+          <Link href="/postcode/M1" className="text-accent hover:underline">M1 (Manchester)</Link>, and{" "}
+          <Link href="/postcode/BS1" className="text-accent hover:underline">BS1 (Bristol)</Link>.{" "}
+          <Link href="/compare" className="text-accent hover:underline">See the full UK rankings</Link>.
         </p>
 
         {/* UK vs EU regulation */}

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "UK Water Companies — Water Quality Comparison",
     description:
       "Compare water quality scores across all 16 major UK water companies.",
-    url: "https://www.tapwater.uk/supplier/",
+    url: "https://www.tapwater.uk/supplier",
     type: "website",
   },
 };
@@ -61,7 +61,7 @@ export default async function SuppliersPage() {
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
-          { name: "Water Companies", url: "https://www.tapwater.uk/supplier/" },
+          { name: "Water Companies", url: "https://www.tapwater.uk/supplier" },
         ]}
       />
 
@@ -102,7 +102,7 @@ export default async function SuppliersPage() {
                 <td className="px-4 py-3.5 text-faint font-data">{i + 1}</td>
                 <td className="px-4 py-3.5">
                   <Link
-                    href={`/supplier/${supplier.id}/`}
+                    href={`/supplier/${supplier.id}`}
                     className="group flex items-center gap-2"
                   >
                     <Building2 className="w-4 h-4 text-faint shrink-0" />

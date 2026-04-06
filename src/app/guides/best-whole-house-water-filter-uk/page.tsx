@@ -38,13 +38,13 @@ export function generateMetadata(): Metadata {
     description:
       "We analysed 2,800 UK postcodes to find where whole-house filtration matters most. Independent reviews focused on sediment removal, appliance protection, and real running costs.",
     alternates: {
-      canonical: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk/",
+      canonical: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
     },
     openGraph: {
       title: `Best Whole House Water Filter UK (${year})`,
       description:
         "Independent whole-house filter reviews tested against real UK water quality data from 2,800 postcodes.",
-      url: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk/",
+      url: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
       type: "article",
     },
     twitter: {
@@ -225,14 +225,14 @@ export default function BestWholeHouseFilterGuide() {
           { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Whole House Filter UK",
-            url: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk/",
+            url: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Whole House Water Filter UK ${year}`}
         description="We analysed 2,800 UK postcodes to find where whole-house filtration matters most. Independent reviews focused on sediment removal, appliance protection, and real running costs."
-        url="https://www.tapwater.uk/guides/best-whole-house-water-filter-uk/"
+        url="https://www.tapwater.uk/guides/best-whole-house-water-filter-uk"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"

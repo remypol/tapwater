@@ -170,7 +170,7 @@ export default async function CityPage({ params }: Props) {
         <BreadcrumbSchema
           items={[
             { name: "Home", url: "https://www.tapwater.uk" },
-            { name: "Cities", url: "https://www.tapwater.uk/city/" },
+            { name: "Cities", url: "https://www.tapwater.uk/city" },
             {
               name: city.name,
               url: `https://www.tapwater.uk/city/${city.slug}/`,
@@ -264,7 +264,7 @@ export default async function CityPage({ params }: Props) {
                       ? "No contaminants were found above recommended levels."
                       : `${totalFlagged} contaminant${totalFlagged !== 1 ? "s were" : " was"} flagged above recommended levels across all areas.`}{" "}
                     Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
                       {primarySupplier.name}
                     </Link>
                     . {city.description}
@@ -276,7 +276,7 @@ export default async function CityPage({ params }: Props) {
                     <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>, with{" "}
                     {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
                     Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
                       {primarySupplier.name}
                     </Link>
                     . {city.description}
@@ -289,7 +289,7 @@ export default async function CityPage({ params }: Props) {
                     {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
                     Check your specific postcode for detailed results.{" "}
                     Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}/`} className="text-accent hover:underline">
+                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
                       {primarySupplier.name}
                     </Link>
                     . {city.description}
@@ -366,7 +366,7 @@ export default async function CityPage({ params }: Props) {
                   {sortedPostcodes.map((pc) => (
                     <Link
                       key={pc.district}
-                      href={`/postcode/${pc.district}/`}
+                      href={`/postcode/${pc.district}`}
                       className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[1fr_1fr_80px_80px_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-rule last:border-b-0 hover:bg-wash transition-colors group items-center"
                     >
                       <span className="font-data font-bold text-sm text-ink">
@@ -398,7 +398,7 @@ export default async function CityPage({ params }: Props) {
             {/* Supplier card */}
             <div className="mt-8">
               <Link
-                href={`/supplier/${primarySupplier.id}/`}
+                href={`/supplier/${primarySupplier.id}`}
                 className="card p-4 flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">

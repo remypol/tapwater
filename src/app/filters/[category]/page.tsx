@@ -188,7 +188,7 @@ export default async function CategoryPage({
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
-          { name: "Filters", url: "https://www.tapwater.uk/filters/" },
+          { name: "Filters", url: "https://www.tapwater.uk/filters" },
           {
             name: meta.title,
             url: `https://www.tapwater.uk/filters/${meta.slug}/`,
@@ -205,7 +205,7 @@ export default async function CategoryPage({
           </Link>
           <span>/</span>
           <Link
-            href="/filters/"
+            href="/filters"
             className="hover:text-accent transition-colors"
           >
             Filters

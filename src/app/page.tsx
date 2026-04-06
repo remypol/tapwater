@@ -158,7 +158,7 @@ export default async function HomePage() {
               return (
                 <Link
                   key={item.district}
-                  href={`/postcode/${item.district}/`}
+                  href={`/postcode/${item.district}`}
                   className="card p-4 group block"
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -219,7 +219,7 @@ export default async function HomePage() {
             {best.map((item) => (
               <Link
                 key={item.district}
-                href={`/postcode/${item.district}/`}
+                href={`/postcode/${item.district}`}
                 className="card p-4 group block"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -268,7 +268,7 @@ export default async function HomePage() {
           {popularSearches.map(({ district, data }) => (
               <Link
                 key={district}
-                href={`/postcode/${district}/`}
+                href={`/postcode/${district}`}
                 className="card px-4 py-3 group flex items-center gap-3"
               >
                 <span className="font-data font-bold text-sm text-ink w-12 shrink-0">
@@ -299,7 +299,7 @@ export default async function HomePage() {
           {suppliers.slice(0, 6).map((supplier) => (
             <Link
               key={supplier.id}
-              href={`/supplier/${supplier.id}/`}
+              href={`/supplier/${supplier.id}`}
               className="flex items-center gap-3 px-4 py-3 group hover:bg-wash transition-colors first:rounded-t-xl"
             >
               <Building2 className="w-4 h-4 text-faint shrink-0" />

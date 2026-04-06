@@ -93,7 +93,7 @@ export function StatCards({
 
       {/* Supplier — links to supplier page */}
       <Link
-        href={`/supplier/${supplierId}/`}
+        href={`/supplier/${supplierId}`}
         className="card p-6 hover:border-accent/30 transition-colors group"
       >
         <div className="animate-fade-up delay-3">

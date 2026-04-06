@@ -116,7 +116,7 @@ export function HomepageMap() {
             {regionPostcodes.map((pc) => (
               <Link
                 key={pc.district}
-                href={`/postcode/${pc.district}/`}
+                href={`/postcode/${pc.district}`}
                 className="card px-3 py-2.5 flex items-center gap-2 group"
               >
                 <span className="font-data font-bold text-sm text-ink shrink-0">

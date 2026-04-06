@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
       title: `Understanding Your Water Company's Quality Report (${year})`,
       description:
         "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
-      url: "https://www.tapwater.uk/guides/understanding-your-water-supplier/",
+      url: "https://www.tapwater.uk/guides/understanding-your-water-supplier",
       type: "article",
     },
   }
@@ -55,7 +55,7 @@ export default function UnderstandingYourWaterSupplierPage() {
         <ArticleSchema
           headline={`Understanding Your Water Company's Quality Report (${new Date().getFullYear()})`}
           description="How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards."
-          url="https://www.tapwater.uk/guides/understanding-your-water-supplier/"
+          url="https://www.tapwater.uk/guides/understanding-your-water-supplier"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
@@ -238,11 +238,11 @@ export default function UnderstandingYourWaterSupplierPage() {
             TapWater.uk homepage
           </Link>
           {" "}or go directly to a postcode such as{" "}
-          <Link href="/postcode/SW1/" className="text-accent underline hover:text-accent-hover transition-colors">
+          <Link href="/postcode/SW1" className="text-accent underline hover:text-accent-hover transition-colors">
             SW1 (central London)
           </Link>
           {" "}or{" "}
-          <Link href="/postcode/M1/" className="text-accent underline hover:text-accent-hover transition-colors">
+          <Link href="/postcode/M1" className="text-accent underline hover:text-accent-hover transition-colors">
             M1 (central Manchester)
           </Link>
           {" "}to see how the data is structured.
@@ -317,7 +317,7 @@ export default function UnderstandingYourWaterSupplierPage() {
           {SUPPLIERS.map((supplier) => (
             <Link
               key={supplier.slug}
-              href={`/supplier/${supplier.slug}/`}
+              href={`/supplier/${supplier.slug}`}
               className="card p-4 flex items-start gap-3 group no-underline"
             >
               <FileText className="w-4 h-4 text-muted mt-0.5 shrink-0 group-hover:text-accent transition-colors" />

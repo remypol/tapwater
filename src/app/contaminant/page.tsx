@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Contaminants in UK Tap Water",
     description:
       "Health effects, legal limits, and removal methods for all major contaminants in UK drinking water.",
-    url: "https://www.tapwater.uk/contaminant/",
+    url: "https://www.tapwater.uk/contaminant",
     type: "website",
   },
 };
@@ -81,7 +81,7 @@ export default function ContaminantsPage() {
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
-          { name: "Contaminants", url: "https://www.tapwater.uk/contaminant/" },
+          { name: "Contaminants", url: "https://www.tapwater.uk/contaminant" },
         ]}
       />
 
@@ -106,7 +106,7 @@ export default function ContaminantsPage() {
         {CONTAMINANT_CARDS.map((item) => (
           <Link
             key={item.slug}
-            href={`/contaminant/${item.slug}/`}
+            href={`/contaminant/${item.slug}`}
             className="card p-5 group block hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between gap-3 mb-3">

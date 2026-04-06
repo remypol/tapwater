@@ -38,13 +38,13 @@ export function generateMetadata(): Metadata {
     description:
       "We analysed 2,800 UK postcodes to find where reverse osmosis actually matters. Independent RO system reviews tested against real contaminant data, not marketing claims.",
     alternates: {
-      canonical: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk/",
+      canonical: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk",
     },
     openGraph: {
       title: `Best Reverse Osmosis System UK (${year})`,
       description:
         "Independent RO system reviews tested against real UK water quality data from 2,800 postcodes.",
-      url: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk/",
+      url: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk",
       type: "article",
     },
     twitter: {
@@ -225,14 +225,14 @@ export default function BestReverseOsmosisGuide() {
           { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best RO System UK",
-            url: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk/",
+            url: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Reverse Osmosis System UK ${year} \u2014 Tested Against Real Water Data`}
         description="We analysed 2,800 UK postcodes to find where reverse osmosis actually matters. Independent RO system reviews tested against real contaminant data."
-        url="https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk/"
+        url="https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"
