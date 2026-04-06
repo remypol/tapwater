@@ -500,3 +500,19 @@ export async function getMapPostcodes(): Promise<MapPostcode[]> {
     scoreGrade: data.scoreGrade,
   }));
 }
+
+/**
+ * Computes the national average safety score across all scored postcode districts.
+ */
+export async function getNationalAverageScore(): Promise<number> {
+  const cache = await loadData();
+  let total = 0;
+  let count = 0;
+  for (const data of cache.values()) {
+    if (data.safetyScore >= 0) {
+      total += data.safetyScore;
+      count++;
+    }
+  }
+  return count > 0 ? total / count : 0;
+}

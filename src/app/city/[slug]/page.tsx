@@ -12,7 +12,8 @@ import {
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
-import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { RelatedGuides } from "@/components/related-guides";
+import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { CITIES, getCityBySlug } from "@/lib/cities";
@@ -96,7 +97,10 @@ export default async function CityPage({ params }: Props) {
   const city = getCityBySlug(slug);
   if (!city) notFound();
 
-  const allPostcodes = await getPostcodesForCity(city.matches);
+  const [allPostcodes, nationalAvg] = await Promise.all([
+    getPostcodesForCity(city.matches),
+    getNationalAverageScore(),
+  ]);
   const scored = allPostcodes.filter((p) => p.safetyScore >= 0);
 
   // Aggregate stats
@@ -148,6 +152,18 @@ export default async function CityPage({ params }: Props) {
   const sortedPostcodes = [...scored].sort(
     (a, b) => a.safetyScore - b.safetyScore,
   );
+
+  // Best and worst areas
+  const bestPostcodes = [...scored].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3);
+  const worstPostcodes = [...scored].sort((a, b) => a.safetyScore - b.safetyScore).slice(0, 3);
+
+  // Score vs national
+  const scoreDiff = avgScore - nationalAvg;
+  const scoreVsNational = scoreDiff > 0.15
+    ? "above"
+    : scoreDiff < -0.15
+      ? "below"
+      : "level with";
 
   // FAQ answers
   const safetyAnswer =
@@ -253,6 +269,11 @@ export default async function CityPage({ params }: Props) {
                   {avgScore.toFixed(1)}
                   <span className="text-sm text-faint font-normal">/10</span>
                 </p>
+                {nationalAvg > 0 && (
+                  <p className="text-xs text-faint mt-1">
+                    UK avg: {nationalAvg.toFixed(1)}/10
+                  </p>
+                )}
               </div>
               <div className="card p-4 text-center">
                 <p className="text-xs text-muted uppercase tracking-wider">
@@ -287,7 +308,10 @@ export default async function CityPage({ params }: Props) {
                   <>
                     <strong className="text-ink">Yes, {city.name} tap water is safe to drink.</strong>{" "}
                     Based on {scored.length} areas tested, {city.name} has an average water quality
-                    score of <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>.{" "}
+                    score of <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>
+                    {nationalAvg > 0 && (
+                      <span className="text-muted text-sm"> ({scoreVsNational} the UK average of {nationalAvg.toFixed(1)}/10)</span>
+                    )}.{" "}
                     {totalFlagged === 0
                       ? "No contaminants were found above recommended levels."
                       : `${totalFlagged} contaminant${totalFlagged !== 1 ? "s were" : " was"} flagged above recommended levels across all areas.`}{" "}
@@ -423,18 +447,52 @@ export default async function CityPage({ params }: Props) {
 
             <hr className="border-rule mt-10" />
 
+            {/* Hardness badge */}
+            {avgHardness != null && hardnessClass != null && (
+              <div className="mt-8">
+                <Link
+                  href="/hardness/"
+                  className="card p-4 flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-accent-light flex items-center justify-center">
+                      <Droplets className="w-4 h-4 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted">Water hardness</p>
+                      <p className="font-semibold text-ink group-hover:text-accent transition-colors">
+                        {city.name} water is{" "}
+                        <span className="capitalize">{hardnessClass}</span>{" "}
+                        <span className="text-muted font-normal text-sm">
+                          ({Math.round(avgHardness)} mg/L CaCO₃)
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
+                </Link>
+              </div>
+            )}
+
             {/* Supplier card */}
-            <div className="mt-8">
+            <div className="mt-4">
               <Link
-                href={`/supplier/${primarySupplier.id}`}
+                href={`/supplier/${primarySupplier.id}/`}
                 className="card p-4 flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
-                    <Building2 className="w-4 h-4 text-faint" />
+                  <div className="w-9 h-9 rounded-lg bg-wash flex items-center justify-center">
+                    <Building2 className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted">Main water supplier</p>
+                    <p className="text-sm text-muted">
+                      Main water supplier
+                      {primarySupplier.count > 0 && (
+                        <span className="ml-2 text-faint">
+                          — {primarySupplier.count} postcode{primarySupplier.count !== 1 ? "s" : ""} in {city.name}
+                        </span>
+                      )}
+                    </p>
                     <p className="font-semibold text-ink group-hover:text-accent transition-colors">
                       {primarySupplier.name}
                     </p>
@@ -456,6 +514,91 @@ export default async function CityPage({ params }: Props) {
               below.
             </p>
           </div>
+        )}
+
+        {/* Best & worst areas */}
+        {scored.length >= 2 && (
+          <>
+            <hr className="border-rule mt-10" />
+            <ScrollReveal delay={0}>
+              <section className="mt-8">
+                <h2 className="font-display text-2xl text-ink italic mb-5">
+                  Best and worst areas in {city.name}
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {/* Best */}
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-safe font-semibold mb-3">
+                      Best areas
+                    </p>
+                    <div className="space-y-2">
+                      {bestPostcodes.map((pc) => (
+                        <Link
+                          key={pc.district}
+                          href={`/postcode/${pc.district}`}
+                          className="card p-3 flex items-center justify-between group"
+                        >
+                          <div className="min-w-0">
+                            <span className="font-data font-bold text-sm text-ink">
+                              {pc.district}
+                            </span>
+                            <span className="text-sm text-muted ml-2 truncate">
+                              {pc.areaName}
+                            </span>
+                          </div>
+                          <span className={`font-data text-sm font-bold ml-3 shrink-0 ${scoreTextClass(pc.safetyScore)}`}>
+                            {pc.safetyScore.toFixed(1)}/10
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Worst */}
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-warning font-semibold mb-3">
+                      Areas to watch
+                    </p>
+                    <div className="space-y-2">
+                      {worstPostcodes.map((pc) => (
+                        <Link
+                          key={pc.district}
+                          href={`/postcode/${pc.district}`}
+                          className="card p-3 flex items-center justify-between group"
+                        >
+                          <div className="min-w-0">
+                            <span className="font-data font-bold text-sm text-ink">
+                              {pc.district}
+                            </span>
+                            <span className="text-sm text-muted ml-2 truncate">
+                              {pc.areaName}
+                            </span>
+                          </div>
+                          <span className={`font-data text-sm font-bold ml-3 shrink-0 ${scoreTextClass(pc.safetyScore)}`}>
+                            {pc.safetyScore.toFixed(1)}/10
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </ScrollReveal>
+          </>
+        )}
+
+        {/* Related guides */}
+        {scored.length > 0 && (
+          <>
+            <hr className="border-rule mt-10" />
+            <ScrollReveal delay={0}>
+              <RelatedGuides
+                pfasDetected={pfasCount > 0}
+                hasLeadFlagged={topConcerns.some(([name]) => /lead/i.test(name))}
+                isHardWater={(avgHardness ?? 0) >= 180}
+                hasContaminantsFlagged={totalFlagged > 0}
+              />
+            </ScrollReveal>
+          </>
         )}
 
         <hr className="border-rule mt-10" />
