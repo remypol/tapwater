@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, AlertTriangle, Check, Star, ArrowUpRight, ShieldCheck, Search } from "lucide-react";
+import { ArrowRight, Check, Star, ArrowUpRight, ShieldCheck, Search } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
