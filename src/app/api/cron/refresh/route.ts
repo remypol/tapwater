@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
-import { writePostcodeData } from "@/lib/db-writer";
+import { writePostcodeData, getThamesReadings } from "@/lib/db-writer";
 import type { StreamRecord } from "@/lib/stream-api";
 import { getStreamSource } from "@/lib/stream-sources";
 import { fetchStreamData } from "@/lib/stream-api";
@@ -146,6 +146,23 @@ export async function GET(request: NextRequest) {
             const lsoas = await getLsoasForDistrict(district);
             if (lsoas.length > 0) {
               streamRecords = await fetchStreamData(streamSource, lsoas);
+            }
+          }
+
+          // Thames Water fallback: if no Stream data, check for pre-imported zone data
+          if (streamRecords.length === 0 && supplier.id === "thames-water") {
+            const thamesData = await getThamesReadings(district);
+            if (thamesData) {
+              streamRecords = thamesData.map((r) => ({
+                sampleId: `thames-zone-${district}`,
+                sampleDate: r.sampleDate,
+                determinand: r.determinand,
+                dwiCode: "",
+                unit: r.unit,
+                belowDetectionLimit: false,
+                value: r.value,
+                lsoa: "",
+              }));
             }
           }
         }

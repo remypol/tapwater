@@ -7,6 +7,7 @@
 import { getSupabase } from "./supabase";
 import { getSupplier } from "./suppliers";
 import { computeScore } from "./scoring";
+import { getThamesZonePrefix } from "./thames-zones";
 import type { PostcodeSeedData } from "./ea-fetcher";
 import type { StreamRecord } from "./stream-api";
 import type { ScoreResult } from "./scoring";
@@ -210,6 +211,35 @@ export async function upsertPageData(
     console.error(`[db-writer] page_data upsert failed for ${seedData.district}:`, error);
     throw error;
   }
+}
+
+/**
+ * Check if Thames Water zone data exists in drinking_water_readings
+ * for a given postcode district. Returns the records if they exist.
+ */
+export async function getThamesReadings(
+  district: string,
+): Promise<{ determinand: string; value: number; unit: string; sampleDate: string }[] | null> {
+  const prefix = getThamesZonePrefix(district);
+  if (!prefix) return null;
+
+  const db = getSupabase();
+  const { data, error } = await db
+    .from("drinking_water_readings")
+    .select("determinand, value, unit, sample_date")
+    .eq("postcode_district", district)
+    .eq("source", "thames_water_zone")
+    .order("sample_date", { ascending: false })
+    .limit(100);
+
+  if (error || !data || data.length === 0) return null;
+
+  return data.map((r) => ({
+    determinand: r.determinand,
+    value: r.value,
+    unit: r.unit,
+    sampleDate: r.sample_date,
+  }));
 }
 
 /**
