@@ -139,6 +139,15 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "upper",
     dateFormat: "string",
   },
+  "cambridge-water": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2024, serviceName: "CAM_DomesticWaterQuality" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "upper",
+    dateFormat: "string",
+  },
   "hafren-dyfrdwy": {
     orgId: STREAM_ORG,
     services: [

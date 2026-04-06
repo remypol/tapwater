@@ -25,6 +25,13 @@ describe("getStreamSource", () => {
     expect(getStreamSource("nonexistent")).toBeNull();
   });
 
+  it("returns config for cambridge-water", () => {
+    const source = getStreamSource("cambridge-water");
+    expect(source).not.toBeNull();
+    expect(source!.orgId).toBe("XxS6FebPX29TRGDJ");
+    expect(source!.services.length).toBeGreaterThan(0);
+  });
+
   it("lists all stream supplier IDs", () => {
     const ids = getAllStreamSupplierIds();
     expect(ids).toContain("yorkshire-water");
