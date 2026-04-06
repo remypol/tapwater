@@ -77,7 +77,30 @@ export default async function RegionPage({ params }: Props) {
   const allPostcodes = cityData.flatMap((c) => c.postcodes);
   const totalPostcodes = allPostcodes.length;
 
-  if (totalPostcodes === 0) notFound();
+  // No data for this region yet — show a minimal page instead of 404
+  // (avoids build failures when seed data doesn't cover all regions)
+  if (totalPostcodes === 0) {
+    return (
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
+          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-ink font-medium">{region.name}</span>
+        </nav>
+        <h1 className="font-display text-3xl sm:text-4xl text-ink tracking-tight italic mt-6">
+          Water quality in {region.name}
+        </h1>
+        <p className="text-muted mt-3 max-w-2xl">{region.description}</p>
+        <div className="mt-8 card p-8 max-w-2xl">
+          <p className="font-display text-xl text-ink italic">Data coming soon</p>
+          <p className="text-body mt-2">We&apos;re still collecting water quality data for this region. Check back soon or search for a specific postcode.</p>
+          <div className="mt-6 max-w-md">
+            <PostcodeSearch size="lg" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const avgScore = allPostcodes.reduce((sum, p) => sum + p.safetyScore, 0) / totalPostcodes;
   const pfasCount = allPostcodes.filter((p) => p.pfasDetected).length;

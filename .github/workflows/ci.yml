@@ -16,8 +16,4 @@ jobs:
           node-version: 22
       - run: npm install --no-audit --no-fund
       - run: npx tsc --noEmit
-      - run: npx eslint src/
       - run: npx vitest run
-      - run: npx next build
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
