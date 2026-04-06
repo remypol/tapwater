@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Contaminants in UK Tap Water",
     description:
       "Health effects, legal limits, and removal methods for all major contaminants in UK drinking water.",
-    url: "https://tapwater.uk/contaminant/",
+    url: "https://www.tapwater.uk/contaminant/",
     type: "website",
   },
 };
@@ -80,8 +80,8 @@ export default function ContaminantsPage() {
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Contaminants", url: "https://tapwater.uk/contaminant/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Contaminants", url: "https://www.tapwater.uk/contaminant/" },
         ]}
       />
 

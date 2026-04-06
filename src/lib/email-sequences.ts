@@ -11,7 +11,7 @@ const STEP_DELAYS: Record<EmailSequenceStep, number> = {
   30: 16,
 };
 
-const BASE_URL = "https://tapwater.uk";
+const BASE_URL = "https://www.tapwater.uk";
 
 interface SequenceEmail {
   step: EmailSequenceStep;

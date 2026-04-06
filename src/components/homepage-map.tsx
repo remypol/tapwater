@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { MapPin, X, Loader2 } from "lucide-react";
 import { UKMap } from "@/components/uk-map";
@@ -30,14 +30,29 @@ export function HomepageMap() {
   const [postcodes, setPostcodes] = useState<MapPostcodeEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Only fetch when scrolled into view
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { rootMargin: "200px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
+    if (!visible) return;
     fetch("/api/map-postcodes")
       .then((res) => res.json())
       .then((data) => setPostcodes(data))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [visible]);
 
   const handleRegionSelect = useCallback((regionId: string | null) => {
     setSelectedRegion((prev) => (prev === regionId ? null : regionId));
@@ -63,7 +78,7 @@ export function HomepageMap() {
     UK_REGIONS.find((r) => r.id === selectedRegion)?.name ?? "";
 
   return (
-    <div>
+    <div ref={containerRef}>
       {/* Map — centred, constrained width */}
       <div className="mx-auto max-w-xs">
         {loading ? (

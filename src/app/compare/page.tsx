@@ -96,7 +96,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: `Best and Worst Tap Water in the UK — ${year} Rankings`,
       description,
-      url: "https://tapwater.uk/compare/",
+      url: "https://www.tapwater.uk/compare/",
       type: "article",
     },
     twitter: {
@@ -186,8 +186,8 @@ export default async function ComparePage() {
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://tapwater.uk" },
-            { name: "Compare", url: "https://tapwater.uk/compare/" },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: "Compare", url: "https://www.tapwater.uk/compare/" },
           ]}
         />
         <FAQSchema

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Water Filters — Find the Right One for Your Area",
   description:
     "Compare water filters matched to UK water quality data. Jugs, under-sink, reverse osmosis, whole-house, shower filters, and testing kits — with prices, specs, and independent recommendations.",
-  alternates: { canonical: "https://tapwater.uk/filters/" },
+  alternates: { canonical: "https://www.tapwater.uk/filters/" },
 };
 
 export default function FiltersHubPage() {
@@ -17,8 +17,8 @@ export default function FiltersHubPage() {
     <>
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Filters", url: "https://tapwater.uk/filters/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Filters", url: "https://www.tapwater.uk/filters/" },
         ]}
       />
       <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">

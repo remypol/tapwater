@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
   if (resendKey) {
     try {
       const resend = new Resend(resendKey);
-      const verifyUrl = `https://tapwater.uk/api/subscribe/verify?token=${token}`;
+      const verifyUrl = `https://www.tapwater.uk/api/subscribe/verify?token=${token}`;
 
       await resend.emails.send({
         from: "TapWater.uk <alerts@tapwater.uk>",

@@ -78,7 +78,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Is ${city.name} Tap Water Safe to Drink?`,
       description,
-      url: `https://tapwater.uk/city/${city.slug}/`,
+      url: `https://www.tapwater.uk/city/${city.slug}/`,
       type: "article",
     },
     twitter: {
@@ -169,11 +169,11 @@ export default async function CityPage({ params }: Props) {
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://tapwater.uk" },
-            { name: "Cities", url: "https://tapwater.uk/city/" },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: "Cities", url: "https://www.tapwater.uk/city/" },
             {
               name: city.name,
-              url: `https://tapwater.uk/city/${city.slug}/`,
+              url: `https://www.tapwater.uk/city/${city.slug}/`,
             },
           ]}
         />

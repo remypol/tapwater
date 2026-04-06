@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
       description:
         "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost.",
-      url: "https://tapwater.uk/guides/tap-water-vs-bottled-water/",
+      url: "https://www.tapwater.uk/guides/tap-water-vs-bottled-water/",
       type: "article",
     },
     twitter: {
@@ -51,9 +51,9 @@ export default function TapVsBottledGuide() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Guides", url: "https://tapwater.uk/guides" },
-          { name: "Tap Water vs Bottled Water", url: "https://tapwater.uk/guides/tap-water-vs-bottled-water/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
+          { name: "Tap Water vs Bottled Water", url: "https://www.tapwater.uk/guides/tap-water-vs-bottled-water/" },
         ]}
       />
       <div className="max-w-3xl mx-auto">
@@ -72,11 +72,11 @@ export default function TapVsBottledGuide() {
         <ArticleSchema
           headline="Tap Water vs Bottled Water: Which Is Safer in the UK?"
           description="Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you."
-          url="https://tapwater.uk/guides/tap-water-vs-bottled-water/"
+          url="https://www.tapwater.uk/guides/tap-water-vs-bottled-water/"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
-          authorUrl="https://tapwater.uk/about"
+          authorUrl="https://www.tapwater.uk/about"
         />
 
         {/* H1 */}

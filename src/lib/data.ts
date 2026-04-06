@@ -335,6 +335,160 @@ export async function getSuppliersList(): Promise<SupplierData[]> {
   return MOCK_SUPPLIERS;
 }
 
+/**
+ * Lightweight trust metrics — single aggregate query instead of loading all postcodes.
+ */
+export async function getTrustMetrics(): Promise<
+  { value: string; label: string }[]
+> {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.rpc("homepage_trust_metrics");
+      if (!error && data) {
+        const { valid_count, pfas_count, total_samples } = data;
+        const testLabel =
+          total_samples > 1000
+            ? `${Math.round(total_samples / 1000)}k+`
+            : total_samples > 0
+              ? Number(total_samples).toLocaleString()
+              : "25,000+";
+        return [
+          { value: Number(valid_count).toLocaleString(), label: "Areas covered" },
+          { value: testLabel, label: "Water tests" },
+          { value: pfas_count > 0 ? `${pfas_count}+` : "Monitoring", label: "PFAS alerts" },
+          { value: "Daily", label: "Updates" },
+        ];
+      }
+    } catch {
+      // Fall through to cache-based approach
+    }
+  }
+
+  // Fallback: use the full cache (same as before, but only as fallback)
+  const cache = await loadData();
+  let validCount = 0;
+  let pfasCount = 0;
+  let totalSamples = 0;
+  for (const d of cache.values()) {
+    if (d.safetyScore >= 0) {
+      validCount++;
+      if (d.pfasDetected) pfasCount++;
+      totalSamples += d.sampleCount;
+    }
+  }
+  const testLabel =
+    totalSamples > 1000
+      ? `${Math.round(totalSamples / 1000)}k+`
+      : totalSamples > 0
+        ? totalSamples.toLocaleString()
+        : "25,000+";
+  return [
+    { value: validCount.toLocaleString(), label: "Areas covered" },
+    { value: testLabel, label: "Water tests" },
+    { value: pfasCount > 0 ? `${pfasCount}+` : "Monitoring", label: "PFAS alerts" },
+    { value: "Daily", label: "Updates" },
+  ];
+}
+
+/**
+ * Returns the 3 worst and 3 best scoring postcodes — targeted query.
+ */
+export async function getRankedPostcodes(): Promise<{
+  worst: PostcodeData[];
+  best: PostcodeData[];
+}> {
+  if (supabase) {
+    try {
+      const selectCols = `
+        postcode_district, safety_score, score_grade,
+        contaminants_tested, contaminants_flagged,
+        pfas_detected, pfas_level, pfas_source,
+        all_readings, drinking_water_readings,
+        nearby_postcodes, last_data_update, data_source,
+        sample_count, date_range_from, date_range_to,
+        postcode_districts!inner (
+          area_name, city, region, latitude, longitude, supplier_id, supply_zone
+        )
+      `;
+
+      const [worstRes, bestRes] = await Promise.all([
+        supabase
+          .from("page_data")
+          .select(selectCols)
+          .gt("safety_score", 0)
+          .order("safety_score", { ascending: true })
+          .limit(3),
+        supabase
+          .from("page_data")
+          .select(selectCols)
+          .gt("safety_score", 0)
+          .order("safety_score", { ascending: false })
+          .limit(3),
+      ]);
+
+      if (!worstRes.error && !bestRes.error && worstRes.data && bestRes.data) {
+        const mapRow = async (row: typeof worstRes.data[0]): Promise<PostcodeData> => {
+          const pd = row.postcode_districts as unknown as {
+            area_name: string; city: string; region: string;
+            latitude: number; longitude: number;
+            supplier_id: string | null; supply_zone: string | null;
+          };
+          const supplier = pd.supplier_id
+            ? await getSupplierById(pd.supplier_id)
+            : getSupplier(pd.city);
+          const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
+            .map((r) => ({ ...r, source: "drinking" as const }));
+          const envReadings = (row.all_readings ?? []) as ContaminantReading[];
+          const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
+
+          return {
+            district: row.postcode_district,
+            areaName: pd.area_name,
+            city: pd.city,
+            region: pd.region,
+            latitude: pd.latitude,
+            longitude: pd.longitude,
+            supplier: supplier.name,
+            supplierId: supplier.id,
+            supplyZone: pd.supply_zone ?? `${pd.city} Central`,
+            safetyScore: row.safety_score,
+            scoreGrade: row.score_grade as PostcodeData["scoreGrade"],
+            contaminantsTested: row.contaminants_tested,
+            contaminantsFlagged: row.contaminants_flagged,
+            pfasDetected: row.pfas_detected,
+            pfasLevel: row.pfas_level,
+            pfasSource: row.pfas_source as PostcodeData["pfasSource"],
+            lastUpdated: lastDate,
+            lastSampleDate: lastDate,
+            readings: drinkingReadings.length > 0 ? drinkingReadings : envReadings,
+            nearbyPostcodes: row.nearby_postcodes ?? [],
+            dataSource: (row.data_source ?? "ea-only") as PostcodeData["dataSource"],
+            drinkingWaterReadings: drinkingReadings,
+            environmentalReadings: envReadings.map((r) => ({ ...r, source: "environmental" as const })),
+            sampleCount: row.sample_count ?? 0,
+            dateRange: row.date_range_from && row.date_range_to
+              ? { from: row.date_range_from.split("T")[0], to: row.date_range_to.split("T")[0] }
+              : null,
+          };
+        };
+
+        return {
+          worst: await Promise.all(worstRes.data.map(mapRow)),
+          best: await Promise.all(bestRes.data.map(mapRow)),
+        };
+      }
+    } catch {
+      // Fall through to cache-based approach
+    }
+  }
+
+  // Fallback
+  const cache = await loadData();
+  const all = Array.from(cache.values()).filter((d) => d.safetyScore >= 0);
+  all.sort((a, b) => a.safetyScore - b.safetyScore);
+  return { worst: all.slice(0, 3), best: all.slice(-3).reverse() };
+}
+
 export async function getMapPostcodes(): Promise<MapPostcode[]> {
   const cache = await loadData();
   return Array.from(cache.values()).map((data) => ({

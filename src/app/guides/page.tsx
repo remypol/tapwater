@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Water Quality Guides",
     description: "In-depth guides on UK tap water quality.",
-    url: "https://tapwater.uk/guides",
+    url: "https://www.tapwater.uk/guides",
   },
 };
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED } from "@/lib/mock-data";
-import { getPostcodeData, getAllPostcodeDistricts, getSuppliersList } from "@/lib/data";
+import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes } from "@/lib/data";
 import { HomepageMap } from "@/components/homepage-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: "What's in your tap water?",
     description:
       "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more.",
-    url: "https://tapwater.uk",
+    url: "https://www.tapwater.uk",
     type: "website",
   },
   twitter: {
@@ -32,32 +32,6 @@ export const metadata: Metadata = {
     description: "Free water quality reports for every UK postcode.",
   },
 };
-
-async function buildTrustMetrics() {
-  const districts = await getAllPostcodeDistricts();
-  let validCount = 0;
-  let pfasCount = 0;
-  let totalSamples = 0;
-  for (const d of districts) {
-    const data = await getPostcodeData(d);
-    if (data && data.safetyScore >= 0) {
-      validCount++;
-      if (data.pfasDetected) pfasCount++;
-      totalSamples += data.sampleCount;
-    }
-  }
-  const testLabel = totalSamples > 1000
-    ? `${Math.round(totalSamples / 1000)}k+`
-    : totalSamples > 0
-      ? totalSamples.toLocaleString()
-      : "25,000+";
-  return [
-    { value: validCount.toLocaleString(), label: "Areas covered" },
-    { value: testLabel, label: "Water tests" },
-    { value: pfasCount > 0 ? `${pfasCount}+` : "Monitoring", label: "PFAS alerts" },
-    { value: "Daily", label: "Updates" },
-  ];
-}
 
 function scoreBadgeClass(score: number): string {
   const c = getScoreColor(score);
@@ -73,46 +47,27 @@ function scoreTextClass(score: number): string {
   return "text-danger";
 }
 
-async function buildRankedPostcodes(): Promise<{
-  worst: PostcodeData[];
-  best: PostcodeData[];
-}> {
-  const districts = await getAllPostcodeDistricts();
-
-  const all: PostcodeData[] = [];
-  for (const d of districts) {
-    const data = await getPostcodeData(d);
-    if (data && data.safetyScore >= 0) {
-      all.push(data);
-    }
-  }
-
-  all.sort((a, b) => a.safetyScore - b.safetyScore);
-
-  return {
-    worst: all.slice(0, 3),
-    best: all.slice(-3).reverse(),
-  };
-}
-
 export default async function HomePage() {
-  const { worst, best } = await buildRankedPostcodes();
-  const suppliers = await getSuppliersList();
-  const TRUST_METRICS = await buildTrustMetrics();
-
-  // Pre-fetch popular searches
-  const popularSearches = (
-    await Promise.all(
-      MOST_CHECKED.map(async (district) => ({
-        district,
-        data: await getPostcodeData(district),
-      })),
-    )
-  )
-    .filter((row): row is { district: string; data: PostcodeData } =>
-      row.data !== null && row.data.safetyScore >= 0,
-    )
-    .slice(0, 6);
+  // All queries run in parallel — no N+1 loading
+  const [{ worst, best }, suppliers, TRUST_METRICS, popularSearches] =
+    await Promise.all([
+      getRankedPostcodes(),
+      getSuppliersList(),
+      getTrustMetrics(),
+      Promise.all(
+        MOST_CHECKED.map(async (district) => ({
+          district,
+          data: await getPostcodeData(district),
+        })),
+      ).then((rows) =>
+        rows
+          .filter(
+            (row): row is { district: string; data: PostcodeData } =>
+              row.data !== null && row.data.safetyScore >= 0,
+          )
+          .slice(0, 6),
+      ),
+    ]);
 
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
@@ -319,7 +274,7 @@ export default async function HomePage() {
                 <span className="font-data font-bold text-sm text-ink w-12 shrink-0">
                   {district}
                 </span>
-                <span className="text-sm text-muted flex-1 truncate">
+                <span className="text-xs sm:text-sm text-muted flex-1 truncate">
                   {data.areaName}
                 </span>
                 <span className={`${scoreBadgeClass(data.safetyScore)} font-data shrink-0`}>

@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
       title: `Understanding Your Water Company's Quality Report (${year})`,
       description:
         "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
-      url: "https://tapwater.uk/guides/understanding-your-water-supplier/",
+      url: "https://www.tapwater.uk/guides/understanding-your-water-supplier/",
       type: "article",
     },
   }
@@ -55,11 +55,11 @@ export default function UnderstandingYourWaterSupplierPage() {
         <ArticleSchema
           headline={`Understanding Your Water Company's Quality Report (${new Date().getFullYear()})`}
           description="How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards."
-          url="https://tapwater.uk/guides/understanding-your-water-supplier/"
+          url="https://www.tapwater.uk/guides/understanding-your-water-supplier/"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
-          authorUrl="https://tapwater.uk/about"
+          authorUrl="https://www.tapwater.uk/about"
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">

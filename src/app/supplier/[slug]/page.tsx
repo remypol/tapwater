@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${supplier.name} Water Quality Report`,
       description,
-      url: `https://tapwater.uk/supplier/${supplier.id}/`,
+      url: `https://www.tapwater.uk/supplier/${supplier.id}/`,
       type: "article",
     },
     twitter: {
@@ -119,9 +119,9 @@ export default async function SupplierPage({ params }: Props) {
       {/* Breadcrumb */}
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Suppliers", url: "https://tapwater.uk/supplier/" },
-          { name: supplier.name, url: `https://tapwater.uk/supplier/${supplier.id}/` },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Suppliers", url: "https://www.tapwater.uk/supplier/" },
+          { name: supplier.name, url: `https://www.tapwater.uk/supplier/${supplier.id}/` },
         ]}
       />
       <nav className="flex items-center gap-1.5 text-sm text-faint mb-6" aria-label="Breadcrumb">

@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   description:
     "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more contaminants near you. Based on official Environment Agency monitoring data.",
-  metadataBase: new URL("https://tapwater.uk"),
+  metadataBase: new URL("https://www.tapwater.uk"),
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -67,6 +67,10 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${instrumentSerif.variable} ${spaceMono.variable}`}
     >
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+      </head>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         strategy="afterInteractive"

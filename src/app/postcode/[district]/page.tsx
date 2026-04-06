@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,
-      url: `https://tapwater.uk/postcode/${data.district}/`,
+      url: `https://www.tapwater.uk/postcode/${data.district}/`,
       type: "website",
     },
     twitter: {
@@ -134,10 +134,10 @@ export default async function PostcodePage({ params }: Props) {
         />
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://tapwater.uk" },
-            { name: data.region, url: `https://tapwater.uk/postcode/${data.district}/` },
-            { name: data.areaName, url: `https://tapwater.uk/postcode/${data.district}/` },
-            { name: data.district, url: `https://tapwater.uk/postcode/${data.district}/` },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: data.region, url: `https://www.tapwater.uk/postcode/${data.district}/` },
+            { name: data.areaName, url: `https://www.tapwater.uk/postcode/${data.district}/` },
+            { name: data.district, url: `https://www.tapwater.uk/postcode/${data.district}/` },
           ]}
         />
         {faqs.length > 0 && <FAQSchema faqs={faqs} />}

@@ -38,13 +38,13 @@ export function generateMetadata(): Metadata {
     description:
       "We tested the top UK water filter jugs against real contaminant data from 2,800 postcodes. BRITA, ZeroWater, Aqua Optima, and PUR compared on what they actually remove.",
     alternates: {
-      canonical: "https://tapwater.uk/guides/best-water-filter-jug-uk/",
+      canonical: "https://www.tapwater.uk/guides/best-water-filter-jug-uk/",
     },
     openGraph: {
       title: `Best Water Filter Jug UK (${year})`,
       description:
         "BRITA vs ZeroWater vs the rest. Independent jug filter reviews tested against real UK water quality data.",
-      url: "https://tapwater.uk/guides/best-water-filter-jug-uk/",
+      url: "https://www.tapwater.uk/guides/best-water-filter-jug-uk/",
       type: "article",
     },
     twitter: {
@@ -222,22 +222,22 @@ export default function BestWaterFilterJugGuide() {
       {/* ── Schema markup ────────────────────────────────────────────── */}
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Guides", url: "https://tapwater.uk/guides" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Water Filter Jug UK",
-            url: "https://tapwater.uk/guides/best-water-filter-jug-uk/",
+            url: "https://www.tapwater.uk/guides/best-water-filter-jug-uk/",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Water Filter Jug UK ${year} \u2014 BRITA vs ZeroWater vs the Rest`}
         description="We tested the top UK water filter jugs against real contaminant data from 2,800 postcodes. BRITA, ZeroWater, Aqua Optima, and PUR compared on what they actually remove."
-        url="https://tapwater.uk/guides/best-water-filter-jug-uk/"
+        url="https://www.tapwater.uk/guides/best-water-filter-jug-uk/"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"
-        authorUrl="https://tapwater.uk/about"
+        authorUrl="https://www.tapwater.uk/about"
       />
       <FAQSchema faqs={FAQ_DATA} />
 

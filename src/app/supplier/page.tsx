@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "UK Water Companies — Water Quality Comparison",
     description:
       "Compare water quality scores across all 16 major UK water companies.",
-    url: "https://tapwater.uk/supplier/",
+    url: "https://www.tapwater.uk/supplier/",
     type: "website",
   },
 };
@@ -60,8 +60,8 @@ export default async function SuppliersPage() {
     <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Water Companies", url: "https://tapwater.uk/supplier/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Water Companies", url: "https://www.tapwater.uk/supplier/" },
         ]}
       />
 

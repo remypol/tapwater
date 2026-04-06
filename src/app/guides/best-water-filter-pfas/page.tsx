@@ -43,13 +43,13 @@ export function generateMetadata(): Metadata {
     description:
       "We analysed 2,800 UK postcodes for PFAS contamination. Only reverse osmosis and select filters reliably remove forever chemicals. Independent reviews with real data.",
     alternates: {
-      canonical: "https://tapwater.uk/guides/best-water-filter-pfas/",
+      canonical: "https://www.tapwater.uk/guides/best-water-filter-pfas/",
     },
     openGraph: {
       title: `Best Water Filter for PFAS Removal UK (${year})`,
       description:
         "Which filters actually remove PFAS? Independent reviews tested against real UK water quality data.",
-      url: "https://tapwater.uk/guides/best-water-filter-pfas/",
+      url: "https://www.tapwater.uk/guides/best-water-filter-pfas/",
       type: "article",
     },
     twitter: {
@@ -233,22 +233,22 @@ export default function BestWaterFilterPfasGuide() {
       {/* ── Schema markup ────────────────────────────────────────────── */}
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Guides", url: "https://tapwater.uk/guides" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Water Filter for PFAS UK",
-            url: "https://tapwater.uk/guides/best-water-filter-pfas/",
+            url: "https://www.tapwater.uk/guides/best-water-filter-pfas/",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Water Filter for PFAS Removal UK ${year}`}
         description="We analysed 2,800 UK postcodes for PFAS contamination. Only reverse osmosis and select filters reliably remove forever chemicals."
-        url="https://tapwater.uk/guides/best-water-filter-pfas/"
+        url="https://www.tapwater.uk/guides/best-water-filter-pfas/"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"
-        authorUrl="https://tapwater.uk/about"
+        authorUrl="https://www.tapwater.uk/about"
       />
       <FAQSchema faqs={FAQ_DATA} />
 

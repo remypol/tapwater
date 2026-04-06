@@ -3,7 +3,7 @@ import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@
 import { CITIES } from "@/lib/cities";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 
-const BASE_URL = "https://tapwater.uk";
+const BASE_URL = "https://www.tapwater.uk";
 
 const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli"];
 

@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `PFAS in UK Drinking Water: Everything You Need to Know (${year})`,
       description:
         "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them?",
-      url: "https://tapwater.uk/guides/pfas-uk-explained/",
+      url: "https://www.tapwater.uk/guides/pfas-uk-explained/",
       type: "article",
     },
     twitter: {
@@ -65,11 +65,11 @@ export default function PFASGuide() {
         <ArticleSchema
           headline="PFAS in UK Drinking Water: Everything You Need to Know"
           description="What are PFAS forever chemicals, where are they found in UK water, and what can you do about them? A comprehensive guide based on Environment Agency data."
-          url="https://tapwater.uk/guides/pfas-uk-explained/"
+          url="https://www.tapwater.uk/guides/pfas-uk-explained/"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
-          authorUrl="https://tapwater.uk/about"
+          authorUrl="https://www.tapwater.uk/about"
         />
 
         {/* H1 */}

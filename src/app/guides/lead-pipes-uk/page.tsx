@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
       description:
         "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
-      url: "https://tapwater.uk/guides/lead-pipes-uk/",
+      url: "https://www.tapwater.uk/guides/lead-pipes-uk/",
       type: "article",
     },
     twitter: {
@@ -65,11 +65,11 @@ export default function LeadPipesGuide() {
         <ArticleSchema
           headline="The UK's Lead Pipe Problem: Which Areas Are Most Affected?"
           description="Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household."
-          url="https://tapwater.uk/guides/lead-pipes-uk/"
+          url="https://www.tapwater.uk/guides/lead-pipes-uk/"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"
-          authorUrl="https://tapwater.uk/about"
+          authorUrl="https://www.tapwater.uk/about"
         />
 
         {/* H1 */}

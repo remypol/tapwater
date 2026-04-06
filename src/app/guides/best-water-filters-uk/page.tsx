@@ -32,7 +32,7 @@ export function generateMetadata(): Metadata {
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:
         "Which water filter type do you actually need? Compare jug, countertop, under-sink, reverse osmosis, and whole-house systems.",
-      url: "https://tapwater.uk/guides/best-water-filters-uk/",
+      url: "https://www.tapwater.uk/guides/best-water-filters-uk/",
       type: "article",
     },
     twitter: {
@@ -203,22 +203,22 @@ export default function BestWaterFiltersGuide() {
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Guides", url: "https://tapwater.uk/guides" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Water Filters UK",
-            url: "https://tapwater.uk/guides/best-water-filters-uk/",
+            url: "https://www.tapwater.uk/guides/best-water-filters-uk/",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Water Filters for UK Tap Water (${year})`}
         description="An honest overview of every water filter type available in the UK, with links to specific buying guides for each category."
-        url="https://tapwater.uk/guides/best-water-filters-uk/"
+        url="https://www.tapwater.uk/guides/best-water-filters-uk/"
         datePublished="2026-04-02"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"
-        authorUrl="https://tapwater.uk/about"
+        authorUrl="https://www.tapwater.uk/about"
       />
       <FAQSchema
         faqs={[

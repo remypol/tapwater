@@ -14,8 +14,8 @@ export default function ContactPage() {
       <div className="max-w-2xl mx-auto">
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://tapwater.uk" },
-            { name: "Contact", url: "https://tapwater.uk/contact" },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: "Contact", url: "https://www.tapwater.uk/contact" },
           ]}
         />
 

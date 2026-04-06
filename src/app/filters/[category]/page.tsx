@@ -162,7 +162,7 @@ export async function generateMetadata({
   return {
     title: `${meta.title} — Compare ${count} Filters`,
     description: `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`,
-    alternates: { canonical: `https://tapwater.uk/filters/${meta.slug}/` },
+    alternates: { canonical: `https://www.tapwater.uk/filters/${meta.slug}/` },
   };
 }
 
@@ -187,11 +187,11 @@ export default async function CategoryPage({
     <>
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Filters", url: "https://tapwater.uk/filters/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Filters", url: "https://www.tapwater.uk/filters/" },
           {
             name: meta.title,
-            url: `https://tapwater.uk/filters/${meta.slug}/`,
+            url: `https://www.tapwater.uk/filters/${meta.slug}/`,
           },
         ]}
       />

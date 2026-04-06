@@ -14,9 +14,9 @@ export default function DataSourcesPage() {
       <div className="max-w-3xl mx-auto">
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://tapwater.uk" },
-            { name: "About", url: "https://tapwater.uk/about" },
-            { name: "Data Sources", url: "https://tapwater.uk/about/data-sources" },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: "About", url: "https://www.tapwater.uk/about" },
+            { name: "Data Sources", url: "https://www.tapwater.uk/about/data-sources" },
           ]}
         />
         <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">

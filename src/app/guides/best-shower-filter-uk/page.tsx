@@ -38,13 +38,13 @@ export function generateMetadata(): Metadata {
     description:
       "We analysed 2,800 UK postcodes to find where shower filters make the biggest difference. Independent reviews focused on chlorine removal, skin and hair benefits.",
     alternates: {
-      canonical: "https://tapwater.uk/guides/best-shower-filter-uk/",
+      canonical: "https://www.tapwater.uk/guides/best-shower-filter-uk/",
     },
     openGraph: {
       title: `Best Shower Filter for Hard Water UK (${year})`,
       description:
         "Independent shower filter reviews tested against real UK water quality data from 2,800 postcodes.",
-      url: "https://tapwater.uk/guides/best-shower-filter-uk/",
+      url: "https://www.tapwater.uk/guides/best-shower-filter-uk/",
       type: "article",
     },
     twitter: {
@@ -219,22 +219,22 @@ export default function BestShowerFilterGuide() {
       {/* ── Schema markup ────────────────────────────────────────────── */}
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://tapwater.uk" },
-          { name: "Guides", url: "https://tapwater.uk/guides" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
           {
             name: "Best Shower Filter UK",
-            url: "https://tapwater.uk/guides/best-shower-filter-uk/",
+            url: "https://www.tapwater.uk/guides/best-shower-filter-uk/",
           },
         ]}
       />
       <ArticleSchema
         headline={`Best Shower Filter for Hard Water UK ${year}`}
         description="We analysed 2,800 UK postcodes to find where shower filters make the biggest difference. Independent reviews focused on chlorine removal, skin and hair benefits."
-        url="https://tapwater.uk/guides/best-shower-filter-uk/"
+        url="https://www.tapwater.uk/guides/best-shower-filter-uk/"
         datePublished="2026-04-05"
         dateModified={new Date().toISOString().split("T")[0]}
         authorName="Remy"
-        authorUrl="https://tapwater.uk/about"
+        authorUrl="https://www.tapwater.uk/about"
       />
       <FAQSchema faqs={FAQ_DATA} />
 

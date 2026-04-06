@@ -23,7 +23,7 @@ export function OrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "TapWater.uk",
-    url: "https://tapwater.uk",
+    url: "https://www.tapwater.uk",
     description: "Independent UK water quality research and reporting",
     sameAs: ["https://x.com/tapwateruk"],
   };
@@ -41,10 +41,10 @@ export function WebSiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "TapWater.uk",
-    url: "https://tapwater.uk",
+    url: "https://www.tapwater.uk",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://tapwater.uk/postcode/{search_term_string}/",
+      target: "https://www.tapwater.uk/postcode/{search_term_string}/",
       "query-input": "required name=search_term_string",
     },
   };
@@ -155,7 +155,7 @@ export function ArticleSchema({
     publisher: {
       "@type": "Organization",
       name: "TapWater.uk",
-      url: "https://tapwater.uk",
+      url: "https://www.tapwater.uk",
     },
     mainEntityOfPage: url,
   };
@@ -199,7 +199,7 @@ export function PostcodeDatasetSchema({
     "@type": "Dataset",
     name: `Water Quality Report for ${district}`,
     description: `Environmental water quality data for ${district} (${areaName}), ${city}, ${region}. Supplied by ${supplier}. ${hasScore ? `Safety score: ${score}/10 based on ${contaminantsTested} tested parameters.` : `${contaminantsTested} parameters tested.`}`,
-    url: `https://tapwater.uk/postcode/${district}/`,
+    url: `https://www.tapwater.uk/postcode/${district}/`,
     dateModified: lastUpdated,
     creator: { "@type": "Organization", name: "TapWater.uk" },
     license:
@@ -272,7 +272,7 @@ export function ProductSchema({
     brand: { "@type": "Brand", name: brand },
     description,
     category,
-    ...(imageUrl ? { image: `https://tapwater.uk${imageUrl}` } : {}),
+    ...(imageUrl ? { image: `https://www.tapwater.uk${imageUrl}` } : {}),
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: String(rating),
