@@ -7,7 +7,7 @@
    Color communicates meaning.
 ── */
 
-@theme inline {
+@theme {
   /* Safety semantics */
   --color-safe: #16a34a;
   --color-safe-light: #dcfce7;
@@ -33,6 +33,10 @@
   --color-accent-hover: #0e7490;
   --color-accent-light: #ecfeff;
 
+  /* Fixed — does not change with dark mode */
+  --color-btn: #0c0f17;
+  --color-btn-hover: #1f2937;
+
   /* Fonts */
   --font-display: var(--font-instrument-serif);
   --font-sans: var(--font-dm-sans);
@@ -50,6 +54,32 @@
   --color-wave-deep: rgba(8, 145, 178, 0.10);
   --color-wave-mid: rgba(14, 165, 197, 0.14);
   --color-wave-surface: rgba(164, 218, 232, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-ink: #f0f4f8;
+    --color-body: #cbd5e1;
+    --color-muted: #94a3b8;
+    --color-faint: #64748b;
+    --color-surface: #1e293b;
+    --color-wash: #0f172a;
+    --color-rule: #334155;
+    --color-rule-strong: #475569;
+    --color-accent-light: rgba(8, 145, 178, 0.15);
+
+    /* Safety colours stay saturated but lighten slightly */
+    --color-safe-light: rgba(22, 163, 74, 0.15);
+    --color-warning-light: rgba(217, 119, 6, 0.15);
+    --color-danger-light: rgba(220, 38, 38, 0.15);
+    --color-pfas-light: rgba(124, 58, 237, 0.15);
+
+    /* Water surface — darker depths */
+    --color-wave-deep: rgba(8, 145, 178, 0.06);
+    --color-wave-mid: rgba(14, 165, 197, 0.08);
+    --color-wave-surface: rgba(164, 218, 232, 0.12);
+  }
 }
 
 body {
@@ -110,6 +140,54 @@ body {
     radial-gradient(ellipse 50% 40% at 15% 60%, rgba(8, 145, 178, 0.04) 0%, transparent 55%),
     radial-gradient(ellipse 45% 35% at 85% 40%, rgba(6, 182, 212, 0.03) 0%, transparent 50%),
     var(--color-wash);
+}
+
+/* ── Dark mode overrides for hero/score gradients ── */
+
+@media (prefers-color-scheme: dark) {
+  .bg-hero {
+    background:
+      radial-gradient(ellipse 90% 55% at 40% -5%, rgba(8, 145, 178, 0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 45% at 85% 15%, rgba(14, 116, 144, 0.08) 0%, transparent 55%),
+      var(--color-wash);
+  }
+
+  .bg-score-safe {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(22, 163, 74, 0.1) 0%, transparent 60%),
+      var(--color-wash);
+  }
+
+  .bg-score-warning {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(217, 119, 6, 0.1) 0%, transparent 60%),
+      var(--color-wash);
+  }
+
+  .bg-score-danger {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(220, 38, 38, 0.1) 0%, transparent 60%),
+      var(--color-wash);
+  }
+
+  .card {
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .card:hover {
+    box-shadow: 0 0 0 1px rgba(8,145,178,0.15), 0 4px 20px rgba(8,145,178,0.1);
+  }
+
+  .card-elevated {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 1px 3px rgba(0, 0, 0, 0.15),
+      0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .noise-overlay::before {
+    opacity: 0.03;
+  }
 }
 
 /* ── Score Ring ── */

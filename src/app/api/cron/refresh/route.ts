@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
@@ -178,6 +179,7 @@ export async function GET(request: NextRequest) {
       }
     } catch (err) {
       console.error(`  ✗ ${district}:`, err);
+      Sentry.captureException(err, { tags: { district, pipeline: "refresh" } });
     }
     processed++;
   }

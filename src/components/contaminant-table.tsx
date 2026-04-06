@@ -83,7 +83,7 @@ interface ProgressBarProps {
 function ProgressBar({ percent, visible }: ProgressBarProps) {
   const colorClass = getBarColorClass(percent);
   return (
-    <div className="h-1.5 w-full rounded-full bg-gray-100 mt-1.5 overflow-hidden">
+    <div className="h-1.5 w-full rounded-full bg-rule mt-1.5 overflow-hidden">
       <div
         className={`h-1.5 rounded-full ${colorClass} ${visible ? 'bar-animated' : ''}`}
         style={{ width: `${percent}%` }}

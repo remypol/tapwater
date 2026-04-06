@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { MOST_CHECKED, MOCK_SUPPLIERS } from "@/lib/mock-data";
-import { getPostcodeData, getAllPostcodeDistricts, getMapPostcodes } from "@/lib/data";
+import { MOST_CHECKED } from "@/lib/mock-data";
+import { getPostcodeData, getAllPostcodeDistricts, getSuppliersList } from "@/lib/data";
 import { HomepageMap } from "@/components/homepage-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -97,7 +97,7 @@ async function buildRankedPostcodes(): Promise<{
 
 export default async function HomePage() {
   const { worst, best } = await buildRankedPostcodes();
-  const mapPostcodes = await getMapPostcodes();
+  const suppliers = await getSuppliersList();
   const TRUST_METRICS = await buildTrustMetrics();
 
   // Pre-fetch popular searches
@@ -155,7 +155,7 @@ export default async function HomePage() {
                 <div className="hidden lg:block h-10 w-px bg-rule" />
               )}
               <div
-                className={`animate-fade-up delay-${i + 1} flex flex-col items-center px-6 lg:px-10`}
+                className={`animate-fade-up ${["delay-1", "delay-2", "delay-3", "delay-4"][i]} flex flex-col items-center px-6 lg:px-10`}
               >
                 <span className="font-data text-2xl lg:text-3xl font-bold text-ink">
                   {value}
@@ -179,7 +179,7 @@ export default async function HomePage() {
             Tap a region to explore water quality data for that area.
           </p>
         </div>
-        <HomepageMap postcodes={mapPostcodes} />
+        <HomepageMap />
       </section>
 
       {/* Areas to watch + Cleanest water — side by side on desktop */}
@@ -341,7 +341,7 @@ export default async function HomePage() {
         </p>
 
         <div className="card divide-y divide-rule">
-          {MOCK_SUPPLIERS.slice(0, 6).map((supplier) => (
+          {suppliers.slice(0, 6).map((supplier) => (
             <Link
               key={supplier.id}
               href={`/supplier/${supplier.id}/`}

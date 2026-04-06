@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
-import { getPostcodeData } from "@/lib/data";
 import { Resend } from "resend";
 import { subscribeLimiter, isMemoryRateLimited } from "@/lib/rate-limit";
 
@@ -60,19 +59,26 @@ export async function POST(request: NextRequest) {
   }
 
   // Store water data snapshot for email drip sequence
+  // Query page_data directly instead of loading the full data cache
   if (postcode) {
     try {
-      const waterData = await getPostcodeData(postcode);
-      if (waterData) {
+      const { data: pageRow } = await supabase
+        .from("page_data")
+        .select("safety_score, score_grade, contaminants_flagged, pfas_detected, all_readings, drinking_water_readings")
+        .eq("postcode_district", postcode)
+        .single();
+
+      if (pageRow) {
+        const readings = (pageRow.drinking_water_readings ?? pageRow.all_readings ?? []) as { name: string; status: string }[];
         const snapshot = {
-          safetyScore: waterData.safetyScore,
-          scoreGrade: waterData.scoreGrade,
-          contaminantsFlagged: waterData.contaminantsFlagged,
-          topConcerns: waterData.readings
+          safetyScore: pageRow.safety_score,
+          scoreGrade: pageRow.score_grade,
+          contaminantsFlagged: pageRow.contaminants_flagged,
+          topConcerns: readings
             .filter((r) => r.status === "fail" || r.status === "warning")
             .slice(0, 3)
             .map((r) => r.name),
-          pfasDetected: waterData.pfasDetected,
+          pfasDetected: pageRow.pfas_detected,
         };
 
         await supabase

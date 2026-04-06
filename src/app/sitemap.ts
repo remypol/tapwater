@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getScoredPostcodeDistricts, getPostcodeData } from "@/lib/data";
-import { MOCK_SUPPLIERS } from "@/lib/mock-data";
+import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 
@@ -57,7 +56,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
-  const supplierPaths = MOCK_SUPPLIERS.map((s) => ({
+  const suppliers = await getSuppliersList();
+  const supplierPaths = suppliers.map((s) => ({
     url: `${BASE_URL}/supplier/${s.id}/`,
     lastModified: latestDataDate,
     changeFrequency: "monthly" as const,

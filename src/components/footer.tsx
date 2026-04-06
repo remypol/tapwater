@@ -17,7 +17,7 @@ const legalLinks = [
 export function Footer() {
   return (
     <footer
-      className="w-full bg-[var(--color-ink)]"
+      className="w-full bg-[#0c0f17]"
       style={{ fontFamily: "var(--font-dm-sans)" }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-14">

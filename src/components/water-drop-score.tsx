@@ -171,9 +171,11 @@ export function WaterDropScore({ score, size = 200, tested, flagged, className }
         height={h}
         viewBox={`0 0 ${w} ${h}`}
         role="img"
-        aria-label={ariaLabel}
+        aria-labelledby="drop-title drop-desc"
         style={{ overflow: 'visible' }}
       >
+        <title id="drop-title">Water quality score: {score}/10</title>
+        <desc id="drop-desc">{ariaLabel}</desc>
         <defs>
           {/* Gradient */}
           <linearGradient id={gradientId} x1="0" y1="1" x2="0" y2="0">

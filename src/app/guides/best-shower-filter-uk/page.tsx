@@ -189,7 +189,7 @@ function ProductReview({
           href={product.affiliateUrl}
           target="_blank"
           rel="noopener noreferrer sponsored nofollow"
-          className="inline-flex items-center gap-1.5 bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors"
+          className="inline-flex items-center gap-1.5 bg-btn text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-btn-hover transition-colors"
         >
           {ctaLabel ?? "View deal"}
           <ArrowUpRight className="w-3.5 h-3.5" />
@@ -610,7 +610,7 @@ export default function BestShowerFilterGuide() {
             href={jolie.affiliateUrl}
             target="_blank"
             rel="noopener noreferrer sponsored nofollow"
-            className="inline-flex items-center justify-center gap-2 bg-ink text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
             Get the Jolie Filtered Showerhead
             <ArrowRight className="w-4 h-4" />

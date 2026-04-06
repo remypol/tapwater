@@ -8,7 +8,7 @@
 import { supabase } from "./supabase";
 import { getSupplier } from "./suppliers";
 import { computeScore, type ScoreResult } from "./scoring";
-import type { PostcodeData, ContaminantReading } from "./types";
+import type { PostcodeData, ContaminantReading, SupplierData } from "./types";
 
 // ── JSON fallback (used when Supabase is not configured) ──
 
@@ -300,6 +300,39 @@ export interface MapPostcode {
   lng: number;
   score: number;
   scoreGrade: string;
+}
+
+/**
+ * Fetches the list of water suppliers.
+ * Tries Supabase first, falls back to MOCK_SUPPLIERS.
+ */
+export async function getSuppliersList(): Promise<SupplierData[]> {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("water_suppliers")
+        .select("id, name, region, customers_m, compliance_rate, website, postcode_areas")
+        .order("customers_m", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        return data.map((row) => ({
+          id: row.id,
+          name: row.name,
+          region: row.region,
+          customersM: row.customers_m,
+          complianceRate: row.compliance_rate,
+          website: row.website,
+          postcodeAreas: row.postcode_areas ?? [],
+        }));
+      }
+    } catch {
+      // Fall through to mock data
+    }
+  }
+
+  // Fallback to static data
+  const { MOCK_SUPPLIERS } = await import("./mock-data");
+  return MOCK_SUPPLIERS;
 }
 
 export async function getMapPostcodes(): Promise<MapPostcode[]> {

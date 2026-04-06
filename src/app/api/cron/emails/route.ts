@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
 import { getNextEmail, shouldSendEmail } from "@/lib/email-sequences";
@@ -65,7 +66,10 @@ export async function GET(request: Request) {
         .eq("email", state.email);
 
       sent++;
-    } catch {
+    } catch (err) {
+      Sentry.captureException(err, {
+        tags: { pipeline: "drip-emails", email: state.email, step: String(nextEmail.step) },
+      });
       skipped++;
     }
   }

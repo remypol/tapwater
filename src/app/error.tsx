@@ -20,7 +20,7 @@ export default function Error({
       <div className="flex items-center justify-center gap-3 mt-8">
         <button
           onClick={reset}
-          className="bg-ink text-white rounded-lg py-2.5 px-5 text-sm font-medium hover:bg-gray-800 transition-colors"
+          className="bg-btn text-white rounded-lg py-2.5 px-5 text-sm font-medium hover:bg-btn-hover transition-colors"
         >
           Try again
         </button>

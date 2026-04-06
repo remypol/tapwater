@@ -27,6 +27,15 @@ export const subscribeLimiter = redis
 
 // In-memory fallback for local dev
 const memoryMap = new Map<string, { count: number; resetAt: number }>();
+const MAX_MEMORY_ENTRIES = 10_000;
+
+function pruneExpired() {
+  if (memoryMap.size <= MAX_MEMORY_ENTRIES) return;
+  const now = Date.now();
+  for (const [key, entry] of memoryMap) {
+    if (now > entry.resetAt) memoryMap.delete(key);
+  }
+}
 
 export function isMemoryRateLimited(
   ip: string,
@@ -37,6 +46,7 @@ export function isMemoryRateLimited(
   const entry = memoryMap.get(ip);
   if (!entry || now > entry.resetAt) {
     memoryMap.set(ip, { count: 1, resetAt: now + windowMs });
+    pruneExpired();
     return false;
   }
   entry.count++;

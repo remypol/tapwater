@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { NavProgress } from "@/components/nav-progress";
 import { OrganizationSchema, WebSiteSchema } from "@/components/json-ld";
 import "./globals.css";
 
@@ -42,7 +43,6 @@ export const metadata: Metadata = {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
     ],
-    apple: "/icon.svg",
   },
   other: {
     "impact-site-verification": "e18f3561-3822-4c00-942c-d4622f421149",
@@ -80,6 +80,7 @@ export default function RootLayout({
         `}
       </Script>
       <body className="min-h-screen flex flex-col antialiased">
+        <NavProgress />
         <Header />
         <OrganizationSchema />
         <WebSiteSchema />

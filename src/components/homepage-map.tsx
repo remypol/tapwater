@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { MapPin, X } from "lucide-react";
+import { MapPin, X, Loader2 } from "lucide-react";
 import { UKMap } from "@/components/uk-map";
 import { UK_REGIONS, POSTCODE_TO_REGION } from "@/data/uk-regions";
 import { getScoreColor } from "@/lib/types";
@@ -12,10 +12,6 @@ interface MapPostcodeEntry {
   areaName: string;
   score: number;
   scoreGrade: string;
-}
-
-interface HomepageMapProps {
-  postcodes: MapPostcodeEntry[];
 }
 
 function postcodePrefix(district: string): string {
@@ -30,8 +26,18 @@ function scoreBadgeClass(score: number): string {
   return "badge badge-danger";
 }
 
-export function HomepageMap({ postcodes }: HomepageMapProps) {
+export function HomepageMap() {
+  const [postcodes, setPostcodes] = useState<MapPostcodeEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/map-postcodes")
+      .then((res) => res.json())
+      .then((data) => setPostcodes(data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleRegionSelect = useCallback((regionId: string | null) => {
     setSelectedRegion((prev) => (prev === regionId ? null : regionId));
@@ -60,7 +66,13 @@ export function HomepageMap({ postcodes }: HomepageMapProps) {
     <div>
       {/* Map — centred, constrained width */}
       <div className="mx-auto max-w-xs">
-        <UKMap postcodes={postcodes} onRegionSelect={handleRegionSelect} />
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-6 h-6 text-accent animate-spin" />
+          </div>
+        ) : (
+          <UKMap postcodes={postcodes} onRegionSelect={handleRegionSelect} />
+        )}
       </div>
 
       {/* Region postcodes — full width below map */}

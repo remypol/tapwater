@@ -25,7 +25,7 @@ export function OrganizationSchema() {
     name: "TapWater.uk",
     url: "https://tapwater.uk",
     description: "Independent UK water quality research and reporting",
-    sameAs: [],
+    sameAs: ["https://x.com/tapwateruk"],
   };
 
   return (

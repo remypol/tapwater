@@ -146,7 +146,7 @@ function HeroRecommendation({
             href={filter.affiliateUrl}
             target="_blank"
             rel="noopener noreferrer sponsored nofollow"
-            className="flex-1 bg-ink text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors"
+            className="flex-1 bg-btn text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-btn-hover transition-colors"
           >
             Check price & reviews
             <ArrowRight className="w-4 h-4" />

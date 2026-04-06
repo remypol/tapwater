@@ -13,7 +13,7 @@ import { getPostcodeData, getScoredPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
-import { PostcodeDatasetSchema, BreadcrumbSchema } from "@/components/json-ld";
+import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,
       url: `https://tapwater.uk/postcode/${data.district}/`,
-      type: "article",
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",
@@ -99,6 +99,23 @@ export default async function PostcodePage({ params }: Props) {
     .map((r) => r.name);
   const filterRecs = recommendFilters(flaggedNames, 3);
 
+  // Build FAQ schema for rich results
+  const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
+  const faqs = hasData ? [
+    {
+      question: `Is ${data.district} tap water safe to drink?`,
+      answer: `Based on the latest tests, ${data.district} (${data.areaName}) water scores ${data.safetyScore}/10, which is ${scoreLabel}. ${data.contaminantsFlagged} of ${data.contaminantsTested} tested contaminants exceeded recommended levels. Water is supplied by ${data.supplier}.`,
+    },
+    {
+      question: `What contaminants are in ${data.district} water?`,
+      answer: `We tested ${data.contaminantsTested} contaminants in ${data.district} water. ${data.contaminantsFlagged > 0 ? `${data.contaminantsFlagged} were flagged, including ${flaggedNames.slice(0, 3).join(", ")}.` : "None exceeded recommended safe levels."}${data.pfasDetected ? ` PFAS (forever chemicals) were also detected at ${data.pfasLevel} µg/L.` : ""}`,
+    },
+    {
+      question: `Who supplies water in ${data.district}?`,
+      answer: `${data.district} (${data.areaName}) is supplied by ${data.supplier}. You can view their full profile and compliance data on our supplier page.`,
+    },
+  ] : [];
+
   return (
     <div className={gradientClass}>
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
@@ -123,6 +140,7 @@ export default async function PostcodePage({ params }: Props) {
             { name: data.district, url: `https://tapwater.uk/postcode/${data.district}/` },
           ]}
         />
+        {faqs.length > 0 && <FAQSchema faqs={faqs} />}
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
@@ -326,6 +344,33 @@ export default async function PostcodePage({ params }: Props) {
                 </ScrollReveal>
               </>
             )}
+
+            {/* Contextual internal links — contaminant pages + guides */}
+            <section className="mt-10">
+              <h2 className="font-display text-xl text-ink italic mb-3">
+                Learn more
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {data.pfasDetected && (
+                  <Link href="/contaminant/pfas/" className="pill">PFAS explained</Link>
+                )}
+                {flaggedNames.some((n) => /lead/i.test(n)) && (
+                  <Link href="/contaminant/lead/" className="pill">Lead in water</Link>
+                )}
+                {flaggedNames.some((n) => /nitrate|nitrite/i.test(n)) && (
+                  <Link href="/contaminant/nitrate/" className="pill">Nitrate levels</Link>
+                )}
+                {flaggedNames.some((n) => /chlorine/i.test(n)) && (
+                  <Link href="/contaminant/chlorine/" className="pill">Chlorine</Link>
+                )}
+                <Link href="/guides/how-to-test-your-water/" className="pill">How to test your water</Link>
+                <Link href="/guides/best-water-filters-uk/" className="pill">Best water filters</Link>
+                <Link href={`/city/${data.city.toLowerCase().replace(/\s+/g, "-")}/`} className="pill">
+                  Water in {data.city}
+                </Link>
+                <Link href="/compare/" className="pill">UK water rankings</Link>
+              </div>
+            </section>
 
             <hr className="border-rule mt-10" />
 

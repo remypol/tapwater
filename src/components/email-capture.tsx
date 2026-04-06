@@ -83,7 +83,7 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
                 <button
                   type="submit"
                   disabled={status === "submitting" || !consent}
-                  className="bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium flex items-center gap-1.5 hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="bg-btn text-white rounded-lg px-5 py-2.5 text-sm font-medium flex items-center gap-1.5 hover:bg-btn-hover transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {status === "submitting" ? "Sending\u2026" : "Subscribe"}
                   <ArrowRight className="w-3.5 h-3.5" />

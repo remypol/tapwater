@@ -69,7 +69,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
               </div>
               <button
                 type="submit"
-                className="bg-ink text-white rounded-xl py-4 px-7 text-base font-medium flex items-center gap-2 hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 shrink-0"
+                className="bg-btn text-white rounded-xl py-4 px-7 text-base font-medium flex items-center gap-2 hover:bg-btn-hover hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 shrink-0"
               >
                 Check
                 <ArrowRight className="w-4 h-4" />
@@ -92,7 +92,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
               </div>
               <button
                 type="submit"
-                className="bg-ink text-white rounded-lg py-2.5 px-4 text-sm font-medium flex items-center hover:bg-gray-800 transition-colors shrink-0"
+                className="bg-btn text-white rounded-lg py-2.5 px-4 text-sm font-medium flex items-center hover:bg-btn-hover transition-colors shrink-0"
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
