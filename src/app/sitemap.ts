@@ -3,6 +3,7 @@ import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
+import { WATER_PROBLEMS } from "@/lib/water-problems";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -11,7 +12,9 @@ const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate", "copper", "chlorine", "flu
 const GUIDE_SLUGS = [
   "best-water-filters-uk",
   "pfas-uk-explained",
+  "is-uk-tap-water-safe",
   "lead-pipes-uk",
+  "water-problems",
   "water-hardness-map",
   "understanding-your-water-supplier",
   "how-to-test-your-water",
@@ -174,6 +177,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...CATEGORY_ORDER.map((cat) => ({
       url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}/`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    // Water problems sub-pages
+    ...WATER_PROBLEMS.map((problem) => ({
+      url: `${BASE_URL}/guides/water-problems/${problem.slug}/`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.7,
