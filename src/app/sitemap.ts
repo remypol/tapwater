@@ -97,6 +97,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
+      url: `${BASE_URL}/rankings/`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/compare/`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
