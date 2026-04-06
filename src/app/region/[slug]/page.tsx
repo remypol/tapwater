@@ -123,6 +123,17 @@ export default async function RegionPage({ params }: Props) {
 
   const scoreLabel = avgScore >= 7 ? "safe" : avgScore >= 4 ? "moderate" : "below average";
 
+  const allRegionReadings = allPostcodes.flatMap(p => [...p.readings, ...p.environmentalReadings]);
+  const hardnessReadings = allRegionReadings.filter(r =>
+    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
+  );
+  const avgHardness = hardnessReadings.length > 0
+    ? hardnessReadings.reduce((s, r) => s + r.value, 0) / hardnessReadings.length
+    : null;
+  const hardnessClass = avgHardness != null
+    ? avgHardness < 60 ? "soft" : avgHardness < 120 ? "moderately soft" : avgHardness < 180 ? "moderately hard" : avgHardness < 250 ? "hard" : "very hard"
+    : null;
+
   const faqs = [
     {
       question: `Is tap water safe in ${region.name}?`,
@@ -132,6 +143,14 @@ export default async function RegionPage({ params }: Props) {
       question: `Which area has the best water in ${region.name}?`,
       answer: best.length > 0 ? `${best[0].district} (${best[0].areaName}) has the highest water quality score in ${region.name} at ${best[0].safetyScore.toFixed(1)}/10.` : `Data is still being collected for ${region.name}.`,
     },
+    {
+      question: `Which area has the worst water in ${region.name}?`,
+      answer: worst.length > 0 ? `${worst[0].district} (${worst[0].areaName}) has the lowest water quality score in ${region.name} at ${worst[0].safetyScore.toFixed(1)}/10. Check the postcode page for details on specific contaminants.` : `Data is still being collected for ${region.name}.`,
+    },
+    ...(avgHardness != null ? [{
+      question: `Is ${region.name} water hard or soft?`,
+      answer: `Water in ${region.name} has an average hardness of ${Math.round(avgHardness)} mg/L CaCO₃, which is classified as ${hardnessClass}. Hardness varies by area — check your postcode for exact levels.`,
+    }] : []),
     {
       question: `Who supplies water in ${region.name}?`,
       answer: `Water in ${region.name} is supplied by ${suppliers.join(", ")}.`,
