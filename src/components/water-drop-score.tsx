@@ -174,7 +174,7 @@ export function WaterDropScore({ score, size = 200, tested, flagged, className }
         aria-labelledby="drop-title drop-desc"
         style={{ overflow: 'visible' }}
       >
-        <title id="drop-title">Water quality score: {score}/10</title>
+        <title id="drop-title">{`Water quality score: ${score}/10`}</title>
         <desc id="drop-desc">{ariaLabel}</desc>
         <defs>
           {/* Gradient */}

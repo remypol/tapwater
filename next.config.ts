@@ -4,7 +4,6 @@ import { withSentryConfig } from "@sentry/nextjs";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
-  trailingSlash: true,
   async headers() {
     return [
       {
