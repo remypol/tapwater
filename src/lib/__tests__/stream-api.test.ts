@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { normalizeStreamRecord, parseStreamDate } from "../stream-api";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { normalizeStreamRecord, parseStreamDate, fetchStreamData } from "../stream-api";
+import type { StreamSource } from "../stream-sources";
 
 describe("parseStreamDate", () => {
   it("parses epoch milliseconds", () => {
@@ -83,5 +84,119 @@ describe("normalizeStreamRecord", () => {
     const result = normalizeStreamRecord(record, "upper", "epoch");
     expect(result.unit).toBe("\u00b5g/l Al");
     expect(result.belowDetectionLimit).toBe(true);
+  });
+});
+
+describe("fetchStreamData", () => {
+  const mockSource: StreamSource = {
+    orgId: "test-org",
+    services: [
+      { year: 2025, serviceName: "Company_2025" },
+      { year: 2024, serviceName: "Company_2024" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "upper",
+    dateFormat: "epoch",
+  };
+
+  const makeFeature = (determinand: string, date: number) => ({
+    attributes: {
+      SAMPLE_ID: "s1",
+      SAMPLE_DATE: date,
+      DETERMINAND: determinand,
+      DWI_CODE: "X1",
+      UNITS: "mg/l",
+      OPERATOR: null,
+      RESULT: 1.0,
+      LSOA: "E01000001",
+    },
+  });
+
+  const makeArcGISResponse = (features: unknown[], exceededLimit = false) =>
+    new Response(JSON.stringify({ features, exceededTransferLimit: exceededLimit }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+
+  const emptyResponse = () => makeArcGISResponse([]);
+
+  const discoveryResponse = (services: string[]) =>
+    new Response(
+      JSON.stringify({
+        services: services.map((name) => ({ name, type: "FeatureServer" })),
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+
+  let fetchSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    fetchSpy = vi.spyOn(globalThis, "fetch");
+  });
+
+  afterEach(() => {
+    fetchSpy.mockRestore();
+  });
+
+  it("returns data from newest hardcoded service (fast path)", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      makeArcGISResponse([makeFeature("Lead", 1743206400000)]),
+    );
+
+    const records = await fetchStreamData(mockSource, ["E01000001"]);
+    expect(records.length).toBe(1);
+    expect(records[0].determinand).toBe("Lead");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("falls through to older service when newest is empty", async () => {
+    fetchSpy
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(
+        makeArcGISResponse([makeFeature("Chlorine", 1700000000000)]),
+      )
+      .mockResolvedValueOnce(discoveryResponse(["Company_2025", "Company_2024"]));
+
+    const records = await fetchStreamData(mockSource, ["E01000001"]);
+    expect(records.length).toBe(1);
+    expect(records[0].determinand).toBe("Chlorine");
+  });
+
+  it("prefers discovered newer service over stale hardcoded data", async () => {
+    fetchSpy
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(
+        makeArcGISResponse([makeFeature("Chlorine", 1700000000000)]),
+      )
+      .mockResolvedValueOnce(
+        discoveryResponse([
+          "Company_Drinking_Water_Quality_2026",
+          "Company_2025",
+          "Company_2024",
+        ]),
+      )
+      .mockResolvedValueOnce(
+        makeArcGISResponse([makeFeature("Lead", 1770000000000)]),
+      );
+
+    const records = await fetchStreamData(mockSource, ["E01000001"]);
+    expect(records.length).toBe(1);
+    expect(records[0].determinand).toBe("Lead");
+  });
+
+  it("returns empty array when no services have data", async () => {
+    fetchSpy
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(discoveryResponse([]));
+
+    const records = await fetchStreamData(mockSource, ["E01000001"]);
+    expect(records).toEqual([]);
+  });
+
+  it("returns empty array for empty lsoa list", async () => {
+    const records = await fetchStreamData(mockSource, []);
+    expect(records).toEqual([]);
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 });

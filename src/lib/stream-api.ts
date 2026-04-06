@@ -210,27 +210,69 @@ async function discoverServices(orgId: string): Promise<string[]> {
 }
 
 /**
+ * Extract a year from a service name, or return current year if none found.
+ * Services without a year (e.g., "Affinity_Water_Domestic_Water_Quality")
+ * are assumed to contain the latest data.
+ */
+function extractServiceYear(serviceName: string): number {
+  const match = serviceName.match(/\d{4}/);
+  return match ? parseInt(match[0], 10) : new Date().getFullYear();
+}
+
+/**
  * Fetch the most recent year's data for a supplier and set of LSOAs.
- * First tries hardcoded services (fast), then discovers new ones if none work.
+ *
+ * Strategy:
+ * 1. Try hardcoded services newest-first (fast path)
+ * 2. If best data is older than our newest config, run discovery
+ * 3. If discovery finds a newer service with data, prefer it
  */
 export async function fetchStreamData(
   source: StreamSource,
   lsoaCodes: string[],
 ): Promise<StreamRecord[]> {
-  // Try hardcoded services first (fast path)
-  for (const service of source.services) {
+  if (lsoaCodes.length === 0) return [];
+
+  // Sort hardcoded services newest-first (enforce regardless of config order)
+  const sortedServices = [...source.services].sort((a, b) => b.year - a.year);
+  const newestHardcodedYear = sortedServices[0]?.year ?? 0;
+
+  // Try hardcoded services newest-first
+  let bestRecords: StreamRecord[] = [];
+  let bestYear = 0;
+
+  for (const service of sortedServices) {
     const records = await queryStreamService(source, service.serviceName, lsoaCodes);
-    if (records.length > 0) return records;
+    if (records.length > 0) {
+      bestRecords = records;
+      bestYear = service.year;
+      break; // fast path: newest available worked
+    }
   }
 
-  // Fallback: discover services dynamically (handles new yearly datasets)
-  const discovered = await discoverServices(source.orgId);
-  for (const serviceName of discovered) {
-    // Skip services we already tried
-    if (source.services.some((s) => s.serviceName === serviceName)) continue;
-    const records = await queryStreamService(source, serviceName, lsoaCodes);
-    if (records.length > 0) return records;
+  // If our best data is older than the newest hardcoded year, or we have nothing,
+  // try discovering newer services on the portal
+  if (bestYear < newestHardcodedYear || bestRecords.length === 0) {
+    const discovered = await discoverServices(source.orgId);
+    const triedNames = new Set(sortedServices.map((s) => s.serviceName));
+
+    for (const serviceName of discovered) {
+      if (triedNames.has(serviceName)) continue;
+
+      const discoveredYear = extractServiceYear(serviceName);
+      if (discoveredYear <= bestYear) continue; // already have newer data
+
+      const records = await queryStreamService(source, serviceName, lsoaCodes);
+      if (records.length > 0) {
+        console.log(
+          `[stream-api] Discovered newer service: ${serviceName} (${discoveredYear}) — update stream-sources.ts`,
+        );
+        bestRecords = records;
+        bestYear = discoveredYear;
+        break; // found newer data
+      }
+    }
   }
 
-  return [];
+  return bestRecords;
 }
