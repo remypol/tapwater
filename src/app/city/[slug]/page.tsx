@@ -164,6 +164,31 @@ export default async function CityPage({ params }: Props) {
       ? `The most commonly flagged contaminants across ${city.name} are ${topConcerns.slice(0, 4).map(([name, count]) => `${name} (flagged in ${count} area${count > 1 ? "s" : ""})`).join(", ")}. ${pfasCount > 0 ? `PFAS (forever chemicals) were detected in ${pfasCount} area${pfasCount > 1 ? "s" : ""}.` : "No PFAS were detected."}`
       : `No contaminants were flagged above recommended levels across ${city.name}. All tested areas passed on the parameters measured.`;
 
+  // Compute hardness for the city
+  const allCityReadings = scored.flatMap(p => [...p.readings, ...p.environmentalReadings]);
+  const hardnessReadings = allCityReadings.filter(r =>
+    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
+  );
+  const avgHardness = hardnessReadings.length > 0
+    ? hardnessReadings.reduce((s, r) => s + r.value, 0) / hardnessReadings.length
+    : null;
+  const hardnessClass = avgHardness != null
+    ? avgHardness < 60 ? "soft" : avgHardness < 120 ? "moderately soft" : avgHardness < 180 ? "moderately hard" : avgHardness < 250 ? "hard" : "very hard"
+    : null;
+
+  const hardnessAnswer = avgHardness != null
+    ? `Water in ${city.name} has an average hardness of ${Math.round(avgHardness)} mg/L CaCO₃, which is classified as ${hardnessClass}. ${avgHardness >= 180 ? "Hard water causes limescale buildup in kettles and appliances. A water softener or filter may help." : avgHardness < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`
+    : `Hardness data is not yet available for ${city.name}. Enter your postcode for detailed water quality data.`;
+
+  const bestAreas = [...scored].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3);
+  const bestAreasAnswer = bestAreas.length > 0
+    ? `The areas with the best water quality in ${city.name} are ${bestAreas.map(p => `${p.district} (${p.safetyScore.toFixed(1)}/10)`).join(", ")}.`
+    : `Data is still being collected for ${city.name}.`;
+
+  const pfasAnswer = pfasCount > 0
+    ? `PFAS (forever chemicals) have been detected in ${pfasCount} out of ${scored.length} areas tested in ${city.name}. The UK currently has no legal limit for PFAS in drinking water. Check your specific postcode for details.`
+    : `No PFAS (forever chemicals) have been detected in any of the ${scored.length} areas tested in ${city.name}.`;
+
   return (
     <div className="bg-score-safe">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
@@ -180,8 +205,11 @@ export default async function CityPage({ params }: Props) {
         <FAQSchema
           faqs={[
             { question: `Is ${city.name} tap water safe to drink?`, answer: safetyAnswer },
+            { question: `What is the water quality in ${city.name}?`, answer: contaminantsAnswer },
+            { question: `Is ${city.name} water hard or soft?`, answer: hardnessAnswer },
+            { question: `Which areas of ${city.name} have the best water?`, answer: bestAreasAnswer },
             { question: `Who supplies water in ${city.name}?`, answer: supplierAnswer },
-            { question: `What contaminants are in ${city.name} tap water?`, answer: contaminantsAnswer },
+            { question: `Are there PFAS in ${city.name} water?`, answer: pfasAnswer },
           ]}
         />
 
