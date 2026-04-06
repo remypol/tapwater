@@ -118,7 +118,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0B9J4N1ZH?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/pur-plus-pitcher.png",
+    imageUrl: "/filters/pur-plus-pitcher.jpg",
     rating: 4.2,
     badge: "best-value",
     pros: [
@@ -181,7 +181,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0BXJL6MNK?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/tapp-ecopro.png",
+    imageUrl: "/filters/tapp-ecopro.jpeg",
     rating: 4.4,
     badge: "best-match",
     pros: [
@@ -245,7 +245,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B005HSFMDI?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/doulton-hip-ultracarb.png",
+    imageUrl: "/filters/doulton-hip-ultracarb.jpg",
     rating: 4.6,
     badge: "best-match",
     pros: [
@@ -379,7 +379,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://echowater.com/?ref=tapwater",
     affiliateProgram: "impact",
     affiliateTag: "ref=tapwater",
-    imageUrl: "/filters/echo-water-hydrogen.png",
+    imageUrl: "/filters/echo-one.jpeg",
     rating: 4.4,
     badge: "premium",
     pros: [
@@ -444,7 +444,7 @@ export const PRODUCTS: FilterProduct[] = [
       "https://www.waterdropfilter.co.uk/products/waterdrop-whf21?sca_ref=placeholder",
     affiliateProgram: "impact",
     affiliateTag: "sca_ref=placeholder",
-    imageUrl: "/filters/waterdrop-whf21.png",
+    imageUrl: "/filters/WaterDrop-WHF21-FG.jpg",
     rating: 4.5,
     badge: "best-match",
     pros: [
@@ -475,7 +475,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B01MZGPB47?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/aquasana-eq1000.png",
+    imageUrl: "",
     rating: 4.4,
     badge: "premium",
     pros: [
@@ -508,7 +508,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0C5QJZQY8?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/jolie-showerhead.png",
+    imageUrl: "/filters/jolie-showerhead.jpeg",
     rating: 4.5,
     badge: "premium",
     pros: [
@@ -538,7 +538,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B01MUBU0YC?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/aquabliss-sf220.png",
+    imageUrl: "/filters/aquabliss-sf220.jpg",
     rating: 4.2,
     badge: "budget",
     pros: [
@@ -568,7 +568,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0BXWNRYF4?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/philips-awp1775.png",
+    imageUrl: "/filters/philips-awp1775.jpg",
     rating: 4.3,
     badge: "best-value",
     pros: [
@@ -600,7 +600,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0B1HMD3LH?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/simplexhealth-17.png",
+    imageUrl: "/filters/simplexhealth-13.jpg",
     rating: 4.1,
     badge: "budget",
     pros: [
@@ -628,7 +628,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B0BN1JLGZP?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/sj-wave-16.png",
+    imageUrl: "/filters/sj-wave-16.jpg",
     rating: 4.0,
     badge: "budget",
     pros: [
@@ -656,7 +656,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl: "https://www.amazon.co.uk/dp/B07XMGKX4Q?tag=tapwater21-21",
     affiliateProgram: "amazon",
     affiliateTag: "tapwater21-21",
-    imageUrl: "/filters/tap-score-essential.png",
+    imageUrl: "/filters/tap-score-essential.jpeg",
     rating: 4.7,
     badge: "premium",
     pros: [
