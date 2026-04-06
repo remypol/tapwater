@@ -59,6 +59,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "united-utilities": {
     orgId: STREAM_ORG,
     services: [
+      { year: 2025, serviceName: "United_Utilities_Domestic_Water_Quality" },
       { year: 2023, serviceName: "United_Utilities_Domestic_Drinking_Water_Quality_2023" },
     ],
     geoField: "LSOA",
@@ -68,6 +69,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "anglian-water": {
     orgId: STREAM_ORG,
     services: [
+      { year: 2025, serviceName: "Anglian_Water_Domestic_Water_Quality" },
       { year: 2024, serviceName: "Anglian_Water_Domestic_Water_Quality_2024" },
     ],
     geoField: "LSOA21CD",
