@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PersonSchema } from '@/components/json-ld'
+import { getTrustMetrics } from '@/lib/data'
 
 export const metadata: Metadata = {
   title: 'About TapWater.uk',
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
     'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const metrics = await getTrustMetrics();
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <PersonSchema
@@ -32,6 +34,41 @@ export default function AboutPage() {
           government sources to provide free, postcode-searchable water quality reports for every
           area in England and Wales.
         </p>
+
+        {/* Trust metrics */}
+        <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {metrics.map(({ value, label }) => (
+            <div key={label} className="card p-4 text-center">
+              <span className="font-data text-xl font-bold text-ink">{value}</span>
+              <p className="text-xs text-faint uppercase tracking-wider mt-1">{label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Data source credibility */}
+        <div className="mt-8 card p-6">
+          <h2 className="text-sm font-semibold text-ink uppercase tracking-wider mb-4">Our data sources</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <p className="text-sm font-medium text-ink">Environment Agency</p>
+              <p className="text-xs text-muted mt-1">Water Quality Archive — environmental monitoring of rivers, groundwater, and source waters across England</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-ink">Drinking Water Inspectorate</p>
+              <p className="text-xs text-muted mt-1">DWI compliance data — the regulator responsible for drinking water quality in England and Wales</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-ink">Stream Water Data Portal</p>
+              <p className="text-xs text-muted mt-1">Real tap water test results direct from UK water companies — the most granular source available</p>
+            </div>
+          </div>
+          <p className="text-xs text-faint mt-4">
+            All data is published under the{" "}
+            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-muted">
+              Open Government Licence v3
+            </a>
+          </p>
+        </div>
 
         <section className="mt-10">
           <h2 className="font-display text-xl italic text-ink mb-4">
