@@ -99,6 +99,16 @@ export default async function PostcodePage({ params }: Props) {
     .map((r) => r.name);
   const filterRecs = recommendFilters(flaggedNames, 3);
 
+  // Extract water hardness from readings (very commonly searched)
+  const allReadings = [...data.readings, ...data.environmentalReadings];
+  const hardnessReading = allReadings.find((r) =>
+    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name)),
+  );
+  const hardnessValue = hardnessReading?.value ?? null;
+  const hardnessLabel = hardnessValue != null
+    ? hardnessValue < 60 ? "soft" : hardnessValue < 120 ? "moderately soft" : hardnessValue < 180 ? "moderately hard" : hardnessValue < 250 ? "hard" : "very hard"
+    : null;
+
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
   const faqs = hasData ? [
@@ -114,6 +124,10 @@ export default async function PostcodePage({ params }: Props) {
       question: `Who supplies water in ${data.district}?`,
       answer: `${data.district} (${data.areaName}) is supplied by ${data.supplier}. You can view their full profile and compliance data on our supplier page.`,
     },
+    ...(hardnessValue != null ? [{
+      question: `Is ${data.district} water hard or soft?`,
+      answer: `Water in ${data.district} (${data.areaName}) has a hardness of ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}. ${hardnessValue >= 180 ? "Hard water can cause limescale buildup. A water softener or filter jug may help." : hardnessValue < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`,
+    }] : []),
   ] : [];
 
   return (
@@ -204,36 +218,64 @@ export default async function PostcodePage({ params }: Props) {
               </div>
             )}
 
-            {/* Summary — GEO-optimised for AI citation */}
+            {/* Water hardness — one of the most searched water questions */}
+            {hardnessValue != null && (
+              <div className="mt-6 card p-4 flex items-center gap-4">
+                <div className="w-9 h-9 rounded-lg bg-accent-light flex items-center justify-center shrink-0">
+                  <span className="text-accent text-sm font-bold">H</span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-ink">
+                    Water hardness: {hardnessValue} mg/L ({hardnessLabel})
+                  </p>
+                  <p className="text-xs text-muted mt-0.5">
+                    {hardnessValue >= 180
+                      ? "Hard water — may cause limescale buildup in kettles and pipes"
+                      : hardnessValue < 60
+                        ? "Soft water — gentle on appliances and skin"
+                        : "Moderate hardness — unlikely to cause issues"}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Summary — structured for AI citation and GEO */}
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
-                {data.dataSource === "stream" || data.dataSource === "mixed" ? (
-                  <>Based on drinking water tests</>
-                ) : (
-                  <>Based on environmental water monitoring</>
-                )}, your water in{" "}
-                {data.district} ({data.areaName}) is supplied by{" "}
+                Tap water in {data.district} ({data.areaName}, {data.city}) is supplied by{" "}
                 <Link href={`/supplier/${data.supplierId}`} className="font-medium text-ink hover:text-accent transition-colors">
                   {data.supplier}
-                </Link>
-                . Based on the latest data (last sampled {data.lastSampleDate}),{" "}
-                <span className="font-data">{data.contaminantsTested}</span> things
-                were tested with{" "}
-                <span className="font-data">{data.contaminantsFlagged}</span> exceeding
-                recommended levels.{" "}
-                The overall water quality score for {data.district} is{" "}
-                <span className="font-data font-bold">{data.safetyScore}/10</span>
+                </Link>{" "}
+                and scored <span className="font-data font-bold">{data.safetyScore} out of 10</span> for
+                safety based on {data.contaminantsTested} tested parameters.{" "}
+                {data.contaminantsFlagged > 0 ? (
+                  <>
+                    {data.contaminantsFlagged} contaminant{data.contaminantsFlagged !== 1 ? "s" : ""} exceeded
+                    recommended safe levels
+                    {flaggedNames.length > 0 && (
+                      <>: {flaggedNames.slice(0, 3).join(", ")}{flaggedNames.length > 3 ? ` and ${flaggedNames.length - 3} more` : ""}</>
+                    )}
+                    .
+                  </>
+                ) : (
+                  <>No contaminants exceeded recommended safe levels.</>
+                )}
                 {data.pfasDetected && data.pfasLevel != null && (
                   <>
-                    . PFAS (forever chemicals) were detected at{" "}
+                    {" "}PFAS (forever chemicals) were detected at{" "}
                     <span className="font-data">{data.pfasLevel}</span> µg/L
                     {data.pfasSource === "drinking"
-                      ? " in local tap water tests"
-                      : " in nearby environmental monitoring"} — the UK currently has no
-                    legal limit for PFAS in drinking water
+                      ? " in local drinking water tests"
+                      : " in nearby environmental monitoring"}. The UK currently has no
+                    legal limit for PFAS in drinking water.
                   </>
                 )}
-                .
+                {" "}Data is from{" "}
+                {data.sampleCount > 0 ? `${data.sampleCount.toLocaleString()} samples collected up to ` : "samples last taken "}
+                {data.lastSampleDate}, sourced from{" "}
+                {data.dataSource === "stream" || data.dataSource === "mixed"
+                  ? `${data.supplier} via the Stream Water Data Portal`
+                  : "the Environment Agency Water Quality Archive"}.
               </p>
             </div>
 
@@ -453,7 +495,7 @@ export default async function PostcodePage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Methodology Footer */}
+        {/* Methodology Footer — E-E-A-T signals */}
         <footer id="methodology-footer" className="mt-10 pb-4 text-sm text-faint leading-relaxed scroll-mt-20">
           {hasData ? <>Based on {data.contaminantsTested} tests. </> : null}
           {data.dataSource === "stream" || data.dataSource === "mixed"
@@ -464,6 +506,13 @@ export default async function PostcodePage({ params }: Props) {
             methodology
           </Link>{" "}
           for how scores are calculated.
+          <span className="block mt-2">
+            Last updated: <time dateTime={data.lastUpdated}>{data.lastUpdated}</time>
+            {" · "}Reviewed by{" "}
+            <Link href="/about" className="underline underline-offset-2 hover:text-muted transition-colors">
+              the TapWater.uk research team
+            </Link>
+          </span>
         </footer>
       </div>
     </div>
