@@ -2,6 +2,7 @@
 
 import { Search, ArrowRight } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { events } from "@/lib/analytics"
 import { useState } from "react"
 
 type Props = {
@@ -35,6 +36,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
       return
     }
 
+    events.postcodeSearch(district)
     router.push(`/postcode/${district}/`)
   }
 

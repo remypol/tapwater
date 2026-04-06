@@ -14,6 +14,7 @@ import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { CITIES } from "@/lib/cities";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -99,6 +100,13 @@ export default async function PostcodePage({ params }: Props) {
     .map((r) => r.name);
   const filterRecs = recommendFilters(flaggedNames, 3);
 
+  // Find city page for breadcrumb linking
+  const cityMatch = CITIES.find((c) =>
+    c.matches.some((m) => m.toLowerCase() === data.city.toLowerCase()) ||
+    c.name.toLowerCase() === data.city.toLowerCase(),
+  );
+  const citySlug = cityMatch?.slug ?? data.city.toLowerCase().replace(/\s+/g, "-");
+
   // Extract water hardness from readings (very commonly searched)
   const allReadings = [...data.readings, ...data.environmentalReadings];
   const hardnessReading = allReadings.find((r) =>
@@ -149,15 +157,16 @@ export default async function PostcodePage({ params }: Props) {
         <BreadcrumbSchema
           items={[
             { name: "Home", url: "https://www.tapwater.uk" },
-            { name: data.region, url: `https://www.tapwater.uk/postcode/${data.district}/` },
-            { name: data.areaName, url: `https://www.tapwater.uk/postcode/${data.district}/` },
-            { name: data.district, url: `https://www.tapwater.uk/postcode/${data.district}/` },
+            { name: data.city, url: `https://www.tapwater.uk/city/${citySlug}` },
+            { name: data.district, url: `https://www.tapwater.uk/postcode/${data.district}` },
           ]}
         />
         {faqs.length > 0 && <FAQSchema faqs={faqs} />}
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link href={`/city/${citySlug}`} className="hover:text-accent transition-colors">{data.city}</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-ink font-medium">{data.district}</span>
         </nav>

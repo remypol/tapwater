@@ -6,6 +6,7 @@ import { MapPin, X, Loader2 } from "lucide-react";
 import { UKMap } from "@/components/uk-map";
 import { UK_REGIONS, POSTCODE_TO_REGION } from "@/data/uk-regions";
 import { getScoreColor } from "@/lib/types";
+import { events } from "@/lib/analytics";
 
 interface MapPostcodeEntry {
   district: string;
@@ -56,6 +57,7 @@ export function HomepageMap() {
 
   const handleRegionSelect = useCallback((regionId: string | null) => {
     setSelectedRegion((prev) => (prev === regionId ? null : regionId));
+    if (regionId) events.regionSelect(regionId);
   }, []);
 
   const regionPostcodes = useMemo(() => {

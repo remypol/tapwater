@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Bell, ArrowRight, Check, AlertCircle } from "lucide-react";
+import { events } from "@/lib/analytics";
 
 interface EmailCaptureProps {
   postcode: string;
@@ -20,6 +21,7 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
 
     setStatus("submitting");
     setErrorMsg("");
+    events.subscribeAttempt(postcode);
 
     try {
       const res = await fetch("/api/subscribe", {
@@ -34,6 +36,7 @@ export function EmailCapture({ postcode }: EmailCaptureProps) {
       }
 
       setStatus("success");
+      events.subscribeSuccess(postcode);
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Failed to subscribe");
