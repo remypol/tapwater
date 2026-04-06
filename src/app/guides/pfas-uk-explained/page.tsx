@@ -47,6 +47,14 @@ export default function PFASGuide() {
             question: "How do I remove PFAS from my tap water?",
             answer: "Reverse osmosis systems are the most effective option, removing 90-99% of PFAS compounds (typically \u00a3150-\u00a3400 under-sink). Activated carbon filters offer partial reduction (50-80%), and ion exchange resins can match RO performance in whole-house systems.",
           },
+          {
+            question: "What are the UK PFAS drinking water limits?",
+            answer: "There are currently no statutory limits for PFAS in UK drinking water. The government\u2019s PFAS National Strategy, published in February 2026, commits to a consultation on whether legal limits should be introduced. Until then, only voluntary guidelines apply. By contrast, the EU set a binding total PFAS limit of 0.1 \u00b5g/L from January 2026.",
+          },
+          {
+            question: "Which water filter removes PFAS?",
+            answer: "Reverse osmosis (RO) and certified activated carbon filters are the most effective options. Look for NSF/ANSI 58 certification for RO systems, or NSF/ANSI 53 for activated carbon. RO removes 90\u201399% of most PFAS compounds; activated carbon offers 50\u201380% reduction for longer-chain variants.",
+          },
         ]}
       />
       <div className="max-w-3xl mx-auto">
@@ -224,6 +232,50 @@ export default function PFASGuide() {
         <p className="text-base text-body leading-relaxed">
           Anion exchange resins specifically designed for PFAS can achieve removal rates comparable to reverse osmosis. They are more commonly found in whole-house treatment systems than in point-of-use devices. Municipal water utilities are increasingly deploying ion exchange at scale — this is a significant part of the treatment infrastructure investment being driven by the EU Directive.
         </p>
+
+        {/* 2026 regulatory developments */}
+        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink flex items-center gap-2">
+          <ShieldAlert className="w-5 h-5 text-warning shrink-0" aria-hidden="true" />
+          UK PFAS regulation: what&apos;s changing in 2026
+        </h2>
+        <p className="text-base text-body leading-relaxed mb-4">
+          February 2026 marked a turning point — of sorts. Defra published the UK&apos;s first dedicated PFAS Plan, setting out a government-wide framework for addressing the contamination challenge. The strategy acknowledges the public health risk, commits to expanded environmental monitoring, and proposes engaging water companies in voluntary reporting. It also opens a formal consultation on introducing statutory drinking water limits for the first time.
+        </p>
+        <p className="text-base text-body leading-relaxed mb-4">
+          The critical word is "consultation." As of April 2026, there is still no legal maximum for PFAS in UK tap water. Water companies have no statutory obligation to test, report, or remediate. The government&apos;s position — that limits require further evidence-gathering before they can be set — has drawn criticism from environmental scientists and public health bodies who argue the evidence has been sufficient for several years, and that delay carries a measurable health cost.
+        </p>
+
+        <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">Where the EU stands</h3>
+        <p className="text-base text-body leading-relaxed mb-4">
+          The EU&apos;s revised Drinking Water Directive has been in force since January 2026. It sets a limit of 0.1 µg/L for individual PFAS compounds of concern, and 0.5 µg/L for total PFAS across all detected substances. These are binding legal limits, enforceable in member state courts. Water suppliers that breach them face mandatory treatment upgrades, not just advisory notices.
+        </p>
+        <p className="text-base text-body leading-relaxed mb-4">
+          The UK is expected to broadly follow the EU approach when limits are eventually introduced — the scientific rationale is the same, and the Drinking Water Inspectorate has signalled it considers the EU thresholds scientifically sound. But the timeline is unclear. Industry estimates suggest significant infrastructure investment will be needed: advanced oxidation, activated carbon beds at scale, and membrane filtration upgrades at treatment works serving affected catchments. Water companies will need years of lead time once limits are confirmed.
+        </p>
+
+        <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">What this means for you</h3>
+        <p className="text-base text-body leading-relaxed mb-4">
+          In practical terms, the consultation period means two things. First, some areas with currently elevated PFAS levels in source water may see those levels formally flagged for the first time once monitoring obligations tighten. Second, water bills are likely to rise as treatment infrastructure is upgraded — the cost of compliance will be substantial for several water companies.
+        </p>
+        <p className="text-base text-body leading-relaxed mb-4">
+          For households in affected areas, the most straightforward protective measure available now — before any statutory limits are in force — is a point-of-use filter certified for PFAS removal. Our dedicated guide covers the options in detail:
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4 mt-2 mb-2">
+          <Link
+            href="/guides/best-water-filter-pfas/"
+            className="card p-4 group hover:border-accent transition-colors block"
+          >
+            <p className="font-medium text-ink group-hover:text-accent transition-colors text-sm">Best water filters for PFAS removal</p>
+            <p className="text-xs text-muted mt-1">Certified options — RO, activated carbon, and what the NSF ratings mean</p>
+          </Link>
+          <Link
+            href="/filters/"
+            className="card p-4 group hover:border-accent transition-colors block"
+          >
+            <p className="font-medium text-ink group-hover:text-accent transition-colors text-sm">Filter recommendations by water issue</p>
+            <p className="text-xs text-muted mt-1">Find the right filter for your postcode area&apos;s specific contaminants</p>
+          </Link>
+        </div>
 
         {/* Check your area */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">
