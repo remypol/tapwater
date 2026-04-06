@@ -37,7 +37,7 @@ export function ProductCard({ product, highlight }: ProductCardProps) {
           </div>
           <div className="text-right shrink-0">
             <p className="font-data text-lg font-bold text-ink">
-              {product.priceGbp > 0 ? `£${product.priceGbp}` : "Check price"}
+              {product.priceGbp > 0 ? `£${product.priceGbp.toLocaleString("en-GB")}` : "Check price"}
             </p>
             <div className="flex items-center gap-1 justify-end">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -68,7 +68,7 @@ export function ProductCard({ product, highlight }: ProductCardProps) {
           <a
             href={product.affiliateUrl}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener noreferrer sponsored nofollow"
             className="text-sm font-medium text-accent hover:underline flex items-center gap-1"
           >
             View deal

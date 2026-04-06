@@ -188,7 +188,7 @@ function ProductReview({
         <a
           href={product.affiliateUrl}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="noopener noreferrer sponsored nofollow"
           className="inline-flex items-center gap-1.5 bg-ink text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors"
         >
           {ctaLabel ?? "View deal"}
@@ -610,7 +610,7 @@ export default function BestReverseOsmosisGuide() {
           <a
             href={waterdrop.affiliateUrl}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener noreferrer sponsored nofollow"
             className="inline-flex items-center justify-center gap-2 bg-ink text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
           >
             Get the Waterdrop G3P600
@@ -619,7 +619,7 @@ export default function BestReverseOsmosisGuide() {
           <a
             href={frizzlife.affiliateUrl}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener noreferrer sponsored nofollow"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Get the Frizzlife PD600 (value pick)

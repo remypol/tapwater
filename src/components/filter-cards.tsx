@@ -145,7 +145,7 @@ function HeroRecommendation({
           <a
             href={filter.affiliateUrl}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener noreferrer sponsored nofollow"
             className="flex-1 bg-ink text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors"
           >
             Check price & reviews
@@ -153,7 +153,7 @@ function HeroRecommendation({
           </a>
           <div className="text-right shrink-0">
             <p className="font-data text-xl font-bold text-ink">
-              {filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}
+              {filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}
             </p>
             <div className="flex items-center gap-1 justify-end">
               <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -183,7 +183,7 @@ function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
         )}
       </div>
       <div className="text-right shrink-0">
-        <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}</p>
+        <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
         <div className="flex items-center gap-0.5 justify-end">
           <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
           <span className="text-[11px] text-muted">{filter.rating}</span>
@@ -192,7 +192,7 @@ function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
       <a
         href={filter.affiliateUrl}
         target="_blank"
-        rel="noopener noreferrer sponsored"
+        rel="noopener noreferrer sponsored nofollow"
         className="shrink-0 p-2 rounded-lg border border-rule hover:border-accent hover:text-accent transition-colors"
         aria-label={`View ${filter.brand} ${filter.model}`}
       >
@@ -300,7 +300,7 @@ export function FilterCards({ filters }: FilterCardsProps) {
               )}
             </div>
             <div className="text-right shrink-0">
-              <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp}` : "Check price"}</p>
+              <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
               <div className="flex items-center gap-0.5 justify-end">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 <span className="text-[11px] text-muted">{filter.rating}</span>
@@ -309,7 +309,7 @@ export function FilterCards({ filters }: FilterCardsProps) {
             <a
               href={filter.affiliateUrl}
               target="_blank"
-              rel="noopener noreferrer sponsored"
+              rel="noopener noreferrer sponsored nofollow"
               className="shrink-0 text-sm font-medium text-accent hover:underline flex items-center gap-1"
             >
               View

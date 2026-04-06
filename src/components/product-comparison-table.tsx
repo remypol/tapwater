@@ -29,13 +29,13 @@ export function ProductComparisonTable({ products, contaminants }: ComparisonTab
           {products.map((product) => (
             <tr key={product.id} className="border-b border-rule/50 hover:bg-wash/50">
               <td className="p-3">
-                <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="font-medium text-ink hover:text-accent">
+                <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored nofollow" className="font-medium text-ink hover:text-accent">
                   {product.brand} {product.model}
                 </a>
                 {product.bestFor && <p className="text-xs text-muted mt-0.5">{product.bestFor}</p>}
               </td>
               <td className="text-center p-3 font-data font-bold text-ink">
-                {product.priceGbp > 0 ? `£${product.priceGbp}` : "\u2014"}
+                {product.priceGbp > 0 ? `£${product.priceGbp.toLocaleString("en-GB")}` : "\u2014"}
               </td>
               <td className="text-center p-3">
                 <span className="inline-flex items-center gap-0.5">
