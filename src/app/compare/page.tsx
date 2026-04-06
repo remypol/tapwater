@@ -8,6 +8,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { CompareSearch } from "@/components/compare-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
@@ -243,6 +244,11 @@ export default async function ComparePage() {
             </p>
           )}
         </header>
+
+        {/* Compare two postcodes */}
+        <div className="mt-8 max-w-2xl">
+          <CompareSearch />
+        </div>
 
         {/* Best and Worst — side by side */}
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
