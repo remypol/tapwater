@@ -58,6 +58,13 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Cadmium](https://www.tapwater.uk/contaminant/cadmium): Cadmium contamination
 - [Chromium](https://www.tapwater.uk/contaminant/chromium): Chromium in water
 
+## PFAS tracker
+
+- [PFAS Live Tracker](https://www.tapwater.uk/pfas): National PFAS detection map and city rankings
+- City-level PFAS pages: https://www.tapwater.uk/pfas/{city-slug} (e.g. london, manchester, birmingham)
+- Data source: Environment Agency Water Quality Archive, PFAS determinands 2942-3037
+- Updated weekly with 3 years of historical data
+
 ## Water filter guides
 
 - [Best Water Filters UK](https://www.tapwater.uk/guides/best-water-filters-uk): Overview of filter types

@@ -4,6 +4,7 @@ import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
+import { getPfasCitySlugs } from "@/lib/pfas-data";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -122,6 +123,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/pfas`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/supplier`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
@@ -218,5 +225,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...postcodePaths,
     ...supplierPaths,
     ...contaminantPaths,
+    ...getPfasCitySlugs().map((slug) => ({
+      url: `${BASE_URL}/pfas/${slug}`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
   ];
 }
