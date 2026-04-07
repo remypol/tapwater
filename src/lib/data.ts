@@ -255,6 +255,59 @@ interface SeedEntry {
 
 // ── Public API (all async) ──
 
+/**
+ * Returns the average water hardness (mg/L CaCO3) for a postcode district,
+ * queried directly from drinking_water_readings since hardness isn't a
+ * regulated contaminant and is excluded from the scored page_data readings.
+ */
+let hardnessCache: Map<string, number | null> | null = null;
+
+export async function getHardness(
+  district: string,
+): Promise<{ value: number; label: string } | null> {
+  if (!supabase) return null;
+
+  // Bulk-load all hardness data on first call (one query vs per-page)
+  if (!hardnessCache) {
+    hardnessCache = new Map();
+    try {
+      const { data, error } = await supabase
+        .from("drinking_water_readings")
+        .select("postcode_district, value")
+        .or("determinand.ilike.%hardness%,determinand.ilike.Hardness (Total) as CaCO3")
+        .not("determinand", "ilike", "%alkalinity%");
+
+      if (!error && data) {
+        // Average per district
+        const sums = new Map<string, { total: number; count: number }>();
+        for (const row of data) {
+          const key = row.postcode_district.toUpperCase();
+          const entry = sums.get(key) ?? { total: 0, count: 0 };
+          entry.total += Number(row.value);
+          entry.count += 1;
+          sums.set(key, entry);
+        }
+        for (const [key, { total, count }] of sums) {
+          hardnessCache.set(key, Math.round(total / count));
+        }
+      }
+    } catch {
+      // Silently fail — hardness is informational only
+    }
+  }
+
+  const value = hardnessCache.get(district.toUpperCase());
+  if (value == null) return null;
+
+  const label = value < 60 ? "soft"
+    : value < 120 ? "moderately soft"
+    : value < 180 ? "moderately hard"
+    : value < 250 ? "hard"
+    : "very hard";
+
+  return { value, label };
+}
+
 export async function getPostcodeData(
   district: string,
 ): Promise<PostcodeData | null> {

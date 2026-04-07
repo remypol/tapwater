@@ -9,7 +9,7 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
-import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
@@ -127,15 +127,10 @@ export default async function PostcodePage({ params }: Props) {
   );
   const citySlug = cityMatch?.slug ?? data.city.toLowerCase().replace(/\s+/g, "-");
 
-  // Extract water hardness from readings (very commonly searched)
-  const allReadings = [...data.readings, ...data.environmentalReadings];
-  const hardnessReading = allReadings.find((r) =>
-    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name)),
-  );
-  const hardnessValue = hardnessReading?.value ?? null;
-  const hardnessLabel = hardnessValue != null
-    ? hardnessValue < 60 ? "soft" : hardnessValue < 120 ? "moderately soft" : hardnessValue < 180 ? "moderately hard" : hardnessValue < 250 ? "hard" : "very hard"
-    : null;
+  // Water hardness — queried from raw drinking_water_readings (not in scored page_data)
+  const hardnessData = await getHardness(data.district);
+  const hardnessValue = hardnessData?.value ?? null;
+  const hardnessLabel = hardnessData?.label ?? null;
 
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
