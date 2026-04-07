@@ -14,6 +14,19 @@ const CONTAMINANT_SLUGS = [
   "nitrite", "turbidity", "aluminium", "coliform", "cadmium", "chromium",
 ];
 
+const CITY_COMPARISON_PAIRS: [string, string][] = [
+  ["london", "manchester"], ["london", "birmingham"], ["london", "leeds"],
+  ["london", "glasgow"], ["london", "edinburgh"], ["london", "bristol"],
+  ["london", "liverpool"], ["london", "sheffield"], ["london", "nottingham"],
+  ["london", "cardiff"],
+  ["manchester", "birmingham"], ["manchester", "leeds"], ["manchester", "liverpool"],
+  ["manchester", "sheffield"], ["manchester", "glasgow"],
+  ["birmingham", "leeds"], ["birmingham", "bristol"], ["birmingham", "nottingham"],
+  ["edinburgh", "glasgow"], ["leeds", "sheffield"],
+  ["bristol", "cardiff"], ["liverpool", "leeds"],
+  ["newcastle", "sunderland"], ["nottingham", "leicester"],
+];
+
 const RANKING_SLUGS = [
   "worst-lead", "worst-nitrate", "worst-pfas", "hardest-water", "best-water", "worst-water",
 ];
@@ -126,6 +139,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    // City-vs-city comparison pages (both directions)
+    ...CITY_COMPARISON_PAIRS.flatMap(([a, b]) => [
+      {
+        url: `${BASE_URL}/compare/city/${a}/vs/${b}`,
+        lastModified: latestDataDate,
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      },
+      {
+        url: `${BASE_URL}/compare/city/${b}/vs/${a}`,
+        lastModified: latestDataDate,
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      },
+    ]),
     {
       url: `${BASE_URL}/hardness`,
       lastModified: latestDataDate,
