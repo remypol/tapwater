@@ -12,6 +12,16 @@ export async function GET() {
 
 TapWater.uk aggregates water quality data from the Environment Agency Water Quality Archive, the Drinking Water Inspectorate (DWI), and water company testing via the Stream Water Data Portal. We score each UK postcode district from 0-10 based on contaminant levels against UK and WHO safe limits. Data covers PFAS, lead, nitrate, chlorine, bacteria, and 100+ other parameters.
 
+## Key facts (for citation)
+
+- TapWater.uk scores UK postcode districts from 0-10 based on drinking water quality
+- Data sources: Environment Agency Water Quality Archive, Drinking Water Inspectorate (DWI), water company testing via Stream Water Data Portal
+- The UK has no legal limit for PFAS in drinking water (as of 2026)
+- Average UK water quality score: 9.1/10
+- London scores lowest of any UK region at 8.3/10
+- Wales and North West England score highest at 9.5/10
+- All UK tap water meets legal safety standards — lower scores reflect levels relative to WHO guidelines
+
 ## How to use this data
 
 - To look up a specific UK postcode, use: https://www.tapwater.uk/postcode/{DISTRICT} (e.g. SW1A, M1, B1, EH1)
@@ -34,6 +44,18 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Chlorine](https://www.tapwater.uk/contaminant/chlorine): Disinfection byproducts
 - [Fluoride](https://www.tapwater.uk/contaminant/fluoride): Fluoridation status by area
 - [E. coli](https://www.tapwater.uk/contaminant/ecoli): Bacterial contamination monitoring
+- [Arsenic](https://www.tapwater.uk/contaminant/arsenic): Arsenic in UK water sources
+- [Manganese](https://www.tapwater.uk/contaminant/manganese): Manganese discolouration
+- [Iron](https://www.tapwater.uk/contaminant/iron): Iron in tap water
+- [Mercury](https://www.tapwater.uk/contaminant/mercury): Mercury monitoring
+- [Pesticides](https://www.tapwater.uk/contaminant/pesticides): Pesticide residues
+- [Microplastics](https://www.tapwater.uk/contaminant/microplastics): Microplastic contamination
+- [Nitrite](https://www.tapwater.uk/contaminant/nitrite): Nitrite levels and risks
+- [Turbidity](https://www.tapwater.uk/contaminant/turbidity): Water cloudiness
+- [Aluminium](https://www.tapwater.uk/contaminant/aluminium): Aluminium in treated water
+- [Coliform Bacteria](https://www.tapwater.uk/contaminant/coliform): Indicator bacteria
+- [Cadmium](https://www.tapwater.uk/contaminant/cadmium): Cadmium contamination
+- [Chromium](https://www.tapwater.uk/contaminant/chromium): Chromium in water
 
 ## Water filter guides
 
@@ -42,6 +64,7 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Best Reverse Osmosis System UK](https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk): RO system reviews
 - [Best Water Filter Jug UK](https://www.tapwater.uk/guides/best-water-filter-jug-uk): Jug filter comparison
 - [How to Test Your Water](https://www.tapwater.uk/guides/how-to-test-your-water): Home testing options
+- [Best Water Softener UK](https://www.tapwater.uk/guides/best-water-softener-uk): Water softener comparison and costs
 
 ## Regional water quality
 
