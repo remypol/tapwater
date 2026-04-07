@@ -181,7 +181,69 @@ Ensure every page has a visible breadcrumb nav. Check: `/rankings`, `/hardness`,
 
 ---
 
-## 11. What This Does NOT Include
+## 11. Mobile-First Pass
+
+The site uses responsive Tailwind classes but hasn't been systematically audited for mobile UX.
+
+### 11.1 Touch Targets
+Verify all interactive elements meet the 44x44px minimum tap target size:
+- Header nav links in mobile hamburger menu (check padding)
+- Product card CTA buttons ("Check price on Amazon", "Buy from Waterdrop")
+- Filter pill/tag elements on filter pages
+- Table row links in rankings/city pages
+- Close buttons (X) on modals/panels
+- Postcode search submit button
+- Checkbox/radio inputs on partner signup form
+
+Where tap targets are too small, increase padding. Don't increase font size — increase the clickable area.
+
+### 11.2 Sticky Header + Mobile Nav Interaction
+With the header now sticky, the mobile hamburger panel (which slides down from the header) needs to:
+- Remain attached to the sticky header, not scroll away
+- Not push page content down (use absolute/fixed positioning on the panel)
+- Close on scroll (optional — better UX than leaving it open while scrolling)
+- Ensure the panel's `z-index` layers correctly under the sticky header
+
+### 11.3 Tables on Mobile
+Data tables (rankings, contaminant readings, PFAS city table, sampling points) need responsive treatment:
+- All tables should have `overflow-x-auto` on their container (most already do — verify)
+- For tables wider than viewport: add a subtle horizontal scroll indicator (gradient fade on the right edge)
+- Alternative: on screens < `sm`, convert wide tables to a stacked card layout. This is more work but better UX. Only do this if the table has 4+ columns.
+
+### 11.4 Map Touch Interaction
+Mapbox maps on PFAS pages need mobile-safe touch handling:
+- Disable `scrollZoom` (prevents accidental zoom when user is scrolling the page)
+- Keep `touchZoomRotate` enabled (pinch-to-zoom is expected)
+- Keep `dragPan` enabled
+- Popups should be positioned to not overflow the viewport on small screens
+
+Add to PfasMap component:
+```typescript
+scrollZoom: false,
+```
+
+### 11.5 Responsive Grid Consistency
+Verify all stat card grids, product grids, and postcode grids use consistent responsive breakpoints:
+- 1 column on mobile (< `sm`)
+- 2 columns on `sm`
+- 3-4 columns on `md`+
+
+Pages to check: PFAS tracker (stat cards), city pages (stat cards + postcode grid), postcode pages (nearby postcodes grid), filter category pages (product grid).
+
+### 11.6 Scroll-to-Top on Mobile
+Position the scroll-to-top button with sufficient margin from screen edges:
+- `bottom-4 right-4` on mobile (not bottom-8 right-8 which puts it too far from thumb reach)
+- Ensure it doesn't overlap the mobile nav hamburger when both are visible
+- Button size: 40px circle (meets touch target requirement)
+
+### 11.7 Font Legibility on Mobile
+- Body text at 16px (`text-base`) is correct — never go below 14px on mobile
+- Data values using `font-data` at larger sizes may overflow on narrow screens — verify with long numbers
+- Table header text may need to be slightly smaller on mobile (already handled by responsive classes — verify)
+
+---
+
+## 12. What This Does NOT Include
 
 - Full WCAG 2.2 Level AA audit (that's a multi-day effort)
 - Lighthouse CI integration (premature without CI/CD)
