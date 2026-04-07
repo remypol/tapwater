@@ -106,19 +106,66 @@ export async function POST(request: NextRequest) {
           ? `Confirm your water quality alerts for ${postcode}`
           : "Confirm your TapWater.uk subscription",
         html: `
-          <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto;">
-            <h2 style="color: #1a1a1a; font-size: 20px;">Confirm your subscription</h2>
-            <p style="color: #555; line-height: 1.6;">
-              You signed up for water quality alerts${postcode ? ` for <strong>${postcode}</strong>` : ""} on TapWater.uk.
-              Click below to confirm:
-            </p>
-            <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 500; margin: 16px 0;">
-              Confirm subscription
-            </a>
-            <p style="color: #999; font-size: 13px; margin-top: 24px;">
-              If you didn't sign up, you can ignore this email.
-            </p>
-          </div>
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:520px;margin:0 auto;padding:40px 24px;">
+
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">tap</span><span style="font-size:22px;font-weight:700;color:#0891b2;letter-spacing:-0.02em;">water</span><span style="font-size:14px;color:#0891b2;">.uk</span>
+    </div>
+
+    <!-- Card -->
+    <div style="background:#1e293b;border-radius:16px;padding:32px 28px;border:1px solid #334155;">
+      <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;line-height:1.3;">
+        Confirm your alerts${postcode ? ` for ${postcode}` : ""}
+      </h1>
+      <p style="margin:0 0 24px;font-size:15px;color:#94a3b8;line-height:1.6;">
+        You signed up for water quality alerts${postcode ? ` for <strong style="color:#ffffff;">${postcode}</strong>` : ""}.
+        We'll email you when new data is available for your area.
+      </p>
+
+      <!-- CTA Button -->
+      <div style="text-align:center;margin:28px 0;">
+        <a href="${verifyUrl}" style="display:inline-block;padding:14px 32px;background:#0891b2;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;font-size:15px;letter-spacing:0.01em;">
+          Confirm subscription
+        </a>
+      </div>
+
+      <!-- What you'll get -->
+      <div style="border-top:1px solid #334155;padding-top:20px;margin-top:24px;">
+        <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">What you'll get</p>
+        <table style="width:100%;border-collapse:collapse;">
+          <tr>
+            <td style="padding:6px 0;font-size:14px;color:#cbd5e1;">New contaminant data for your area</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;font-size:14px;color:#cbd5e1;">PFAS and water safety updates</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;font-size:14px;color:#cbd5e1;">Filter recommendations matched to your water</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;margin-top:28px;">
+      <p style="font-size:12px;color:#475569;line-height:1.5;margin:0;">
+        If you didn't sign up, you can safely ignore this email.
+      </p>
+      <p style="font-size:12px;color:#334155;margin:12px 0 0;">
+        <a href="https://www.tapwater.uk" style="color:#0891b2;text-decoration:none;">tapwater.uk</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://www.tapwater.uk/privacy" style="color:#475569;text-decoration:none;">Privacy</a>
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
         `,
       });
     } catch (err) {
