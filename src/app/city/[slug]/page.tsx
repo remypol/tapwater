@@ -72,30 +72,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : 0;
 
   const year = new Date().getFullYear();
+  const contaminantCount = new Set(scored.flatMap(p => p.readings.map(r => r.name))).size;
 
-  // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
-  const cityTitle = `${city.name} Water Quality ${year}`;
-  const pageTitle = (cityTitle + " | TapWater.uk").length <= 60
-    ? cityTitle
-    : `${city.name} Water Quality`;
+  // Keep title under 45 chars; shorten "Tap Water" → "Water" for long city names
+  const titleFull = `Is ${city.name} Tap Water Safe? (${year})`;
+  const titleShort = `Is ${city.name} Water Safe? (${year})`;
+  const pageTitle = titleFull.length <= 45 ? titleFull : titleShort;
 
   // Keep description under 155 chars
-  const descFull = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate levels and more. Free ${year} report.`;
-  const descShort = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate and more.`;
+  const descFull = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants tested across ${scored.length} postcodes. Free ${year} report.`;
+  const descShort = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants across ${scored.length} postcodes.`;
   const description = descFull.length <= 155 ? descFull : descShort;
 
   return {
     title: pageTitle,
     description,
     openGraph: {
-      title: `Is ${city.name} Tap Water Safe to Drink?`,
+      title: `Is ${city.name} Tap Water Safe to Drink? (${year})`,
       description,
       url: `https://www.tapwater.uk/city/${city.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Is ${city.name} Tap Water Safe to Drink?`,
+      title: `Is ${city.name} Tap Water Safe to Drink? (${year})`,
       description,
     },
   };
