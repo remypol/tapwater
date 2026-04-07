@@ -80,17 +80,17 @@ export function MobileNav({ navLinks }: MobileNavProps) {
       >
         <nav className="py-4">
           {navLinks.map((link) => {
-            const active = pathname === link.href;
+            const active = pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={[
-                  "block py-3 px-5 text-base text-body hover:text-accent transition-colors border-l-2",
+                  "block py-3 px-5 text-base hover:text-accent transition-colors border-l-2",
                   active
-                    ? "text-accent font-medium border-l-[var(--color-accent)]"
-                    : "border-l-transparent",
+                    ? "text-ink font-semibold border-l-[var(--color-accent)]"
+                    : "text-body border-l-transparent",
                 ].join(" ")}
                 style={{ fontFamily: "var(--font-dm-sans)" }}
               >
