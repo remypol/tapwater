@@ -14,12 +14,13 @@ export function generateStaticParams() {
   return WATER_PROBLEMS.map((p) => ({ slug: p.slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}): Metadata {
-  const problem = WATER_PROBLEMS.find((p) => p.slug === params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const problem = WATER_PROBLEMS.find((p) => p.slug === slug);
   if (!problem) return {};
 
   const year = new Date().getFullYear();
@@ -53,12 +54,13 @@ const CONTAMINANT_SLUG_MAP: Record<string, string> = {
   Nitrate: "nitrate",
 };
 
-export default function WaterProblemPage({
+export default async function WaterProblemPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const problem = WATER_PROBLEMS.find((p) => p.slug === params.slug);
+  const { slug } = await params;
+  const problem = WATER_PROBLEMS.find((p) => p.slug === slug);
   if (!problem) notFound();
 
   const dateStr = new Date().toISOString().split("T")[0];
@@ -84,10 +86,10 @@ export default function WaterProblemPage({
 
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: `${BASE_URL}/` },
-          { name: "Guides", url: `${BASE_URL}/guides/` },
-          { name: "Water Problems", url: `${BASE_URL}/guides/water-problems/` },
-          { name: problem.title, url: `${BASE_URL}/guides/water-problems/${problem.slug}/` },
+          { name: "Home", url: BASE_URL },
+          { name: "Guides", url: `${BASE_URL}/guides` },
+          { name: "Water Problems", url: `${BASE_URL}/guides/water-problems` },
+          { name: problem.title, url: `${BASE_URL}/guides/water-problems/${problem.slug}` },
         ]}
       />
 
