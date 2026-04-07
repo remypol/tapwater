@@ -777,12 +777,17 @@ export const CATEGORY_ORDER: ProductCategory[] = [
 export function getProductsByCategory(
   category: ProductCategory,
 ): FilterProduct[] {
-  return PRODUCTS.filter((p) => p.category === category);
+  return PRODUCTS.filter((p) => p.category === category && p.availableInUk !== false);
 }
 
 /**
  * Look up a single product by its URL slug.
  */
 export function getProductBySlug(slug: string): FilterProduct | undefined {
+  return PRODUCTS.find((p) => p.slug === slug);
+}
+
+/** Returns a specific product regardless of UK availability (for conditional rendering) */
+export function getProductIncludingUnavailable(slug: string): FilterProduct | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
