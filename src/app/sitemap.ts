@@ -7,7 +7,11 @@ import { WATER_PROBLEMS } from "@/lib/water-problems";
 
 const BASE_URL = "https://www.tapwater.uk";
 
-const CONTAMINANT_SLUGS = ["pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli"];
+const CONTAMINANT_SLUGS = [
+  "pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli",
+  "arsenic", "manganese", "iron", "mercury", "pesticides", "microplastics",
+  "nitrite", "turbidity", "aluminium", "coliform", "cadmium", "chromium",
+];
 
 const GUIDE_SLUGS = [
   "best-water-filters-uk",

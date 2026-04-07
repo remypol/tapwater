@@ -121,6 +121,162 @@ const CONTAMINANTS: Record<string, ContaminantEntry> = {
     euLimit: "0 per 100ml",
     removal: ["UV disinfection", "Reverse osmosis", "Chlorination"],
   },
+  arsenic: {
+    name: "Arsenic",
+    description:
+      "Arsenic is a naturally occurring metalloid found in groundwater, particularly in areas with certain geological formations. In the UK, arsenic is most commonly detected at elevated levels in parts of Cornwall, Devon, and other regions with mineralised bedrock. It can also enter water sources through historical mining activity and industrial contamination.",
+    healthEffects:
+      "Arsenic is classified as a Group 1 carcinogen by the International Agency for Research on Cancer (IARC). Chronic exposure through drinking water is linked to cancers of the skin, bladder, lungs, and kidneys. Long-term ingestion at levels above the regulatory limit can also cause skin lesions, cardiovascular disease, diabetes, and neurological effects. Children and pregnant women are particularly vulnerable.",
+    sources:
+      "In the UK, the primary source of arsenic in drinking water is natural dissolution from underground rock formations, especially in the south-west of England where mineralised geology is common. Legacy mining operations in Cornwall and Devon have also contributed to elevated arsenic levels in some groundwater sources. Industrial activities, wood preservation using chromated copper arsenate, and agricultural pesticide residues are additional but less common sources.",
+    ukLimit: "0.01 mg/L",
+    whoGuideline: "0.01 mg/L",
+    euLimit: "0.01 mg/L",
+    removal: ["Reverse osmosis", "Ion exchange", "Activated carbon"],
+  },
+  manganese: {
+    name: "Manganese",
+    description:
+      "Manganese is a naturally occurring metal found in rocks, soil, and groundwater. It is one of the most common causes of discoloured water in the UK, producing brown or black deposits that can stain laundry and plumbing fixtures. While manganese is an essential nutrient in small amounts, elevated levels in drinking water raise health concerns — particularly for infants and young children.",
+    healthEffects:
+      "At elevated levels, manganese can affect the developing nervous system. Studies have linked high manganese exposure in drinking water to reduced cognitive function, learning difficulties, and behavioural problems in children. In adults, chronic overexposure can cause manganism — a condition with symptoms resembling Parkinson's disease, including tremors, difficulty walking, and mood disturbances. The WHO lowered its guideline value in 2022 to reflect these neurological concerns.",
+    sources:
+      "Manganese enters UK drinking water primarily through natural dissolution from rocks and soils into groundwater. Levels tend to be higher in groundwater sources than in surface water. Old cast iron distribution mains can also release manganese that has accumulated over decades as biofilm deposits, particularly when flow patterns change or mains are disturbed. Seasonal changes in reservoir water chemistry can mobilise manganese from sediments.",
+    ukLimit: "0.05 mg/L",
+    whoGuideline: "0.08 mg/L",
+    euLimit: "0.05 mg/L",
+    removal: ["Reverse osmosis", "Ion exchange", "Activated carbon"],
+  },
+  iron: {
+    name: "Iron",
+    description:
+      "Iron is the most common cause of brown or orange discoloured water in the UK. While not typically a health hazard at the levels found in drinking water, iron causes aesthetic problems including unpleasant taste, staining of laundry and sanitary ware, and sediment build-up. The UK regulatory limit is set as an aesthetic standard rather than a health-based one.",
+    healthEffects:
+      "Iron in drinking water is generally not considered a direct health risk at the concentrations typically found in UK supplies. The WHO has not set a health-based guideline because iron is an essential nutrient and toxicity from drinking water is extremely rare. However, very high iron levels can cause gastrointestinal discomfort, nausea, and contribute to an unpleasant metallic taste that discourages adequate water consumption. Iron deposits in pipes can also harbour bacteria.",
+    sources:
+      "The main source of iron in UK tap water is aging cast iron water mains, many of which were laid in the Victorian era. As these pipes corrode, iron oxide flakes off into the water supply — particularly after pressure changes, burst mains, or when fire hydrants are used. Natural iron in groundwater sources is another contributor, especially in areas with iron-rich geology. Internal galvanised steel plumbing in older properties can also release iron.",
+    ukLimit: "0.2 mg/L",
+    whoGuideline: "No health-based guideline",
+    euLimit: "0.2 mg/L",
+    removal: ["Activated carbon", "Reverse osmosis", "Ion exchange"],
+  },
+  mercury: {
+    name: "Mercury",
+    description:
+      "Mercury is a highly toxic heavy metal that exists in several chemical forms, all of which pose health risks. In UK drinking water, mercury contamination is rare and typically found at very low levels, but the extreme toxicity of the element means that even small amounts are carefully regulated. The UK limit is among the strictest of any drinking water parameter.",
+    healthEffects:
+      "Mercury is a potent neurotoxin that can damage the nervous system, kidneys, and immune system. Inorganic mercury in drinking water is primarily toxic to the kidneys, where it accumulates over time. Developing foetuses and young children are most vulnerable — mercury exposure during pregnancy can impair cognitive development, language skills, and motor function. Chronic low-level exposure in adults has been linked to tremors, memory problems, and mood changes.",
+    sources:
+      "Mercury in UK water sources comes from both natural and industrial origins. Natural sources include weathering of mercury-containing minerals and volcanic deposits. Industrial sources include historical discharge from chemical manufacturing, chlor-alkali plants, and dental amalgam waste. Atmospheric deposition from coal-fired power stations and waste incineration can contaminate surface water catchments. Legacy contamination from industrial sites remains a concern in some areas.",
+    ukLimit: "0.001 mg/L",
+    whoGuideline: "0.006 mg/L",
+    euLimit: "0.001 mg/L",
+    removal: ["Reverse osmosis", "Distillation", "Activated carbon"],
+  },
+  pesticides: {
+    name: "Pesticides",
+    description:
+      "Pesticides are a broad group of agricultural and horticultural chemicals designed to kill weeds, insects, fungi, and other pests. UK drinking water regulations set a blanket limit on individual pesticide compounds and a separate limit for total pesticides — among the strictest standards in the world. Despite this, pesticide detections remain one of the most common causes of regulatory failures by UK water companies.",
+    healthEffects:
+      "The health effects of pesticides vary widely depending on the specific compound, but chronic exposure through drinking water has been linked to endocrine disruption, reproductive problems, neurological effects, and increased cancer risk for some substances. Children are more vulnerable due to their lower body weight and developing organ systems. The precautionary UK limit of 0.1 µg/L per compound is set well below levels where health effects have been observed, reflecting a safety-first approach.",
+    sources:
+      "Pesticides reach UK drinking water sources primarily through agricultural runoff from treated fields, leaching through soil into groundwater, and spray drift. The most commonly detected pesticides in UK water include metaldehyde (used in slug pellets), clopyralid (a broadleaf herbicide), MCPA (used on grassland and cereals), and propyzamide. Seasonal patterns are common, with higher detections in autumn and winter following application and rainfall. Urban sources include weed killers used on railways, roads, and gardens.",
+    ukLimit: "0.1 µg/L (individual), 0.5 µg/L (total)",
+    whoGuideline: "Varies by compound",
+    euLimit: "0.1 µg/L (individual), 0.5 µg/L (total)",
+    removal: ["Activated carbon", "Reverse osmosis", "Carbon block filters"],
+  },
+  microplastics: {
+    name: "Microplastics",
+    description:
+      "Microplastics are tiny plastic particles less than 5mm in size that have been found in drinking water sources worldwide, including UK tap water and bottled water. They are an emerging contaminant with no current UK regulatory limit. Research into their health effects is still in early stages, but the ubiquity of microplastics in the water supply has drawn growing public concern and scientific attention.",
+    healthEffects:
+      "The health effects of microplastics in drinking water are not yet fully understood. The WHO concluded in 2019 that microplastics in drinking water do not appear to pose a health risk at current levels, but acknowledged significant knowledge gaps. Concerns centre on the potential for microplastics to carry harmful chemicals (such as plasticisers and persistent organic pollutants) into the body, and on possible inflammatory responses to very small particles. Research is ongoing and regulatory positions may change as evidence develops.",
+    sources:
+      "Microplastics enter UK water sources from multiple pathways. Major sources include synthetic textile fibres released during washing, tyre wear particles washed from roads into rivers, and the breakdown of larger plastic waste in the environment. Wastewater treatment plants remove the majority of microplastics but cannot capture all particles, especially the smallest ones. Atmospheric fallout of airborne microplastics also contributes to contamination of reservoirs and catchments.",
+    ukLimit: null,
+    whoGuideline: "No guideline value set",
+    euLimit: "Monitoring required from 2026",
+    removal: ["Reverse osmosis", "Carbon block filters", "Activated carbon"],
+  },
+  nitrite: {
+    name: "Nitrite",
+    description:
+      "Nitrite is a nitrogen compound that is more toxic than the more commonly discussed nitrate. It can form in water distribution systems through the microbial conversion of nitrate or ammonia, and is also found in source water affected by sewage or agricultural contamination. Nitrite is commonly detected across UK postcode areas, though usually at levels well below the regulatory limit.",
+    healthEffects:
+      "Nitrite poses a particular risk to infants under three months old. It reacts with haemoglobin in the blood to form methaemoglobin, which cannot carry oxygen — a condition known as methaemoglobinaemia or 'blue baby syndrome'. In severe cases this can be fatal. In adults, chronic nitrite exposure has been linked to the formation of N-nitroso compounds in the stomach, which are associated with an increased risk of gastric and oesophageal cancer. The risk is higher when nitrite is combined with dietary amines.",
+    sources:
+      "Nitrite in UK drinking water can form within the distribution network itself, particularly in systems that use chloramine (combined chlorine) as a disinfectant — bacteria can convert the ammonia component into nitrite through nitrification. Agricultural runoff, sewage contamination, and the breakdown of organic nitrogen in source water also contribute. Nitrite levels tend to be higher at the extremities of distribution networks where water has a longer residence time.",
+    ukLimit: "0.5 mg/L",
+    whoGuideline: "3 mg/L",
+    euLimit: "0.5 mg/L",
+    removal: ["Reverse osmosis", "Ion exchange", "Distillation"],
+  },
+  turbidity: {
+    name: "Turbidity",
+    description:
+      "Turbidity is a measure of the cloudiness or haziness of water caused by suspended particles that are not visible to the naked eye individually but collectively scatter light. It is not a contaminant in itself, but rather an indicator of water quality — high turbidity suggests the possible presence of pathogens, sediment, or treatment problems. UK water companies monitor turbidity continuously at treatment works.",
+    healthEffects:
+      "Turbidity does not directly cause illness, but elevated levels are a serious public health concern because suspended particles can shield bacteria, viruses, and parasites like Cryptosporidium from disinfection. This means that high-turbidity water may harbour pathogens that chlorine cannot reach. Research has shown a correlation between turbidity spikes and increased rates of gastrointestinal illness in affected populations. For this reason, turbidity control is considered one of the most important barriers to waterborne disease.",
+    sources:
+      "Turbidity in UK water sources is caused by soil erosion and runoff (especially after heavy rainfall), algal blooms in reservoirs, disturbance of sediment in rivers and lakes, and resuspension of deposits in distribution mains. Moorland catchments in northern England and upland Wales are particularly prone to turbidity events following storms. Construction work, burst mains, and hydrant use within the distribution network can also cause localised turbidity spikes.",
+    ukLimit: "4 NTU",
+    whoGuideline: "1 NTU (ideally below 0.5 NTU)",
+    euLimit: "1 NTU at treatment works",
+    removal: ["Carbon block filters", "Reverse osmosis", "Activated carbon"],
+  },
+  aluminium: {
+    name: "Aluminium",
+    description:
+      "Aluminium in UK drinking water comes primarily from aluminium sulphate, which is deliberately added during water treatment as a coagulant to remove suspended particles and organic matter. While the treatment process is designed to remove most of the added aluminium before water enters the distribution system, residual levels can remain — particularly if the coagulation process is not optimally controlled.",
+    healthEffects:
+      "The health effects of aluminium in drinking water have been debated for decades, with particular attention on a possible link to Alzheimer's disease. Some epidemiological studies have found an association between elevated aluminium in drinking water and increased risk of cognitive decline, though the evidence remains inconclusive and contested. Aluminium is not classified as a carcinogen. At very high levels, aluminium can cause gastrointestinal irritation, and it may accumulate in bone tissue in people with impaired kidney function.",
+    sources:
+      "The main source of aluminium in UK drinking water is the aluminium sulphate (alum) used as a coagulant in water treatment. When treatment works are operating correctly, most aluminium is removed along with the particles it binds to. However, operational upsets, rapid changes in raw water quality (such as after storms), and suboptimal pH control can lead to elevated residual aluminium in treated water. Natural aluminium from soil and rock dissolution also contributes to levels in raw water sources.",
+    ukLimit: "0.2 mg/L",
+    whoGuideline: "0.2 mg/L",
+    euLimit: "0.2 mg/L",
+    removal: ["Reverse osmosis", "Distillation", "Ion exchange"],
+  },
+  coliform: {
+    name: "Coliform Bacteria",
+    description:
+      "Coliform bacteria are a broad group of organisms used as indicator organisms in drinking water testing. While most coliforms are not harmful themselves, their presence in treated water indicates that the disinfection or treatment process may have failed, and that disease-causing organisms could potentially be present. UK regulations require zero coliform bacteria in treated water samples.",
+    healthEffects:
+      "Most coliform bacteria are not pathogenic and do not cause illness directly. However, their detection in treated drinking water is treated as a serious event because it signals that the water may have been exposed to faecal contamination or that the treatment barrier has been compromised. This means that harmful organisms — including E. coli, Cryptosporidium, and viruses — could also be present. When coliforms are detected, water companies must investigate immediately and may issue precautionary boil-water notices.",
+    sources:
+      "Coliform bacteria are found naturally in soil, vegetation, and the intestines of warm-blooded animals. They enter water sources through agricultural runoff, sewage discharges, and surface water contamination. In treated water, coliform detection usually points to a breakdown in the treatment process, inadequate disinfection, ingress of contaminated water into the distribution network through cracked pipes, or regrowth in biofilms within the pipe system. Warm weather and stagnant water can promote bacterial growth.",
+    ukLimit: "0 per 100ml",
+    whoGuideline: "0 per 100ml",
+    euLimit: "0 per 100ml",
+    removal: ["UV disinfection", "Reverse osmosis", "Chlorination"],
+  },
+  cadmium: {
+    name: "Cadmium",
+    description:
+      "Cadmium is a toxic heavy metal that accumulates in the body over time, primarily in the kidneys and liver. It is classified as a Group 1 carcinogen by the IARC. Cadmium contamination in UK drinking water is uncommon at elevated levels, but the metal's extreme toxicity and tendency to bioaccumulate mean that even low-level chronic exposure is a concern. The UK regulatory limit is set at 0.005 mg/L.",
+    healthEffects:
+      "Cadmium is highly toxic to the kidneys, where it accumulates over a lifetime and can cause irreversible damage to the renal tubules. Long-term exposure is associated with kidney disease, bone demineralisation (leading to osteoporosis and fractures), and increased cancer risk — particularly lung and kidney cancer. The IARC classifies cadmium as a Group 1 carcinogen (carcinogenic to humans). Even at low levels, chronic exposure can impair calcium metabolism and weaken bones, particularly in post-menopausal women.",
+    sources:
+      "Cadmium in UK drinking water can leach from galvanised steel pipes and fittings, cadmium-containing solders, and some older plumbing components. Industrial sources include zinc smelting, battery manufacturing, electroplating, and waste incineration, which can contaminate surface water and groundwater. Agricultural use of phosphate fertilisers (which contain trace cadmium) and sewage sludge spreading can also contribute to cadmium in source water over time.",
+    ukLimit: "0.005 mg/L",
+    whoGuideline: "0.003 mg/L",
+    euLimit: "0.005 mg/L",
+    removal: ["Reverse osmosis", "Distillation", "Ion exchange"],
+  },
+  chromium: {
+    name: "Chromium",
+    description:
+      "Chromium exists in drinking water primarily in two forms: trivalent chromium (Cr-III), which is an essential nutrient, and hexavalent chromium (Cr-VI), which is carcinogenic. Current UK regulations set a limit for total chromium without distinguishing between the two forms. The EU has introduced a tighter limit of 0.025 mg/L that will take effect from 2036, reflecting growing concern about hexavalent chromium specifically.",
+    healthEffects:
+      "Hexavalent chromium (Cr-VI) is classified as a Group 1 carcinogen by the IARC when inhaled, and ingestion through drinking water has been linked to stomach and intestinal cancer in animal studies and some human epidemiological research. Chronic exposure to Cr-VI in drinking water may also cause liver and kidney damage, reproductive harm, and allergic skin reactions. Trivalent chromium (Cr-III) is far less toxic and is actually an essential trace nutrient involved in glucose metabolism. The challenge for regulators is that standard testing measures total chromium without distinguishing the toxic hexavalent form.",
+    sources:
+      "Chromium enters UK water sources from both natural and industrial origins. Natural weathering of chromium-containing rocks contributes low background levels. Industrial sources are more significant and include chrome plating facilities, leather tanning operations, textile dyeing, stainless steel manufacturing, and wood preservation using chromated copper arsenate. Legacy contamination from historical industrial sites can persist in groundwater for decades. Some older cooling water systems also used chromium-based corrosion inhibitors.",
+    ukLimit: "0.05 mg/L (total chromium)",
+    whoGuideline: "0.05 mg/L",
+    euLimit: "0.025 mg/L (from 2036)",
+    removal: ["Reverse osmosis", "Ion exchange", "Activated carbon"],
+  },
 };
 
 const REMOVAL_DESCRIPTIONS: Record<string, string> = {
@@ -149,6 +305,18 @@ const CONTAMINANT_GUIDE_MAP: Record<string, { guideTitle: string; guideHref: str
   copper: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink-filters" },
   trihalomethanes: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
   ecoli: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/water-testing-kits" },
+  arsenic: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  manganese: { guideTitle: "Best whole house water filter UK", guideHref: "/guides/best-whole-house-water-filter-uk/", categoryTitle: "Whole-house filters", categoryHref: "/filters/whole-house-filters" },
+  iron: { guideTitle: "Best whole house water filter UK", guideHref: "/guides/best-whole-house-water-filter-uk/", categoryTitle: "Whole-house filters", categoryHref: "/filters/whole-house-filters" },
+  mercury: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  pesticides: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  microplastics: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink-filters" },
+  nitrite: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  turbidity: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/water-testing-kits" },
+  aluminium: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  coliform: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/water-testing-kits" },
+  cadmium: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  chromium: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
 };
 
 type Props = { params: Promise<{ slug: string }> };
@@ -271,7 +439,41 @@ export default async function ContaminantPage({ params }: Props) {
                 ? "Industry, firefighting foam"
                 : slug === "lead"
                   ? "Old lead pipes"
-                  : "Agricultural runoff"}
+                  : slug === "ecoli"
+                    ? "Sewage, animal waste"
+                    : slug === "trihalomethanes"
+                      ? "Chlorine + organic matter"
+                      : slug === "fluoride"
+                        ? "Added by water companies"
+                        : slug === "chlorine"
+                          ? "Added as disinfectant"
+                          : slug === "copper"
+                            ? "Copper plumbing"
+                            : slug === "arsenic"
+                              ? "Geology, mining legacy"
+                              : slug === "manganese"
+                                ? "Geology, old iron mains"
+                                : slug === "iron"
+                                  ? "Old cast iron mains"
+                                  : slug === "mercury"
+                                    ? "Industry, atmospheric deposits"
+                                    : slug === "pesticides"
+                                      ? "Agricultural chemicals"
+                                      : slug === "microplastics"
+                                        ? "Textiles, tyre wear, plastics"
+                                        : slug === "nitrite"
+                                          ? "Distribution pipes, agriculture"
+                                          : slug === "turbidity"
+                                            ? "Runoff, sediment disturbance"
+                                            : slug === "aluminium"
+                                              ? "Water treatment process"
+                                              : slug === "coliform"
+                                                ? "Soil, sewage, pipe ingress"
+                                                : slug === "cadmium"
+                                                  ? "Galvanised pipes, industry"
+                                                  : slug === "chromium"
+                                                    ? "Chrome plating, tanning"
+                                                    : "Agricultural runoff"}
             </p>
           </div>
         </div>
@@ -300,7 +502,31 @@ export default async function ContaminantPage({ params }: Props) {
                     ? "About 10% of the English population receives deliberately fluoridated water, primarily in the West Midlands and North East."
                     : slug === "chlorine"
                       ? "Chlorine is deliberately added to UK tap water as a disinfectant. At the levels used (typically 0.2-0.5 mg/L), it is not harmful to health."
-                      : `Enter your postcode on TapWater.uk to check ${contaminant.name} levels in your area.`}
+                      : slug === "arsenic"
+                        ? "Arsenic occurs naturally in groundwater in parts of Cornwall and Devon. It is classified as a Group 1 carcinogen with no safe level of long-term exposure."
+                        : slug === "manganese"
+                          ? "Manganese is a common cause of brown or black discoloured water in the UK. The WHO lowered its guideline in 2022 due to neurological concerns in children."
+                          : slug === "iron"
+                            ? "Iron is the most common cause of brown or orange water complaints in the UK, typically from aging Victorian-era cast iron mains."
+                            : slug === "mercury"
+                              ? "Mercury is one of the most tightly regulated metals in UK drinking water. The UK limit of 0.001 mg/L is six times stricter than the WHO guideline."
+                              : slug === "pesticides"
+                                ? "The UK applies a precautionary blanket limit of 0.1 µg/L for any individual pesticide. Metaldehyde and clopyralid are among the most commonly detected."
+                                : slug === "microplastics"
+                                  ? "Microplastics are an emerging contaminant with no UK legal limit. The EU will require monitoring from 2026, but health effects remain uncertain."
+                                  : slug === "nitrite"
+                                    ? "Nitrite is more toxic than nitrate and can form within distribution pipes. It poses the greatest risk to infants under three months old."
+                                    : slug === "turbidity"
+                                      ? "Turbidity is not harmful itself but can shield bacteria from disinfection. The WHO recommends levels below 0.5 NTU for effective chlorination."
+                                      : slug === "aluminium"
+                                        ? "Most aluminium in UK tap water comes from aluminium sulphate added during treatment. A debated link to Alzheimer's disease remains inconclusive."
+                                        : slug === "coliform"
+                                          ? "UK regulations require zero coliform bacteria in treated water. Detection indicates possible treatment failure and triggers immediate investigation."
+                                          : slug === "cadmium"
+                                            ? "Cadmium is a Group 1 carcinogen that accumulates in the kidneys over a lifetime. It can leach from galvanised pipes and industrial sources."
+                                            : slug === "chromium"
+                                              ? "Hexavalent chromium is carcinogenic. The EU will tighten its standard to 0.025 mg/L from 2036 — half the current UK limit."
+                                              : `Enter your postcode on TapWater.uk to check ${contaminant.name} levels in your area.`}
         </p>
       </div>
 
