@@ -13,6 +13,8 @@ import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
+import { SoftenerLeadBanner } from "@/components/softener-lead-banner";
+import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { RelatedGuides } from "@/components/related-guides";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { CITIES } from "@/lib/cities";
@@ -285,6 +287,14 @@ export default async function PostcodePage({ params }: Props) {
               </div>
             )}
 
+            {hardnessValue != null && hardnessValue >= 180 && (
+              <SoftenerLeadBanner
+                postcode={data.district}
+                hardnessValue={hardnessValue}
+                hardnessLabel={hardnessLabel!}
+              />
+            )}
+
             {/* Summary — structured for AI citation and GEO */}
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
@@ -390,6 +400,17 @@ export default async function PostcodePage({ params }: Props) {
                   contaminantsFlagged={data.contaminantsFlagged}
                 />
               </ScrollReveal>
+            )}
+
+            {hardnessValue != null && hardnessValue >= 180 && (
+              <div className="mt-8">
+                <SoftenerLeadForm
+                  postcode={data.district}
+                  hardnessValue={hardnessValue}
+                  hardnessLabel={hardnessLabel!}
+                  source="postcode_page"
+                />
+              </div>
             )}
 
             {/* Supplementary recommendations */}
