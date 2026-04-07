@@ -4,7 +4,7 @@ import type { ProductCategory } from "../types";
 
 describe("PRODUCTS catalogue", () => {
   it("has at least 20 products", () => {
-    expect(PRODUCTS.length).toBeGreaterThanOrEqual(19);
+    expect(PRODUCTS.length).toBeGreaterThanOrEqual(20);
   });
 
   it("every product has required fields", () => {
