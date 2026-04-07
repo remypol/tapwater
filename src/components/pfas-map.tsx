@@ -47,6 +47,7 @@ export function PfasMap({ points, center, zoom }: PfasMapProps) {
       center: center ?? [-2.5, 54.0],
       zoom: zoom ?? 5.5,
       attributionControl: false,
+      scrollZoom: false,
     });
 
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
@@ -90,6 +91,6 @@ export function PfasMap({ points, center, zoom }: PfasMapProps) {
   }, [points, center, zoom]);
 
   return (
-    <div ref={containerRef} className="w-full h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-rule" />
+    <div ref={containerRef} role="img" aria-label="Interactive map showing PFAS detection points" className="w-full h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-rule" />
   );
 }

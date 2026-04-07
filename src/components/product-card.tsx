@@ -80,7 +80,7 @@ export function ProductCard({ product, highlight, pageType }: ProductCardProps) 
             href={affiliateHref}
             target="_blank"
             rel="noopener noreferrer sponsored nofollow"
-            className="text-sm font-medium text-accent hover:underline flex items-center gap-1"
+            className="text-sm font-medium text-accent hover:underline flex items-center gap-1 py-2 px-3 -mr-3"
           >
             {ctaText}
             <ArrowRight className="w-3.5 h-3.5" />
