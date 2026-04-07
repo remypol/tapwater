@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Guides — UK Water Quality Research",
@@ -125,6 +125,14 @@ const GUIDES = [
     icon: GlassWater,
     iconColor: "text-sky-600",
     iconBg: "bg-sky-50",
+  },
+  {
+    slug: "best-water-softener-uk",
+    title: "Best Water Softener UK",
+    subtitle: "Compare water softeners, installation costs, and which UK areas need one most",
+    icon: Waves,
+    iconColor: "text-blue-600",
+    iconBg: "bg-blue-50",
   },
 ];
 

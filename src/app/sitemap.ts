@@ -30,6 +30,7 @@ const GUIDE_SLUGS = [
   "best-water-testing-kit-uk",
   "best-water-filter-pfas",
   "best-water-filter-jug-uk",
+  "best-water-softener-uk",
 ];
 
 /**
