@@ -184,7 +184,7 @@ export default function WidgetPage() {
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-6">
           Customisation
         </h2>
-        <div className="card p-6 mb-10 border-l-4 border-l-accent">
+        <div className="card p-6 mb-6 border-l-4 border-l-accent">
           <p className="text-base text-body leading-relaxed">
             The widget auto-detects the postcode from the{" "}
             <code className="text-sm bg-surface px-1 py-0.5 rounded font-mono">
@@ -195,6 +195,27 @@ export default function WidgetPage() {
             available. No API key required.
           </p>
         </div>
+
+        <h3 className="font-display text-lg italic text-ink mt-6 mb-3">Dark mode</h3>
+        <p className="text-sm text-body leading-relaxed mb-3">
+          The widget automatically adapts to your site&apos;s colour scheme. To force a specific theme, add{" "}
+          <code className="text-xs bg-surface px-1 py-0.5 rounded font-mono">data-tapwater-theme</code>:
+        </p>
+        <div className="card p-4 mb-6">
+          <pre className="text-sm font-mono text-ink overflow-x-auto leading-relaxed">
+{`<!-- Force dark mode -->
+<div data-tapwater-postcode="SW1A" data-tapwater-theme="dark"></div>
+
+<!-- Force light mode -->
+<div data-tapwater-postcode="SW1A" data-tapwater-theme="light"></div>`}
+          </pre>
+        </div>
+
+        <h3 className="font-display text-lg italic text-ink mt-6 mb-3">Multiple widgets</h3>
+        <p className="text-sm text-body leading-relaxed mb-10">
+          You can place multiple widgets on the same page — each with a different postcode.
+          Include the script tag only once; it will find and render all widgets automatically.
+        </p>
 
         {/* ── Footer ─────────────────────────────────────────────── */}
         <footer className="mt-12 pb-4 text-sm text-faint leading-relaxed border-t border-rule pt-6">
