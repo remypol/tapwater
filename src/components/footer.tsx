@@ -6,6 +6,7 @@ const navigateLinks = [
   { label: "About", href: "/about" },
   { label: "Methodology", href: "/about/methodology" },
   { label: "Data Sources", href: "/about/data-sources" },
+  { label: "Press", href: "/press" },
 ];
 
 const legalLinks = [
