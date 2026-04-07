@@ -20,7 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${d1} vs ${d2} Water Quality — Which Is Better?`,
-    description: `Compare tap water quality between ${d1} (${data1.areaName}) and ${d2} (${data2.areaName}). ${d1} scores ${data1.safetyScore}/10, ${d2} scores ${data2.safetyScore}/10. Side-by-side contaminant comparison.`,
+    description: (() => {
+      const full = `Compare tap water quality between ${d1} (${data1.areaName}) and ${d2} (${data2.areaName}). ${d1} scores ${data1.safetyScore}/10, ${d2} scores ${data2.safetyScore}/10. Side-by-side contaminant comparison.`;
+      const short = `Compare tap water quality: ${d1} scores ${data1.safetyScore}/10, ${d2} scores ${data2.safetyScore}/10. Side-by-side contaminant comparison.`;
+      return full.length <= 155 ? full : short;
+    })(),
     openGraph: {
       title: `${d1} vs ${d2} Water Quality Comparison`,
       description: `${d1} scores ${data1.safetyScore}/10, ${d2} scores ${data2.safetyScore}/10. Compare contaminants, suppliers, and safety data.`,

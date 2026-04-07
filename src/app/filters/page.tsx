@@ -6,12 +6,12 @@ import { BreadcrumbSchema } from "@/components/json-ld";
 import { CATEGORY_META, CATEGORY_ORDER, getProductsByCategory } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Water Filters — Find the Right One for Your Area",
+  title: "Water Filters — Find the Right One",
   description:
     "Compare water filters for UK water. Jugs, under-sink, RO, whole-house and shower filters with prices, specs and recommendations.",
   alternates: { canonical: "https://www.tapwater.uk/filters" },
   openGraph: {
-    title: "Water Filters — Find the Right One for Your Area",
+    title: "Water Filters — Find the Right One",
     description:
       "Compare water filters for UK water. Jugs, under-sink, RO, whole-house and shower filters with prices, specs and recommendations.",
     url: "https://www.tapwater.uk/filters",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Water Filters — Find the Right One for Your Area",
+    title: "Water Filters — Find the Right One",
     description:
       "Compare water filters for UK water. Jugs, under-sink, RO, whole-house and shower filters with prices, specs and recommendations.",
   },

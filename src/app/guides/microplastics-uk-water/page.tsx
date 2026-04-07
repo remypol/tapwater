@@ -7,11 +7,11 @@ import { Microscope, Waves, ShieldQuestion, BookOpen } from "lucide-react";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
+    title: `Microplastics in UK Tap Water (${year})`,
     description:
-      "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
+      "Are there microplastics in your tap water? What the research says about contamination in UK drinking water, health risks, and reducing exposure.",
     openGraph: {
-      title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
+      title: `Microplastics in UK Tap Water (${year})`,
       description:
         "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water.",
       url: "https://www.tapwater.uk/guides/microplastics-uk-water",
@@ -19,7 +19,7 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `Microplastics in UK Tap Water: What We Know So Far (${year})`,
+      title: `Microplastics in UK Tap Water (${year})`,
       description:
         "What the research says about microplastic contamination in UK drinking water, health risks, and how to reduce exposure.",
     },

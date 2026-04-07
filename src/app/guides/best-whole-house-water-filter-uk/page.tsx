@@ -34,9 +34,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Whole House Water Filter UK ${year} — Tested Against Real Water Data`,
+    title: `Best Whole House Water Filter UK (${year})`,
     description:
-      "We analysed 2,800 UK postcodes to find where whole-house filtration matters most. Independent reviews focused on sediment removal, appliance protection, and real running costs.",
+      "We analysed UK postcodes to find where whole-house filtration matters most. Independent reviews: sediment removal, appliance protection, running costs.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
     },

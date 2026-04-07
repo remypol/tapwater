@@ -7,11 +7,11 @@ import { Scale, ShieldCheck, Leaf, PiggyBank, BookOpen } from "lucide-react";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
+    title: `Tap Water vs Bottled Water UK (${year})`,
     description:
       "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you.",
     openGraph: {
-      title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
+      title: `Tap Water vs Bottled Water UK (${year})`,
       description:
         "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost.",
       url: "https://www.tapwater.uk/guides/tap-water-vs-bottled-water",
@@ -19,7 +19,7 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `Tap Water vs Bottled Water: Which Is Safer in the UK? (${year})`,
+      title: `Tap Water vs Bottled Water UK (${year})`,
       description:
         "Compare quality testing, contamination levels, environmental impact, and cost of UK tap water vs bottled water.",
     },

@@ -7,11 +7,11 @@ import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `Water Hardness Checker: Is Your Water Hard or Soft? (${year})`,
+    title: `Water Hardness Checker by Postcode (${year})`,
     description:
-      "Check your water hardness by postcode. Find out if you have hard or soft water, what it means for your home, and whether you need a water softener or filter.",
+      "Check your water hardness by postcode. Find out if you have hard or soft water, what it means for your home, and whether you need a softener.",
     openGraph: {
-      title: `Water Hardness Checker: Is Your Water Hard or Soft? (${year})`,
+      title: `Water Hardness Checker by Postcode (${year})`,
       description:
         "Check your water hardness by postcode. Understand what causes hard water and what you can do about it.",
       url: "https://www.tapwater.uk/hardness",

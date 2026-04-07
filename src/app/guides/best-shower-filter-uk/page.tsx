@@ -34,9 +34,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Shower Filter for Hard Water UK ${year} — Tested Against Real Water Data`,
+    title: `Best Shower Filter UK ${year} — Hard Water`,
     description:
-      "We analysed 2,800 UK postcodes to find where shower filters make the biggest difference. Independent reviews focused on chlorine removal, skin and hair benefits.",
+      "We analysed 2,800 UK postcodes to find where shower filters matter most. Independent reviews focused on chlorine removal and skin benefits.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-shower-filter-uk",
     },

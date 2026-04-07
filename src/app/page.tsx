@@ -17,7 +17,7 @@ import { WaterSurface } from "@/components/water-surface";
 import { REGIONS } from "@/lib/regions";
 
 export const metadata: Metadata = {
-  title: "TapWater.uk — Check Your Tap Water Quality by Postcode",
+  title: "Check Your Tap Water Quality by Postcode",
   description:
     "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and 100+ contaminants. Based on real drinking water tests.",
   openGraph: {

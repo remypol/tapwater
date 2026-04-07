@@ -34,9 +34,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Reverse Osmosis System UK ${year} \u2014 Tested Against Real Water Data`,
+    title: `Best Reverse Osmosis System UK (${year})`,
     description:
-      "We analysed 2,800 UK postcodes to find where reverse osmosis actually matters. Independent RO system reviews tested against real contaminant data, not marketing claims.",
+      "We analysed UK postcodes to find where reverse osmosis matters. Independent RO system reviews tested against real contaminant data.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-reverse-osmosis-system-uk",
     },

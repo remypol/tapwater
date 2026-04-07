@@ -7,11 +7,11 @@ import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
+    title: `UK Lead Pipes: Areas Most Affected (${year})`,
     description:
-      "Millions of UK homes still have lead pipes. Find out how lead gets into tap water, which areas are worst affected, and what you can do to protect your household.",
+      "Millions of UK homes still have lead pipes. How lead gets into tap water, which areas are worst affected, and what you can do.",
     openGraph: {
-      title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
+      title: `UK Lead Pipes: Areas Most Affected (${year})`,
       description:
         "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
       url: "https://www.tapwater.uk/guides/lead-pipes-uk",
@@ -19,7 +19,7 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `The UK's Lead Pipe Problem: Which Areas Are Most Affected? (${year})`,
+      title: `UK Lead Pipes: Areas Most Affected (${year})`,
       description:
         "An estimated 6–7 million UK homes still have lead service pipes. Here is what that means for your tap water.",
     },

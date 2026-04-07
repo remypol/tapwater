@@ -92,17 +92,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = `See which UK postcodes have the best and worst tap water quality. Rankings based on ${totalTested}+ real drinking water tests. Updated daily.`;
 
   return {
-    title: `Best and Worst Tap Water in the UK — ${year} Rankings`,
+    title: `Best & Worst UK Tap Water — ${year} Rankings`,
     description,
     openGraph: {
-      title: `Best and Worst Tap Water in the UK — ${year} Rankings`,
+      title: `Best & Worst UK Tap Water — ${year} Rankings`,
       description,
       url: "https://www.tapwater.uk/compare",
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Best and Worst Tap Water in the UK — ${year}`,
+      title: `Best & Worst UK Tap Water — ${year}`,
       description,
     },
   };

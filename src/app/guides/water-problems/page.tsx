@@ -9,11 +9,11 @@ const BASE_URL = "https://www.tapwater.uk";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Tap Water Problems: What's Wrong With My Water? (${year})`,
+    title: `Tap Water Problems (${year})`,
     description:
       "Water tastes of chlorine? Looks cloudy or brown? Smells like rotten eggs? This guide explains the most common UK tap water problems and exactly what to do.",
     openGraph: {
-      title: `Tap Water Problems: What's Wrong With My Water? (${year})`,
+      title: `Tap Water Problems (${year})`,
       description:
         "The most common UK tap water problems explained — taste, smell, colour, and pressure issues. Find out what's causing it and what to do.",
       url: `${BASE_URL}/guides/water-problems`,
@@ -21,7 +21,7 @@ export function generateMetadata(): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `Tap Water Problems: What's Wrong With My Water? (${year})`,
+      title: `Tap Water Problems (${year})`,
       description:
         "Cloudy water, chlorine taste, rotten egg smell, brown water — the most common UK tap water problems explained clearly.",
     },
@@ -81,7 +81,7 @@ export default function WaterProblemsHub() {
       />
 
       <ArticleSchema
-        headline={`Tap Water Problems: What's Wrong With My Water? (${year})`}
+        headline={`Tap Water Problems (${year})`}
         description="The most common UK tap water problems explained — taste, smell, colour, and pressure issues. Find out what's causing it and what to do."
         url={`${BASE_URL}/guides/water-problems`}
         datePublished="2026-04-06"

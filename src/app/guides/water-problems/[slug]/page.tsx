@@ -24,7 +24,9 @@ export async function generateMetadata({
   if (!problem) return {};
 
   const year = new Date().getFullYear();
-  const title = `${problem.title} (${year})`;
+  const maxPageTitle = 45; // 60 - " | TapWater.uk".length
+  const fullTitle = `${problem.title} (${year})`;
+  const title = fullTitle.length <= maxPageTitle ? fullTitle : problem.title;
   const description = `${problem.symptom} — find out why it happens, whether it's safe, and what to do. UK tap water guide.`;
 
   return {

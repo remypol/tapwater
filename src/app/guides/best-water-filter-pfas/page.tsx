@@ -39,9 +39,9 @@ const pfasProducts = PRODUCTS.filter((p) =>
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Water Filter for PFAS Removal UK ${year} — Forever Chemicals Guide`,
+    title: `Best Water Filter for PFAS UK (${year})`,
     description:
-      "We analysed 2,800 UK postcodes for PFAS contamination. Only reverse osmosis and select filters reliably remove forever chemicals. Independent reviews with real data.",
+      "We analysed UK postcodes for PFAS contamination. Only reverse osmosis and select filters reliably remove forever chemicals. Independent reviews.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-water-filter-pfas",
     },

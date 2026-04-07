@@ -25,7 +25,7 @@ const year = new Date().getFullYear();
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Water Filters UK: Which Type Do You Actually Need? (${year})`,
+    title: `Best Water Filters UK (${year})`,
     description:
       "An honest overview of every water filter type available in the UK. Find out which filter removes what, then read our specific buying guides.",
     openGraph: {

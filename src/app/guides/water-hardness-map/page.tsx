@@ -6,11 +6,11 @@ import { FAQSchema, ArticleSchema } from "@/components/json-ld"
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `UK Water Hardness Map: Is Your Water Hard or Soft? (${year})`,
+    title: `UK Water Hardness Map (${year})`,
     description:
       "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
     openGraph: {
-      title: `UK Water Hardness Map: Is Your Water Hard or Soft? (${year})`,
+      title: `UK Water Hardness Map (${year})`,
       description:
         "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
       url: "https://www.tapwater.uk/guides/water-hardness-map",

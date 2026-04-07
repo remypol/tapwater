@@ -10,7 +10,7 @@ import { BreadcrumbSchema } from "@/components/json-ld";
 export const metadata: Metadata = {
   title: "UK Water Companies — Water Quality by Supplier",
   description:
-    "Compare water quality scores across all 16 major UK water companies. See which supplier has the best and worst tap water, coverage areas, and detailed postcode reports.",
+    "Compare water quality scores across all 16 major UK water companies. See which supplier has the best and worst tap water and coverage areas.",
   openGraph: {
     title: "UK Water Companies — Water Quality Comparison",
     description:

@@ -7,11 +7,11 @@ import { ShieldCheck, Droplets, AlertTriangle, FlaskConical, BookOpen, Info } fr
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Is UK Tap Water Safe to Drink? The Complete Guide (${year})`,
+    title: `Is UK Tap Water Safe to Drink? (${year})`,
     description:
       "Is UK tap water safe? Yes — but not perfect. Learn what's in your water, regional differences, and when to consider a filter. Based on official data.",
     openGraph: {
-      title: `Is UK Tap Water Safe to Drink? The Complete Guide (${year})`,
+      title: `Is UK Tap Water Safe to Drink? (${year})`,
       description:
         "Everything you need to know about UK tap water safety — contaminants, regulations, regional differences, and practical advice.",
       url: "https://www.tapwater.uk/guides/is-uk-tap-water-safe",

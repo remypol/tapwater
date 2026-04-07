@@ -6,13 +6,13 @@ import { ArticleSchema } from "@/components/json-ld"
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `Understanding Your Water Company's Quality Report (${year})`,
+    title: `Understanding Your Water Supplier (${year})`,
     description:
-      "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
+      "How to read your water company's compliance report. What the DWI measures, compliance rates, and how to check your supplier.",
     openGraph: {
-      title: `Understanding Your Water Company's Quality Report (${year})`,
+      title: `Understanding Your Water Supplier (${year})`,
       description:
-        "How to read your water company's compliance report. What the DWI measures, what compliance rates mean, and how to check if your supplier is meeting standards.",
+        "How to read your water company's compliance report. What the DWI measures, compliance rates, and how to check your supplier.",
       url: "https://www.tapwater.uk/guides/understanding-your-water-supplier",
       type: "article",
     },

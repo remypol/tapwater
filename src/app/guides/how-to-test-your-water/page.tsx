@@ -7,11 +7,11 @@ import { ArticleSchema } from "@/components/json-ld"
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `How to Test Your Tap Water at Home (${year} Guide)`,
+    title: `How to Test Your Tap Water (${year})`,
     description:
       "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
     openGraph: {
-      title: `How to Test Your Tap Water at Home (${year} Guide)`,
+      title: `How to Test Your Tap Water (${year})`,
       description:
         "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
       url: "https://www.tapwater.uk/guides/how-to-test-your-water",

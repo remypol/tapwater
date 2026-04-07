@@ -3,21 +3,21 @@ import Link from 'next/link'
 import { FAQSchema } from '@/components/json-ld'
 
 export const metadata: Metadata = {
-  title: 'Methodology — How We Calculate Water Quality Scores',
+  title: 'Methodology — Water Quality Scores',
   description:
-    'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+    'How TapWater.uk calculates 0-10 water quality scores. Data sources, parameter weighting, tier system, and grade thresholds explained.',
   openGraph: {
-    title: 'Methodology — How We Calculate Water Quality Scores',
+    title: 'Methodology — Water Quality Scores',
     description:
-      'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+      'How TapWater.uk calculates 0-10 water quality scores. Data sources, parameter weighting, tier system, and grade thresholds explained.',
     url: 'https://www.tapwater.uk/about/methodology',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Methodology — How We Calculate Water Quality Scores',
+    title: 'Methodology — Water Quality Scores',
     description:
-      'A full explanation of how TapWater.uk calculates its 0–10 water quality safety scores, including data sources, parameter weighting, and grade thresholds.',
+      'How TapWater.uk calculates 0-10 water quality scores. Data sources, parameter weighting, tier system, and grade thresholds explained.',
   },
 }
 

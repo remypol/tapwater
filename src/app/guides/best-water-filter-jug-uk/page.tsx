@@ -34,9 +34,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Water Filter Jug UK ${year} \u2014 BRITA vs ZeroWater vs the Rest`,
+    title: `Best Water Filter Jug UK (${year})`,
     description:
-      "We tested the top UK water filter jugs against real contaminant data from 2,800 postcodes. BRITA, ZeroWater, Aqua Optima, and PUR compared on what they actually remove.",
+      "We tested the top UK water filter jugs against real contaminant data. BRITA, ZeroWater, Aqua Optima and PUR compared on what they actually remove.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-water-filter-jug-uk",
     },

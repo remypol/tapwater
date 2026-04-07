@@ -70,7 +70,7 @@ function scoreBorderClass(score: number): string {
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `UK Water Quality Rankings ${year} — Best & Worst Tap Water`,
+    title: `UK Water Quality Rankings (${year})`,
     description: `Which UK city has the best tap water? See ${year} rankings for all 51 major cities, water companies, and regions. Based on official Environment Agency data.`,
     openGraph: {
       title: `UK Water Quality Rankings ${year}`,

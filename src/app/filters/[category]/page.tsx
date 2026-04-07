@@ -160,7 +160,9 @@ export async function generateMetadata({
   const count = getProductsByCategory(category).length;
 
   const title = `${meta.title} — Compare ${count} Filters`;
-  const description = `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`;
+  const descFull = `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`;
+  const descShort = `${meta.description} ${count} products compared with prices and ratings.`;
+  const description = descFull.length <= 155 ? descFull : descShort;
   const url = `https://www.tapwater.uk/filters/${meta.slug}`;
 
   return {
