@@ -27,7 +27,9 @@ export function OrganizationSchema() {
     description: "Independent UK water quality research and reporting",
     logo: {
       "@type": "ImageObject",
-      url: "https://www.tapwater.uk/icon.svg",
+      url: "https://www.tapwater.uk/icon.png",
+      width: 512,
+      height: 512,
     },
     sameAs: ["https://x.com/tapwateruk"],
   };
@@ -65,12 +67,16 @@ export function BreadcrumbSchema({ items }: BreadcrumbSchemaProps) {
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: item.name,
-      item: item.url,
-    })),
+    itemListElement: items.map((item, i) => {
+      const isLast = i === items.length - 1;
+      // Google Rich Results: last breadcrumb should NOT have an "item" URL
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        name: item.name,
+        ...(isLast ? {} : { item: item.url }),
+      };
+    }),
   };
 
   return (
