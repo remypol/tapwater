@@ -14,7 +14,7 @@ export function generateMetadata(): Metadata {
       title: `Is UK Tap Water Safe to Drink? The Complete Guide (${year})`,
       description:
         "Everything you need to know about UK tap water safety — contaminants, regulations, regional differences, and practical advice.",
-      url: "https://www.tapwater.uk/guides/is-uk-tap-water-safe/",
+      url: "https://www.tapwater.uk/guides/is-uk-tap-water-safe",
       type: "article",
     },
     twitter: {
@@ -88,11 +88,11 @@ export default function IsUKTapWaterSafeGuide() {
 
         <BreadcrumbSchema
           items={[
-            { name: "Home", url: "https://www.tapwater.uk/" },
-            { name: "Guides", url: "https://www.tapwater.uk/guides/" },
+            { name: "Home", url: "https://www.tapwater.uk" },
+            { name: "Guides", url: "https://www.tapwater.uk/guides" },
             {
               name: "Is UK Tap Water Safe to Drink?",
-              url: "https://www.tapwater.uk/guides/is-uk-tap-water-safe/",
+              url: "https://www.tapwater.uk/guides/is-uk-tap-water-safe",
             },
           ]}
         />
@@ -100,7 +100,7 @@ export default function IsUKTapWaterSafeGuide() {
         <ArticleSchema
           headline="Is UK Tap Water Safe to Drink? The Complete Guide"
           description="Is UK tap water safe? Yes — but not perfect. Learn what's in your water, regional differences, and when to consider a filter. Based on official data."
-          url="https://www.tapwater.uk/guides/is-uk-tap-water-safe/"
+          url="https://www.tapwater.uk/guides/is-uk-tap-water-safe"
           datePublished="2026-04-06"
           dateModified={new Date().toISOString().split("T")[0]}
           authorName="Remy"

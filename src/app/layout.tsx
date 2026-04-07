@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s | TapWater.uk",
   },
   description:
-    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more contaminants near you. Based on official Environment Agency monitoring data.",
+    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more near you. Based on official monitoring data.",
   metadataBase: new URL("https://www.tapwater.uk"),
   icons: {
     icon: [
@@ -54,6 +54,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: "TapWater.uk",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "TapWater.uk — UK Water Quality Data",
+      },
+    ],
   },
 };
 

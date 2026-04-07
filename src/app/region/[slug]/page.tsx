@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const year = new Date().getFullYear();
   return {
     title: `Water Quality in ${region.name} ${year} — Is It Safe?`,
-    description: `${region.description} Check water safety scores, contaminant levels, and PFAS data for every postcode in ${region.name}. Free ${year} report.`,
+    description: `Water quality data for ${region.name}. Check safety scores, contaminants, PFAS and supplier info for every postcode. Free ${year} report.`,
     openGraph: {
       title: `Water Quality in ${region.name} — Is It Safe?`,
       description: `Water quality data for every postcode in ${region.name}. Check safety scores, contaminants, and supplier info.`,

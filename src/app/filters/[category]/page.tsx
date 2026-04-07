@@ -161,7 +161,7 @@ export async function generateMetadata({
 
   const title = `${meta.title} — Compare ${count} Filters`;
   const description = `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`;
-  const url = `https://www.tapwater.uk/filters/${meta.slug}/`;
+  const url = `https://www.tapwater.uk/filters/${meta.slug}`;
 
   return {
     title,
@@ -206,7 +206,7 @@ export default async function CategoryPage({
           { name: "Filters", url: "https://www.tapwater.uk/filters" },
           {
             name: meta.title,
-            url: `https://www.tapwater.uk/filters/${meta.slug}/`,
+            url: `https://www.tapwater.uk/filters/${meta.slug}`,
           },
         ]}
       />

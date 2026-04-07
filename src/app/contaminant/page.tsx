@@ -6,7 +6,7 @@ import { BreadcrumbSchema } from "@/components/json-ld";
 export const metadata: Metadata = {
   title: "Contaminants in UK Tap Water — What's Being Tested",
   description:
-    "Everything you need to know about contaminants found in UK drinking water: PFAS forever chemicals, lead, nitrate, chlorine, copper, fluoride, trihalomethanes, and E. coli. Health effects, legal limits, and how to remove them.",
+    "Key contaminants in UK drinking water: PFAS, lead, nitrate, chlorine, copper and more. Health effects, legal limits and removal methods.",
   openGraph: {
     title: "Contaminants in UK Tap Water",
     description:

@@ -38,12 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free ${year} report for ${data.areaName}.`;
 
   return {
-    title: `${data.district} Water Quality: Is It Safe? | ${data.areaName} ${year}`,
+    title: `${data.district} Water Quality: Is It Safe? | ${data.areaName}`,
     description,
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,
-      url: `https://www.tapwater.uk/postcode/${data.district}/`,
+      url: `https://www.tapwater.uk/postcode/${data.district}`,
       type: "website",
     },
     twitter: {
@@ -171,7 +171,9 @@ export default async function PostcodePage({ params }: Props) {
         <BreadcrumbSchema
           items={[
             { name: "Home", url: "https://www.tapwater.uk" },
-            { name: data.city, url: `https://www.tapwater.uk/city/${citySlug}` },
+            ...(cityMatch
+              ? [{ name: data.city, url: `https://www.tapwater.uk/city/${citySlug}` }]
+              : [{ name: data.city, url: `https://www.tapwater.uk` }]),
             { name: data.district, url: `https://www.tapwater.uk/postcode/${data.district}` },
           ]}
         />
@@ -180,7 +182,11 @@ export default async function PostcodePage({ params }: Props) {
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link href={`/city/${citySlug}`} className="hover:text-accent transition-colors">{data.city}</Link>
+          {cityMatch ? (
+            <Link href={`/city/${citySlug}`} className="hover:text-accent transition-colors">{data.city}</Link>
+          ) : (
+            <span>{data.city}</span>
+          )}
           <ChevronRight className="w-3 h-3" />
           <span className="text-ink font-medium">{data.district}</span>
         </nav>
@@ -442,9 +448,13 @@ export default async function PostcodePage({ params }: Props) {
                 )}
                 <Link href="/guides/how-to-test-your-water" className="pill">How to test your water</Link>
                 <Link href="/guides/best-water-filters-uk" className="pill">Best water filters</Link>
-                <Link href={`/city/${data.city.toLowerCase().replace(/\s+/g, "-")}`} className="pill">
-                  Water in {data.city}
-                </Link>
+                {cityMatch ? (
+                  <Link href={`/city/${citySlug}`} className="pill">
+                    Water in {data.city}
+                  </Link>
+                ) : (
+                  <span className="pill">Water in {data.city}</span>
+                )}
                 <Link href="/compare" className="pill">UK water rankings</Link>
               </div>
             </section>

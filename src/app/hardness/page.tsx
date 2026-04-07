@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
       title: `Water Hardness Checker: Is Your Water Hard or Soft? (${year})`,
       description:
         "Check your water hardness by postcode. Understand what causes hard water and what you can do about it.",
-      url: "https://www.tapwater.uk/hardness/",
+      url: "https://www.tapwater.uk/hardness",
       type: "website",
     },
     twitter: {
@@ -66,8 +66,8 @@ export default function WaterHardnessCheckerPage() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://www.tapwater.uk/" },
-          { name: "Water Hardness Checker", url: "https://www.tapwater.uk/hardness/" },
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Water Hardness Checker", url: "https://www.tapwater.uk/hardness" },
         ]}
       />
 
@@ -82,7 +82,7 @@ export default function WaterHardnessCheckerPage() {
         <ArticleSchema
           headline={`Water Hardness Checker: Is Your Water Hard or Soft? (${year})`}
           description="Check your water hardness by postcode. Find out if you have hard or soft water, what it means for your home, and whether you need a water softener or filter."
-          url="https://www.tapwater.uk/hardness/"
+          url="https://www.tapwater.uk/hardness"
           datePublished="2026-04-06"
           dateModified={dateModified}
           authorName="Remy"

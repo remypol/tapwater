@@ -25,6 +25,10 @@ export function OrganizationSchema() {
     name: "TapWater.uk",
     url: "https://www.tapwater.uk",
     description: "Independent UK water quality research and reporting",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://www.tapwater.uk/icon.svg",
+    },
     sameAs: ["https://x.com/tapwateruk"],
   };
 
@@ -199,7 +203,7 @@ export function PostcodeDatasetSchema({
     "@type": "Dataset",
     name: `Water Quality Report for ${district}`,
     description: `Environmental water quality data for ${district} (${areaName}), ${city}, ${region}. Supplied by ${supplier}. ${hasScore ? `Safety score: ${score}/10 based on ${contaminantsTested} tested parameters.` : `${contaminantsTested} parameters tested.`}`,
-    url: `https://www.tapwater.uk/postcode/${district}/`,
+    url: `https://www.tapwater.uk/postcode/${district}`,
     dateModified: lastUpdated,
     creator: { "@type": "Organization", name: "TapWater.uk" },
     license:

@@ -173,7 +173,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${contaminant.name} in UK Drinking Water`,
       description,
-      url: `https://www.tapwater.uk/contaminant/${slug}/`,
+      url: `https://www.tapwater.uk/contaminant/${slug}`,
       type: "article",
     },
     twitter: {
@@ -198,7 +198,7 @@ export default async function ContaminantPage({ params }: Props) {
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
           { name: "Contaminants", url: "https://www.tapwater.uk/contaminant" },
-          { name: contaminant.name, url: `https://www.tapwater.uk/contaminant/${slug}/` },
+          { name: contaminant.name, url: `https://www.tapwater.uk/contaminant/${slug}` },
         ]}
       />
       <FAQSchema

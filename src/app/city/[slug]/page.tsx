@@ -75,12 +75,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate levels and more. Free ${year} report based on real drinking water tests.`;
 
   return {
-    title: `Is ${city.name} Tap Water Safe to Drink? ${year} Water Quality Report`,
+    title: `Is ${city.name} Tap Water Safe? ${year} Water Quality`,
     description,
     openGraph: {
       title: `Is ${city.name} Tap Water Safe to Drink?`,
       description,
-      url: `https://www.tapwater.uk/city/${city.slug}/`,
+      url: `https://www.tapwater.uk/city/${city.slug}`,
       type: "article",
     },
     twitter: {
@@ -215,7 +215,7 @@ export default async function CityPage({ params }: Props) {
             { name: "Cities", url: "https://www.tapwater.uk/city" },
             {
               name: city.name,
-              url: `https://www.tapwater.uk/city/${city.slug}/`,
+              url: `https://www.tapwater.uk/city/${city.slug}`,
             },
           ]}
         />

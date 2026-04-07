@@ -75,7 +75,7 @@ export function generateMetadata(): Metadata {
     openGraph: {
       title: `UK Water Quality Rankings ${year}`,
       description: "Which UK city has the best tap water? Rankings for 51 cities, water companies, and regions.",
-      url: "https://www.tapwater.uk/rankings/",
+      url: "https://www.tapwater.uk/rankings",
       type: "website",
     },
     twitter: {
@@ -288,7 +288,7 @@ export default async function RankingsPage() {
         <BreadcrumbSchema
           items={[
             { name: "Home", url: "https://www.tapwater.uk" },
-            { name: "Rankings", url: "https://www.tapwater.uk/rankings/" },
+            { name: "Rankings", url: "https://www.tapwater.uk/rankings" },
           ]}
         />
         <FAQSchema faqs={faqs} />

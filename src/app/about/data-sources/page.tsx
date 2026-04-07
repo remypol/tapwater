@@ -5,11 +5,11 @@ import { BreadcrumbSchema } from '@/components/json-ld'
 export const metadata: Metadata = {
   title: 'Data Sources — Where TapWater.uk Gets Its Data',
   description:
-    'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+    'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
   openGraph: {
     title: 'Data Sources — Where TapWater.uk Gets Its Data',
     description:
-      'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+      'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
     url: 'https://www.tapwater.uk/about/data-sources',
     type: 'website',
   },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Data Sources — Where TapWater.uk Gets Its Data',
     description:
-      'TapWater.uk uses real drinking water test results from 16 UK water companies via the Stream Water Data Portal, supplemented by Environment Agency environmental monitoring. Fully transparent, open data.',
+      'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
   },
 }
 
