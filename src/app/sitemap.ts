@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const data = await getPostcodeData(district);
       const lastMod = data?.lastUpdated ? new Date(data.lastUpdated) : latestDataDate;
       return {
-        url: `${BASE_URL}/postcode/${district}/`,
+        url: `${BASE_URL}/postcode/${district}`,
         lastModified: lastMod,
         changeFrequency: "weekly" as const,
         priority: 0.8,
@@ -62,28 +62,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const suppliers = await getSuppliersList();
   const supplierPaths = suppliers.map((s) => ({
-    url: `${BASE_URL}/supplier/${s.id}/`,
+    url: `${BASE_URL}/supplier/${s.id}`,
     lastModified: latestDataDate,
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
   const contaminantPaths = CONTAMINANT_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/contaminant/${slug}/`,
+    url: `${BASE_URL}/contaminant/${slug}`,
     lastModified: latestDataDate,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   const cityPaths = CITIES.map((city) => ({
-    url: `${BASE_URL}/city/${city.slug}/`,
+    url: `${BASE_URL}/city/${city.slug}`,
     lastModified: latestDataDate,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
   const regionPaths = REGIONS.map((r) => ({
-    url: `${BASE_URL}/region/${r.slug}/`,
+    url: `${BASE_URL}/region/${r.slug}`,
     lastModified: latestDataDate,
     changeFrequency: "weekly" as const,
     priority: 0.85,
@@ -91,111 +91,111 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: `${BASE_URL}/`,
+      url: BASE_URL,
       lastModified: latestDataDate,
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
-      url: `${BASE_URL}/rankings/`,
+      url: `${BASE_URL}/rankings`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/compare/`,
+      url: `${BASE_URL}/compare`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/hardness/`,
+      url: `${BASE_URL}/hardness`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/supplier/`,
+      url: `${BASE_URL}/supplier`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: `${BASE_URL}/contaminant/`,
+      url: `${BASE_URL}/contaminant`,
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${BASE_URL}/about/`,
+      url: `${BASE_URL}/about`,
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/about/methodology/`,
+      url: `${BASE_URL}/about/methodology`,
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/about/data-sources/`,
+      url: `${BASE_URL}/about/data-sources`,
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/contact/`,
+      url: `${BASE_URL}/contact`,
       lastModified: latestDataDate,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
-      url: `${BASE_URL}/privacy/`,
+      url: `${BASE_URL}/privacy`,
       lastModified: new Date("2025-01-01"),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/disclaimer/`,
+      url: `${BASE_URL}/disclaimer`,
       lastModified: new Date("2025-01-01"),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/affiliate-disclosure/`,
+      url: `${BASE_URL}/affiliate-disclosure`,
       lastModified: new Date("2025-01-01"),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/guides/`,
+      url: `${BASE_URL}/guides`,
       lastModified: latestDataDate,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     },
     ...GUIDE_SLUGS.map((slug) => ({
-      url: `${BASE_URL}/guides/${slug}/`,
+      url: `${BASE_URL}/guides/${slug}`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     // Filter pages
     {
-      url: `${BASE_URL}/filters/`,
+      url: `${BASE_URL}/filters`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
     ...CATEGORY_ORDER.map((cat) => ({
-      url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}/`,
+      url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     // Water problems sub-pages
     ...WATER_PROBLEMS.map((problem) => ({
-      url: `${BASE_URL}/guides/water-problems/${problem.slug}/`,
+      url: `${BASE_URL}/guides/water-problems/${problem.slug}`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.7,
