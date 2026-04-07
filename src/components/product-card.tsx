@@ -3,12 +3,23 @@ import { Star, ArrowRight, Check } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
 
+function appendUtm(baseUrl: string, productSlug: string, pageType?: string): string {
+  const sep = baseUrl.includes("?") ? "&" : "?";
+  const campaign = pageType || "unknown";
+  return `${baseUrl}${sep}utm_source=tapwater&utm_medium=affiliate&utm_campaign=${campaign}&utm_content=${productSlug}`;
+}
+
 interface ProductCardProps {
   product: FilterProduct;
   highlight?: string;
+  pageType?: string;
 }
 
-export function ProductCard({ product, highlight }: ProductCardProps) {
+export function ProductCard({ product, highlight, pageType }: ProductCardProps) {
+  const affiliateHref = appendUtm(product.affiliateUrl, product.slug, pageType);
+  const ctaText = product.affiliateProgram === "amazon"
+    ? "Check price on Amazon"
+    : `Buy from ${product.brand}`;
   return (
     <div className="card overflow-hidden">
       <div className="p-5">
@@ -66,12 +77,12 @@ export function ProductCard({ product, highlight }: ProductCardProps) {
             ))}
           </div>
           <a
-            href={product.affiliateUrl}
+            href={affiliateHref}
             target="_blank"
             rel="noopener noreferrer sponsored nofollow"
             className="text-sm font-medium text-accent hover:underline flex items-center gap-1"
           >
-            View deal
+            {ctaText}
             <ArrowRight className="w-3.5 h-3.5" />
           </a>
         </div>
