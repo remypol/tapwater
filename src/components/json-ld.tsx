@@ -259,6 +259,54 @@ export function PostcodeDatasetSchema({
   );
 }
 
+export function NewsArticleSchema({
+  headline,
+  description,
+  url,
+  datePublished,
+  dateModified,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline,
+    description,
+    url,
+    datePublished,
+    dateModified,
+    author: {
+      "@type": "Organization",
+      name: "TapWater.uk",
+      url: "https://www.tapwater.uk",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "TapWater.uk",
+      url: "https://www.tapwater.uk",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.tapwater.uk/icon.png",
+        width: 512,
+        height: 512,
+      },
+    },
+    mainEntityOfPage: url,
+    isAccessibleForFree: true,
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export function ProductSchema({
   name,
   brand,
