@@ -58,6 +58,10 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Cadmium](https://www.tapwater.uk/contaminant/cadmium): Cadmium contamination
 - [Chromium](https://www.tapwater.uk/contaminant/chromium): Chromium in water
 
+## Annual report
+
+- [UK Water Quality Report 2026](https://www.tapwater.uk/report/2026): Comprehensive annual analysis of UK drinking water quality across 2,800+ postcodes
+
 ## PFAS tracker
 
 - [PFAS Live Tracker](https://www.tapwater.uk/pfas): National PFAS detection map and city rankings

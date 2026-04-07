@@ -127,6 +127,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${BASE_URL}/report/2026`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.9,
+    },
     ...RANKING_SLUGS.map((slug) => ({
       url: `${BASE_URL}/rankings/${slug}`,
       lastModified: latestDataDate,
