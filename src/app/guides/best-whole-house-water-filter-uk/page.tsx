@@ -204,7 +204,7 @@ function ProductReview({
 export default function BestWholeHouseFilterGuide() {
   const wholeHouseProducts = getProductsByCategory("whole_house");
   const bwt = wholeHouseProducts.find((p) => p.id === "bwt-e1-whole-house")!;
-  const waterdrop = wholeHouseProducts.find((p) => p.id === "waterdrop-whf21")!;
+  const waterdrop = wholeHouseProducts.find((p) => p.id === "waterdrop-whf3t")!;
   const aquasana = wholeHouseProducts.find((p) => p.id === "aquasana-eq1000")!;
 
   const comparisonContaminants = [
@@ -497,7 +497,7 @@ export default function BestWholeHouseFilterGuide() {
               key={product.id}
               product={product}
               highlight={
-                product.id === "waterdrop-whf21"
+                product.id === "waterdrop-whf3t"
                   ? "Top pick \u2014 best overall"
                   : product.id === "bwt-e1-whole-house"
                     ? "Value pick \u2014 lowest running costs"

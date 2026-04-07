@@ -170,7 +170,7 @@ export default function BestWaterTestingKitGuide() {
   const testingProducts = getProductsByCategory("testing_kit");
   const simplex = testingProducts.find((p) => p.id === "simplexhealth-17-in-1")!;
   const sjWave = testingProducts.find((p) => p.id === "sj-wave-16-in-1")!;
-  const tapScore = testingProducts.find((p) => p.id === "tap-score-essential")!;
+  // Tap Score removed (US-only, Amazon listing dead) — guide now focuses on the two UK-available kits
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
@@ -305,16 +305,16 @@ export default function BestWaterTestingKitGuide() {
             </div>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs text-accent font-medium uppercase tracking-wider">Best for real answers</p>
+                <p className="text-xs text-accent font-medium uppercase tracking-wider">Best for ongoing monitoring</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
-                  {tapScore.brand} {tapScore.model}
+                  {sjWave.brand} {sjWave.model}
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  ISO 17025 accredited lab, 50+ parameters including PFAS
+                  150 strips included — enough for monthly testing all year
                 </p>
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
-                &pound;{tapScore.priceGbp}
+                &pound;{sjWave.priceGbp}
               </span>
             </div>
           </div>
@@ -500,9 +500,8 @@ export default function BestWaterTestingKitGuide() {
             ctaLabel="View on Amazon"
           />
 
-          <ProductReview
-            product={tapScore}
-            heading="Tap Score Essential \u2014 Best for real answers"
+          {/* Tap Score removed — US-only product, Amazon listing dead */}
+          {/* <ProductReview
             verdict="The only option that gives you precise numbers from an accredited lab."
             review="The Tap Score Essential City Water Test is in a different league. You collect a sample, post it to an ISO 17025 accredited laboratory, and receive a detailed online report with precise measurements for 50+ parameters — including PFAS, all major heavy metals, bacteria, volatile organic compounds, and more. The online dashboard is excellent: it colour-codes each result against WHO and EPA guidelines and gives personalised health recommendations. At £80 it costs significantly more than dip strips, and results take 5–7 business days. But if you are trying to decide whether to invest £300–£500 in a reverse osmosis system, spending £80 to get definitive data first is the smart move. This is the test that tells you what filter you actually need."
             pros={[
@@ -517,7 +516,7 @@ export default function BestWaterTestingKitGuide() {
               "One-time test — no strips for ongoing monitoring",
             ]}
             ctaLabel="View on Amazon"
-          />
+          /> */}
         </div>
 
         {/* ── No comparison table for testing kits ─────────────────── */}
@@ -538,14 +537,10 @@ export default function BestWaterTestingKitGuide() {
             &pound;13 as a quick screen.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            If your postcode flags PFAS, heavy metals, or elevated nitrate —
-            or if you are considering a &pound;300+ filter purchase — invest in
-            the{" "}
-            <strong className="text-ink">
-              Tap Score Essential lab test
-            </strong>{" "}
-            at &pound;80. Precise numbers from an accredited lab will tell you
-            exactly which filter you need (and whether you need one at all).
+            If your postcode flags concerning results, test your own tap
+            with the <strong className="text-ink">SimplexHealth kit</strong> to
+            confirm what is actually coming through your pipes before
+            investing in a filter.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             For ongoing monitoring after you have installed a filter, the{" "}
@@ -555,15 +550,6 @@ export default function BestWaterTestingKitGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
-            href={tapScore.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
-            className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
-          >
-            Get the Tap Score lab test
-            <ArrowRight className="w-4 h-4" />
-          </a>
           <a
             href={simplex.affiliateUrl}
             target="_blank"
