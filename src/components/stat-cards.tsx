@@ -91,23 +91,39 @@ export function StatCards({
         </div>
       </ScrollCard>
 
-      {/* Supplier — links to supplier page */}
-      <Link
-        href={`/supplier/${supplierId}`}
-        className="card p-6 hover:border-accent/30 transition-colors group"
-      >
-        <div className="animate-fade-up delay-3">
-          <div className="w-9 h-9 rounded-xl bg-wash flex items-center justify-center mb-3">
-            <Building2 className="w-4 h-4 text-faint group-hover:text-accent transition-colors" aria-hidden="true" />
+      {/* Supplier — links to supplier page (guard against unknown/missing IDs) */}
+      {supplierId && supplierId !== "unknown" ? (
+        <Link
+          href={`/supplier/${supplierId}`}
+          className="card p-6 hover:border-accent/30 transition-colors group"
+        >
+          <div className="animate-fade-up delay-3">
+            <div className="w-9 h-9 rounded-xl bg-wash flex items-center justify-center mb-3">
+              <Building2 className="w-4 h-4 text-faint group-hover:text-accent transition-colors" aria-hidden="true" />
+            </div>
+            <p className="text-2xl font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
+              {supplier}
+            </p>
+            <p className="mt-1 text-sm text-muted">
+              Your water company
+            </p>
           </div>
-          <p className="text-2xl font-semibold leading-snug text-ink group-hover:text-accent transition-colors">
-            {supplier}
-          </p>
-          <p className="mt-1 text-sm text-muted">
-            Your water company
-          </p>
+        </Link>
+      ) : (
+        <div className="card p-6">
+          <div className="animate-fade-up delay-3">
+            <div className="w-9 h-9 rounded-xl bg-wash flex items-center justify-center mb-3">
+              <Building2 className="w-4 h-4 text-faint" aria-hidden="true" />
+            </div>
+            <p className="text-2xl font-semibold leading-snug text-ink">
+              {supplier || "Unknown"}
+            </p>
+            <p className="mt-1 text-sm text-muted">
+              Your water company
+            </p>
+          </div>
         </div>
-      </Link>
+      )}
 
       {/* Last Updated — scrolls to methodology footer */}
       <ScrollCard target="methodology-footer">

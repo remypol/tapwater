@@ -73,7 +73,7 @@ export default async function SupplierPage({ params }: Props) {
   const { slug } = await params;
   const supplier = MOCK_SUPPLIERS.find((s) => s.id === slug);
 
-  if (!supplier) {
+  if (!supplier || slug === "unknown") {
     notFound();
   }
 
