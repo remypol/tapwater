@@ -6,11 +6,11 @@ import { getTrustMetrics } from '@/lib/data'
 export const metadata: Metadata = {
   title: 'About TapWater.uk',
   description:
-    'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+    'Independent water quality research. Free postcode-searchable reports for England and Wales, based on UK government data.',
   openGraph: {
     title: 'About TapWater.uk',
     description:
-      'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+      'Independent water quality research. Free postcode-searchable reports for England and Wales, based on UK government data.',
     url: 'https://www.tapwater.uk/about',
     type: 'website',
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'About TapWater.uk',
     description:
-      'TapWater.uk is an independent water quality research project aggregating UK government data to provide free, postcode-searchable water quality reports for England and Wales.',
+      'Independent water quality research. Free postcode-searchable reports for England and Wales, based on UK government data.',
   },
 }
 
