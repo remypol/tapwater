@@ -72,10 +72,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : 0;
 
   const year = new Date().getFullYear();
-  const description = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate levels and more. Free ${year} report based on real drinking water tests.`;
+
+  // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
+  const cityTitle = `${city.name} Water Quality ${year}`;
+  const pageTitle = (cityTitle + " | TapWater.uk").length <= 60
+    ? cityTitle
+    : `${city.name} Water Quality`;
+
+  // Keep description under 155 chars
+  const descFull = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate levels and more. Free ${year} report.`;
+  const descShort = `Check ${city.name} tap water quality. ${scored.length} areas tested, average score ${avgScore.toFixed(1)}/10. PFAS, lead, nitrate and more.`;
+  const description = descFull.length <= 155 ? descFull : descShort;
 
   return {
-    title: `Is ${city.name} Tap Water Safe? ${year} Water Quality`,
+    title: pageTitle,
     description,
     openGraph: {
       title: `Is ${city.name} Tap Water Safe to Drink?`,

@@ -27,9 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!region) return { title: "Not Found" };
 
   const year = new Date().getFullYear();
+
+  // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
+  const regionTitle = `${region.name} Water Quality ${year}`;
+  const pageTitle = (regionTitle + " | TapWater.uk").length <= 60
+    ? regionTitle
+    : `${region.name} Water Quality`;
+
+  // Keep description under 155 chars
+  const descFull = `Water quality data for ${region.name}. Check safety scores, contaminants, PFAS and supplier info for every postcode. Free ${year} report.`;
+  const descShort = `Water quality data for ${region.name}. Safety scores, contaminants, PFAS and supplier info for every postcode.`;
+  const regionDesc = descFull.length <= 155 ? descFull : descShort;
+
   return {
-    title: `Water Quality in ${region.name} ${year} — Is It Safe?`,
-    description: `Water quality data for ${region.name}. Check safety scores, contaminants, PFAS and supplier info for every postcode. Free ${year} report.`,
+    title: pageTitle,
+    description: regionDesc,
     openGraph: {
       title: `Water Quality in ${region.name} — Is It Safe?`,
       description: `Water quality data for every postcode in ${region.name}. Check safety scores, contaminants, and supplier info.`,

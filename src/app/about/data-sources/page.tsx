@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { BreadcrumbSchema } from '@/components/json-ld'
 
 export const metadata: Metadata = {
-  title: 'Data Sources — Where TapWater.uk Gets Its Data',
+  title: 'Data Sources — Where We Get Our Data',
   description:
     'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
   openGraph: {
-    title: 'Data Sources — Where TapWater.uk Gets Its Data',
+    title: 'Data Sources — Where We Get Our Data',
     description:
       'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
     url: 'https://www.tapwater.uk/about/data-sources',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Data Sources — Where TapWater.uk Gets Its Data',
+    title: 'Data Sources — Where We Get Our Data',
     description:
       'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
   },
