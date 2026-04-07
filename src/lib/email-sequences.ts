@@ -585,14 +585,14 @@ function buildDay14(sub: SubscriberSequenceState): string {
         <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};font-family:-apple-system,sans-serif;">Quick screen &middot; From &pound;12</p>
       </td>
       <td align="right" style="padding:14px 16px;">
-        <a href="${BASE_URL}/filters/testing-kits/" style="color:${COLORS.accent};font-size:13px;font-weight:600;text-decoration:none;font-family:-apple-system,sans-serif;">View &rarr;</a>
+        <a href="${BASE_URL}/filters/water-testing-kits/" style="color:${COLORS.accent};font-size:13px;font-weight:600;text-decoration:none;font-family:-apple-system,sans-serif;">View &rarr;</a>
       </td>
     </tr>
   </table>
 </td></tr>`;
 
   inner += disclosureBox();
-  inner += ctaButton(`${BASE_URL}/filters/testing-kits/`, "Browse testing kits");
+  inner += ctaButton(`${BASE_URL}/filters/water-testing-kits/`, "Browse testing kits");
   inner += nextTeaser("Your monthly water quality update arrives in a couple of weeks.");
 
   return emailShell(inner, sub);

@@ -141,14 +141,14 @@ const REMOVAL_DESCRIPTIONS: Record<string, string> = {
 };
 
 const CONTAMINANT_GUIDE_MAP: Record<string, { guideTitle: string; guideHref: string; categoryTitle: string; categoryHref: string }> = {
-  pfas: { guideTitle: "Best water filter for PFAS removal", guideHref: "/guides/best-water-filter-pfas/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
-  lead: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink/" },
-  fluoride: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
-  nitrate: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
-  chlorine: { guideTitle: "Best shower filter UK", guideHref: "/guides/best-shower-filter-uk/", categoryTitle: "Jug filters", categoryHref: "/filters/jug/" },
-  copper: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink/" },
-  trihalomethanes: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis/" },
-  ecoli: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/testing-kits/" },
+  pfas: { guideTitle: "Best water filter for PFAS removal", guideHref: "/guides/best-water-filter-pfas/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  lead: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink-filters" },
+  fluoride: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  nitrate: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  chlorine: { guideTitle: "Best shower filter UK", guideHref: "/guides/best-shower-filter-uk/", categoryTitle: "Jug filters", categoryHref: "/filters/water-filter-jugs" },
+  copper: { guideTitle: "Best water filters UK", guideHref: "/guides/best-water-filters-uk/", categoryTitle: "Under-sink filters", categoryHref: "/filters/under-sink-filters" },
+  trihalomethanes: { guideTitle: "Best reverse osmosis system UK", guideHref: "/guides/best-reverse-osmosis-system-uk/", categoryTitle: "Reverse osmosis systems", categoryHref: "/filters/reverse-osmosis-systems" },
+  ecoli: { guideTitle: "Best water testing kit UK", guideHref: "/guides/best-water-testing-kit-uk/", categoryTitle: "Water testing kits", categoryHref: "/filters/water-testing-kits" },
 };
 
 type Props = { params: Promise<{ slug: string }> };

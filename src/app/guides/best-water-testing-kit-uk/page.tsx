@@ -596,7 +596,7 @@ export default function BestWaterTestingKitGuide() {
         </h2>
         <div className="space-y-2">
           <Link
-            href="/filters/testing-kits"
+            href="/filters/water-testing-kits"
             className="flex items-center gap-2 text-sm text-accent hover:underline"
           >
             <ArrowRight className="w-3.5 h-3.5" />

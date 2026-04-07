@@ -651,7 +651,7 @@ export default function BestWholeHouseFilterGuide() {
         </h2>
         <div className="space-y-2">
           <Link
-            href="/filters/whole-house"
+            href="/filters/whole-house-filters"
             className="flex items-center gap-2 text-sm text-accent hover:underline"
           >
             <ArrowRight className="w-3.5 h-3.5" />

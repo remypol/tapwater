@@ -654,7 +654,7 @@ export default function BestShowerFilterGuide() {
             UK water hardness map
           </Link>
           <Link
-            href="/filters/shower"
+            href="/filters/shower-filters"
             className="flex items-center gap-2 text-sm text-accent hover:underline"
           >
             <ArrowRight className="w-3.5 h-3.5" />

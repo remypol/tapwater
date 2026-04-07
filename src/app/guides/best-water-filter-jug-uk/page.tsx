@@ -697,7 +697,7 @@ export default function BestWaterFilterJugGuide() {
         </h2>
         <div className="space-y-2">
           <Link
-            href="/filters/jug"
+            href="/filters/water-filter-jugs"
             className="flex items-center gap-2 text-sm text-accent hover:underline"
           >
             <ArrowRight className="w-3.5 h-3.5" />

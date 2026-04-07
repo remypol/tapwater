@@ -266,9 +266,13 @@ export default async function PostcodePage({ params }: Props) {
             <div className="mt-10 max-w-3xl">
               <p className="text-base text-body leading-relaxed">
                 Tap water in {data.district} ({data.areaName}, {data.city}) is supplied by{" "}
-                <Link href={`/supplier/${data.supplierId}`} className="font-medium text-ink hover:text-accent transition-colors">
-                  {data.supplier}
-                </Link>{" "}
+                {data.supplierId && data.supplierId !== "unknown" ? (
+                  <Link href={`/supplier/${data.supplierId}`} className="font-medium text-ink hover:text-accent transition-colors">
+                    {data.supplier}
+                  </Link>
+                ) : (
+                  <span className="font-medium text-ink">{data.supplier}</span>
+                )}{" "}
                 and scored <span className="font-data font-bold">{data.safetyScore} out of 10</span> for
                 safety based on {data.contaminantsTested} tested parameters.{" "}
                 {data.contaminantsFlagged > 0 ? (
@@ -368,7 +372,7 @@ export default async function PostcodePage({ params }: Props) {
             {/* Supplementary recommendations */}
             <section className="mt-6 grid gap-3 sm:grid-cols-2">
               <Link
-                href="/filters/shower"
+                href="/filters/shower-filters"
                 className="card p-4 group hover:border-accent/30 transition-colors"
               >
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
@@ -379,7 +383,7 @@ export default async function PostcodePage({ params }: Props) {
                 </p>
               </Link>
               <Link
-                href="/filters/testing-kits"
+                href="/filters/water-testing-kits"
                 className="card p-4 group hover:border-accent/30 transition-colors"
               >
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
@@ -505,26 +509,38 @@ export default async function PostcodePage({ params }: Props) {
           </section>
         </ScrollReveal>
 
-        {/* Supplier Card — always shown */}
-        <div className="mt-10">
-          <Link
-            href={`/supplier/${data.supplierId}`}
-            className="card p-4 flex items-center justify-between group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-faint" />
+        {/* Supplier Card — only linked when supplier is known */}
+        {data.supplierId && data.supplierId !== "unknown" ? (
+          <div className="mt-10">
+            <Link
+              href={`/supplier/${data.supplierId}`}
+              className="card p-4 flex items-center justify-between group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+                  <Building2 className="w-4 h-4 text-faint" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted">Your water supplier</p>
+                  <p className="font-semibold text-ink group-hover:text-accent transition-colors">
+                    {data.supplier}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted">Your water supplier</p>
-                <p className="font-semibold text-ink group-hover:text-accent transition-colors">
-                  {data.supplier}
-                </p>
-              </div>
+              <ExternalLink className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-10 card p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center">
+              <Building2 className="w-4 h-4 text-faint" />
             </div>
-            <ExternalLink className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
-          </Link>
-        </div>
+            <div>
+              <p className="text-sm text-muted">Your water supplier</p>
+              <p className="font-semibold text-ink">{data.supplier || "Unknown"}</p>
+            </div>
+          </div>
+        )}
 
         {/* Methodology Footer — E-E-A-T signals */}
         <footer id="methodology-footer" className="mt-10 pb-4 text-sm text-faint leading-relaxed scroll-mt-20">
