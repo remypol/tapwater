@@ -29,4 +29,19 @@ export const events = {
 
   regionSelect: (regionId: string) =>
     trackEvent("region_select", { region_id: regionId }),
+
+  softenerBannerView: (postcode: string) =>
+    trackEvent("softener_banner_view", { postcode }),
+
+  softenerBannerClick: (postcode: string) =>
+    trackEvent("softener_banner_click", { postcode }),
+
+  softenerFormView: (postcode: string, source: string) =>
+    trackEvent("softener_form_view", { postcode, source }),
+
+  softenerFormSubmit: (postcode: string, source: string) =>
+    trackEvent("softener_form_submit", { postcode, source }),
+
+  softenerFormError: (postcode: string, error: string) =>
+    trackEvent("softener_form_error", { postcode, error }),
 };
