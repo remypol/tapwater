@@ -396,6 +396,48 @@ export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
 
   // ─── South East Water ────────────────────────────────────────────────────────
   Crawley: { name: "South East Water", id: "south-east-water" },
+
+  // ── 2023 Local Government Reorganisation ──────────────────────────────────
+  // These unitary authorities replaced older district councils.
+  // postcodes.io now returns these names instead of the old ones.
+
+  // Yorkshire Water
+  "North Yorkshire": { name: "Yorkshire Water", id: "yorkshire-water" },
+  "Kingston upon Hull, City of": { name: "Yorkshire Water", id: "yorkshire-water" },
+
+  // United Utilities
+  Cumberland: { name: "United Utilities", id: "united-utilities" },
+  "Westmorland and Furness": { name: "United Utilities", id: "united-utilities" },
+  "St. Helens": { name: "United Utilities", id: "united-utilities" },
+
+  // Anglian Water
+  "Milton Keynes": { name: "Anglian Water", id: "anglian-water" },
+  "North Lincolnshire": { name: "Anglian Water", id: "anglian-water" },
+  "North East Lincolnshire": { name: "Anglian Water", id: "anglian-water" },
+
+  // Thames Water
+  Buckinghamshire: { name: "Thames Water", id: "thames-water" },
+
+  // Severn Trent
+  "Herefordshire, County of": { name: "Severn Trent", id: "severn-trent" },
+  Tewkesbury: { name: "Severn Trent", id: "severn-trent" },
+  Stroud: { name: "Severn Trent", id: "severn-trent" },
+  Gloucester: { name: "Severn Trent", id: "severn-trent" },
+  Cheltenham: { name: "Severn Trent", id: "severn-trent" },
+  Cotswold: { name: "Severn Trent", id: "severn-trent" },
+  "Forest of Dean": { name: "Severn Trent", id: "severn-trent" },
+
+  // Wessex Water
+  "Bournemouth, Christchurch and Poole": { name: "Wessex Water", id: "wessex-water" },
+
+  // Southern Water
+  Hart: { name: "Southern Water", id: "southern-water" },
+  "East Hampshire": { name: "Southern Water", id: "southern-water" },
+  "Basingstoke and Deane": { name: "Southern Water", id: "southern-water" },
+  Rushmoor: { name: "Southern Water", id: "southern-water" },
+
+  // Northumbrian Water
+  "County Durham": { name: "Northumbrian Water", id: "northumbrian-water" },
 };
 
 const UNKNOWN_SUPPLIER: SupplierInfo = { name: "Unknown", id: "unknown" };
