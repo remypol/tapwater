@@ -45,7 +45,8 @@ export type ProductCategory =
   | "whole_house"
   | "shower"
   | "testing_kit"
-  | "countertop";
+  | "countertop"
+  | "water_softener";
 
 export type PriceTier = "budget" | "mid" | "premium";
 
@@ -73,6 +74,7 @@ export interface FilterProduct {
   flowRate?: string;
   filterLife?: string;
   annualCost?: number;
+  availableInUk?: boolean; // undefined or true = available. false = not yet available in UK market.
 }
 
 export interface SupplierData {

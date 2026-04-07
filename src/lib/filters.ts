@@ -14,6 +14,7 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   countertop: "Countertop",
   shower: "Shower Filter",
   testing_kit: "Testing Kit",
+  water_softener: "Water Softener",
 };
 
 /**
@@ -25,7 +26,7 @@ export function recommendFilters(
   maxResults: number = 3,
 ): (FilterProduct & { matchedCount: number; matchedContaminants: string[] })[] {
   const drinkingFilters = PRODUCTS.filter(
-    (f) => f.category !== "testing_kit" && f.category !== "shower",
+    (f) => f.category !== "testing_kit" && f.category !== "shower" && f.category !== "water_softener",
   );
 
   if (flaggedContaminants.length === 0) {
