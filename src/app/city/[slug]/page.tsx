@@ -221,6 +221,11 @@ export default async function CityPage({ params }: Props) {
     ? `PFAS (forever chemicals) have been detected in ${pfasCount} out of ${scored.length} areas tested in ${city.name}. The UK currently has no legal limit for PFAS in drinking water. Check your specific postcode for details.`
     : `No PFAS (forever chemicals) have been detected in any of the ${scored.length} areas tested in ${city.name}.`;
 
+  // Count unique contaminants tested across all postcodes
+  const uniqueContaminants = new Set(scored.flatMap(p => p.readings.map(r => r.name)));
+  const contaminantCount = uniqueContaminants.size;
+  const year = new Date().getFullYear();
+
   return (
     <div className="bg-score-safe">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
@@ -281,6 +286,20 @@ export default async function CityPage({ params }: Props) {
             {city.description}
           </p>
         </header>
+
+        {/* GEO: Branded summary for AI citation */}
+        {scored.length > 0 && (
+          <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6">
+            <p className="text-base text-body leading-relaxed">
+              <strong className="text-ink">
+                According to TapWater.uk&apos;s analysis, {city.name} scores {avgScore.toFixed(1)}/10
+                for drinking water quality in {year}.
+              </strong>{" "}
+              Water is supplied by {primarySupplier.name} and has been tested for {contaminantCount} contaminants
+              across {scored.length} postcode districts.
+            </p>
+          </div>
+        )}
 
         {/* Aggregate stats */}
         {scored.length > 0 ? (

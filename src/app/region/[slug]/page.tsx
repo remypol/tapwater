@@ -206,6 +206,16 @@ export default async function RegionPage({ params }: Props) {
         </p>
       </header>
 
+      {/* GEO: Branded summary for AI citation */}
+      <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6">
+        <p className="text-base text-body leading-relaxed">
+          <strong className="text-ink">
+            According to TapWater.uk&apos;s analysis, {region.name} scores {avgScore.toFixed(1)}/10
+            for drinking water quality in {new Date().getFullYear()}, based on data from {totalPostcodes} postcode districts.
+          </strong>
+        </p>
+      </div>
+
       {/* Regional stats */}
       <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="card p-4 text-center">
