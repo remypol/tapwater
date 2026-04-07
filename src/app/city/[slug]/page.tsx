@@ -18,6 +18,8 @@ import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { CITIES, getCityBySlug } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
+import { IncidentAlerts } from "@/components/incident-alert";
+import { getActiveIncidentsForCity } from "@/lib/incidents";
 
 export const revalidate = 86400;
 
@@ -107,6 +109,8 @@ export default async function CityPage({ params }: Props) {
   const { slug } = await params;
   const city = getCityBySlug(slug);
   if (!city) notFound();
+
+  const activeIncidents = await getActiveIncidentsForCity(slug);
 
   const [allPostcodes, nationalAvg] = await Promise.all([
     getPostcodesForCity(city.matches),
@@ -261,6 +265,8 @@ export default async function CityPage({ params }: Props) {
           <ChevronRight className="w-3 h-3" />
           <span className="text-ink font-medium">{city.name}</span>
         </nav>
+
+        <IncidentAlerts incidents={activeIncidents} />
 
         {/* Header */}
         <header className="mt-6">

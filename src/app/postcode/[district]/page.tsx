@@ -21,6 +21,8 @@ import { RelatedGuides } from "@/components/related-guides";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { CITIES } from "@/lib/cities";
+import { IncidentAlerts } from "@/components/incident-alert";
+import { getActiveIncidentsForPostcode } from "@/lib/incidents";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -98,6 +100,7 @@ function getScoreBadgeColor(score: number): string {
 export default async function PostcodePage({ params }: Props) {
   const { district } = await params;
   const data = await getPostcodeData(district);
+  const activeIncidents = await getActiveIncidentsForPostcode(district);
   if (!data) notFound();
 
   const hasData = data.safetyScore >= 0;
@@ -207,6 +210,8 @@ export default async function PostcodePage({ params }: Props) {
           <ChevronRight className="w-3 h-3" />
           <span className="text-ink font-medium">{data.district}</span>
         </nav>
+
+        <IncidentAlerts incidents={activeIncidents} />
 
         {/* Header */}
         <header className="mt-6">
