@@ -5,6 +5,13 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 
+function truncateAtSentence(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  const truncated = text.slice(0, maxLen);
+  const lastPeriod = truncated.lastIndexOf(".");
+  return lastPeriod > maxLen * 0.5 ? truncated.slice(0, lastPeriod + 1) : truncated + "...";
+}
+
 type ContaminantEntry = {
   name: string;
   description: string;
@@ -371,8 +378,8 @@ export default async function ContaminantPage({ params }: Props) {
       />
       <FAQSchema
         faqs={[
-          { question: `What is ${contaminant.name} and why is it in UK drinking water?`, answer: contaminant.description.slice(0, 300) },
-          { question: `What are the health effects of ${contaminant.name} in drinking water?`, answer: contaminant.healthEffects.slice(0, 300) },
+          { question: `What is ${contaminant.name} and why is it in UK drinking water?`, answer: truncateAtSentence(contaminant.description, 300) },
+          { question: `What are the health effects of ${contaminant.name} in drinking water?`, answer: truncateAtSentence(contaminant.healthEffects, 300) },
           { question: `What is the UK legal limit for ${contaminant.name}?`, answer: contaminant.ukLimit ? `The UK legal limit for ${contaminant.name} in drinking water is ${contaminant.ukLimit}, set under the Water Supply (Water Quality) Regulations.` : `The UK currently has no legal limit for ${contaminant.name} in drinking water, though the WHO guideline is ${contaminant.whoGuideline} and the EU standard is ${contaminant.euLimit}.` },
           { question: `How do I remove ${contaminant.name} from my tap water?`, answer: `The most effective methods to remove ${contaminant.name} from tap water are: ${contaminant.removal.join(", ")}. Check your postcode on TapWater.uk to see current levels in your area.` },
         ]}

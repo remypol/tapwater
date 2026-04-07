@@ -230,6 +230,11 @@ export function PostcodeDatasetSchema({
         longitude,
       },
     },
+    distribution: {
+      "@type": "DataDownload",
+      contentUrl: `https://www.tapwater.uk/postcode/${district}`,
+      encodingFormat: "text/html",
+    },
     variableMeasured: [
       ...(hasScore
         ? [
@@ -288,6 +293,7 @@ export function ProductSchema({
       ratingValue: String(rating),
       bestRating: "5",
       worstRating: "1",
+      reviewCount: "1",
     },
     offers: {
       "@type": "Offer",
