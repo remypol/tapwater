@@ -1,8 +1,21 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { ContaminantReading, getPercentOfLimit } from '@/lib/types';
 import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
+
+// Map contaminant display names → slug for cross-linking to /contaminant/[slug]
+const CONTAMINANT_SLUG_MAP: Record<string, string> = {
+  "PFAS": "pfas", "Lead": "lead", "Nitrate": "nitrate", "Copper": "copper",
+  "Chlorine": "chlorine", "Fluoride": "fluoride", "Trihalomethanes": "trihalomethanes",
+  "E. coli": "ecoli", "Arsenic": "arsenic", "Manganese": "manganese",
+  "Iron": "iron", "Mercury": "mercury", "Microplastics": "microplastics",
+  "Nitrite": "nitrite", "Turbidity": "turbidity", "Aluminium": "aluminium",
+  "Coliform Bacteria": "coliform", "Cadmium": "cadmium", "Chromium": "chromium",
+  "Pesticides": "pesticides", "Total Coliforms": "coliform",
+  "Coliform bacteria": "coliform",
+};
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -166,7 +179,13 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                 >
                   {/* Contaminant */}
                   <td className="py-4 px-4 align-top">
-                    <span className="font-medium text-ink">{reading.name}</span>
+                    {CONTAMINANT_SLUG_MAP[reading.name] ? (
+                      <Link href={`/contaminant/${CONTAMINANT_SLUG_MAP[reading.name]}`} className="font-medium text-accent hover:underline">
+                        {reading.name}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-ink">{reading.name}</span>
+                    )}
                   </td>
 
                   {/* Your Level */}
@@ -228,7 +247,13 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
             >
               {/* Card header */}
               <div className="flex items-start justify-between gap-2">
-                <span className="font-medium text-ink">{reading.name}</span>
+                {CONTAMINANT_SLUG_MAP[reading.name] ? (
+                  <Link href={`/contaminant/${CONTAMINANT_SLUG_MAP[reading.name]}`} className="font-medium text-accent hover:underline">
+                    {reading.name}
+                  </Link>
+                ) : (
+                  <span className="font-medium text-ink">{reading.name}</span>
+                )}
                 <StatusDisplay status={reading.status} display="badge" />
               </div>
 
