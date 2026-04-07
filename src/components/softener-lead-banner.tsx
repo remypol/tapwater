@@ -25,7 +25,7 @@ export function SoftenerLeadBanner({
   }, [postcode]);
 
   return (
-    <div className="mt-4 rounded-lg border-l-[3px] border-amber-500 bg-amber-50/60 px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+    <div className="mt-4 rounded-lg border-l-[3px] border-amber-500 bg-[var(--color-warning-light)] px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
       <div className="flex items-center gap-3 min-w-0">
         <Droplets className="w-4 h-4 text-amber-600 shrink-0" aria-hidden="true" />
         <div className="min-w-0">

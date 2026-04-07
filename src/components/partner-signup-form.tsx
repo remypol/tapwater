@@ -205,7 +205,7 @@ export function PartnerSignupForm({ regionNames }: PartnerSignupFormProps) {
             value={monthlyVolume}
             onChange={(e) => setMonthlyVolume(e.target.value)}
             disabled={status === "submitting"}
-            className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm text-body focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50 bg-white"
+            className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm text-body focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50 bg-[var(--color-surface)]"
           >
             <option value="">Select volume...</option>
             {VOLUME_OPTIONS.map((opt) => (

@@ -611,7 +611,7 @@ export default async function ContaminantPage({ params }: Props) {
           </table>
         </div>
         {!contaminant.ukLimit && (
-          <p className="mt-4 text-sm text-muted bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <p className="mt-4 text-sm text-muted bg-[var(--color-warning-light)] border border-amber-200 rounded-lg px-4 py-3">
             The UK currently has no statutory limit for {contaminant.name}.
             This means water companies are not legally required to monitor or
             report levels, even though both the WHO and EU have set guidelines.
@@ -630,7 +630,7 @@ export default async function ContaminantPage({ params }: Props) {
           {contaminant.removal.map((method) => (
             <li
               key={method}
-              className="flex gap-3 bg-white rounded-lg border border-rule p-4"
+              className="flex gap-3 bg-[var(--color-surface)] rounded-lg border border-rule p-4"
             >
               <span className="mt-0.5 flex-shrink-0 w-2 h-2 rounded-full bg-accent mt-2" />
               <div>

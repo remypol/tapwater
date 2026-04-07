@@ -172,7 +172,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                 <tr
                   key={reading.name}
                   className={[
-                    reading.status === 'fail' ? 'bg-red-50' : reading.status === 'warning' ? 'bg-amber-50' : isEven ? 'bg-wash/30' : 'bg-surface',
+                    reading.status === 'fail' ? 'bg-[var(--color-danger-light)]' : reading.status === 'warning' ? 'bg-[var(--color-warning-light)]' : isEven ? 'bg-wash/30' : 'bg-surface',
                     reading.isPfas ? 'border-l-2 border-l-violet-500' : reading.status === 'fail' ? 'border-l-2 border-l-red-500' : reading.status === 'warning' ? 'border-l-2 border-l-amber-500' : '',
                     'hover:bg-blue-50/30 transition-colors',
                   ].join(' ')}
@@ -241,8 +241,8 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
               className={[
                 'card p-4 snap-start shrink-0 w-[300px] sm:w-auto sm:shrink',
                 reading.isPfas ? 'border-l-[3px] border-l-violet-500' : '',
-                reading.status === 'fail' ? 'bg-red-50 border border-red-200 shadow-[inset_0_0_0_1px_rgba(220,38,38,0.08)]' : '',
-                reading.status === 'warning' ? 'bg-amber-50 border border-amber-200' : '',
+                reading.status === 'fail' ? 'bg-[var(--color-danger-light)] border border-red-200 shadow-[inset_0_0_0_1px_rgba(220,38,38,0.08)]' : '',
+                reading.status === 'warning' ? 'bg-[var(--color-warning-light)] border border-amber-200' : '',
               ].join(' ')}
             >
               {/* Card header */}
