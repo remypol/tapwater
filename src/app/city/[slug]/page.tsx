@@ -164,6 +164,11 @@ export default async function CityPage({ params }: Props) {
     (a, b) => a.safetyScore - b.safetyScore,
   );
 
+  // Unscored postcodes (safetyScore < 0) — still need internal links
+  const unscoredPostcodes = allPostcodes
+    .filter((p) => p.safetyScore < 0)
+    .sort((a, b) => a.district.localeCompare(b.district));
+
   // Best and worst areas
   const bestPostcodes = [...scored].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3);
   const worstPostcodes = [...scored].sort((a, b) => a.safetyScore - b.safetyScore).slice(0, 3);
@@ -467,6 +472,28 @@ export default async function CityPage({ params }: Props) {
               </section>
             </ScrollReveal>
 
+            {/* Unscored postcodes — ensure they have at least one internal link */}
+            {unscoredPostcodes.length > 0 && (
+              <div className="mt-4">
+                <p className="text-xs text-faint mb-2">
+                  {unscoredPostcodes.length} additional area{unscoredPostcodes.length !== 1 ? "s" : ""} with limited data:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {unscoredPostcodes.map((pc) => (
+                    <Link
+                      key={pc.district}
+                      href={`/postcode/${pc.district}`}
+                      className="pill"
+                    >
+                      <MapPin className="w-3 h-3 text-faint mr-1" />
+                      {pc.district}
+                      <span className="text-faint ml-1">{pc.areaName}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <hr className="border-rule mt-10" />
 
             {/* Hardness badge */}
@@ -526,16 +553,39 @@ export default async function CityPage({ params }: Props) {
           </>
         ) : (
           /* No data state */
-          <div className="mt-10 card-elevated rounded-2xl p-8 max-w-2xl">
-            <p className="font-display text-2xl text-ink italic">
-              Not enough data yet
-            </p>
-            <p className="text-base text-body leading-relaxed mt-3">
-              We don&apos;t have enough test results for {city.name} yet to
-              show aggregate scores. Try searching for a specific postcode
-              below.
-            </p>
-          </div>
+          <>
+            <div className="mt-10 card-elevated rounded-2xl p-8 max-w-2xl">
+              <p className="font-display text-2xl text-ink italic">
+                Not enough data yet
+              </p>
+              <p className="text-base text-body leading-relaxed mt-3">
+                We don&apos;t have enough test results for {city.name} yet to
+                show aggregate scores. Try searching for a specific postcode
+                below.
+              </p>
+            </div>
+            {/* Link unscored postcodes so they aren't orphaned */}
+            {unscoredPostcodes.length > 0 && (
+              <div className="mt-6">
+                <p className="text-xs text-faint mb-2">
+                  Areas with limited data:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {unscoredPostcodes.map((pc) => (
+                    <Link
+                      key={pc.district}
+                      href={`/postcode/${pc.district}`}
+                      className="pill"
+                    >
+                      <MapPin className="w-3 h-3 text-faint mr-1" />
+                      {pc.district}
+                      <span className="text-faint ml-1">{pc.areaName}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Best & worst areas */}

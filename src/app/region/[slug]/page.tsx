@@ -63,8 +63,8 @@ export default async function RegionPage({ params }: Props) {
   const region = getRegionBySlug(slug);
   if (!region) notFound();
 
-  // Gather all postcodes for this region's cities
-  const cityData: { city: typeof CITIES[0]; postcodes: PostcodeData[] }[] = [];
+  // Gather all postcodes for this region's cities (scored AND unscored)
+  const cityData: { city: typeof CITIES[0]; postcodes: PostcodeData[]; unscoredPostcodes: PostcodeData[] }[] = [];
   for (const citySlug of region.cities) {
     const city = getCityBySlug(citySlug);
     if (!city) continue;
@@ -74,24 +74,28 @@ export default async function RegionPage({ params }: Props) {
       await Promise.all(city.matches.map((m) => getPostcodesByCity(m)))
     ).flat();
     const all = [...postcodes, ...additionalPostcodes];
-    // Dedupe by district
+    // Dedupe by district — keep ALL postcodes, separate scored from unscored
     const seen = new Set<string>();
-    const unique = all.filter((p) => {
+    const deduped = all.filter((p) => {
       if (seen.has(p.district)) return false;
       seen.add(p.district);
-      return p.safetyScore >= 0;
+      return true;
     });
-    if (unique.length > 0) {
-      cityData.push({ city, postcodes: unique });
+    const scored = deduped.filter((p) => p.safetyScore >= 0);
+    const unscored = deduped.filter((p) => p.safetyScore < 0);
+    if (deduped.length > 0) {
+      cityData.push({ city, postcodes: scored, unscoredPostcodes: unscored });
     }
   }
 
   const allPostcodes = cityData.flatMap((c) => c.postcodes);
+  const allUnscoredPostcodes = cityData.flatMap((c) => c.unscoredPostcodes);
   const totalPostcodes = allPostcodes.length;
+  const totalAllPostcodes = totalPostcodes + allUnscoredPostcodes.length;
 
   // No data for this region yet — show a minimal page instead of 404
   // (avoids build failures when seed data doesn't cover all regions)
-  if (totalPostcodes === 0) {
+  if (totalAllPostcodes === 0) {
     return (
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
@@ -114,7 +118,9 @@ export default async function RegionPage({ params }: Props) {
     );
   }
 
-  const avgScore = allPostcodes.reduce((sum, p) => sum + p.safetyScore, 0) / totalPostcodes;
+  const avgScore = totalPostcodes > 0
+    ? allPostcodes.reduce((sum, p) => sum + p.safetyScore, 0) / totalPostcodes
+    : 0;
   const pfasCount = allPostcodes.filter((p) => p.pfasDetected).length;
 
   // Ranked postcodes
@@ -335,6 +341,32 @@ export default async function RegionPage({ params }: Props) {
                 </Link>
               );
             })}
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* All postcode areas — safety net so every postcode has at least one internal link */}
+      <ScrollReveal delay={0}>
+        <section className="mt-12">
+          <h2 className="font-display text-xl text-ink italic mb-1">
+            All postcode areas in {region.name}
+          </h2>
+          <p className="text-sm text-muted mb-4">
+            Every postcode district we monitor in this region.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[...allPostcodes, ...allUnscoredPostcodes]
+              .sort((a, b) => a.district.localeCompare(b.district))
+              .map((pc) => (
+                <Link
+                  key={pc.district}
+                  href={`/postcode/${pc.district}`}
+                  className="pill"
+                >
+                  <MapPin className="w-3 h-3 text-faint mr-1" />
+                  {pc.district}
+                </Link>
+              ))}
           </div>
         </section>
       </ScrollReveal>
