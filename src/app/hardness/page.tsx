@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
+import { SoftenerLeadForm } from "@/components/softener-lead-form"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
 
 export function generateMetadata(): Metadata {
@@ -296,6 +297,14 @@ export default function WaterHardnessCheckerPage() {
             UK Water Hardness Map &mdash; which areas have the hardest water?
           </Link>
         </p>
+
+        <div className="mt-10">
+          <SoftenerLeadForm
+            hardnessValue={220}
+            hardnessLabel="hard"
+            source="hardness_page"
+          />
+        </div>
 
         {/* Hardness by region */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Water hardness by region</h2>
