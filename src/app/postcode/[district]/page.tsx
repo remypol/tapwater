@@ -9,7 +9,7 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
-import { getPostcodeData, getScoredPostcodeDistricts } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
@@ -24,8 +24,8 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  // Only build pages for postcodes with a real score — avoids thin pages
-  const districts = await getScoredPostcodeDistricts();
+  // Build pages for ALL postcodes with data so every linked page exists
+  const districts = await getAllPostcodeDistricts();
   return districts.map((district) => ({ district }));
 }
 
@@ -35,10 +35,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!data) return { title: "Not Found" };
 
   const year = new Date().getFullYear();
-  const description = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS levels, lead, nitrate & more. Free ${year} report for ${data.areaName}.`;
+
+  // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
+  const maxTitleLen = 44; // 60 - 16 for " | TapWater.uk"
+  const baseTitle = `${data.district} Water Quality`;
+  const remainingLen = maxTitleLen - baseTitle.length - 3; // 3 for " | "
+  const shortArea = remainingLen >= 8
+    ? (data.areaName.length > remainingLen
+      ? data.areaName.substring(0, remainingLen).replace(/,?\s*$/, '')
+      : data.areaName)
+    : null;
+  const pageTitle = shortArea ? `${baseTitle} | ${shortArea}` : baseTitle;
+
+  // Keep description under 155 chars
+  const descBase = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS, lead, nitrate & more.`;
+  const descSuffix = ` Free ${year} report for ${data.areaName}.`;
+  const description = (descBase + descSuffix).length <= 155
+    ? descBase + descSuffix
+    : descBase;
 
   return {
-    title: `${data.district} Water Quality: Is It Safe? | ${data.areaName}`,
+    title: pageTitle,
     description,
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,

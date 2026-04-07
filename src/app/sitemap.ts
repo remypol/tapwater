@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
+import { getScoredPostcodeDistricts, getAllPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
@@ -45,17 +45,19 @@ async function getLatestDataDate(): Promise<Date> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
-  const districts = await getScoredPostcodeDistricts();
+  // Include ALL postcodes with data (not just scored ones) so the sitemap
+  // covers every indexable page — city pages and nearby links point to these.
+  const allDistricts = await getAllPostcodeDistricts();
 
   const postcodePaths = await Promise.all(
-    districts.map(async (district) => {
+    allDistricts.map(async (district) => {
       const data = await getPostcodeData(district);
       const lastMod = data?.lastUpdated ? new Date(data.lastUpdated) : latestDataDate;
       return {
         url: `${BASE_URL}/postcode/${district}`,
         lastModified: lastMod,
         changeFrequency: "weekly" as const,
-        priority: 0.8,
+        priority: data && data.safetyScore >= 0 ? 0.8 : 0.5,
       };
     }),
   );
