@@ -149,6 +149,14 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
     const rows = allRows;
     if (rows.length === 0) return null;
 
+    // Batch-load all suppliers upfront to avoid N+1 queries
+    const supplierIds = new Set<string>();
+    for (const row of rows) {
+      const pd = row.postcode_districts as unknown as { supplier_id: string | null };
+      if (pd.supplier_id) supplierIds.add(pd.supplier_id);
+    }
+    const supplierMap = await loadSuppliersBatch(Array.from(supplierIds));
+
     const cache = new Map<string, PostcodeData>();
 
     for (const row of rows) {
@@ -162,8 +170,8 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         supply_zone: string | null;
       };
 
-      const supplier = pd.supplier_id
-        ? await getSupplierById(pd.supplier_id)
+      const supplier = pd.supplier_id && supplierMap.has(pd.supplier_id)
+        ? supplierMap.get(pd.supplier_id)!
         : getSupplier(pd.city);
 
       const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
@@ -222,6 +230,26 @@ async function getSupplierById(
     .single();
 
   return { name: data?.name ?? "Unknown", id };
+}
+
+/** Batch-load suppliers by IDs in a single query to avoid N+1 */
+async function loadSuppliersBatch(
+  ids: string[],
+): Promise<Map<string, { name: string; id: string }>> {
+  const result = new Map<string, { name: string; id: string }>();
+  if (!supabase || ids.length === 0) return result;
+
+  const { data } = await supabase
+    .from("water_suppliers")
+    .select("id, name")
+    .in("id", ids);
+
+  if (data) {
+    for (const row of data) {
+      result.set(row.id, { name: row.name ?? "Unknown", id: row.id });
+    }
+  }
+  return result;
 }
 
 // ── Unified loader: Supabase first, JSON fallback ──

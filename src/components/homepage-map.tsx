@@ -49,9 +49,16 @@ export function HomepageMap() {
   useEffect(() => {
     if (!visible) return;
     fetch("/api/map-postcodes")
-      .then((res) => res.json())
-      .then((data) => setPostcodes(data))
-      .catch(() => {})
+      .then((res) => {
+        if (!res.ok) throw new Error(`Map API returned ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) setPostcodes(data);
+      })
+      .catch((err) => {
+        console.error("[HomepageMap] Failed to load map data:", err);
+      })
       .finally(() => setLoading(false));
   }, [visible]);
 
