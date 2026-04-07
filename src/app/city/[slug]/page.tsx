@@ -17,6 +17,7 @@ import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } fro
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { CITIES, getCityBySlug } from "@/lib/cities";
+import { REGIONS } from "@/lib/regions";
 
 export const revalidate = 86400;
 
@@ -243,10 +244,21 @@ export default async function CityPage({ params }: Props) {
 
         {/* Header */}
         <header className="mt-6">
-          <p className="text-xs uppercase tracking-[0.15em] text-accent font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
-            <MapPin className="w-3 h-3" />
-            {city.region}
-          </p>
+          {(() => {
+            const parentRegion = REGIONS.find((r) => r.cities.includes(city.slug));
+            return (
+              <p className="text-xs uppercase tracking-[0.15em] text-accent font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
+                <MapPin className="w-3 h-3" />
+                {parentRegion ? (
+                  <Link href={`/region/${parentRegion.slug}`} className="hover:underline">
+                    {parentRegion.name}
+                  </Link>
+                ) : (
+                  city.region
+                )}
+              </p>
+            );
+          })()}
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
             Is {city.name} tap water safe to drink?
           </h1>

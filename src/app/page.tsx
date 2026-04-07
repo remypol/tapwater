@@ -14,6 +14,7 @@ import {
   Building2,
 } from "lucide-react";
 import { WaterSurface } from "@/components/water-surface";
+import { REGIONS } from "@/lib/regions";
 
 export const metadata: Metadata = {
   title: "TapWater.uk — Check Your Tap Water Quality by Postcode",
@@ -346,6 +347,16 @@ export default async function HomePage() {
           ].map(({ name, slug }) => (
             <Link key={slug} href={`/city/${slug}/`} className="pill">
               {name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Regions */}
+        <p className="text-xs uppercase tracking-[0.15em] text-muted font-semibold mt-5 mb-2">By region</p>
+        <div className="flex flex-wrap gap-2">
+          {REGIONS.map((region) => (
+            <Link key={region.slug} href={`/region/${region.slug}`} className="pill">
+              {region.name}
             </Link>
           ))}
         </div>
