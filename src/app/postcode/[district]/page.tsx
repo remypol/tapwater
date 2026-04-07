@@ -18,6 +18,7 @@ import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { getProductIncludingUnavailable } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { RelatedGuides } from "@/components/related-guides";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { CITIES } from "@/lib/cities";
 
@@ -345,7 +346,7 @@ export default async function PostcodePage({ params }: Props) {
                     Drinking water tests
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 text-xs font-medium text-amber-700">
+                  <span className="inline-flex items-center gap-1.5 bg-[var(--color-warning-light)] border border-amber-200 rounded-full px-3 py-1 text-xs font-medium text-amber-700">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                     Environmental monitoring
                   </span>
@@ -360,7 +361,7 @@ export default async function PostcodePage({ params }: Props) {
                 {data.dataSource === "ea-only" && <> · Tap water tests not yet available for {data.supplier}</>}
               </p>
               {isStale && (
-                <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-2">
+                <p className="text-xs text-amber-700 bg-[var(--color-warning-light)] border border-amber-200 rounded-lg px-3 py-2 mt-2">
                   This data is {monthsOld > 24 ? `over ${Math.floor(monthsOld / 12)} years` : `${monthsOld} months`} old.
                   {data.dataSource === "ea-only"
                     ? ` The Environment Agency hasn't sampled near ${data.district} recently. Scores reflect the most recent available data.`
@@ -617,6 +618,7 @@ export default async function PostcodePage({ params }: Props) {
           </span>
         </footer>
       </div>
+      <ScrollToTop />
     </div>
   );
 }

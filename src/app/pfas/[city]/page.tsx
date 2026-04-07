@@ -7,6 +7,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
 import { PfasCompoundChart } from "@/components/pfas-compound-chart";
 import { PfasMapWrapper as PfasMap } from "@/components/pfas-map-wrapper";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { PfasTrendChartWrapper as PfasTrendChart } from "@/components/pfas-trend-chart-wrapper";
 import { getPfasCityData, getPfasCitySlugs } from "@/lib/pfas-data";
 import { getProductIncludingUnavailable } from "@/lib/products";
@@ -507,6 +508,7 @@ export default async function PfasCityPage({ params }: Props) {
             .
           </footer>
         </div>
+        <ScrollToTop />
       </div>
     );
   }
@@ -729,6 +731,7 @@ export default async function PfasCityPage({ params }: Props) {
           .
         </footer>
       </div>
+      <ScrollToTop />
     </div>
   );
 }

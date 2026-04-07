@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
 import { PfasMapWrapper as PfasMap } from "@/components/pfas-map-wrapper";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { getPfasNationalSummary } from "@/lib/pfas-data";
 import { getProductIncludingUnavailable } from "@/lib/products";
 
@@ -536,6 +537,7 @@ export default async function PfasNationalPage() {
           for more information.
         </footer>
       </div>
+      <ScrollToTop />
     </div>
   );
 }
