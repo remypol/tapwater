@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search, Check, X } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { getProductIncludingUnavailable } from "@/lib/products";
+import { ProductCard } from "@/components/product-card";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 
 export const revalidate = 86400;
@@ -365,6 +367,20 @@ export default function BestWaterSoftenerGuide() {
           installers in your area. We only partner with companies that are
           properly accredited, insured, and reviewed.
         </p>
+
+        {/* ── Product recommendation (conditional) ──────────────────── */}
+        {(() => {
+          const softener = getProductIncludingUnavailable("waterdrop-whr01");
+          if (!softener || softener.availableInUk === false) return null;
+          return (
+            <>
+              <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">
+                Our top pick: Waterdrop WHR01
+              </h2>
+              <ProductCard product={softener} pageType="guide" highlight="Now available in the UK" />
+            </>
+          );
+        })()}
 
         {/* ── UK areas with the hardest water ───────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
