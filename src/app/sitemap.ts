@@ -14,6 +14,10 @@ const CONTAMINANT_SLUGS = [
   "nitrite", "turbidity", "aluminium", "coliform", "cadmium", "chromium",
 ];
 
+const RANKING_SLUGS = [
+  "worst-lead", "worst-nitrate", "worst-pfas", "hardest-water", "best-water", "worst-water",
+];
+
 const GUIDE_SLUGS = [
   "best-water-filters-uk",
   "pfas-uk-explained",
@@ -110,6 +114,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    ...RANKING_SLUGS.map((slug) => ({
+      url: `${BASE_URL}/rankings/${slug}`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    })),
     {
       url: `${BASE_URL}/compare`,
       lastModified: latestDataDate,
