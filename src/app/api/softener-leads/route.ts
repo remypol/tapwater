@@ -150,5 +150,60 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // Forward lead to matching installer partners
+  try {
+    const { data: partners } = await supabase
+      .from("installer_partners")
+      .select("id, company_name, contact_name, email, coverage_regions, coverage_postcodes")
+      .eq("status", "active");
+
+    if (partners && partners.length > 0 && resendKey) {
+      const postcodePrefix = postcode.replace(/[0-9]/g, "");
+      const matchedPartners = partners.filter((p: { coverage_postcodes: string[] | null }) => {
+        if (p.coverage_postcodes && p.coverage_postcodes.length > 0) {
+          return p.coverage_postcodes.some((cp: string) =>
+            postcode.startsWith(cp) || postcodePrefix === cp
+          );
+        }
+        return false;
+      });
+
+      if (matchedPartners.length > 0) {
+        const resend = new Resend(resendKey);
+        for (const partner of matchedPartners.slice(0, 3)) {
+          await resend.emails.send({
+            from: "TapWater.uk Leads <alerts@tapwater.uk>",
+            to: partner.email,
+            subject: `New water softener lead in ${postcode}`,
+            html: `
+<h2>New Water Softener Lead</h2>
+<p>A homeowner in your coverage area has requested water softener quotes.</p>
+<table style="border-collapse:collapse;">
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Name:</td><td>${name}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Phone:</td><td>${phone}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Email:</td><td>${email}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Postcode:</td><td>${postcode}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Hardness:</td><td>${hardnessValue ? `${Math.round(hardnessValue)} mg/L (${hardnessLabel})` : "Unknown"}</td></tr>
+</table>
+<p style="margin-top:16px;color:#666;font-size:13px;">This lead was sent to up to 3 installers in the area. Please contact the homeowner within 24 hours.</p>
+<p style="color:#999;font-size:12px;">TapWater.uk Lead Service</p>`,
+          });
+        }
+
+        // Update lead status to forwarded
+        await supabase
+          .from("softener_leads")
+          .update({ status: "forwarded", forwarded_at: new Date().toISOString() })
+          .eq("postcode_district", postcode)
+          .eq("email", email)
+          .eq("status", "new")
+          .order("created_at", { ascending: false })
+          .limit(1);
+      }
+    }
+  } catch (err) {
+    console.error("[softener-leads] Installer forwarding error:", err);
+  }
+
   return NextResponse.json({ ok: true });
 }
