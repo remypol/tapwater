@@ -5,6 +5,7 @@ import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
+import { getAllIncidentSlugs } from "@/lib/incidents";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -71,6 +72,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Include ALL postcodes with data (not just scored ones) so the sitemap
   // covers every indexable page — city pages and nearby links point to these.
   const allDistricts = await getAllPostcodeDistricts();
+
+  const incidentSlugs = await getAllIncidentSlugs();
+  const newsPaths = incidentSlugs.map((slug) => ({
+    url: `${BASE_URL}/news/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.7,
+  }));
 
   const postcodePaths = await Promise.all(
     allDistricts.map(async (district) => {
@@ -270,6 +279,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
+    {
+      url: `${BASE_URL}/news`,
+      lastModified: new Date(),
+      changeFrequency: "hourly" as const,
+      priority: 0.9,
+    },
+    ...newsPaths,
     ...regionPaths,
     ...cityPaths,
     ...postcodePaths,

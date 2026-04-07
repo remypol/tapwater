@@ -75,6 +75,14 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${instrumentSerif.variable} ${spaceMono.variable}`}
     >
+      <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          href="/news/rss.xml"
+          title="TapWater.uk Water Incident News"
+        />
+      </head>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         strategy="lazyOnload"
