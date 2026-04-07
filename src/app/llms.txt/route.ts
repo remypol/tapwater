@@ -21,6 +21,7 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - London scores lowest of any UK region at 8.3/10
 - Wales and North West England score highest at 9.5/10
 - All UK tap water meets legal safety standards — lower scores reflect levels relative to WHO guidelines
+- Over 60% of England has hard water above 200 mg/L — a water softener can save £200+/year in energy and appliance costs
 
 ## How to use this data
 
@@ -65,6 +66,7 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 - [Best Water Filter Jug UK](https://www.tapwater.uk/guides/best-water-filter-jug-uk): Jug filter comparison
 - [How to Test Your Water](https://www.tapwater.uk/guides/how-to-test-your-water): Home testing options
 - [Best Water Softener UK](https://www.tapwater.uk/guides/best-water-softener-uk): Water softener comparison and costs
+- [Water Softeners](https://www.tapwater.uk/filters/water-softeners): Water softener systems for hard water areas
 
 ## Regional water quality
 
