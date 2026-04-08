@@ -166,6 +166,7 @@ export interface ScoreResult {
   contaminantsFlagged: number;
   pfasDetected: boolean;
   pfasLevel: number | null;
+  lowConfidence: boolean;
 }
 
 // Determinands that should only be scored from drinking water (Stream) data,
@@ -290,8 +291,8 @@ export function computeScore(
     return limit !== null;
   }).length;
 
-  if (totalWeight === 0 || scoredCount < 2) {
-    // Not enough data for a meaningful score
+  if (totalWeight === 0 || scoredCount < 1) {
+    // No scoreable data at all
     safetyScore = -1;
     scoreGrade = "insufficient-data";
   } else {
@@ -324,5 +325,6 @@ export function computeScore(
     contaminantsFlagged: flagged,
     pfasDetected,
     pfasLevel,
+    lowConfidence: scoredCount < 3 && safetyScore >= 0,
   };
 }
