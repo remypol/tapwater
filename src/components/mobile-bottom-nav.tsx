@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -89,6 +89,31 @@ export function MobileBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
+  useEffect(() => {
+    function onScroll() {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        // Show when scrolling up or near the top, hide when scrolling down
+        if (y < 50) {
+          setVisible(true);
+        } else if (y < lastScrollY.current) {
+          setVisible(true);
+        } else if (y > lastScrollY.current + 10) {
+          setVisible(false);
+        }
+        lastScrollY.current = y;
+        ticking.current = false;
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isHome = pathname === "/";
   const isNews = pathname.startsWith("/news");
@@ -115,13 +140,15 @@ export function MobileBottomNav() {
       <nav
         role="navigation"
         aria-label="Main navigation"
-        className="sm:hidden fixed bottom-3 left-3 right-3 z-50 flex items-center justify-around"
+        className="sm:hidden fixed bottom-3 left-3 right-3 z-50 flex items-center justify-around motion-reduce:transition-none"
         style={{
           background: "#111827",
           border: "1px solid #1f2937",
           borderRadius: 20,
           boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
           padding: "6px 6px calc(6px + env(safe-area-inset-bottom))",
+          transform: visible ? "translateY(0)" : "translateY(calc(100% + 24px))",
+          transition: "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <NavItem
