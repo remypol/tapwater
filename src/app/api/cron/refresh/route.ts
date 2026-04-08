@@ -167,15 +167,16 @@ export async function GET(request: NextRequest) {
             }
           }
         }
-      } catch {
-        // Continue with EA-only data
+      } catch (streamErr) {
+        const reason = streamErr instanceof Error ? streamErr.message : String(streamErr);
+        console.warn(`  ⚠ ${district}: Stream fetch failed (${reason}), falling back to EA-only`);
       }
 
       if (seedData) {
         await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined);
         console.log(`  ✓ ${district}${streamRecords.length > 0 ? ` (${streamRecords.length} Stream records)` : ""}`);
       } else {
-        console.log(`  ✗ ${district} — no data`);
+        console.warn(`  ✗ ${district} — EA returned no data (postcodes.io may have failed)`);
       }
     } catch (err) {
       console.error(`  ✗ ${district}:`, err);
