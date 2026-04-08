@@ -124,7 +124,7 @@ export default function BestWaterSoftenerGuide() {
         url="https://www.tapwater.uk/guides/best-water-softener-uk"
         datePublished="2026-04-07"
         dateModified={new Date().toISOString().split("T")[0]}
-        authorName="Remy"
+        authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
       <FAQSchema faqs={FAQ_DATA} />
@@ -160,7 +160,7 @@ export default function BestWaterSoftenerGuide() {
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>
-            By <span className="text-ink font-medium">Remy</span>
+            By <span className="text-ink font-medium">TapWater.uk Research</span>
           </span>
           <span>&middot;</span>
           <span>Updated April {year}</span>

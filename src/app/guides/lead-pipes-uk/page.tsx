@@ -68,7 +68,7 @@ export default function LeadPipesGuide() {
           url="https://www.tapwater.uk/guides/lead-pipes-uk"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
-          authorName="Remy"
+          authorName="TapWater.uk Research"
           authorUrl="https://www.tapwater.uk/about"
         />
 
@@ -77,7 +77,7 @@ export default function LeadPipesGuide() {
           The UK&apos;s Lead Pipe Problem: Which Areas Are Most Affected?
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>
           <span>·</span>
           <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>

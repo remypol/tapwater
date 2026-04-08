@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { PersonSchema } from '@/components/json-ld'
 import { getTrustMetrics } from '@/lib/data'
 
 export const metadata: Metadata = {
@@ -26,11 +25,6 @@ export default async function AboutPage() {
   const metrics = await getTrustMetrics();
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-      <PersonSchema
-        name="Remy"
-        url="https://www.tapwater.uk/about"
-        description="Independent water quality researcher and founder of TapWater.uk"
-      />
       <div className="max-w-3xl mx-auto">
         <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5">
@@ -85,12 +79,10 @@ export default async function AboutPage() {
 
         <section className="mt-10">
           <h2 className="font-display text-xl italic text-ink mb-4">
-            Who&apos;s behind this
+            Who we are
           </h2>
           <p className="text-base text-body leading-relaxed mb-4">
-            TapWater.uk is built by <strong className="text-ink">Remy</strong>, an
-            independent data researcher focused on making public environmental data
-            accessible to normal people. The project grew from a simple question:
+            TapWater.uk is an independent research project by <strong className="text-ink">CCC Impact BV</strong>, focused on making public environmental data accessible to normal people. The project grew from a simple question:
             what&apos;s actually in my tap water, and why is it so hard to find out?
           </p>
           <p className="text-base text-body leading-relaxed mb-4">

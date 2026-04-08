@@ -101,7 +101,7 @@ export default async function WaterProblemPage({
         url={`${BASE_URL}/guides/water-problems/${problem.slug}`}
         datePublished="2026-04-06"
         dateModified={dateStr}
-        authorName="Remy"
+        authorName="TapWater.uk Research"
         authorUrl={`${BASE_URL}/about`}
       />
 
@@ -129,7 +129,7 @@ export default async function WaterProblemPage({
           {problem.title}
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>
           <span>·</span>
           <time dateTime={dateStr}>
             Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}

@@ -86,7 +86,7 @@ export default function WaterHardnessCheckerPage() {
           url="https://www.tapwater.uk/hardness"
           datePublished="2026-04-06"
           dateModified={dateModified}
-          authorName="Remy"
+          authorName="TapWater.uk Research"
           authorUrl="https://www.tapwater.uk/about"
         />
 
@@ -94,7 +94,7 @@ export default function WaterHardnessCheckerPage() {
           Water Hardness Checker: Is Your Water Hard or Soft? ({year})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-          <span>By <span className="text-ink font-medium">Remy</span></span>
+          <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>
           <span>·</span>
           <time dateTime={dateModified}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
           <span>·</span>
