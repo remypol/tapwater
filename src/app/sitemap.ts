@@ -6,6 +6,7 @@ import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
 import { getAllIncidentSlugs } from "@/lib/incidents";
+import { BRAND_COMPARISON_PAIRS } from "@/lib/brand-comparisons";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -167,6 +168,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: latestDataDate,
         changeFrequency: "weekly" as const,
         priority: 0.7,
+      },
+    ]),
+    // Brand filter comparison pages (both directions)
+    ...BRAND_COMPARISON_PAIRS.flatMap(([a, b]) => [
+      {
+        url: `${BASE_URL}/compare/filter/${a}/vs/${b}`,
+        lastModified: latestDataDate,
+        changeFrequency: "monthly" as const,
+        priority: 0.75,
+      },
+      {
+        url: `${BASE_URL}/compare/filter/${b}/vs/${a}`,
+        lastModified: latestDataDate,
+        changeFrequency: "monthly" as const,
+        priority: 0.75,
       },
     ]),
     {
