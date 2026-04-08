@@ -303,7 +303,7 @@ export default async function ComparePage() {
               </h2>
             </div>
             <p className="text-sm text-muted mt-1 mb-5">
-              Average water quality scores ranked by supplier.
+              Average postcode safety score per supplier — not compliance rate.
             </p>
 
             <div className="card overflow-hidden">
@@ -311,8 +311,8 @@ export default async function ComparePage() {
               <div className="hidden sm:grid sm:grid-cols-[40px_1fr_100px_100px] gap-4 px-4 py-2.5 bg-wash border-b border-rule text-xs text-faint uppercase tracking-wider font-medium">
                 <span>#</span>
                 <span>Supplier</span>
-                <span className="text-right">Avg score</span>
-                <span className="text-right">Areas</span>
+                <span className="text-right">Avg safety score</span>
+                <span className="text-right">Postcodes</span>
               </div>
 
               {suppliers.map((s, i) => (
