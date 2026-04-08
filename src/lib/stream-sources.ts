@@ -123,7 +123,8 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "camel",
     dateFormat: "string",
   },
-  "south-east-water": {
+  // south-east-water: NOT on Stream portal. Do not confuse with SES Water.
+  "ses-water": {
     orgId: STREAM_ORG,
     services: [
       { year: 2025, serviceName: "SES_Water_Water_Quality_250515" },
