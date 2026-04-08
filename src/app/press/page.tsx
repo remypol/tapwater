@@ -49,50 +49,63 @@ const STORY_LABELS: Record<string, string> = {
 function StoryCard({ story }: { story: PressStoryData }) {
   const accent = STORY_ACCENTS[story.slug] ?? STORY_ACCENTS["worst-lead"];
   const label = STORY_LABELS[story.slug] ?? "Data";
-  const previewEntries = story.entries.slice(0, 3);
+  const previewEntries = story.entries.slice(0, 5);
 
   return (
     <article className="card flex flex-col overflow-hidden">
       {/* Coloured top bar */}
       <div className={`h-[3px] w-full ${accent.bar}`} />
 
-      <div className="flex flex-col flex-1 p-6 gap-5">
+      <div className="flex flex-col flex-1 p-7 gap-6">
         {/* Topic pill + headline */}
         <div>
           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider ${accent.badge}`}>
             {label}
           </span>
-          <h3 className="font-display text-xl text-ink mt-2 leading-snug">
+          <h3 className="font-display text-2xl text-ink mt-3 leading-snug">
             {story.headline}
           </h3>
         </div>
 
-        {/* Key stat */}
-        <div className="border-l-2 border-[var(--color-rule)] pl-4">
-          <p className={`font-data text-3xl font-bold ${accent.stat}`}>
+        {/* Lede — editorial hook */}
+        <p className="text-body text-sm leading-relaxed">
+          {story.lede}
+        </p>
+
+        {/* Key stat — within narrative */}
+        <div className={`border-l-[3px] pl-4`} style={{ borderColor: `var(--color-rule)` }}>
+          <p className={`font-data text-4xl font-bold ${accent.stat}`}>
             {story.keyStat}
           </p>
-          <p className="text-xs text-muted mt-0.5 leading-tight">
+          <p className="text-xs text-muted mt-1 leading-tight">
             {story.keyStatLabel}
           </p>
         </div>
 
-        {/* Top 3 preview */}
-        <div className="space-y-1.5">
+        {/* Context paragraph */}
+        <p className="text-muted text-xs leading-relaxed border-t border-[var(--color-rule)] pt-5">
+          {story.context}
+        </p>
+
+        {/* Top 5 preview */}
+        <div className="space-y-0">
+          <p className="text-[10px] uppercase tracking-[0.12em] text-faint font-semibold mb-2">
+            Top {previewEntries.length}
+          </p>
           {previewEntries.map((entry) => (
             <div
               key={entry.rank}
-              className="flex items-baseline justify-between gap-3 py-1.5 border-b border-[var(--color-rule)] last:border-b-0"
+              className="flex items-baseline justify-between gap-3 py-2 border-b border-[var(--color-rule)] last:border-b-0"
             >
-              <div className="flex items-baseline gap-2 min-w-0">
-                <span className="font-data text-xs text-faint w-4 shrink-0 tabular-nums">
+              <div className="flex items-baseline gap-2.5 min-w-0">
+                <span className="font-data text-[11px] text-faint w-4 shrink-0 tabular-nums">
                   {entry.rank}.
                 </span>
                 <div className="min-w-0">
                   <span className="text-sm font-semibold text-ink">
                     {entry.label}
                   </span>
-                  <span className="text-xs text-muted ml-1.5 truncate">
+                  <span className="text-xs text-muted ml-1.5">
                     {entry.location.replace(/^(BEST|WORST) — /, "")}
                   </span>
                 </div>
@@ -102,16 +115,23 @@ function StoryCard({ story }: { story: PressStoryData }) {
               </span>
             </div>
           ))}
-          <p className="text-xs text-faint pt-1">
-            + {story.entries.length - 3} more in the full dataset
-          </p>
+          {story.entries.length > 5 && (
+            <p className="text-xs text-faint pt-2">
+              + {story.entries.length - 5} more in the full dataset
+            </p>
+          )}
         </div>
+
+        {/* Methodology note */}
+        <p className="text-[11px] text-faint leading-relaxed italic">
+          {story.methodology}
+        </p>
 
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Actions */}
-        <div className="flex items-center gap-3 flex-wrap pt-1">
+        {/* Actions row */}
+        <div className="flex items-center gap-3 flex-wrap border-t border-[var(--color-rule)] pt-5">
           <a
             href={`/api/press/data/${story.slug}`}
             download
@@ -127,21 +147,26 @@ function StoryCard({ story }: { story: PressStoryData }) {
             View full rankings
             <ExternalLink className="w-3 h-3" />
           </Link>
+
+          {/* Cite this — details/summary */}
+          <details className="group ml-auto">
+            <summary className="cursor-pointer list-none flex items-center gap-1.5 text-xs text-muted hover:text-ink transition-colors select-none">
+              <Copy className="w-3 h-3" />
+              <span>Cite this</span>
+              <ChevronRight className="w-3 h-3 transition-transform group-open:rotate-90" />
+            </summary>
+            <div className="absolute mt-2 max-w-sm p-3 rounded-lg bg-[var(--color-wash)] border border-[var(--color-rule)] z-10 shadow-lg">
+              <p className="font-data text-[11px] text-muted leading-relaxed whitespace-pre-wrap">
+                {story.citation}
+              </p>
+            </div>
+          </details>
         </div>
 
-        {/* Cite this — details/summary */}
-        <details className="group">
-          <summary className="cursor-pointer list-none flex items-center gap-1.5 text-xs text-muted hover:text-ink transition-colors select-none">
-            <Copy className="w-3 h-3" />
-            <span>Cite this</span>
-            <ChevronRight className="w-3 h-3 transition-transform group-open:rotate-90" />
-          </summary>
-          <div className="mt-3 p-3 rounded-lg bg-[var(--color-wash)] border border-[var(--color-rule)]">
-            <p className="font-data text-[11px] text-muted leading-relaxed whitespace-pre-wrap">
-              {story.citation}
-            </p>
-          </div>
-        </details>
+        {/* Last updated */}
+        <p className="text-[10px] text-faint">
+          Data last refreshed: {story.lastUpdated}
+        </p>
       </div>
     </article>
   );
@@ -293,7 +318,7 @@ Based on Environment Agency Water Quality Archive data. ${year}.`;
           </p>
 
           {stories.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {stories.map((story) => (
                 <StoryCard key={story.slug} story={story} />
               ))}
