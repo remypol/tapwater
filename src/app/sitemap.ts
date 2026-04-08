@@ -51,6 +51,9 @@ const GUIDE_SLUGS = [
   "best-water-filter-pfas",
   "best-water-filter-jug-uk",
   "best-water-softener-uk",
+  "water-quality-pregnancy",
+  "water-and-eczema",
+  "moving-house-water-check",
 ];
 
 /**
