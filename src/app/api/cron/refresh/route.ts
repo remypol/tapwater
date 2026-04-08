@@ -7,7 +7,7 @@ import { writePostcodeData, getThamesReadings } from "@/lib/db-writer";
 import type { StreamRecord } from "@/lib/stream-api";
 import { getStreamSource } from "@/lib/stream-sources";
 import { fetchStreamData } from "@/lib/stream-api";
-import { getLsoasForDistrict } from "@/lib/lsoa-lookup";
+import { getLsoasForDistricts } from "@/lib/lsoa-lookup";
 import { getSupplier } from "@/lib/suppliers";
 
 export const maxDuration = 300;
@@ -30,7 +30,7 @@ export const maxDuration = 300;
  * The next cron invocation starts a fresh run.
  */
 
-const BATCH_SIZE = 6;
+const BATCH_SIZE = 12;
 
 export async function GET(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
@@ -132,6 +132,9 @@ export async function GET(request: NextRequest) {
 
   console.log(`[cron] Batch ${batchIndex + 1}/${totalBatches}: postcodes ${start}-${end - 1}`);
 
+  // Pre-fetch LSOAs for all districts in this batch (parallel, single await)
+  const batchLsoas = await getLsoasForDistricts(batch);
+
   let processed = 0;
 
   for (const district of batch) {
@@ -144,7 +147,7 @@ export async function GET(request: NextRequest) {
           const supplier = getSupplier(seedData.city);
           const streamSource = getStreamSource(supplier.id);
           if (streamSource) {
-            const lsoas = await getLsoasForDistrict(district);
+            const lsoas = batchLsoas.get(district) ?? [];
             if (lsoas.length > 0) {
               streamRecords = await fetchStreamData(streamSource, lsoas);
             }

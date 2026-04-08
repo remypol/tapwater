@@ -29,3 +29,27 @@ export async function getLsoasForDistrict(district: string): Promise<string[]> {
   // Deduplicate
   return [...new Set(data.map((row) => row.lsoa_code))];
 }
+
+/**
+ * Batch resolve multiple postcode districts to their LSOA codes in parallel.
+ * Returns a Map of district → LSOA codes.
+ */
+export async function getLsoasForDistricts(
+  districts: string[],
+): Promise<Map<string, string[]>> {
+  const result = new Map<string, string[]>();
+  if (!supabase || districts.length === 0) return result;
+
+  const resolved = await Promise.all(
+    districts.map(async (district) => ({
+      district,
+      lsoas: await getLsoasForDistrict(district),
+    })),
+  );
+
+  for (const { district, lsoas } of resolved) {
+    result.set(district, lsoas);
+  }
+
+  return result;
+}
