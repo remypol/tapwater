@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import { NavLinks } from "@/components/nav-links";
 import { Logo } from "@/components/logo";
 
@@ -21,11 +20,8 @@ export function Header() {
           <Logo size="sm" />
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop nav — hidden below sm, bottom bar handles mobile */}
         <NavLinks links={navLinks} />
-
-        {/* Mobile hamburger + slide-down panel */}
-        <MobileNav navLinks={navLinks} />
       </div>
     </header>
   );
