@@ -27,20 +27,23 @@ export function PfasBanner({ detected, level, postcode }: PfasBannerProps) {
       <div className="mt-2 space-y-1">
         <p className="text-sm text-violet-800">
           PFAS — known as &apos;forever chemicals&apos; — were found at{" "}
-          <span className="font-data font-semibold text-violet-700">
-            {level !== null ? level : "—"}
-          </span>
-          {" "}µg/L in water tests near {postcode}. The UK doesn&apos;t have a legal limit for these yet.
+          <Link
+            href="/pfas"
+            className="font-data font-semibold text-violet-700 hover:text-violet-900 underline underline-offset-2"
+          >
+            {level !== null ? level : "—"} µg/L
+          </Link>
+          {" "}in water tests near {postcode}. The UK doesn&apos;t have a legal limit for these yet.
         </p>
       </div>
 
       {/* Links */}
       <div className="mt-3 flex flex-wrap gap-4">
         <Link
-          href="/contaminant/pfas"
+          href="/pfas"
           className="inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 hover:underline underline-offset-2"
         >
-          What are forever chemicals?
+          See PFAS tracker
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
         <Link
