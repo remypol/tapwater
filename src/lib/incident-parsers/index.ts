@@ -2,6 +2,8 @@ import type { RawIncident } from "@/lib/incidents-types";
 import { logSourceCheck, getConsecutiveFailures } from "@/lib/incidents";
 import { parseWaterCompanyFeeds } from "./water-companies";
 import { parseEAIncidents } from "./environment-agency";
+import { parseSevernTrentIncidents } from "./severn-trent";
+import { parseScottishWaterIncidents } from "./scottish-water";
 
 // Any incident affecting more than this many postcode districts is likely
 // a data error or a national bulletin — skip it to avoid polluting the DB
@@ -14,9 +16,11 @@ export async function pollAllSources(): Promise<{
   const allIncidents: RawIncident[] = [];
   const errors: string[] = [];
 
-  const [waterResult, eaResult] = await Promise.allSettled([
+  const [waterResult, eaResult, stResult, swResult] = await Promise.allSettled([
     parseWaterCompanyFeeds(),
     parseEAIncidents(),
+    parseSevernTrentIncidents(),
+    parseScottishWaterIncidents(),
   ]);
 
   // ── Water companies ──
@@ -63,6 +67,54 @@ export async function pollAllSources(): Promise<{
     allIncidents.push(...eaResult.value.incidents);
   } else {
     const msg = `EA parser crashed: ${String(eaResult.reason)}`;
+    errors.push(msg);
+    console.error(msg);
+  }
+
+  // ── Severn Trent (HTML scraper) ──
+  if (stResult.status === "fulfilled") {
+    for (const check of stResult.value.checks) {
+      await logSourceCheck(check).catch(() => {});
+
+      if (check.error) {
+        const failures = await getConsecutiveFailures(
+          check.source,
+          check.source_name,
+        ).catch(() => 0);
+        if (failures >= 3) {
+          errors.push(
+            `[${check.source_name}] ${failures} consecutive failures — last: ${check.error}`,
+          );
+        }
+      }
+    }
+    allIncidents.push(...stResult.value.incidents);
+  } else {
+    const msg = `Severn Trent parser crashed: ${String(stResult.reason)}`;
+    errors.push(msg);
+    console.error(msg);
+  }
+
+  // ── Scottish Water ──
+  if (swResult.status === "fulfilled") {
+    for (const check of swResult.value.checks) {
+      await logSourceCheck(check).catch(() => {});
+
+      if (check.error) {
+        const failures = await getConsecutiveFailures(
+          check.source,
+          check.source_name,
+        ).catch(() => 0);
+        if (failures >= 3) {
+          errors.push(
+            `[${check.source_name}] ${failures} consecutive failures — last: ${check.error}`,
+          );
+        }
+      }
+    }
+    allIncidents.push(...swResult.value.incidents);
+  } else {
+    const msg = `Scottish Water parser crashed: ${String(swResult.reason)}`;
     errors.push(msg);
     console.error(msg);
   }

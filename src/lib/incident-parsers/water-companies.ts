@@ -17,56 +17,10 @@ export interface SourceCheckResult {
 }
 
 export const WATER_COMPANY_FEEDS: WaterCompanyFeed[] = [
-  {
-    supplierId: "thames-water",
-    name: "Thames Water",
-    feedUrl: "https://www.thameswater.co.uk/api/incidents/live",
-  },
-  {
-    supplierId: "united-utilities",
-    name: "United Utilities",
-    feedUrl: "https://www.unitedutilities.com/api/service-updates",
-  },
-  {
-    supplierId: "severn-trent",
-    name: "Severn Trent",
-    feedUrl: "https://www.stwater.co.uk/api/incidents",
-  },
-  {
-    supplierId: "yorkshire-water",
-    name: "Yorkshire Water",
-    feedUrl: "https://www.yorkshirewater.com/api/service-updates",
-  },
-  {
-    supplierId: "anglian-water",
-    name: "Anglian Water",
-    feedUrl: "https://www.anglianwater.co.uk/api/incidents",
-  },
-  {
-    supplierId: "southern-water",
-    name: "Southern Water",
-    feedUrl: "https://www.southernwater.co.uk/api/incidents",
-  },
-  {
-    supplierId: "south-west-water",
-    name: "South West Water",
-    feedUrl: "https://www.southwestwater.co.uk/api/incidents",
-  },
-  {
-    supplierId: "welsh-water",
-    name: "Welsh Water",
-    feedUrl: "https://www.dwrcymru.com/api/incidents",
-  },
-  {
-    supplierId: "northumbrian-water",
-    name: "Northumbrian Water",
-    feedUrl: "https://www.nwl.co.uk/api/incidents",
-  },
-  {
-    supplierId: "scottish-water",
-    name: "Scottish Water",
-    feedUrl: "https://www.scottishwater.co.uk/api/incidents",
-  },
+  // All 10 original feeds removed — they used fabricated API URLs
+  // that return 403/404. Real parsers are in severn-trent.ts and
+  // scottish-water.ts. Additional feeds can be added here as
+  // companies publish real APIs.
 ];
 
 function classifyIncident(title: string, description: string): {
