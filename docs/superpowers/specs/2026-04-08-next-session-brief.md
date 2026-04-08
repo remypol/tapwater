@@ -5,113 +5,135 @@
 
 ---
 
-## What was completed (April 7-8 session)
+## What was completed (April 8 session)
 
-### SEO & Content (9 commits)
-- Fixed homepage map (N+1 query, 2.7min → 1.3s)
-- Meta titles ≤60 chars, descriptions ≤155 chars across 27 files
-- Fixed 120 orphan postcode pages via city/region linking
-- Added 12 new contaminant pages (8→20 total)
-- Created "Best Water Softener UK" guide
-- Added contaminant cross-links in postcode data tables
-- GEO summary paragraphs on all city/region pages
-- Expanded llms.txt with key facts for AI citation
+### Priority 1: News & Alerts System (17 commits)
+- Fully automated incident detection, AI article generation, publishing pipeline
+- Supabase tables: `incidents`, `source_checks`, `incident_logs`
+- Cron at `/api/cron/incidents` polling every 15 minutes
+- Water company + EA source parsers (note: water company feeds use placeholder URLs — see "What needs fixing" below)
+- AI article generation via Claude API with validation + fallback template
+- `/news` hub page + `/news/[slug]` article page (editorial + sidebar layout)
+- Alert banner component on postcode/city pages (auto-appears/disappears)
+- RSS feed at `/news/rss.xml` + Google News sitemap at `/news/sitemap.xml`
+- On-demand revalidation via `revalidatePath` when incidents change
+- Stale incident handling: 48h admin email alert, 7d auto-resolve
+- `ANTHROPIC_API_KEY` set in Vercel env vars
 
-### Revenue Architecture (11 commits)
-- Tiered affiliate model: Amazon <£100, direct >£100 with UTM tracking
-- Brand-aware CTAs ("Check price on Amazon" vs "Buy from Waterdrop")
-- Water softener category + Waterdrop WHR01 (availableInUk: false, single boolean flip to activate)
-- Installer partner signup page (/partners) + API + Supabase table
-- Auto-forwarding leads to matched installers by postcode
+### Priority 2: Outreach Infrastructure (6 commits)
+- `/press` page with 5 editorial data stories (live stats + CSV downloads)
+- `/api/press/data/[slug]` CSV download endpoint for 5 story types
+- Logo SVGs (dark/light), attribution badge SVG
+- Media kit section: colours, typography, boilerplate
+- Embed & cite section: widget code, badge code, citation text
+- Press link in footer
 
-### PFAS City Pages (8 commits)
-- pfas_detections Supabase table + data access layer
-- Weekly PFAS cron (EA API, 50+ compounds, 29 cities, 3yr history)
-- Interactive Mapbox GL JS maps with color-coded markers
-- Pure SVG trend chart + CSS compound bar chart
-- National tracker (/pfas) + 29 city pages (/pfas/[city])
+### Priority 4: Content Pages (7 commits)
+- 4 brand comparison pages at `/compare/filter/[brand1]/vs/[brand2]` (Brita vs ZeroWater, Brita vs Waterdrop, ZeroWater vs Waterdrop, Waterdrop vs Frizzlife) — data-driven template, 8 URLs
+- Config at `src/lib/brand-comparisons.ts`
+- 3 health/lifestyle guides: `/guides/water-quality-pregnancy`, `/guides/water-and-eczema`, `/guides/moving-house-water-check`
+- All added to sitemap
 
-### 2026 Site Quality (8 commits)
-- Sticky header with backdrop blur + active nav highlighting
-- Scroll-to-top button on long pages
-- Dark mode contrast fixes (bg-white → semantic colors)
-- CSP for Mapbox tiles/workers
-- OG images for city + PFAS pages
-- Schema validation (reviewCount, distribution, FAQ truncation)
-- Accessibility (skip link, ARIA labels, WCAG AA contrast)
-- Mobile UX (scrollZoom disabled, 44px touch targets)
-
-### Traffic Growth Features (5 commits)
-- City page titles rewritten for search intent ("Is London Tap Water Safe?")
-- Embeddable water quality widget (API + JS + info page) — hardened with XSS escaping, dark mode, CORS, loading states
-- 6 data-driven rankings pages (worst lead/nitrate/PFAS, hardest/best/worst water)
-- 48 city-vs-city comparison pages
-- Annual UK Water Quality Report 2026
-
-### Data Freshness (1 commit)
-- Fixed 280 stale postcodes by adding 2023 local government reorganisation names to supplier map
+### UX Improvements (4 commits)
+- Mobile bottom nav: floating pill bar replacing hamburger menu
+  - 5 items: Home, News, Search (CTA), Rankings, More
+  - "More" opens bottom sheet with remaining nav + postcode search
+  - Auto-hides on scroll down, shows on scroll up (iOS Safari pattern)
+  - Components: `src/components/mobile-bottom-nav.tsx`, `src/components/bottom-sheet.tsx`
+- Font size readability pass across 21 files (9px→11px, 10px/11px→12px, 12px→14px on body content)
+- PFAS stat now clickable (links to /pfas tracker)
+- Supplier score labels clarified on compare page
+- Author attribution changed from "Remy" to "CCC Impact BV" / "TapWater.uk Research" across 24 files
 
 ---
 
-## What to build next session
+## What needs fixing next session
 
-### Priority 1: News/Alerts Section
-**Why:** When water incidents happen (sewage discharges, boil notices, PFAS discoveries), thousands search frantically. Currently zero mechanism to capture this traffic.
+### CRITICAL: Incident Feed URLs Are Broken
 
-**Design needed:**
-- `/news` hub + `/news/[slug]` for individual articles
-- Markdown-based content in `/data/news/` directory (no CMS)
-- Each article: `.md` file with frontmatter (title, date, cities affected, type)
-- Dynamic route renders markdown to HTML
-- RSS feed at `/news/rss.xml` for Google News inclusion
-- Consider: automated monitoring of water company RSS feeds / Twitter for incident detection
-- Consider: AI-assisted article drafting from incident data
+The water company incident parsers in `src/lib/incident-parsers/water-companies.ts` use **placeholder/fabricated API URLs** that don't exist. All 10 water company feeds return 403 or 404. The cron runs every 15 min and logs 462 failed checks.
 
-**Technical decisions to make:**
-- Markdown parsing library (next-mdx-remote? remark/rehype? gray-matter for frontmatter?)
-- RSS generation (custom route or library?)
-- Google News sitemap format requirements
-- Content workflow: how does a new article get published? (git commit? admin UI?)
+**No UK water company has a public incident API.** Here's what actually exists:
 
-### Priority 2: Outreach Infrastructure
-**Why:** DR ~0 with no backlinks. Need infrastructure to support press outreach.
+| Company | Real Incident Page | Feasibility |
+|---------|-------------------|-------------|
+| **Severn Trent** | `stwater.co.uk/in-my-area/incidents/` | **EASY — server-rendered HTML cards, structured, scrapable** |
+| **Scottish Water** | Overflow API at `api.scottishwater.co.uk/overflow-event-monitoring/v1` | **EASY — real JSON API, updates hourly** |
+| Thames Water | `thameswater.co.uk/network-latest` | Medium — SPA, needs API reverse-engineering |
+| United Utilities | `unitedutilities.com/emergencies/up-my-street/` | Medium — Google Maps + FindApi |
+| Yorkshire Water | `yorkshirewater.com/your-water/view-report-problems/` | Medium — custom JS map modules |
+| Southern Water | `southernwater.co.uk/works-or-issues-in-my-area/` | Medium — Vue.js SPA |
+| South West Water | `southwestwater.co.uk/.../service-updates` | Medium — Nuxt.js SPA |
+| Anglian Water | `anglianwater.co.uk/your-local-area/report-an-issue` + digdat | Hard — iframe + 3rd party platform |
+| Welsh Water | `dwrcymru.com/en/help-advice/in-your-area` + digdat | Hard — digdat platform |
+| Northumbrian Water | `nwl.co.uk/check` | Medium — FindApi + Azure |
 
-**Build:**
-- Press/media page (`/press`) with downloadable data assets, press contact, embargoed data
-- Data story templates: auto-generate "Top 10 worst postcodes for X" articles from live data
-- Social sharing optimization: ensure all pages have compelling OG images + descriptions
-- Media kit: TapWater.uk logo pack, brand guidelines, boilerplate about text
+**Recommended fix:**
+1. Replace `parseWaterCompanyFeeds()` in `src/lib/incident-parsers/water-companies.ts` with real parsers for Severn Trent (HTML scrape) and Scottish Water (JSON API)
+2. Disable the 8 broken placeholder feeds to stop wasting cron cycles
+3. EA Flood Monitoring already works (returns 200, just no incidents currently)
+4. Phase 2: reverse-engineer Thames Water and Southern Water SPA APIs
 
-### Priority 3: Remaining Technical Debt
-- Scottish Water data source investigation (442 postcodes stuck on EA-only)
-- Verify PFAS cron runs successfully on first Sunday execution
-- Run Lighthouse audit and address any remaining CWV issues
+### Thames Water Data Gap (1,198 postcodes stuck on ea-only)
+
+Thames Water does NOT publish to the Stream Water Data Portal (`data.streamwater.co.uk`). This means all Thames Water postcodes (SL, TW, W, SW, SE, etc.) have only EA environmental monitoring data — some dating back to year 2000.
+
+**Root cause:** `src/lib/stream-sources.ts` has no entry for `"thames-water"`. Thames Water, Scottish Water, and Wessex Water are the three holdouts.
+
+**The Stream portal has been checked thoroughly** — the org `XxS6FebPX29TRGDJ` has zero Thames Water services. This is confirmed in the original spec at `docs/superpowers/specs/2026-04-02-stream-tap-water-integration-design.md`.
+
+**Potential alternatives to investigate:**
+- Thames Water's own Open Data portal at `data.thameswater.co.uk` (has EDM data, may have drinking water quality)
+- DWI annual returns data (published per company, not real-time)
+- Direct Thames Water contact requesting data access
+
+### PFAS Cron Not Yet Executed
+
+The PFAS cron (`/api/cron/pfas`, schedule `0 3 * * 0` = Sundays 3am) has zero rows in `pfas_detections`. It should fire next Sunday April 12. Verify after that date.
+
+### Priority 3 Technical Debt (deferred)
+- Scottish Water data source (442 postcodes, separate from the 1,198 Thames Water ea-only issue)
+- Lighthouse audit
+- Google Search Console check (once pages are indexed)
 - Verify all schema validates against Google Rich Results Test
-- Check Google Search Console for indexing issues once pages are crawled
-
-### Priority 4: Content That Drives Organic Traffic
-- Brand comparison guides ("Brita vs ZeroWater UK", "Waterdrop vs Frizzlife")
-- Health-related water guides ("water quality and pregnancy", "water and eczema")
-- "Moving house? Check your new area's water" content
-- Seasonal content templates (winter pipe advice, summer drought impact)
-
----
-
-## Key metrics to check at session start
-- Google Search Console: how many pages indexed? Any errors?
-- Vercel Analytics: traffic levels, top pages
-- Ahrefs: domain rating, any backlinks acquired?
-- Supabase: softener_leads count, installer_partners signups
-- PFAS cron: did Sunday's run complete successfully?
 
 ---
 
 ## Architecture notes for context
-- Next.js 16, React 19, Tailwind CSS v4
-- Supabase (Postgres) for data storage
-- Vercel for hosting with ISR (revalidate = 86400 on most pages)
-- EA API + Stream Water Data Portal for water quality data
-- Resend for transactional email
-- Mapbox GL JS on PFAS pages (dynamic import)
-- Amazon Associates + Waterdrop Impact + Echo Water Impact for affiliates
-- Widget embed system at /widget with /api/widget/[district]
+
+- **Next.js 16.2.2**, React 19, Tailwind CSS v4
+- **Supabase** (Postgres) — project ID: `zxmqmzzwausjradfyttc`
+- **Vercel** for hosting with ISR (`revalidate = 86400` on most pages, `300` on news pages)
+- **Vercel crons:** refresh (5min), emails (9am daily), pfas (Sunday 3am), incidents (15min)
+- **Resend** for transactional email
+- **Anthropic Claude API** for incident article generation (`ANTHROPIC_API_KEY` in Vercel env)
+- **Mapbox GL JS** on PFAS pages
+- **Affiliate programs:** Amazon Associates, Waterdrop Impact, Echo Water Impact
+- **Widget** embed system at `/widget` with `/api/widget/[district]`
+
+### Key file locations
+- Data access: `src/lib/data.ts`, `src/lib/incidents.ts`, `src/lib/pfas-data.ts`, `src/lib/press-data.ts`
+- Incident parsers: `src/lib/incident-parsers/` (water-companies.ts, environment-agency.ts, postcode-matcher.ts, index.ts)
+- Article generation: `src/lib/incident-article.ts`
+- Stream data sources: `src/lib/stream-sources.ts` (Thames Water MISSING)
+- Brand comparisons: `src/lib/brand-comparisons.ts`
+- Types: `src/lib/types.ts`, `src/lib/incidents-types.ts`
+- Mobile nav: `src/components/mobile-bottom-nav.tsx`, `src/components/bottom-sheet.tsx`
+
+### Database tables
+- `page_data` — postcode-level water quality (2,782 rows: 1,584 stream, 1,198 ea-only)
+- `postcode_districts` — geographic/supplier mapping
+- `pfas_detections` — EA PFAS monitoring (currently 0 rows, awaiting first cron run)
+- `incidents` — auto-detected water incidents (0 rows, feeds need fixing)
+- `source_checks` — cron polling log (462 rows, all failed checks)
+- `incident_logs` — incident state transition audit trail
+- `subscribers` — email newsletter
+- `pipeline_runs` — data refresh pipeline status
+- `drinking_water_readings` — raw Stream tap water test results
+
+### Design system
+- Fonts: DM Sans (body), Instrument Serif (display/headings), Space Mono (data/numbers)
+- Colours: `--color-safe` #16a34a, `--color-warning` #d97706, `--color-danger` #dc2626, `--color-accent` #0891b2
+- Company: CCC Impact BV, branded as "TapWater.uk Research" for authorship
+- Contact: press@tapwater.uk, hello@tapwater.uk, data@tapwater.uk
+- Tone: plain language, no jargon, no emojis as icons, audience is normal people
