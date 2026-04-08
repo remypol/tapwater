@@ -191,7 +191,7 @@ export default async function HomePage() {
                       <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
                         {item.safetyScore.toFixed(1)}
                       </span>
-                      <span className="text-[10px] text-faint uppercase tracking-wider">/10</span>
+                      <span className="text-xs text-faint uppercase tracking-wider">/10</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">
@@ -245,7 +245,7 @@ export default async function HomePage() {
                     <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
                       {item.safetyScore.toFixed(1)}
                     </span>
-                    <span className="text-[10px] text-faint uppercase tracking-wider">/10</span>
+                    <span className="text-xs text-faint uppercase tracking-wider">/10</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">

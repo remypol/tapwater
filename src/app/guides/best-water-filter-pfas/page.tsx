@@ -126,7 +126,7 @@ function ProductReview({
           {product.certifications.map((cert) => (
             <span
               key={cert}
-              className="text-[10px] bg-gray-100 text-faint rounded px-1.5 py-0.5"
+              className="text-xs bg-gray-100 text-faint rounded px-1.5 py-0.5"
             >
               {cert}
             </span>
@@ -175,15 +175,15 @@ function ProductReview({
       {/* Specs row */}
       <div className="grid grid-cols-3 gap-3 mt-5 pt-4 border-t border-rule">
         <div>
-          <p className="text-[10px] text-faint uppercase tracking-wider">Flow rate</p>
+          <p className="text-xs text-faint uppercase tracking-wider">Flow rate</p>
           <p className="font-data text-sm text-ink font-medium">{product.flowRate ?? "\u2014"}</p>
         </div>
         <div>
-          <p className="text-[10px] text-faint uppercase tracking-wider">Filter life</p>
+          <p className="text-xs text-faint uppercase tracking-wider">Filter life</p>
           <p className="font-data text-sm text-ink font-medium">{product.filterLife ?? "\u2014"}</p>
         </div>
         <div>
-          <p className="text-[10px] text-faint uppercase tracking-wider">Annual cost</p>
+          <p className="text-xs text-faint uppercase tracking-wider">Annual cost</p>
           <p className="font-data text-sm text-ink font-medium">&pound;{product.annualCost}/yr</p>
         </div>
       </div>

@@ -231,15 +231,15 @@ export function SoftenerLeadForm({
           <div className="mt-5 flex gap-6 justify-center pt-4 border-t border-rule">
             <div className="text-center">
               <p className="text-base font-bold text-ink">100%</p>
-              <p className="text-[11px] text-muted">free, no obligation</p>
+              <p className="text-xs text-muted">free, no obligation</p>
             </div>
             <div className="text-center">
               <ShieldCheck className="w-4 h-4 text-muted mx-auto mb-0.5" />
-              <p className="text-[11px] text-muted">vetted installers</p>
+              <p className="text-xs text-muted">vetted installers</p>
             </div>
             <div className="text-center">
               <p className="text-base font-bold text-ink">24h</p>
-              <p className="text-[11px] text-muted">response time</p>
+              <p className="text-xs text-muted">response time</p>
             </div>
           </div>
         </>

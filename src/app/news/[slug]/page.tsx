@@ -127,7 +127,7 @@ export default async function NewsArticlePage({ params }: Props) {
             {/* Type badge + date */}
             <div className="flex items-center gap-2 flex-wrap mb-4">
               <span
-                className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
+                className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
                 style={{ backgroundColor: config.color }}
               >
                 {config.label}
@@ -137,13 +137,13 @@ export default async function NewsArticlePage({ params }: Props) {
               </span>
               {incident.status === "active" ? (
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border"
+                  className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border"
                   style={{ color: config.color, borderColor: config.color }}
                 >
                   Active
                 </span>
               ) : (
-                <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border text-[var(--color-faint)] border-[var(--color-rule)]">
+                <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border text-[var(--color-faint)] border-[var(--color-rule)]">
                   Resolved
                 </span>
               )}

@@ -59,13 +59,13 @@ function ActiveIncidentCard({ incident }: { incident: Incident }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-2">
             <span
-              className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
+              className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
               style={{ backgroundColor: config.color }}
             >
               {config.label}
             </span>
             <span
-              className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border"
+              className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border"
               style={{ color: config.color, borderColor: config.color }}
             >
               Active
@@ -119,7 +119,7 @@ function ResolvedIncidentCard({ incident }: { incident: Incident }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--color-faint)] text-[var(--color-surface)]">
+            <span className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--color-faint)] text-[var(--color-surface)]">
               Resolved
             </span>
             <span className="pill text-xs">
@@ -220,7 +220,7 @@ export default async function NewsPage() {
             ) : (
               <div className="card p-8 text-center">
                 <p className="text-muted text-sm">No water incidents reported</p>
-                <p className="text-faint text-xs mt-1">
+                <p className="text-faint text-sm mt-1">
                   All areas currently clear
                 </p>
               </div>

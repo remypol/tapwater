@@ -98,7 +98,7 @@ function ProductReview({
           {product.certifications.map((cert) => (
             <span
               key={cert}
-              className="text-[10px] bg-gray-100 text-faint rounded px-1.5 py-0.5"
+              className="text-xs bg-gray-100 text-faint rounded px-1.5 py-0.5"
             >
               {cert}
             </span>

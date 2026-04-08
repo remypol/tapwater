@@ -201,7 +201,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
 
       {/* Legend */}
       <div
-        className="absolute bottom-3 left-3 flex items-center gap-2 rounded-lg py-1.5 px-2.5 text-[10px] border border-rule"
+        className="absolute bottom-3 left-3 flex items-center gap-2 rounded-lg py-1.5 px-2.5 text-xs border border-rule"
         style={{ background: "var(--color-surface)" }}
       >
         <span className="flex items-center gap-1 text-muted">

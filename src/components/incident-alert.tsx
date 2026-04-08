@@ -39,7 +39,7 @@ export function IncidentAlert({ incident }: { incident: Incident }) {
               Active {INCIDENT_TYPE_LABELS[incident.type]}
             </span>
             <span
-              className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
+              className="text-xs font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-white"
               style={{ backgroundColor: config.color }}
             >
               Live

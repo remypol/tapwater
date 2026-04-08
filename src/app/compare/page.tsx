@@ -151,7 +151,7 @@ function RankingCard({
           >
             {data.safetyScore.toFixed(1)}
           </span>
-          <span className="text-[10px] text-faint uppercase tracking-wider">
+          <span className="text-xs text-faint uppercase tracking-wider">
             /10
           </span>
         </div>

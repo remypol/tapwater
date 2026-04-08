@@ -262,7 +262,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                 {/* Three-column grid */}
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <div className="text-[10px] uppercase tracking-wider text-faint mb-1">
+                    <div className="text-xs uppercase tracking-wider text-faint mb-1">
                       Found
                     </div>
                     <div className="font-data text-sm text-ink">
@@ -270,7 +270,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-wider text-faint mb-1">
+                    <div className="text-xs uppercase tracking-wider text-faint mb-1">
                       Safe level
                     </div>
                     <div className={`font-data text-sm ${reading.ukLimit !== null ? 'text-ink' : 'text-faint'}`}>
@@ -278,7 +278,7 @@ export function ContaminantTable({ readings }: { readings: ContaminantReading[] 
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-wider text-faint mb-1">
+                    <div className="text-xs uppercase tracking-wider text-faint mb-1">
                       WHO
                     </div>
                     <div className={`font-data text-sm ${reading.whoGuideline !== null ? 'text-ink' : 'text-faint'}`}>

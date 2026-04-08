@@ -279,7 +279,7 @@ export default async function PostcodePage({ params }: Props) {
                   <p className="text-sm font-medium text-ink">
                     Water hardness: {hardnessValue} mg/L ({hardnessLabel})
                   </p>
-                  <p className="text-xs text-muted mt-0.5">
+                  <p className="text-sm text-muted mt-0.5">
                     {hardnessValue >= 180
                       ? "Hard water — may cause limescale buildup in kettles and pipes"
                       : hardnessValue < 60
@@ -366,7 +366,7 @@ export default async function PostcodePage({ params }: Props) {
                 {data.dataSource === "ea-only" && <> · Tap water tests not yet available for {data.supplier}</>}
               </p>
               {isStale && (
-                <p className="text-xs text-amber-700 bg-[var(--color-warning-light)] border border-amber-200 rounded-lg px-3 py-2 mt-2">
+                <p className="text-sm text-amber-700 bg-[var(--color-warning-light)] border border-amber-200 rounded-lg px-3 py-2 mt-2">
                   This data is {monthsOld > 24 ? `over ${Math.floor(monthsOld / 12)} years` : `${monthsOld} months`} old.
                   {data.dataSource === "ea-only"
                     ? ` The Environment Agency hasn't sampled near ${data.district} recently. Scores reflect the most recent available data.`
@@ -435,7 +435,7 @@ export default async function PostcodePage({ params }: Props) {
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
                   Shower filters
                 </p>
-                <p className="text-xs text-muted mt-1">
+                <p className="text-sm text-muted mt-1">
                   Remove chlorine for better skin and hair
                 </p>
               </Link>
@@ -446,7 +446,7 @@ export default async function PostcodePage({ params }: Props) {
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
                   Test your water
                 </p>
-                <p className="text-xs text-muted mt-1">
+                <p className="text-sm text-muted mt-1">
                   Confirm exactly what&apos;s in your pipes
                 </p>
               </Link>

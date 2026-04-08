@@ -71,7 +71,7 @@ export function ProductCard({ product, highlight, pageType }: ProductCardProps) 
         <div className="mt-4 flex items-center justify-between">
           <div className="flex gap-1.5 flex-wrap">
             {product.certifications.map((cert) => (
-              <span key={cert} className="text-[11px] text-muted bg-wash rounded px-2 py-0.5">
+              <span key={cert} className="text-xs text-muted bg-wash rounded px-2 py-0.5">
                 {cert}
               </span>
             ))}

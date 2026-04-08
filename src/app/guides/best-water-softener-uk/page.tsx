@@ -310,7 +310,7 @@ export default function BestWaterSoftenerGuide() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Unit cost
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">
@@ -321,7 +321,7 @@ export default function BestWaterSoftenerGuide() {
             </p>
           </div>
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Installation
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">
@@ -332,7 +332,7 @@ export default function BestWaterSoftenerGuide() {
             </p>
           </div>
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Annual running
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">

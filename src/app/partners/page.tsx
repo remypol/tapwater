@@ -138,7 +138,7 @@ export default function PartnersPage() {
         {/* ── Stats ──────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Postcodes covered
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">
@@ -147,7 +147,7 @@ export default function PartnersPage() {
             <p className="text-sm text-muted mt-1">UK postcode districts</p>
           </div>
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Hard water coverage
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">
@@ -156,7 +156,7 @@ export default function PartnersPage() {
             <p className="text-sm text-muted mt-1">Has hard or very hard water</p>
           </div>
           <div className="card p-5 text-center">
-            <p className="text-[10px] text-faint uppercase tracking-wider">
+            <p className="text-xs text-faint uppercase tracking-wider">
               Data freshness
             </p>
             <p className="font-data text-2xl font-bold text-ink mt-1">

@@ -178,7 +178,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
         {/* ── Quick verdict card ── */}
         <ScrollReveal delay={0}>
           <div className="mt-8 card border-l-4 border-l-accent p-6 lg:p-8 max-w-3xl">
-            <p className="text-[11px] text-accent font-semibold uppercase tracking-widest mb-3">
+            <p className="text-xs text-accent font-semibold uppercase tracking-widest mb-3">
               Our verdict
             </p>
             <p className="text-base text-body leading-relaxed">
@@ -190,7 +190,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
             </p>
             <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="bg-wash rounded-lg p-4">
-                <p className="text-[10px] text-faint uppercase tracking-wider mb-1">
+                <p className="text-xs text-faint uppercase tracking-wider mb-1">
                   {displayComparison.brand1Label} is best for
                 </p>
                 <p className="text-sm font-medium text-ink">
@@ -198,7 +198,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
                 </p>
               </div>
               <div className="bg-wash rounded-lg p-4">
-                <p className="text-[10px] text-faint uppercase tracking-wider mb-1">
+                <p className="text-xs text-faint uppercase tracking-wider mb-1">
                   {displayComparison.brand2Label} is best for
                 </p>
                 <p className="text-sm font-medium text-ink">
@@ -320,7 +320,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
                     {displayProduct1.removes.map((r) => (
                       <span
                         key={r}
-                        className="inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
+                        className="inline-flex items-center gap-0.5 text-xs bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
                       >
                         <Check className="w-2.5 h-2.5 shrink-0" />
                         {r}
@@ -333,7 +333,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
                     {displayProduct2.removes.map((r) => (
                       <span
                         key={r}
-                        className="inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
+                        className="inline-flex items-center gap-0.5 text-xs bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
                       >
                         <Check className="w-2.5 h-2.5 shrink-0" />
                         {r}
@@ -362,7 +362,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
                       {pt.category}
                     </p>
                     {pt.winner !== null && (
-                      <span className="text-[10px] font-semibold text-accent bg-accent/8 rounded-full px-2.5 py-1">
+                      <span className="text-xs font-semibold text-accent bg-accent/8 rounded-full px-2.5 py-1">
                         {pt.winner === 1
                           ? `${displayComparison.brand1Label} wins`
                           : `${displayComparison.brand2Label} wins`}
@@ -544,7 +544,7 @@ function ComparisonCell({
           <Minus className="w-3.5 h-3.5 text-faint shrink-0" />
         )}
         <p
-          className={`text-[10px] font-semibold uppercase tracking-wider ${
+          className={`text-xs font-semibold uppercase tracking-wider ${
             isWinner ? "text-emerald-700" : "text-faint"
           }`}
         >

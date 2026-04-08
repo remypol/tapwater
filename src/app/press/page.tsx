@@ -59,7 +59,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
       <div className="flex flex-col flex-1 p-7 gap-6">
         {/* Topic pill + headline */}
         <div>
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider ${accent.badge}`}>
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold uppercase tracking-wider ${accent.badge}`}>
             {label}
           </span>
           <h3 className="font-display text-2xl text-ink mt-3 leading-snug">
@@ -89,7 +89,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
 
         {/* Top 5 preview */}
         <div className="space-y-0">
-          <p className="text-[10px] uppercase tracking-[0.12em] text-faint font-semibold mb-2">
+          <p className="text-xs uppercase tracking-[0.12em] text-faint font-semibold mb-2">
             Top {previewEntries.length}
           </p>
           {previewEntries.map((entry) => (
@@ -98,7 +98,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
               className="flex items-baseline justify-between gap-3 py-2 border-b border-[var(--color-rule)] last:border-b-0"
             >
               <div className="flex items-baseline gap-2.5 min-w-0">
-                <span className="font-data text-[11px] text-faint w-4 shrink-0 tabular-nums">
+                <span className="font-data text-xs text-faint w-4 shrink-0 tabular-nums">
                   {entry.rank}.
                 </span>
                 <div className="min-w-0">
@@ -123,7 +123,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
         </div>
 
         {/* Methodology note */}
-        <p className="text-[11px] text-faint leading-relaxed italic">
+        <p className="text-xs text-faint leading-relaxed italic">
           {story.methodology}
         </p>
 
@@ -156,7 +156,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
               <ChevronRight className="w-3 h-3 transition-transform group-open:rotate-90" />
             </summary>
             <div className="absolute mt-2 max-w-sm p-3 rounded-lg bg-[var(--color-wash)] border border-[var(--color-rule)] z-10 shadow-lg">
-              <p className="font-data text-[11px] text-muted leading-relaxed whitespace-pre-wrap">
+              <p className="font-data text-xs text-muted leading-relaxed whitespace-pre-wrap">
                 {story.citation}
               </p>
             </div>
@@ -164,7 +164,7 @@ function StoryCard({ story }: { story: PressStoryData }) {
         </div>
 
         {/* Last updated */}
-        <p className="text-[10px] text-faint">
+        <p className="text-xs text-faint">
           Data last refreshed: {story.lastUpdated}
         </p>
       </div>
@@ -364,7 +364,7 @@ Based on Environment Agency Water Quality Archive data. ${year}.`;
                   <div className="px-4 py-3 border-t border-[var(--color-rule)] flex items-center justify-between gap-2">
                     <div>
                       <p className="text-xs font-medium text-ink">Dark variant</p>
-                      <p className="text-[11px] text-muted">For dark backgrounds</p>
+                      <p className="text-xs text-muted">For dark backgrounds</p>
                     </div>
                     <a
                       href="/press/tapwater-logo-dark.svg"
@@ -390,7 +390,7 @@ Based on Environment Agency Water Quality Archive data. ${year}.`;
                   <div className="px-4 py-3 flex items-center justify-between gap-2">
                     <div>
                       <p className="text-xs font-medium text-ink">Light variant</p>
-                      <p className="text-[11px] text-muted">For light backgrounds</p>
+                      <p className="text-xs text-muted">For light backgrounds</p>
                     </div>
                     <a
                       href="/press/tapwater-logo-light.svg"

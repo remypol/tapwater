@@ -186,7 +186,7 @@ function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
         <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
         <div className="flex items-center gap-0.5 justify-end">
           <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-          <span className="text-[11px] text-muted">{filter.rating}</span>
+          <span className="text-xs text-muted">{filter.rating}</span>
         </div>
       </div>
       <a
@@ -303,7 +303,7 @@ export function FilterCards({ filters }: FilterCardsProps) {
               <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
               <div className="flex items-center gap-0.5 justify-end">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                <span className="text-[11px] text-muted">{filter.rating}</span>
+                <span className="text-xs text-muted">{filter.rating}</span>
               </div>
             </div>
             <a
