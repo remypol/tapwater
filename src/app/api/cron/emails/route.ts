@@ -5,12 +5,20 @@ import { Resend } from "resend";
 import { getNextEmail, shouldSendEmail } from "@/lib/email-sequences";
 import type { SubscriberSequenceState } from "@/lib/types";
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret || cronSecret.length < 24) {
+    return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+  }
+
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const supabase = getSupabase();
   const now = new Date();
