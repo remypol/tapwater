@@ -29,7 +29,7 @@ const SCOTTISH_DISTRICTS: string[] = [
 ];
 
 /** Generate a plausible full postcode from a district code */
-function makeTestPostcode(district: string): string {
+function makeTestPostcodes(district: string): string[] {
   // Common second part patterns that tend to exist
   const suffixes = ["1AA", "1AB", "1AD", "1AE", "1AF", "1AG", "1AH", "1AJ",
                      "1AL", "1AN", "1AP", "1AQ", "1AR", "1AS", "1AT", "1AU",
@@ -49,7 +49,7 @@ const HEADERS = {
 };
 
 async function lookupZone(district: string): Promise<string | null> {
-  const postcodes = makeTestPostcode(district);
+  const postcodes = makeTestPostcodes(district);
 
   for (const postcode of postcodes) {
     try {
@@ -64,7 +64,7 @@ async function lookupZone(district: string): Promise<string | null> {
       const html = await res.text();
 
       // Extract zone name from "Site Name:" followed by <strong>ZoneName</strong>
-      const match = html.match(/<td>\s*Site Name:\s*<\/td>\s*<td>\s*<strong>\s*([^<]+?)\s*<\/strong>/s);
+      const match = html.match(/<td>[\s\S]*?Site Name:[\s\S]*?<\/td>[\s\S]*?<td>[\s\S]*?<strong>\s*([^<]+?)\s*<\/strong>/);
       if (match) {
         return match[1].trim();
       }
