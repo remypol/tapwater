@@ -6,7 +6,8 @@ describe("computeScore", () => {
     const result = computeScore([
       { determinand: "Lead", value: 0.005, unit: "mg/l", date: "2025-01-01" },
     ]);
-    expect(result.safetyScore).toBe(-1); // insufficient data (only 1 param with limit)
+    expect(result.safetyScore).toBe(5); // single param scores (lead at 50% of limit)
+    expect(result.lowConfidence).toBe(true); // <3 scored params
     const leadReading = result.readings.find((r) => r.name === "Lead");
     expect(leadReading).toBeDefined();
     expect(leadReading!.status).toBe("pass");
@@ -73,7 +74,7 @@ describe("computeScore", () => {
     expect(leadReading!.status).toBe("pass");
   });
 
-  it("returns insufficient-data when fewer than 2 scored params", () => {
+  it("returns insufficient-data when no scored params", () => {
     const result = computeScore([
       { determinand: "pH", value: 7.5, unit: "ph", date: "2025-01-01" },
     ]);
