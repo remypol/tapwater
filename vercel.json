@@ -23,6 +23,10 @@
     {
       "path": "/api/cron/thames-water",
       "schedule": "0 4 1 * *"
+    },
+    {
+      "path": "/api/cron/scottish-water",
+      "schedule": "0 5 1 * *"
     }
   ]
 }
