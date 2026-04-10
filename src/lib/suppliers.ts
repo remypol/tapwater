@@ -438,6 +438,19 @@ export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
 
   // Northumbrian Water
   "County Durham": { name: "Northumbrian Water", id: "northumbrian-water" },
+
+  // NI Water — all 11 Northern Ireland local government districts
+  "Antrim and Newtownabbey": { name: "NI Water", id: "ni-water" },
+  "Ards and North Down": { name: "NI Water", id: "ni-water" },
+  "Armagh City, Banbridge and Craigavon": { name: "NI Water", id: "ni-water" },
+  Belfast: { name: "NI Water", id: "ni-water" },
+  "Causeway Coast and Glens": { name: "NI Water", id: "ni-water" },
+  "Derry City and Strabane": { name: "NI Water", id: "ni-water" },
+  "Fermanagh and Omagh": { name: "NI Water", id: "ni-water" },
+  "Lisburn and Castlereagh": { name: "NI Water", id: "ni-water" },
+  "Mid and East Antrim": { name: "NI Water", id: "ni-water" },
+  "Mid Ulster": { name: "NI Water", id: "ni-water" },
+  "Newry, Mourne and Down": { name: "NI Water", id: "ni-water" },
 };
 
 const UNKNOWN_SUPPLIER: SupplierInfo = { name: "Unknown", id: "unknown" };
