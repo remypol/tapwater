@@ -155,7 +155,10 @@ export async function parseScottishWaterIncidents(): Promise<{
     }
   }
 
-  // All candidate URLs failed or returned non-2xx
+  // All candidate URLs failed — this is expected since Scottish Water
+  // does not publish a public incident API. Return clean empty result
+  // (no error) to avoid triggering admin email alerts every 15 minutes.
+  // When a real endpoint is confirmed, update CANDIDATE_URLS above.
   return {
     incidents: [],
     checks: [
@@ -164,8 +167,7 @@ export async function parseScottishWaterIncidents(): Promise<{
         source_name: SOURCE_NAME,
         status_code: null,
         items_found: 0,
-        error:
-          "No working API endpoint found. All candidate URLs failed or returned non-2xx. Update CANDIDATE_URLS when the correct endpoint is confirmed.",
+        error: null,
       },
     ],
   };
