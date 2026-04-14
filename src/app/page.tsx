@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED } from "@/lib/mock-data";
-import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes } from "@/lib/data";
+import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes, getRecentlyUpdatedPostcodes } from "@/lib/data";
 import { HomepageMap } from "@/components/homepage-map";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -50,7 +50,7 @@ function scoreTextClass(score: number): string {
 
 export default async function HomePage() {
   // All queries run in parallel — no N+1 loading
-  const [{ worst, best }, suppliers, TRUST_METRICS, popularSearches] =
+  const [{ worst, best }, suppliers, TRUST_METRICS, popularSearches, recentlyUpdated] =
     await Promise.all([
       getRankedPostcodes(),
       getSuppliersList(),
@@ -68,6 +68,7 @@ export default async function HomePage() {
           )
           .slice(0, 6),
       ),
+      getRecentlyUpdatedPostcodes(24),
     ]);
 
   return (
@@ -361,6 +362,31 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* Recently updated — direct crawl paths into the postcode network */}
+      {recentlyUpdated.length > 0 && (
+        <section className="mt-12">
+          <h2 className="font-display text-xl text-ink italic mb-1">
+            Recently updated areas
+          </h2>
+          <p className="text-sm text-muted mb-4">
+            Latest water quality reports from across the UK
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {recentlyUpdated.map((pc) => (
+              <Link
+                key={pc.district}
+                href={`/postcode/${pc.district}`}
+                className="pill group"
+              >
+                <span className="font-data font-bold text-xs">{pc.district}</span>
+                <span className="text-faint mx-1">&middot;</span>
+                <span className="text-xs">{pc.areaName}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Water companies */}
       <section className="mt-12 mb-12">

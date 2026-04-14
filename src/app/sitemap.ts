@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getScoredPostcodeDistricts, getAllPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
+import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
@@ -73,9 +73,9 @@ async function getLatestDataDate(): Promise<Date> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
-  // Include ALL postcodes with data (not just scored ones) so the sitemap
-  // covers every indexable page — city pages and nearby links point to these.
-  const allDistricts = await getAllPostcodeDistricts();
+  // Only include scored postcodes in sitemap — thin pages (no data) are
+  // noindexed and should not waste crawl budget or dilute quality signals.
+  const scoredDistricts = await getScoredPostcodeDistricts();
 
   const incidentSlugs = await getAllIncidentSlugs();
   const newsPaths = incidentSlugs.map((slug) => ({
@@ -86,14 +86,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const postcodePaths = await Promise.all(
-    allDistricts.map(async (district) => {
+    scoredDistricts.map(async (district) => {
       const data = await getPostcodeData(district);
       const lastMod = data?.lastUpdated ? new Date(data.lastUpdated) : latestDataDate;
       return {
         url: `${BASE_URL}/postcode/${district}`,
         lastModified: lastMod,
         changeFrequency: "weekly" as const,
-        priority: data && data.safetyScore >= 0 ? 0.8 : 0.5,
+        priority: 0.8,
       };
     }),
   );

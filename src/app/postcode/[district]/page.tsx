@@ -41,6 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await getPostcodeData(district);
   if (!data) return { title: "Not Found" };
 
+  const hasData = data.safetyScore >= 0;
   const year = new Date().getFullYear();
 
   // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
@@ -54,16 +55,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : null;
   const pageTitle = shortArea ? `${baseTitle} | ${shortArea}` : baseTitle;
 
-  // Keep description under 155 chars
-  const descBase = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS, lead, nitrate & more.`;
-  const descSuffix = ` Free ${year} report for ${data.areaName}.`;
-  const description = (descBase + descSuffix).length <= 155
-    ? descBase + descSuffix
-    : descBase;
+  // Keep description under 155 chars — different copy for thin vs rich pages
+  const description = hasData
+    ? (() => {
+        const descBase = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS, lead, nitrate & more.`;
+        const descSuffix = ` Free ${year} report for ${data.areaName}.`;
+        return (descBase + descSuffix).length <= 155 ? descBase + descSuffix : descBase;
+      })()
+    : `Water quality data for ${data.district} (${data.areaName}) is not yet available. Check back soon for test results.`;
 
   return {
     title: pageTitle,
     description,
+    // Prevent thin pages from polluting the index — keep follow for link equity
+    ...(hasData ? {} : { robots: "noindex, follow" }),
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,

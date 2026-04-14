@@ -54,7 +54,7 @@ async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
       .filter(Boolean)
       .sort()
       .reverse();
-    const lastDate = dates[0] ?? "2000-01-01";
+    const lastDate = dates[0] ?? "2024-01-01";
 
     cache.set(entry.district.toUpperCase(), {
       district: entry.district,
@@ -177,7 +177,7 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
       const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
         .map((r) => ({ ...r, source: "drinking" as const }));
       const envReadings = (row.all_readings ?? []) as ContaminantReading[];
-      const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
+      const lastDate = row.last_data_update?.split("T")[0] ?? "2024-01-01";
 
       cache.set(row.postcode_district.toUpperCase(), {
         district: row.postcode_district,
@@ -365,6 +365,20 @@ export async function getScoredPostcodeDistricts(): Promise<string[]> {
     .sort();
 }
 
+/**
+ * Returns the most recently updated scored postcodes — used on the homepage
+ * to create direct crawl paths into the postcode network beyond popular searches.
+ */
+export async function getRecentlyUpdatedPostcodes(
+  limit = 20,
+): Promise<PostcodeData[]> {
+  const cache = await loadData();
+  return Array.from(cache.values())
+    .filter((d) => d.safetyScore >= 0)
+    .sort((a, b) => b.lastUpdated.localeCompare(a.lastUpdated))
+    .slice(0, limit);
+}
+
 export async function getPostcodesByCity(
   city: string,
 ): Promise<PostcodeData[]> {
@@ -520,7 +534,7 @@ export async function getRankedPostcodes(): Promise<{
           const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
             .map((r) => ({ ...r, source: "drinking" as const }));
           const envReadings = (row.all_readings ?? []) as ContaminantReading[];
-          const lastDate = row.last_data_update?.split("T")[0] ?? "2000-01-01";
+          const lastDate = row.last_data_update?.split("T")[0] ?? "2024-01-01";
 
           return {
             district: row.postcode_district,
