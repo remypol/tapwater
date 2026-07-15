@@ -214,7 +214,7 @@ export default function BestWaterFiltersGuide() {
       highlight: "Stronger pick for PFAS and heavy-metal concerns",
       reason: "pfas-heavy-metals",
     },
-  ].filter((pick) => pick.product?.availableInUk);
+  ].filter((pick) => pick.product?.availableInUk !== false);
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
