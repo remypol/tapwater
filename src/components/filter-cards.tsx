@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Check, Star, ArrowRight, ChevronDown } from "lucide-react";
+import { ExternalLink, Check, Star, ChevronDown } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
+import { AffiliateLink } from "@/components/affiliate-link";
+import { RecommendationTracker } from "@/components/conversion-tracker";
+import { getRecommendationMessage, getTransparentLimitations } from "@/lib/recommendation";
+import { createAffiliatePayload } from "@/lib/affiliate";
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
@@ -16,14 +20,24 @@ type RecommendedFilter = FilterProduct & {
 function HeroRecommendation({
   filter,
   postcodeDistrict,
+  contaminantsFlagged,
+  waterScoreBand,
 }: {
   filter: RecommendedFilter;
   postcodeDistrict: string;
-  flaggedNames?: string[];
+  contaminantsFlagged: number;
+  waterScoreBand: string;
 }) {
-  // Build the narrative
   const removesFromHere = filter.matchedContaminants;
-  const removesCount = removesFromHere.length;
+  const limitations = getTransparentLimitations(filter);
+  const recommendationReason = removesFromHere.length > 0
+    ? removesFromHere.join("+").toLowerCase()
+    : "optional-taste-convenience";
+  const message = getRecommendationMessage({
+    postcodeDistrict,
+    contaminantsFlagged,
+    matchedContaminants: removesFromHere,
+  });
 
   return (
     <div className="card-elevated overflow-hidden">
@@ -66,58 +80,9 @@ function HeroRecommendation({
           </div>
         </div>
 
-        {/* Why this one — the narrative */}
+        {/* Why this one */}
         <div className="mt-4 p-4 bg-wash rounded-lg">
-          <p className="text-sm text-body leading-relaxed">
-            {removesCount > 0 ? (
-              <>
-                {removesCount === 1 ? (
-                  <>
-                    The {filter.brand} {filter.model} is certified to remove{" "}
-                    <strong className="text-ink">{removesFromHere[0]}</strong>,
-                    which was flagged in {postcodeDistrict}.
-                  </>
-                ) : removesCount === 2 ? (
-                  <>
-                    Removes both{" "}
-                    <strong className="text-ink">{removesFromHere[0]}</strong> and{" "}
-                    <strong className="text-ink">{removesFromHere[1]}</strong> —
-                    the two contaminants flagged in {postcodeDistrict}.
-                  </>
-                ) : (
-                  <>
-                    Removes{" "}
-                    <strong className="text-ink">
-                      {removesFromHere.slice(0, -1).join(", ")}
-                    </strong>{" "}
-                    and{" "}
-                    <strong className="text-ink">
-                      {removesFromHere[removesFromHere.length - 1]}
-                    </strong>{" "}
-                    — all {removesCount} contaminants flagged in {postcodeDistrict}.
-                  </>
-                )}
-                {" "}
-                {filter.category === "jug"
-                  ? "No installation needed — just fill and pour."
-                  : filter.category === "countertop"
-                    ? "Sits on your worktop — no plumber needed."
-                    : filter.category === "under_sink" || filter.category === "reverse_osmosis"
-                      ? "Fits under your kitchen sink for filtered water on tap."
-                      : filter.category === "shower"
-                        ? "Fits onto your shower head for softer, cleaner water."
-                        : "Protects every tap in your home."}
-              </>
-            ) : (
-              <>
-                A solid all-round filter for {postcodeDistrict}. Removes{" "}
-                {filter.removes.slice(0, 3).join(", ")} and more.{" "}
-                {filter.category === "jug"
-                  ? "No installation needed."
-                  : "Professional-grade filtration."}
-              </>
-            )}
-          </p>
+          <p className="text-sm text-body leading-relaxed">{message}</p>
         </div>
 
         {/* What it removes — checklist */}
@@ -140,18 +105,46 @@ function HeroRecommendation({
           </div>
         )}
 
+        {limitations.length > 0 && (
+          <div className="mt-4">
+            <p className="text-xs font-medium text-faint uppercase tracking-wider mb-2">
+              Important limitations
+            </p>
+            <ul className="space-y-1">
+              {limitations.map((limitation) => (
+                <li key={limitation} className="text-sm text-muted">{limitation}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <p className="text-sm text-muted mt-4">
+          Affiliate link: we may earn a commission at no extra cost to you.{" "}
+          <Link href="/affiliate-disclosure" className="text-accent hover:underline">
+            How recommendations are funded
+          </Link>
+        </p>
+
         {/* Price + CTA row */}
-        <div className="mt-5 flex items-center gap-4">
-          <a
+        <div className="mt-3 flex items-center gap-4">
+          <AffiliateLink
             href={filter.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="postcode"
+            pathname={`/postcode/${postcodeDistrict}`}
+            postcodeArea={postcodeDistrict}
+            waterScoreBand={waterScoreBand}
+            recommendationReason={recommendationReason}
+            productCategory={filter.category}
+            productSlug={filter.slug}
+            placement="postcode-summary"
+            campaign="postcode-result"
             className="flex-1 bg-btn text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-btn-hover transition-colors"
           >
-            Check price & reviews
-            <ArrowRight className="w-4 h-4" />
-          </a>
+            Check current price
+            <ExternalLink className="w-4 h-4" />
+          </AffiliateLink>
           <div className="text-right shrink-0">
+            <p className="text-xs text-muted">Typical price</p>
             <p className="font-data text-xl font-bold text-ink">
               {filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}
             </p>
@@ -168,7 +161,15 @@ function HeroRecommendation({
 
 /* ── Alternative cards — compact, below the hero ──────────────────────── */
 
-function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
+function AlternativeCard({
+  filter,
+  postcodeDistrict,
+  waterScoreBand,
+}: {
+  filter: RecommendedFilter;
+  postcodeDistrict: string;
+  waterScoreBand: string;
+}) {
   return (
     <div className="card p-4 flex items-center gap-4">
       <div className="flex-1 min-w-0">
@@ -189,15 +190,22 @@ function AlternativeCard({ filter }: { filter: RecommendedFilter }) {
           <span className="text-xs text-muted">{filter.rating}</span>
         </div>
       </div>
-      <a
+      <AffiliateLink
         href={filter.affiliateUrl}
-        target="_blank"
-        rel="noopener noreferrer sponsored nofollow"
-        className="shrink-0 p-2 rounded-lg border border-rule hover:border-accent hover:text-accent transition-colors"
-        aria-label={`View ${filter.brand} ${filter.model}`}
+        pageType="postcode"
+        pathname={`/postcode/${postcodeDistrict}`}
+        postcodeArea={postcodeDistrict}
+        waterScoreBand={waterScoreBand}
+        recommendationReason={filter.matchedContaminants.join("+").toLowerCase() || "alternative"}
+        productCategory={filter.category}
+        productSlug={filter.slug}
+        placement="postcode-alternative"
+        campaign="postcode-result"
+        className="shrink-0 p-3.5 rounded-lg border border-rule hover:border-accent text-accent transition-colors"
+        ariaLabel={`View ${filter.brand} ${filter.model}`}
       >
         <ExternalLink className="w-4 h-4" />
-      </a>
+      </AffiliateLink>
     </div>
   );
 }
@@ -208,26 +216,42 @@ interface FilterRecommendationsProps {
   recommendations: RecommendedFilter[];
   postcodeDistrict: string;
   contaminantsFlagged: number;
+  waterScoreBand: string;
 }
 
 export function FilterRecommendations({
   recommendations,
   postcodeDistrict,
   contaminantsFlagged,
+  waterScoreBand,
 }: FilterRecommendationsProps) {
   if (recommendations.length === 0) return null;
 
   const hero = recommendations[0];
   const alternatives = recommendations.slice(1);
-  const flaggedNames = hero.matchedContaminants;
+  const reason = hero.matchedContaminants.join("+").toLowerCase() || "optional-taste-convenience";
 
   return (
-    <section className="mt-10">
+    <RecommendationTracker payload={createAffiliatePayload({
+      pageType: "postcode",
+      pathname: `/postcode/${postcodeDistrict}`,
+      postcodeArea: postcodeDistrict,
+      waterScoreBand,
+      recommendationReason: reason,
+      productCategory: hero.category,
+      productSlug: hero.slug,
+      placement: "postcode-summary",
+      campaign: "postcode-result",
+      destinationUrl: hero.affiliateUrl,
+    })}>
+    <section id="filter-recommendation" className="mt-8 scroll-mt-24">
       {/* Section header */}
       <h2 className="text-xl font-semibold text-ink tracking-tight">
-        {contaminantsFlagged > 0
-          ? "What removes these from your water"
-          : `Filters for ${postcodeDistrict}`}
+        {hero.matchedContaminants.length > 0
+          ? "Best fit for your water"
+          : contaminantsFlagged > 0
+            ? `Filter options for ${postcodeDistrict}`
+          : `Optional filter for ${postcodeDistrict}`}
       </h2>
       {contaminantsFlagged > 0 && (
         <p className="text-sm text-body mt-1.5 max-w-2xl mb-6">
@@ -245,7 +269,8 @@ export function FilterRecommendations({
       <HeroRecommendation
         filter={hero}
         postcodeDistrict={postcodeDistrict}
-        flaggedNames={flaggedNames}
+        contaminantsFlagged={contaminantsFlagged}
+        waterScoreBand={waterScoreBand}
       />
 
       {/* Alternatives */}
@@ -257,7 +282,12 @@ export function FilterRecommendations({
           </summary>
           <div className="mt-3 space-y-2">
             {alternatives.map((filter) => (
-              <AlternativeCard key={filter.id} filter={filter} />
+              <AlternativeCard
+                key={filter.id}
+                filter={filter}
+                postcodeDistrict={postcodeDistrict}
+                waterScoreBand={waterScoreBand}
+              />
             ))}
           </div>
         </details>
@@ -276,10 +306,9 @@ export function FilterRecommendations({
         </Link>
       </p>
     </section>
+    </RecommendationTracker>
   );
 }
-
-/* ── FilterCards — standalone (used in guide pages) ───────────────────── */
 
 interface FilterCardsProps {
   filters: FilterProduct[];
@@ -306,15 +335,20 @@ export function FilterCards({ filters }: FilterCardsProps) {
                 <span className="text-xs text-muted">{filter.rating}</span>
               </div>
             </div>
-            <a
+            <AffiliateLink
               href={filter.affiliateUrl}
-              target="_blank"
-              rel="noopener noreferrer sponsored nofollow"
-              className="shrink-0 text-sm font-medium text-accent hover:underline flex items-center gap-1"
+              pageType="filter-list"
+              pathname="/filters"
+              recommendationReason="product-catalog"
+              productCategory={filter.category}
+              productSlug={filter.slug}
+              placement="filter-grid"
+              campaign="product-catalog"
+              className="shrink-0 text-sm font-medium text-accent hover:underline flex items-center gap-1 p-3"
             >
               View
               <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            </AffiliateLink>
           </div>
         ))}
       </div>

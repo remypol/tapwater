@@ -23,6 +23,7 @@ import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components
 import { CITIES } from "@/lib/cities";
 import { IncidentAlerts } from "@/components/incident-alert";
 import { getActiveIncidentsForPostcode } from "@/lib/incidents";
+import { WaterReportTracker } from "@/components/conversion-tracker";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -129,7 +130,9 @@ export default async function PostcodePage({ params }: Props) {
   const flaggedNames = data.readings
     .filter((r) => r.status !== "pass")
     .map((r) => r.name);
-  const filterRecs = recommendFilters(flaggedNames, 3);
+  const recommendationSignals = flaggedNames;
+  const filterRecs = recommendFilters(recommendationSignals, 3);
+  const waterScoreBand = data.safetyScore >= 7 ? "good" : data.safetyScore >= 4 ? "attention" : "poor";
 
   // Find city page for breadcrumb linking
   const cityMatch = CITIES.find((c) =>
@@ -234,6 +237,10 @@ export default async function PostcodePage({ params }: Props) {
 
         {hasData ? (
           <>
+            <WaterReportTracker
+              postcodeArea={data.district}
+              waterScoreBand={waterScoreBand}
+            />
             {/* Sticky mobile score bar — appears once score ring scrolls out of view */}
             <StickyScore
               district={data.district}
@@ -380,6 +387,18 @@ export default async function PostcodePage({ params }: Props) {
               )}
             </div>
 
+            {/* Personal recommendation — before long-form detail while intent is fresh */}
+            {filterRecs.length > 0 && data.contaminantsFlagged > 0 && (
+              <ScrollReveal delay={100}>
+                <FilterRecommendations
+                  recommendations={filterRecs}
+                  postcodeDistrict={data.district}
+                  contaminantsFlagged={data.contaminantsFlagged}
+                  waterScoreBand={waterScoreBand}
+                />
+              </ScrollReveal>
+            )}
+
             <hr className="border-rule mt-10" />
 
             {/* Contaminant Data */}
@@ -399,13 +418,14 @@ export default async function PostcodePage({ params }: Props) {
               </section>
             </ScrollReveal>
 
-            {/* Filter Recommendations — immediately after contaminant data, while concern is highest */}
-            {filterRecs.length > 0 && (
+            {/* Keep optional affiliate content below the unique water data for SEO trust. */}
+            {filterRecs.length > 0 && data.contaminantsFlagged === 0 && (
               <ScrollReveal delay={100}>
                 <FilterRecommendations
                   recommendations={filterRecs}
                   postcodeDistrict={data.district}
-                  contaminantsFlagged={data.contaminantsFlagged}
+                  contaminantsFlagged={0}
+                  waterScoreBand={waterScoreBand}
                 />
               </ScrollReveal>
             )}

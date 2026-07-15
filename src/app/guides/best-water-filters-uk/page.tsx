@@ -20,6 +20,10 @@ import {
   X,
   Minus,
 } from "lucide-react";
+import { ProductCard } from "@/components/product-card";
+import { RecommendationTracker } from "@/components/conversion-tracker";
+import { createAffiliatePayload } from "@/lib/affiliate";
+import { getProductBySlug } from "@/lib/products";
 
 const year = new Date().getFullYear();
 
@@ -199,6 +203,19 @@ function EffectivenessCell({ value }: { value: Effectiveness }) {
 /* ── Page ────────────────────────────────────────────────────────────── */
 
 export default function BestWaterFiltersGuide() {
+  const topPicks = [
+    {
+      product: getProductBySlug("brita-marella-xl"),
+      highlight: "Best starting point for taste and chlorine on a budget",
+      reason: "taste-chlorine-budget",
+    },
+    {
+      product: getProductBySlug("zerowater-12-cup"),
+      highlight: "Stronger pick for PFAS and heavy-metal concerns",
+      reason: "pfas-heavy-metals",
+    },
+  ].filter((pick) => pick.product?.availableInUk);
+
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <BreadcrumbSchema
@@ -322,6 +339,41 @@ export default function BestWaterFiltersGuide() {
             </Link>
           </p>
         </div>
+
+        {topPicks.length > 0 && <section id="quick-picks" className="mt-10 scroll-mt-24" aria-labelledby="quick-picks-heading">
+          <h2 id="quick-picks-heading" className="font-display text-2xl italic text-ink mb-2">
+            Honest places to start
+          </h2>
+          <p className="text-base text-body leading-relaxed mb-5">
+            Choose based on what you actually want to reduce. Check your postcode first if you are unsure.
+          </p>
+          <div className="space-y-4">
+            {topPicks.map(({ product, highlight, reason }) => product && (
+              <RecommendationTracker
+                key={product.id}
+                payload={createAffiliatePayload({
+                  pageType: "best-water-filters-guide",
+                  pathname: "/guides/best-water-filters-uk",
+                  recommendationReason: reason,
+                  productCategory: product.category,
+                  productSlug: product.slug,
+                  placement: "guide-quick-picks",
+                  campaign: "best-water-filters-guide",
+                  destinationUrl: product.affiliateUrl,
+                })}
+              >
+                <ProductCard
+                  product={product}
+                  highlight={highlight}
+                  pageType="best-water-filters-guide"
+                  pathname="/guides/best-water-filters-uk"
+                  placement="guide-quick-picks"
+                  recommendationReason={reason}
+                />
+              </RecommendationTracker>
+            ))}
+          </div>
+        </section>}
 
         {/* ── What each filter type removes ────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-3">

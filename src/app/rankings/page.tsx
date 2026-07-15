@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronRight, TrendingUp, TrendingDown, Building2, MapPin, Info } from "lucide-react";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { getAllPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
+import { getAllPostcodeDistricts, getPostcodeData } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
@@ -58,12 +58,6 @@ function scoreBgClass(score: number): string {
   return "bg-[var(--color-danger-light)] text-[var(--color-danger)]";
 }
 
-function scoreBorderClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "border-[var(--color-safe)]";
-  if (c === "warning") return "border-[var(--color-warning)]";
-  return "border-[var(--color-danger)]";
-}
 
 // ── Metadata ──
 

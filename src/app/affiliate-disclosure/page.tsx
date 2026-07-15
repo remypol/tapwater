@@ -41,6 +41,9 @@ export default function AffiliateDisclosurePage() {
           and direct affiliate programmes with selected water filter brands. Affiliate links are
           used only for products we have assessed as genuinely relevant to our readers.
         </p>
+        <p className="text-base font-medium text-ink leading-relaxed mb-6">
+          As an Amazon Associate we earn from qualifying purchases.
+        </p>
 
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Our Editorial Independence</h2>
         <p className="text-base text-body leading-relaxed mb-6">

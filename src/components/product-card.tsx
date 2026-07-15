@@ -1,22 +1,28 @@
 import Image from "next/image";
-import { Star, ArrowRight, Check } from "lucide-react";
+import { Star, ExternalLink, Check } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
-
-function appendUtm(baseUrl: string, productSlug: string, pageType?: string): string {
-  const sep = baseUrl.includes("?") ? "&" : "?";
-  const campaign = pageType || "unknown";
-  return `${baseUrl}${sep}utm_source=tapwater&utm_medium=affiliate&utm_campaign=${campaign}&utm_content=${productSlug}`;
-}
+import { AffiliateLink } from "@/components/affiliate-link";
 
 interface ProductCardProps {
   product: FilterProduct;
   highlight?: string;
   pageType?: string;
+  pathname?: string;
+  placement?: string;
+  postcodeArea?: string;
+  recommendationReason?: string;
 }
 
-export function ProductCard({ product, highlight, pageType }: ProductCardProps) {
-  const affiliateHref = appendUtm(product.affiliateUrl, product.slug, pageType);
+export function ProductCard({
+  product,
+  highlight,
+  pageType = "filter-category",
+  pathname = "/filters",
+  placement = "product-card",
+  postcodeArea,
+  recommendationReason = "product-comparison",
+}: ProductCardProps) {
   const ctaText = product.affiliateProgram === "amazon"
     ? "Check price on Amazon"
     : `Buy from ${product.brand}`;
@@ -47,6 +53,7 @@ export function ProductCard({ product, highlight, pageType }: ProductCardProps) 
             )}
           </div>
           <div className="text-right shrink-0">
+            <p className="text-xs text-muted">Typical price</p>
             <p className="font-data text-lg font-bold text-ink">
               {product.priceGbp > 0 ? `£${product.priceGbp.toLocaleString("en-GB")}` : "Check price"}
             </p>
@@ -68,7 +75,11 @@ export function ProductCard({ product, highlight, pageType }: ProductCardProps) 
           </ul>
         )}
 
-        <div className="mt-4 flex items-center justify-between">
+        <p className="mt-4 text-sm text-muted">
+          Affiliate link: we may earn a commission at no extra cost to you.
+        </p>
+
+        <div className="mt-2 flex items-center justify-between">
           <div className="flex gap-1.5 flex-wrap">
             {product.certifications.map((cert) => (
               <span key={cert} className="text-xs text-muted bg-wash rounded px-2 py-0.5">
@@ -76,15 +87,21 @@ export function ProductCard({ product, highlight, pageType }: ProductCardProps) 
               </span>
             ))}
           </div>
-          <a
-            href={affiliateHref}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
-            className="text-sm font-medium text-accent hover:underline flex items-center gap-1 py-2 px-3 -mr-3"
+          <AffiliateLink
+            href={product.affiliateUrl}
+            pageType={pageType}
+            pathname={pathname}
+            postcodeArea={postcodeArea}
+            recommendationReason={recommendationReason}
+            productCategory={product.category}
+            productSlug={product.slug}
+            placement={placement}
+            campaign={pageType}
+            className="text-sm font-medium text-accent hover:underline flex items-center gap-1 py-3 px-3 -mr-3"
           >
             {ctaText}
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </AffiliateLink>
         </div>
       </div>
     </div>
