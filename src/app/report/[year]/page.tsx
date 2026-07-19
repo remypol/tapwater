@@ -20,7 +20,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { getAllPostcodeDistricts, getPostcodeData, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { CITIES } from "@/lib/cities";
-import type { PostcodeData } from "@/lib/types";
+
 
 export const revalidate = 86400;
 
@@ -71,7 +71,7 @@ interface ContaminantCount {
 
 // ── Metadata ──
 
-export function generateMetadata({ params }: { params: Promise<{ year: string }> }): Metadata {
+export function generateMetadata(): Metadata {
   return {
     title: "UK Water Quality Report (2026)",
     description:
@@ -259,12 +259,6 @@ export default async function ReportPage({
     year: "numeric",
   });
 
-  const totalSamplesLabel =
-    data.totalSamples > 1000
-      ? `${Math.round(data.totalSamples / 1000).toLocaleString()}k+`
-      : data.totalSamples > 0
-        ? data.totalSamples.toLocaleString()
-        : "25,000+";
 
   const faqs = [
     {

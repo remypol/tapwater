@@ -15,8 +15,22 @@ export function trackEvent(name: string, params?: EventParams) {
 
 // Pre-defined events for key conversions
 export const events = {
-  postcodeSearch: (district: string) =>
-    trackEvent("postcode_search", { district }),
+  postcodeSearch: (district: string) => {
+    trackEvent("postcode_search_submitted", { postcode_area: district });
+    trackEvent("postcode_search", { district });
+  },
+
+  waterReportViewed: (postcodeArea: string, waterScoreBand: string) =>
+    trackEvent("water_report_viewed", {
+      postcode_area: postcodeArea,
+      water_score_band: waterScoreBand,
+    }),
+
+  recommendationImpression: (params: EventParams) =>
+    trackEvent("recommendation_impression", params),
+
+  affiliateClick: (params: EventParams) =>
+    trackEvent("affiliate_click", params),
 
   filterClick: (filterId: string, filterBrand: string) =>
     trackEvent("filter_click", { filter_id: filterId, filter_brand: filterBrand }),

@@ -55,7 +55,7 @@ interface FeedItem {
   [key: string]: unknown;
 }
 
-function parseFeedItems(body: string, feedUrl: string): FeedItem[] {
+function parseFeedItems(body: string): FeedItem[] {
   // Try JSON first
   try {
     const json = JSON.parse(body) as unknown;
@@ -161,7 +161,7 @@ export async function parseWaterCompanyFeeds(): Promise<{
 
       clearTimeout(timeout);
       const body = await res.text();
-      const items = parseFeedItems(body, feed.feedUrl);
+      const items = parseFeedItems(body);
       const parsed: RawIncident[] = [];
 
       for (const item of items) {

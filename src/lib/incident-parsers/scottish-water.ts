@@ -149,7 +149,7 @@ export async function parseScottishWaterIncidents(): Promise<{
           },
         ],
       };
-    } catch (err) {
+    } catch {
       clearTimeout(timeout);
       // Network/timeout error on this candidate — try the next one
     }

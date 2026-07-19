@@ -8,7 +8,7 @@ import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
-import { CITIES, getCityBySlug } from "@/lib/cities";
+import { getCityBySlug } from "@/lib/cities";
 
 export const revalidate = 86400;
 

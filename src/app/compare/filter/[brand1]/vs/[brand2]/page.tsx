@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!comparison) return { title: "Not Found" };
 
   const [a, b] = [comparison.brand1Label, comparison.brand2Label];
-  const canonical = getCanonicalUrl(comparison, brand1, brand2);
+  const canonical = getCanonicalUrl(comparison);
 
   const title = `${a} vs ${b} UK (2026) — Which Filter is Better?`;
   const description = `${a} vs ${b}: independent comparison covering filtration, certifications, running costs, and which is right for your home.`;
@@ -67,8 +67,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function getCanonicalUrl(
   comparison: BrandComparison,
-  brand1Param: string,
-  brand2Param: string,
 ): string {
   // Canonical is always brand1Slug/vs/brand2Slug as defined in config
   return `https://www.tapwater.uk/compare/filter/${comparison.brand1Slug}/vs/${comparison.brand2Slug}`;
@@ -116,7 +114,7 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
       ]
     : [comparison, product1, product2];
 
-  const canonicalUrl = getCanonicalUrl(comparison, brand1, brand2);
+  const canonicalUrl = getCanonicalUrl(comparison);
 
   const breadcrumbItems = [
     { name: "Home", url: "https://www.tapwater.uk" },

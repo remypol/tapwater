@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, AlertTriangle, Shield, Droplets, Search, ArrowRight } from "lucide-react";
+import { ChevronRight, Shield, Droplets, ArrowRight } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
@@ -451,7 +451,7 @@ export default async function RankingPage({
   const year = new Date().getFullYear();
   const isPfas = config.accentColor === "pfas";
   const accentClass = isPfas ? "text-[var(--color-pfas)]" : "text-accent";
-  const accentBgClass = isPfas ? "bg-[var(--color-pfas-light)] text-[var(--color-pfas)]" : "bg-[var(--color-accent-light)] text-accent";
+
 
   // Format the key finding for the GEO summary
   const keyFinding = config.sortField === "score"
