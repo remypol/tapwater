@@ -3,7 +3,7 @@ import { buildAffiliateUrl, createAffiliatePayload, getDestinationHost } from ".
 
 describe("buildAffiliateUrl", () => {
   it("preserves Amazon special links without decorating them", () => {
-    const original = "https://www.amazon.co.uk/dp/B0BT1HTR9Q?tag=tapwater21-21";
+    const original = "https://www.amazon.co.uk/dp/B0BT1HTR9Q?tag=tapwater2107-21";
     const url = buildAffiliateUrl(
       original,
       { campaign: "postcode-result", productSlug: "brita-marella-xl" },
