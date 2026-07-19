@@ -24,6 +24,7 @@ import { ProductCard } from "@/components/product-card";
 import { RecommendationTracker } from "@/components/conversion-tracker";
 import { createAffiliatePayload } from "@/lib/affiliate";
 import { getProductBySlug } from "@/lib/products";
+import { Kicker } from "@/components/commerce";
 
 const year = new Date().getFullYear();
 
@@ -340,40 +341,44 @@ export default function BestWaterFiltersGuide() {
           </p>
         </div>
 
-        {topPicks.length > 0 && <section id="quick-picks" className="mt-10 scroll-mt-24" aria-labelledby="quick-picks-heading">
-          <h2 id="quick-picks-heading" className="font-display text-2xl italic text-ink mb-2">
-            Honest places to start
-          </h2>
-          <p className="text-base text-body leading-relaxed mb-5">
-            Choose based on what you actually want to reduce. Check your postcode first if you are unsure.
-          </p>
-          <div className="space-y-4">
-            {topPicks.map(({ product, highlight, reason }) => product && (
-              <RecommendationTracker
-                key={product.id}
-                payload={createAffiliatePayload({
-                  pageType: "best-water-filters-guide",
-                  pathname: "/guides/best-water-filters-uk",
-                  recommendationReason: reason,
-                  productCategory: product.category,
-                  productSlug: product.slug,
-                  placement: "guide-quick-picks",
-                  campaign: "best-water-filters-guide",
-                  destinationUrl: product.affiliateUrl,
-                })}
-              >
-                <ProductCard
-                  product={product}
-                  highlight={highlight}
-                  pageType="best-water-filters-guide"
-                  pathname="/guides/best-water-filters-uk"
-                  placement="guide-quick-picks"
-                  recommendationReason={reason}
-                />
-              </RecommendationTracker>
-            ))}
-          </div>
-        </section>}
+        {topPicks.length > 0 && (
+          <section id="quick-picks" className="mt-10 scroll-mt-24" aria-labelledby="quick-picks-heading">
+            <Kicker>Quick picks</Kicker>
+            <h2 id="quick-picks-heading" className="mt-2 font-display text-2xl italic text-ink">
+              Start with what you want to remove
+            </h2>
+            <p className="mt-2 text-base text-body leading-relaxed max-w-2xl">
+              Choose by what you actually want to reduce. If you are unsure,{" "}
+              <a href="#postcode-check" className="text-accent hover:underline">check your postcode first</a>.
+            </p>
+            <div className={topPicks.length > 1 ? "mt-5 grid gap-4 sm:grid-cols-2 items-stretch" : "mt-5 max-w-xl"}>
+              {topPicks.map(({ product, highlight, reason }) => product && (
+                <RecommendationTracker
+                  key={product.id}
+                  payload={createAffiliatePayload({
+                    pageType: "best-water-filters-guide",
+                    pathname: "/guides/best-water-filters-uk",
+                    recommendationReason: reason,
+                    productCategory: product.category,
+                    productSlug: product.slug,
+                    placement: "guide-quick-picks",
+                    campaign: "best-water-filters-guide",
+                    destinationUrl: product.affiliateUrl,
+                  })}
+                >
+                  <ProductCard
+                    product={product}
+                    highlight={highlight}
+                    pageType="best-water-filters-guide"
+                    pathname="/guides/best-water-filters-uk"
+                    placement="guide-quick-picks"
+                    recommendationReason={reason}
+                  />
+                </RecommendationTracker>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── What each filter type removes ────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-3">
@@ -539,7 +544,7 @@ export default function BestWaterFiltersGuide() {
         </ul>
 
         {/* ── Check your postcode CTA ──────────────────────────────── */}
-        <div className="mt-14 card-elevated p-8 text-center rounded-2xl">
+        <div id="postcode-check" className="mt-14 card-elevated p-8 text-center rounded-2xl scroll-mt-24">
           <div className="flex justify-center mb-4">
             <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
               <Search className="w-6 h-6 text-blue-600" />

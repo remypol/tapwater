@@ -479,3 +479,27 @@ button:active, a.card:active, .pill:active {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ── Commerce CTA — ink stamp ── */
+.btn-ink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--color-btn);
+  color: #ffffff;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.btn-ink:hover { background: var(--color-btn-hover); }
+.btn-ink:active { transform: scale(0.98); }
+@media (prefers-color-scheme: dark) {
+  .btn-ink { background: var(--color-ink); color: #0c0f17; }
+  .btn-ink:hover { background: #ffffff; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-ink { transition: none; }
+}

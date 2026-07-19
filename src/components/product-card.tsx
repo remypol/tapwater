@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { Star, ExternalLink, Check } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
 import { AffiliateLink } from "@/components/affiliate-link";
+import { TypicalPrice, AffiliateNote, getCandourRows } from "@/components/commerce";
 
 interface ProductCardProps {
   product: FilterProduct;
@@ -24,69 +25,83 @@ export function ProductCard({
   recommendationReason = "product-comparison",
 }: ProductCardProps) {
   const ctaText = product.affiliateProgram === "amazon"
-    ? "Check price on Amazon"
-    : `Buy from ${product.brand}`;
+    ? "Check current price on Amazon"
+    : `Check current price at ${product.brand}`;
+  const candour = getCandourRows(product);
+
   return (
-    <div className="card overflow-hidden">
-      <div className="p-5">
-        <div className="flex gap-4 items-start">
+    <article className="card overflow-hidden h-full flex flex-col">
+      <div className="p-5 flex-1 flex flex-col">
+        {/* Purpose lead */}
+        {highlight && (
+          <p className="font-display italic text-lg leading-snug text-ink">{highlight}</p>
+        )}
+
+        {/* Identity row */}
+        <div className={`flex items-center gap-3 ${highlight ? "mt-3" : "mt-0"}`}>
           {product.imageUrl && (
-            <div className="shrink-0 w-20 h-20 rounded-lg bg-wash overflow-hidden">
+            <div className="shrink-0 w-16 h-16 bg-white ring-1 ring-rule rounded-lg overflow-hidden">
               <Image
                 src={product.imageUrl}
                 alt={`${product.brand} ${product.model}`}
-                width={80}
-                height={80}
+                width={64}
+                height={64}
                 className="object-contain w-full h-full p-1.5"
               />
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-faint uppercase tracking-wider">
-              {CATEGORY_LABELS[product.category]}
-            </p>
-            <p className="font-display text-lg text-ink italic mt-0.5">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-ink">
               {product.brand} {product.model}
             </p>
-            {highlight && (
-              <p className="text-xs font-medium text-accent mt-1">{highlight}</p>
-            )}
-          </div>
-          <div className="text-right shrink-0">
-            <p className="text-xs text-muted">Typical price</p>
-            <p className="font-data text-lg font-bold text-ink">
-              {product.priceGbp > 0 ? `£${product.priceGbp.toLocaleString("en-GB")}` : "Check price"}
+            <p className="text-xs text-muted mt-0.5">
+              {CATEGORY_LABELS[product.category]}
+              {product.certifications.length > 0 && (
+                <> · {product.certifications.join(", ")}</>
+              )}
             </p>
-            <div className="flex items-center gap-1 justify-end">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span className="text-xs text-muted">{product.rating}/5</span>
-            </div>
           </div>
         </div>
 
-        {product.pros.length > 0 && (
-          <ul className="mt-3 space-y-1">
-            {product.pros.slice(0, 3).map((pro) => (
-              <li key={pro} className="flex items-start gap-1.5 text-sm text-body">
-                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                {pro}
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Ledger */}
+        <dl className="mt-4 border-t border-rule divide-y divide-rule">
+          {product.pros.length > 0 && (
+            <div className="py-3 sm:grid sm:grid-cols-[148px_1fr] sm:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+                Why it fits
+              </dt>
+              <dd className="mt-1.5 sm:mt-0">
+                <ul className="space-y-1">
+                  {product.pros.slice(0, 3).map((pro) => (
+                    <li key={pro} className="text-sm text-body leading-relaxed">
+                      {pro}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+          {candour && (
+            <div className="py-3 sm:grid sm:grid-cols-[148px_1fr] sm:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+                {candour.label}
+              </dt>
+              <dd className="mt-1.5 sm:mt-0">
+                <ul className="space-y-1">
+                  {candour.lines.map((line) => (
+                    <li key={line} className="text-sm font-medium text-ink leading-relaxed">
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+        </dl>
 
-        <p className="mt-4 text-sm text-muted">
-          Affiliate link: we may earn a commission at no extra cost to you.
-        </p>
-
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex gap-1.5 flex-wrap">
-            {product.certifications.map((cert) => (
-              <span key={cert} className="text-xs text-muted bg-wash rounded px-2 py-0.5">
-                {cert}
-              </span>
-            ))}
-          </div>
+        {/* Rail */}
+        <div className="mt-auto pt-4 border-t border-rule flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <TypicalPrice priceGbp={product.priceGbp} size="md" />
           <AffiliateLink
             href={product.affiliateUrl}
             pageType={pageType}
@@ -97,13 +112,15 @@ export function ProductCard({
             productSlug={product.slug}
             placement={placement}
             campaign={pageType}
-            className="text-sm font-medium text-accent hover:underline flex items-center gap-1 py-3 px-3 -mr-3"
+            className="inline-flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-lg border border-rule-strong text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors w-full sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {ctaText}
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-4 h-4" aria-hidden="true" />
           </AffiliateLink>
         </div>
+
+        <AffiliateNote className="mt-3" />
       </div>
-    </div>
+    </article>
   );
 }
