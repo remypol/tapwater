@@ -49,13 +49,13 @@ export default async function PfasNationalPage() {
     {
       question: "Is UK tap water safe from PFAS?",
       answer:
-        "The UK currently has no legal limit for PFAS in drinking water. While water companies are not required to test for or remove PFAS, Environment Agency monitoring has detected PFAS in water sources near several major cities. The EU set a binding limit of 0.1 \u00b5g/L for total PFAS from January 2026, but the UK has not adopted this standard.",
+        "There are no statutory standards for PFAS in drinking water in England and Wales. There is a regulator's guideline: the Drinking Water Inspectorate sets a value of 0.1 \u00b5g/L for the sum of 48 named PFAS, and since March 2025 water companies must monitor a wider range of PFAS and update their risk assessments. Those results are not published per location, so no public dataset shows what was found in a given postcode.",
     },
     {
       question: "Which UK cities have PFAS in their water?",
       answer: data
         ? `Environment Agency monitoring has detected PFAS compounds in water sources near ${data.citiesWithDetections} UK cities. The cities with the highest recorded levels include ${data.detectionsByCity.slice(0, 5).map((c) => c.city).join(", ")}. Detection does not necessarily mean PFAS is present in treated tap water.`
-        : "PFAS monitoring data is currently being collected. Check back soon for city-level results.",
+        : "No public dataset shows PFAS results by UK city. Water companies in England and Wales are required to monitor PFAS and report to the Drinking Water Inspectorate, but those results are not published per location or per supply zone. The Environment Agency's public monitoring covers rivers and groundwater rather than treated tap water, and its sampling points near major cities do not record PFAS.",
     },
     {
       question: "What is the UK legal limit for PFAS in water?",
@@ -70,7 +70,7 @@ export default async function PfasNationalPage() {
     {
       question: "Should I be worried about PFAS in UK water?",
       answer:
-        "While PFAS detection in water sources is a concern, it does not necessarily mean your tap water contains PFAS at harmful levels. Water treatment can reduce PFAS concentrations. However, the lack of UK regulation means there is no legal requirement to test for or remove PFAS. If you are concerned, a reverse osmosis filter is the most effective home solution.",
+        "PFAS in a water source does not mean your tap water contains PFAS at harmful levels, and treatment can reduce concentrations. Water companies in England and Wales are required to monitor PFAS and act on the Drinking Water Inspectorate's 0.1 µg/L guideline, so this is being tested for. What is missing is publication: the results are not released per location, so you cannot check your own area. If you would rather not wait for that, reverse osmosis is the most effective home filtration for PFAS.",
     },
   ];
 
@@ -100,20 +100,73 @@ export default async function PfasNationalPage() {
           <header className="mt-6 mb-10">
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight mt-2">
               PFAS in UK Water:{" "}
-              <span className="italic">Live Tracker</span>
+              {/* No detections dataset to track, so the heading should not promise one. */}
+              <span className="italic">What Is Known</span>
             </h1>
           </header>
 
           <div className="card-elevated rounded-2xl p-8 max-w-2xl">
             <p className="font-display text-2xl text-ink italic">
-              No PFAS detections on record
+              PFAS results are not published by location
             </p>
             <p className="text-base text-body leading-relaxed mt-3">
-              Environment Agency monitoring near the cities we track has not
-              recorded a PFAS detection. Each city page below shows what was
-              sampled there.
+              This is the honest answer to &quot;is there PFAS in my water?&quot;
+              in the UK: nobody can tell you from public data. That is not
+              because it goes untested.
+            </p>
+            <p className="text-base text-body leading-relaxed mt-3">
+              Water companies in England and Wales are{" "}
+              <strong className="text-ink">required</strong> to monitor PFAS.
+              Since March 2025 the Drinking Water Inspectorate has required them
+              to test for a wider range of PFAS and update their risk
+              assessments against a guideline of 0.1 µg/L for the sum of 48
+              named PFAS. Those results go to the regulator. They are not
+              released per supply zone or per postcode.
+            </p>
+            <p className="text-base text-body leading-relaxed mt-3">
+              The monitoring that <em>is</em> public comes from the Environment
+              Agency, and it covers rivers and groundwater rather than treated
+              tap water. We checked its sampling points near the cities below:
+              they do not record PFAS.
+            </p>
+            <p className="text-sm text-muted leading-relaxed mt-4">
+              So this page will not show you a number for your area, because no
+              honest source can. If that changes we will publish it here.
             </p>
           </div>
+
+          <section className="mt-10 max-w-2xl">
+            <h2 className="font-display text-xl italic text-ink">
+              What is actually settled
+            </h2>
+            <ul className="mt-3 space-y-2 text-base text-body leading-relaxed">
+              <li>
+                <strong className="text-ink">No statutory limit.</strong> There
+                are no statutory standards for PFAS in drinking water in England
+                and Wales. The 0.1 µg/L figure is the regulator&apos;s guideline,
+                not a legal limit.
+              </li>
+              <li>
+                <strong className="text-ink">It is being tested.</strong> Since
+                March 2025 water companies must monitor a wider range of PFAS
+                and update their risk assessments accordingly.
+              </li>
+              <li>
+                <strong className="text-ink">
+                  Publication is the gap, not testing.
+                </strong>{" "}
+                The results exist at the regulator. What is missing is a public
+                dataset that lets you look up your own area.
+              </li>
+              <li>
+                <strong className="text-ink">
+                  Filtering does not depend on any of this.
+                </strong>{" "}
+                Reverse osmosis removes PFAS regardless of what the data says.
+                Standard jug filters do not.
+              </li>
+            </ul>
+          </section>
 
           {/* The per-city pages exist and have content whether or not any detection
               was recorded, so link them from here too. Keeping these links only in
@@ -121,8 +174,12 @@ export default async function PfasNationalPage() {
               at all whenever the table was empty, which is the current state. */}
           <section className="mt-10">
             <h2 className="font-display text-xl italic text-ink">
-              PFAS by city
+              Environment Agency monitoring by city
             </h2>
+            <p className="text-sm text-muted mt-1 max-w-2xl">
+              What the public river and groundwater monitoring near each city
+              shows. This is not a reading of the tap water supplied there.
+            </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {CITIES.map((city) => (
                 <Link
@@ -211,7 +268,8 @@ export default async function PfasNationalPage() {
               {data.totalSamplingPoints.toLocaleString()} sampling points
               across {data.citiesWithDetections} UK cities.
             </strong>{" "}
-            The UK has no legal limit for PFAS in drinking water as of {year}.
+            England and Wales have no statutory limit for PFAS in drinking water
+            as of {year}, only a 0.1 µg/L regulator&apos;s guideline.
           </p>
         </div>
 
@@ -417,11 +475,14 @@ export default async function PfasNationalPage() {
             </h2>
             <div className="max-w-3xl space-y-4">
               <p className="text-base text-body leading-relaxed">
-                The UK currently has <strong className="text-ink">no legal limit</strong> for
-                PFAS in drinking water. The Drinking Water Inspectorate (DWI)
-                has issued non-binding guidance but there is no enforceable
-                standard, and water companies are not legally required to test
-                for or remove PFAS from tap water.
+                England and Wales have{" "}
+                <strong className="text-ink">no statutory standard</strong> for
+                PFAS in drinking water. What exists is a regulator&apos;s
+                guideline: the Drinking Water Inspectorate sets 0.1 µg/L for the
+                sum of 48 named PFAS, and since March 2025 requires water
+                companies to monitor a wider range of PFAS and update their risk
+                assessments. So testing is required; a legally enforceable limit
+                on the result is not.
               </p>
               <p className="text-base text-body leading-relaxed">
                 By contrast, the EU introduced a binding limit of{" "}
