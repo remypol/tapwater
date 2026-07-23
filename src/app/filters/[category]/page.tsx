@@ -277,7 +277,12 @@ export default async function CategoryPage({
             <h2 className="font-display text-xl text-ink italic mb-4">
               Side-by-side comparison
             </h2>
-            <ProductComparisonTable products={products} />
+            <ProductComparisonTable
+              pageType="category"
+              pathname={`/filters/${slug}`}
+              campaign={`category-${slug}`}
+              products={products}
+            />
           </section>
         )}
 

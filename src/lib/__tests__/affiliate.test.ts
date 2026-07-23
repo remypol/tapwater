@@ -12,6 +12,22 @@ describe("buildAffiliateUrl", () => {
     expect(url).toBe(original);
   });
 
+  // Adding our own tracking must never cost us the partner's. Osmio pays a £50-75
+  // fixed bounty and identifies the sale purely by aw_affiliate; drop or mangle that
+  // parameter and the sale still happens, we just never get paid for it.
+  it("keeps a partner's own tracking parameter intact while adding ours", () => {
+    const affiliateParam =
+      "eyJjYW1wYWlnbl9pZCI6IjEiLCJ0cmFmZmljX3NvdXJjZSI6Im5vX3NvdXJjZSIsImFjY291bnRfaWQiOjIxM30";
+    const url = buildAffiliateUrl(
+      `https://www.osmiowater.co.uk/zip-portable-reverse-osmosis-system.html?aw_affiliate=${affiliateParam}`,
+      { campaign: "best-reverse-osmosis-guide", productSlug: "osmio-zero" },
+    );
+    const parsed = new URL(url);
+
+    expect(parsed.searchParams.get("aw_affiliate")).toBe(affiliateParam);
+    expect(parsed.searchParams.get("utm_campaign")).toBe("best-reverse-osmosis-guide");
+  });
+
   it("replaces stale campaign values instead of duplicating them", () => {
     const url = buildAffiliateUrl(
       "https://example.com/product?utm_campaign=unknown&utm_source=old",

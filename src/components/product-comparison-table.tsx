@@ -1,12 +1,27 @@
 import { Star, Check, X } from "lucide-react";
+import { AffiliateLink } from "@/components/affiliate-link";
 import type { FilterProduct } from "@/lib/types";
 
 interface ComparisonTableProps {
   products: FilterProduct[];
   contaminants?: string[];
+  /**
+   * Where this table is rendered. Required rather than optional so a new caller
+   * cannot quietly ship a table whose clicks land in analytics with no idea which
+   * page they came from.
+   */
+  pageType: string;
+  pathname: string;
+  campaign: string;
 }
 
-export function ProductComparisonTable({ products, contaminants }: ComparisonTableProps) {
+export function ProductComparisonTable({
+  products,
+  contaminants,
+  pageType,
+  pathname,
+  campaign,
+}: ComparisonTableProps) {
   const showContaminants = contaminants ?? [
     ...new Set(products.flatMap((p) => p.removes)),
   ].slice(0, 8);
@@ -29,9 +44,19 @@ export function ProductComparisonTable({ products, contaminants }: ComparisonTab
           {products.map((product) => (
             <tr key={product.id} className="border-b border-rule/50 hover:bg-wash/50">
               <td className="p-3">
-                <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored nofollow" className="font-medium text-ink hover:text-accent">
+                <AffiliateLink
+                  href={product.affiliateUrl}
+                  pageType={pageType}
+                  pathname={pathname}
+                  recommendationReason={product.bestFor ?? "comparison-table"}
+                  productCategory={product.category}
+                  productSlug={product.slug}
+                  placement="comparison-table"
+                  campaign={campaign}
+                  className="font-medium text-ink hover:text-accent"
+                >
                   {product.brand} {product.model}
-                </a>
+                </AffiliateLink>
                 {product.bestFor && <p className="text-xs text-muted mt-0.5">{product.bestFor}</p>}
               </td>
               <td className="text-center p-3 font-data font-bold text-ink">
