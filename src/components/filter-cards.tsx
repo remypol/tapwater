@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Check, Star, ChevronDown } from "lucide-react";
+import { ExternalLink, Star, ChevronDown } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { RecommendationTracker } from "@/components/conversion-tracker";
-import { getRecommendationMessage, getTransparentLimitations } from "@/lib/recommendation";
+import { getRecommendationMessage } from "@/lib/recommendation";
 import { createAffiliatePayload } from "@/lib/affiliate";
+import { Kicker, TypicalPrice, AffiliateNote, getCandourRows } from "@/components/commerce";
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
@@ -15,118 +16,105 @@ type RecommendedFilter = FilterProduct & {
   matchedContaminants: string[];
 };
 
-/* ── Hero Recommendation — the single "our pick for you" ──────────────── */
+/* ── Recommendation record — the single "our pick for you" ────────────── */
 
-function HeroRecommendation({
+function RecommendationRecord({
   filter,
   postcodeDistrict,
-  contaminantsFlagged,
   waterScoreBand,
 }: {
   filter: RecommendedFilter;
   postcodeDistrict: string;
-  contaminantsFlagged: number;
   waterScoreBand: string;
 }) {
-  const removesFromHere = filter.matchedContaminants;
-  const limitations = getTransparentLimitations(filter);
-  const recommendationReason = removesFromHere.length > 0
-    ? removesFromHere.join("+").toLowerCase()
-    : "optional-taste-convenience";
-  const message = getRecommendationMessage({
-    postcodeDistrict,
-    contaminantsFlagged,
-    matchedContaminants: removesFromHere,
-  });
+  const matched = filter.matchedContaminants;
+  const alsoListed = filter.removes.filter(
+    (r) => !matched.some((m) => m.toLowerCase() === r.toLowerCase()),
+  );
+  const candour = getCandourRows(filter);
+  const recommendationReason = matched.join("+").toLowerCase() || "optional-taste-convenience";
+  const retailer = filter.affiliateProgram === "amazon" ? "on Amazon" : `at ${filter.brand}`;
 
   return (
-    <div className="card-elevated overflow-hidden">
-      {/* Top accent */}
-      <div className="h-1 w-full bg-accent" />
+    <article className="card-elevated overflow-hidden">
+      <div className="h-0.5 bg-accent" aria-hidden="true" />
 
-      <div className="p-5 sm:p-6">
-        <div className="sm:flex sm:gap-5 sm:items-start">
-          {/* Product image */}
+      <div className="p-5 sm:p-7">
+        {/* Identity band */}
+        <div className="flex items-start gap-4 sm:gap-5">
           {filter.imageUrl && (
-            <div className="hidden sm:block shrink-0 w-28 h-28 rounded-xl bg-wash overflow-hidden">
+            <div className="shrink-0 w-16 h-16 sm:w-24 sm:h-24 bg-white ring-1 ring-rule rounded-lg overflow-hidden">
               <Image
                 src={filter.imageUrl}
                 alt={`${filter.brand} ${filter.model}`}
-                width={112}
-                height={112}
-                className="object-contain w-full h-full p-2"
+                width={96}
+                height={96}
+                className="object-contain w-full h-full p-1.5"
               />
             </div>
           )}
-
-          <div className="flex-1">
-            {/* Label */}
-            <p className="text-xs font-medium text-accent uppercase tracking-wider">
-              Our pick for {postcodeDistrict}
+          <div className="flex-1 min-w-0">
+            <Kicker accent>Our pick for {postcodeDistrict}</Kicker>
+            <h3 className="mt-1.5 font-display italic text-xl sm:text-2xl text-ink leading-snug">
+              {filter.brand} {filter.model}
+            </h3>
+            <p className="mt-1 text-sm text-muted">
+              {CATEGORY_LABELS[filter.category]}
+              {filter.certifications.length > 0 && (
+                <> · {filter.certifications.join(", ")}</>
+              )}
             </p>
-
-            {/* Product name */}
-            <div className="mt-2">
-              <p className="font-display text-xl sm:text-2xl text-ink italic">
-                {filter.brand} {filter.model}
-              </p>
-              <p className="text-sm text-muted mt-0.5">
-                {CATEGORY_LABELS[filter.category]}
-                {filter.certifications.length > 0 && (
-                  <> · {filter.certifications.join(", ")}</>
-                )}
-              </p>
-            </div>
           </div>
         </div>
 
-        {/* Why this one */}
-        <div className="mt-4 p-4 bg-wash rounded-lg">
-          <p className="text-sm text-body leading-relaxed">{message}</p>
-        </div>
-
-        {/* What it removes — checklist */}
-        {removesFromHere.length > 0 && (
-          <div className="mt-4">
-            <p className="text-xs font-medium text-faint uppercase tracking-wider mb-2">
-              Removes from your water
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {removesFromHere.map((c) => (
-                <span
-                  key={c}
-                  className="inline-flex items-center gap-1 text-sm bg-emerald-50 text-emerald-700 rounded-full px-2.5 py-0.5"
-                >
-                  <Check className="w-3 h-3" />
-                  {c}
-                </span>
-              ))}
+        {/* Ledger */}
+        <dl className="mt-6 border-t border-rule divide-y divide-rule">
+          {matched.length > 0 && (
+            <div className="py-3.5 sm:grid sm:grid-cols-[172px_1fr] sm:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+                Matched to your report
+              </dt>
+              <dd className="mt-1.5 sm:mt-0 flex flex-wrap gap-x-4 gap-y-1.5">
+                {matched.map((c) => (
+                  <span key={c} className="inline-flex items-center gap-1.5 text-sm font-medium text-ink">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
+                    {c}
+                  </span>
+                ))}
+              </dd>
             </div>
-          </div>
-        )}
+          )}
+          {alsoListed.length > 0 && (
+            <div className="py-3.5 sm:grid sm:grid-cols-[172px_1fr] sm:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+                {matched.length === 0 ? "Listed to reduce" : "Also listed to reduce"}
+              </dt>
+              <dd className="mt-1.5 sm:mt-0 text-sm text-body leading-relaxed">
+                {alsoListed.join(", ")}
+              </dd>
+            </div>
+          )}
+          {candour && (
+            <div className="py-3.5 sm:grid sm:grid-cols-[172px_1fr] sm:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+                {candour.label}
+              </dt>
+              <dd className="mt-1.5 sm:mt-0">
+                <ul className="space-y-1">
+                  {candour.lines.map((line) => (
+                    <li key={line} className="text-sm font-medium text-ink leading-relaxed">
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )}
+        </dl>
 
-        {limitations.length > 0 && (
-          <div className="mt-4">
-            <p className="text-xs font-medium text-faint uppercase tracking-wider mb-2">
-              Important limitations
-            </p>
-            <ul className="space-y-1">
-              {limitations.map((limitation) => (
-                <li key={limitation} className="text-sm text-muted">{limitation}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <p className="text-sm text-muted mt-4">
-          Affiliate link: we may earn a commission at no extra cost to you.{" "}
-          <Link href="/affiliate-disclosure" className="text-accent hover:underline">
-            How recommendations are funded
-          </Link>
-        </p>
-
-        {/* Price + CTA row */}
-        <div className="mt-3 flex items-center gap-4">
+        {/* Price rail */}
+        <div className="pt-5 border-t border-rule flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <TypicalPrice priceGbp={filter.priceGbp} size="lg" />
           <AffiliateLink
             href={filter.affiliateUrl}
             pageType="postcode"
@@ -138,58 +126,51 @@ function HeroRecommendation({
             productSlug={filter.slug}
             placement="postcode-summary"
             campaign="postcode-result"
-            className="flex-1 bg-btn text-white py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:bg-btn-hover transition-colors"
+            className="btn-ink h-12 px-6 w-full sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            Check current price
-            <ExternalLink className="w-4 h-4" />
+            Check current price {retailer}
+            <ExternalLink className="w-4 h-4" aria-hidden="true" />
           </AffiliateLink>
-          <div className="text-right shrink-0">
-            <p className="text-xs text-muted">Typical price</p>
-            <p className="font-data text-xl font-bold text-ink">
-              {filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}
-            </p>
-            <div className="flex items-center gap-1 justify-end">
-              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-              <span className="text-xs text-muted">{filter.rating}/5</span>
-            </div>
-          </div>
         </div>
+
+        <AffiliateNote withFundingLink className="mt-3" />
       </div>
-    </div>
+    </article>
   );
 }
 
-/* ── Alternative cards — compact, below the hero ──────────────────────── */
+/* ── Alternative rows — a subordinate numbered index ───────────────────── */
 
-function AlternativeCard({
+function AlternativeRow({
   filter,
+  index,
   postcodeDistrict,
   waterScoreBand,
 }: {
   filter: RecommendedFilter;
+  index: number;
   postcodeDistrict: string;
   waterScoreBand: string;
 }) {
   return (
-    <div className="card p-4 flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4 py-2.5 min-h-11">
+      <span className="font-mono text-xs text-muted w-6 shrink-0" aria-hidden="true">
+        {String(index + 2).padStart(2, "0")}
+      </span>
       <div className="flex-1 min-w-0">
-        <p className="text-xs text-faint">{CATEGORY_LABELS[filter.category]}</p>
-        <p className="font-semibold text-ink text-sm truncate">
+        <p className="text-sm font-medium text-ink truncate">
           {filter.brand} {filter.model}
         </p>
-        {filter.matchedContaminants.length > 0 && (
-          <p className="text-xs text-muted mt-0.5 truncate">
-            Removes {filter.matchedContaminants.join(", ")}
-          </p>
-        )}
+        <p className="text-xs text-muted truncate">
+          {CATEGORY_LABELS[filter.category]}
+          {filter.matchedContaminants.length > 0 ? (
+            <> · matched to {filter.matchedContaminants.join(", ")}</>
+          ) : (
+            <> · {filter.bestFor}</>
+          )}
+        </p>
       </div>
-      <div className="text-right shrink-0">
-        <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
-        <div className="flex items-center gap-0.5 justify-end">
-          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-          <span className="text-xs text-muted">{filter.rating}</span>
-        </div>
-      </div>
+      <TypicalPrice priceGbp={filter.priceGbp} size="sm" />
       <AffiliateLink
         href={filter.affiliateUrl}
         pageType="postcode"
@@ -201,10 +182,10 @@ function AlternativeCard({
         productSlug={filter.slug}
         placement="postcode-alternative"
         campaign="postcode-result"
-        className="shrink-0 p-3.5 rounded-lg border border-rule hover:border-accent text-accent transition-colors"
+        className="shrink-0 p-3.5 -mr-1.5 rounded-lg text-accent hover:bg-accent-light transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         ariaLabel={`View ${filter.brand} ${filter.model}`}
       >
-        <ExternalLink className="w-4 h-4" />
+        <ExternalLink className="w-4 h-4" aria-hidden="true" />
       </AffiliateLink>
     </div>
   );
@@ -229,7 +210,27 @@ export function FilterRecommendations({
 
   const hero = recommendations[0];
   const alternatives = recommendations.slice(1);
+  const matchedLen = hero.matchedContaminants.length;
   const reason = hero.matchedContaminants.join("+").toLowerCase() || "optional-taste-convenience";
+
+  const kicker = contaminantsFlagged > 0
+    ? `Filter match · ${contaminantsFlagged} flagged in ${postcodeDistrict}`
+    : `Filter guidance · ${postcodeDistrict}`;
+
+  const verdict =
+    matchedLen > 0 && matchedLen >= contaminantsFlagged
+      ? `Matched to what was flagged in ${postcodeDistrict}`
+      : matchedLen > 0 && matchedLen < contaminantsFlagged
+        ? `Matched to ${matchedLen} of ${contaminantsFlagged} concerns flagged in ${postcodeDistrict}`
+        : matchedLen === 0 && contaminantsFlagged > 0
+          ? `No direct match for the concerns flagged in ${postcodeDistrict}`
+          : `A filter is optional in ${postcodeDistrict}`;
+
+  const message = getRecommendationMessage({
+    postcodeDistrict,
+    contaminantsFlagged,
+    matchedContaminants: hero.matchedContaminants,
+  });
 
   return (
     <RecommendationTracker payload={createAffiliatePayload({
@@ -245,56 +246,48 @@ export function FilterRecommendations({
       destinationUrl: hero.affiliateUrl,
     })}>
     <section id="filter-recommendation" className="mt-8 scroll-mt-24">
-      {/* Section header */}
-      <h2 className="text-xl font-semibold text-ink tracking-tight">
-        {hero.matchedContaminants.length > 0
-          ? "Best fit for your water"
-          : contaminantsFlagged > 0
-            ? `Filter options for ${postcodeDistrict}`
-          : `Optional filter for ${postcodeDistrict}`}
-      </h2>
-      {contaminantsFlagged > 0 && (
-        <p className="text-sm text-body mt-1.5 max-w-2xl mb-6">
-          {contaminantsFlagged} contaminant{contaminantsFlagged !== 1 ? "s" : ""} flagged
-          in {postcodeDistrict}. These filters are matched to what was found in your water.
-        </p>
-      )}
-      {contaminantsFlagged === 0 && (
-        <p className="text-sm text-muted mt-1.5 mb-6">
-          General-purpose filters for common UK tap water concerns.
-        </p>
-      )}
+      {/* Section header — the answer, before any product */}
+      <header className="max-w-2xl">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">{kicker}</p>
+        <h2 className="mt-2 font-display italic text-2xl sm:text-3xl text-ink tracking-tight text-balance">
+          {verdict}
+        </h2>
+        <p className="mt-3 text-sm sm:text-base text-body leading-relaxed">{message}</p>
+      </header>
 
-      {/* Hero recommendation — THE one pick */}
-      <HeroRecommendation
-        filter={hero}
-        postcodeDistrict={postcodeDistrict}
-        contaminantsFlagged={contaminantsFlagged}
-        waterScoreBand={waterScoreBand}
-      />
+      {/* Recommendation record — THE one pick */}
+      <div className="mt-6">
+        <RecommendationRecord
+          filter={hero}
+          postcodeDistrict={postcodeDistrict}
+          waterScoreBand={waterScoreBand}
+        />
+      </div>
 
-      {/* Alternatives */}
+      {/* Alternatives — a subordinate index */}
       {alternatives.length > 0 && (
         <details className="mt-4 group">
-          <summary className="cursor-pointer text-sm text-accent font-medium flex items-center gap-1 hover:underline">
-            <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
-            {alternatives.length} more option{alternatives.length !== 1 ? "s" : ""}
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent hover:underline rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+            <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
+            Compare {alternatives.length} alternative{alternatives.length !== 1 ? "s" : ""}
           </summary>
-          <div className="mt-3 space-y-2">
-            {alternatives.map((filter) => (
-              <AlternativeCard
-                key={filter.id}
-                filter={filter}
-                postcodeDistrict={postcodeDistrict}
-                waterScoreBand={waterScoreBand}
-              />
+          <ul className="mt-1 border-t border-rule divide-y divide-rule">
+            {alternatives.map((filter, index) => (
+              <li key={filter.id}>
+                <AlternativeRow
+                  filter={filter}
+                  index={index}
+                  postcodeDistrict={postcodeDistrict}
+                  waterScoreBand={waterScoreBand}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
         </details>
       )}
 
       {/* Disclosure */}
-      <p className="text-xs text-faint mt-4">
+      <p className="text-xs text-muted mt-4">
         Recommendations matched to your area&apos;s water data, not sponsorship.
         We may earn a commission at no extra cost to you.{" "}
         <Link href="/affiliate-disclosure" className="text-accent hover:underline">
