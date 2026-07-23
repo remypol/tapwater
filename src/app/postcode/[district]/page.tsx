@@ -15,8 +15,6 @@ import { recommendFilters } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
 import { SoftenerLeadBanner } from "@/components/softener-lead-banner";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
-import { getProductIncludingUnavailable } from "@/lib/products";
-import { ProductCard } from "@/components/product-card";
 import { RelatedGuides } from "@/components/related-guides";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
@@ -131,7 +129,6 @@ export default async function PostcodePage({ params }: Props) {
     .filter((r) => r.status !== "pass")
     .map((r) => r.name);
   const recommendationSignals = flaggedNames;
-  const filterRecs = recommendFilters(recommendationSignals, 3);
   const waterScoreBand = data.safetyScore >= 7 ? "good" : data.safetyScore >= 4 ? "attention" : "poor";
 
   // Find city page for breadcrumb linking
@@ -145,6 +142,13 @@ export default async function PostcodePage({ params }: Props) {
   const hardnessData = await getHardness(data.district);
   const hardnessValue = hardnessData?.value ?? null;
   const hardnessLabel = hardnessData?.label ?? null;
+
+  // Recommendations run after the hardness lookup: hard water is not a flagged
+  // contaminant, so without it the recommender cannot tell a scale problem from
+  // clean-but-hard water and falls back to a jug that does nothing about scale.
+  const filterRecs = recommendFilters(recommendationSignals, 3, {
+    hardnessValue,
+  });
 
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
@@ -432,16 +436,6 @@ export default async function PostcodePage({ params }: Props) {
 
             {hardnessValue != null && hardnessValue >= 180 && (
               <div className="mt-8">
-                {/* Show Waterdrop softener if available in UK */}
-                {(() => {
-                  const softener = getProductIncludingUnavailable("waterdrop-whr01");
-                  if (!softener || softener.availableInUk === false) return null;
-                  return (
-                    <div className="mb-4">
-                      <ProductCard product={softener} pageType="postcode" highlight="Recommended for your hard water area" />
-                    </div>
-                  );
-                })()}
                 <SoftenerLeadForm
                   postcode={data.district}
                   hardnessValue={hardnessValue}
