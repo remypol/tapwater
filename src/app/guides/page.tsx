@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Guides — UK Water Quality Research",
   description:
     "In-depth guides on UK tap water quality: PFAS forever chemicals, lead pipes, water hardness, testing your water, and understanding your supplier.",
   openGraph: {
+    images: OG_IMAGE,
     title: "Water Quality Guides",
     description: "In-depth guides on UK tap water quality.",
     url: "https://www.tapwater.uk/guides",

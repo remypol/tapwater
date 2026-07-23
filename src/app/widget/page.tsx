@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
 import { BreadcrumbSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -14,6 +15,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/widget",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: "Embed Water Quality Widget",
       description:
         "Add live UK water quality scores to your website with one line of code. Free, auto-updating widget for property listings and blogs.",
@@ -21,6 +23,7 @@ export function generateMetadata(): Metadata {
       type: "website",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary",
       title: "Embed Water Quality Widget",
       description:

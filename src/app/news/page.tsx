@@ -6,6 +6,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { getAllIncidents } from "@/lib/incidents";
 import type { Incident } from "@/lib/incidents-types";
 import { INCIDENT_TYPE_LABELS, SEVERITY_CONFIG } from "@/lib/incidents-types";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 300;
 
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
   description:
     "Live UK water incidents, boil notices, supply interruptions, and pollution alerts. Updated automatically from official sources.",
   openGraph: {
+    images: OG_IMAGE,
     title: "UK Water Incident News",
     description:
       "Live UK water incidents, boil notices, supply interruptions, and pollution alerts.",

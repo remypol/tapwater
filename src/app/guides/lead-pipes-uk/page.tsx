@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Millions of UK homes still have lead pipes. How lead gets into tap water, which areas are worst affected, and what you can do.",
     openGraph: {
+      images: OG_IMAGE,
       title: `UK Lead Pipes: Areas Most Affected (${year})`,
       description:
         "Millions of UK homes still have lead pipes. Find out how lead gets into tap water and what you can do.",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `UK Lead Pipes: Areas Most Affected (${year})`,
       description:

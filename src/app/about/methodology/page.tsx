@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { FAQSchema } from '@/components/json-ld'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'Methodology — Water Quality Scores',
   description:
     'How TapWater.uk calculates 0-10 water quality scores. Data sources, parameter weighting, tier system, and grade thresholds explained.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'Methodology — Water Quality Scores',
     description:
       'How TapWater.uk calculates 0-10 water quality scores. Data sources, parameter weighting, tier system, and grade thresholds explained.',
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'Methodology — Water Quality Scores',
     description:

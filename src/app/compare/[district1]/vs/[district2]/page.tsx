@@ -6,6 +6,7 @@ import { getPostcodeData } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { OG_IMAGE } from "@/lib/og";
 
 interface Props {
   params: Promise<{ district1: string; district2: string }>;
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       return full.length <= 155 ? full : short;
     })(),
     openGraph: {
+      images: OG_IMAGE,
       title: `${d1} vs ${d2} Water Quality Comparison`,
       description: `${d1} scores ${data1.safetyScore}/10, ${d2} scores ${data2.safetyScore}/10. Compare contaminants, suppliers, and safety data.`,
       url: `https://www.tapwater.uk/compare/${d1}/vs/${d2}`,

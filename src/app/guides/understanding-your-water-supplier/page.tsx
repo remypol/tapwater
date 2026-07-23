@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { FileText, AlertTriangle } from "lucide-react"
 import { ArticleSchema } from "@/components/json-ld"
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
@@ -10,6 +11,7 @@ export function generateMetadata(): Metadata {
     description:
       "How to read your water company's compliance report. What the DWI measures, compliance rates, and how to check your supplier.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Understanding Your Water Supplier (${year})`,
       description:
         "How to read your water company's compliance report. What the DWI measures, compliance rates, and how to check your supplier.",

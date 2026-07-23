@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Scale, ShieldCheck, Leaf, PiggyBank, BookOpen } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Tap Water vs Bottled Water UK (${year})`,
       description:
         "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost.",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Tap Water vs Bottled Water UK (${year})`,
       description:

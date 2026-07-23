@@ -4,6 +4,7 @@ import { ChevronRight, Download, ExternalLink, Mail, Copy } from "lucide-react";
 import { BreadcrumbSchema } from "@/components/json-ld";
 import { getAllStoryData } from "@/lib/press-data";
 import type { PressStoryData } from "@/lib/press-data";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
   description:
     "Download UK water quality data, logos, and media assets. Free data stories with CSVs for journalists and bloggers. Just link back.",
   openGraph: {
+    images: OG_IMAGE,
     title: "Press & Media | TapWater.uk",
     description:
       "Download UK water quality data, logos, and media assets. Free data stories for journalists and bloggers.",
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
+    images: OG_IMAGE,
     card: "summary_large_image",
     title: "Press & Media | TapWater.uk",
     description:

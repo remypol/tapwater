@@ -6,12 +6,14 @@ import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { BreadcrumbSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "UK Water Companies — Water Quality by Supplier",
   description:
     "Compare water quality scores across all 16 major UK water companies. See which supplier has the best and worst tap water and coverage areas.",
   openGraph: {
+    images: OG_IMAGE,
     title: "UK Water Companies — Water Quality Comparison",
     description:
       "Compare water quality scores across all 16 major UK water companies.",

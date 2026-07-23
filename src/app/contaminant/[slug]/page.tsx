@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 function truncateAtSentence(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text;
@@ -346,12 +347,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${contaminant.name} in UK Drinking Water`,
     description,
     openGraph: {
+      images: OG_IMAGE,
       title: `${contaminant.name} in UK Drinking Water`,
       description,
       url: `https://www.tapwater.uk/contaminant/${slug}`,
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `${contaminant.name} in UK Drinking Water`,
       description,

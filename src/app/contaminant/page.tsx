@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, AlertTriangle, ShieldCheck } from "lucide-react";
 import { BreadcrumbSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Contaminants in UK Tap Water",
   description:
     "Key contaminants in UK drinking water: PFAS, lead, nitrate, chlorine, copper and more. Health effects, legal limits and removal methods.",
   openGraph: {
+    images: OG_IMAGE,
     title: "Contaminants in UK Tap Water",
     description:
       "Health effects, legal limits, and removal methods for all major contaminants in UK drinking water.",

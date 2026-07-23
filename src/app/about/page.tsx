@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTrustMetrics } from '@/lib/data'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'About TapWater.uk',
   description:
     'Independent water quality research. Free postcode-searchable reports for England and Wales, based on UK government data.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'About TapWater.uk',
     description:
       'Independent water quality research. Free postcode-searchable reports for England and Wales, based on UK government data.',
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'About TapWater.uk',
     description:

@@ -15,6 +15,7 @@ import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { CITY_COMPARISON_PAIRS, cityLabel } from "@/lib/city-comparisons";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -96,12 +97,14 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `Best & Worst UK Tap Water — ${year} Rankings`,
     description,
     openGraph: {
+      images: OG_IMAGE,
       title: `Best & Worst UK Tap Water — ${year} Rankings`,
       description,
       url: "https://www.tapwater.uk/compare",
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Best & Worst UK Tap Water — ${year}`,
       description,

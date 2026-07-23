@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Microscope, Waves, ShieldQuestion, BookOpen } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Are there microplastics in your tap water? What the research says about contamination in UK drinking water, health risks, and reducing exposure.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Microplastics in UK Tap Water (${year})`,
       description:
         "Are there microplastics in your tap water? What the research says about microplastic contamination in UK drinking water.",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Microplastics in UK Tap Water (${year})`,
       description:

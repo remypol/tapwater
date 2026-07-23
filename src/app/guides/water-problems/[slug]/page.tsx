@@ -5,6 +5,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { CheckCircle, AlertTriangle, Phone } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -33,12 +34,14 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      images: OG_IMAGE,
       title,
       description,
       url: `${BASE_URL}/guides/water-problems/${problem.slug}`,
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title,
       description,

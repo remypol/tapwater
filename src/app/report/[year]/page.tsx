@@ -20,6 +20,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { getAllPostcodeDistricts, getPostcodeData, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { CITIES } from "@/lib/cities";
+import { OG_IMAGE } from "@/lib/og";
 
 
 export const revalidate = 86400;
@@ -77,6 +78,7 @@ export function generateMetadata(): Metadata {
     description:
       "Comprehensive annual report on UK drinking water quality. Data from 2,800+ postcodes, 100+ contaminants. Independent analysis by TapWater.uk.",
     openGraph: {
+      images: OG_IMAGE,
       title: "UK Water Quality Report 2026",
       description:
         "Comprehensive annual report on UK drinking water quality. Data from 2,800+ postcodes, 100+ contaminants.",
@@ -84,6 +86,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: "UK Water Quality Report 2026",
       description:

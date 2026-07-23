@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { WATER_PROBLEMS, PROBLEM_CATEGORIES } from "@/lib/water-problems";
+import { OG_IMAGE } from "@/lib/og";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -13,6 +14,7 @@ export function generateMetadata(): Metadata {
     description:
       "Water tastes of chlorine? Looks cloudy or brown? Smells like rotten eggs? This guide explains the most common UK tap water problems and exactly what to do.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Tap Water Problems (${year})`,
       description:
         "The most common UK tap water problems explained — taste, smell, colour, and pressure issues. Find out what's causing it and what to do.",
@@ -20,6 +22,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Tap Water Problems (${year})`,
       description:

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { ShieldCheck, Droplets, AlertTriangle, FlaskConical, BookOpen, Info } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Is UK tap water safe? Yes — but not perfect. Learn what's in your water, regional differences, and when to consider a filter. Based on official data.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Is UK Tap Water Safe to Drink? (${year})`,
       description:
         "Everything you need to know about UK tap water safety — contaminants, regulations, regional differences, and practical advice.",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Is UK Tap Water Safe to Drink? (${year})`,
       description:

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Search, Check, X } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -40,6 +41,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/guides/best-water-softener-uk",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: `Best Water Softener UK (${year})`,
       description:
         "Compare water softeners for UK homes. Salt vs salt-free, costs, and which areas need one most.",
@@ -47,6 +49,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Best Water Softener UK (${year})`,
       description:

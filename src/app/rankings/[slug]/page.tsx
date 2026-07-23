@@ -8,6 +8,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { getAllPostcodeDistricts, getPostcodeData, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -229,12 +230,14 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      images: OG_IMAGE,
       title: config.title,
       description,
       url: `https://www.tapwater.uk/rankings/${slug}`,
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: config.title,
       description,

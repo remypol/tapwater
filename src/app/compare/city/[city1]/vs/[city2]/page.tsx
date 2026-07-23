@@ -10,6 +10,7 @@ import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { getCityBySlug } from "@/lib/cities";
 import { CITY_COMPARISON_PAIRS, canonicalCityPair } from "@/lib/city-comparisons";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -175,6 +176,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Compare tap water quality in ${c1.name} and ${c2.name}. Safety scores, contaminants, and which city has better water.`,
     alternates: { canonical: canonicalUrl },
     openGraph: {
+      images: OG_IMAGE,
       title: `${c1.name} vs ${c2.name} Water Quality Comparison`,
       description: `Compare tap water quality in ${c1.name} and ${c2.name}. Safety scores, contaminants, and which city has better water.`,
       url: canonicalUrl,

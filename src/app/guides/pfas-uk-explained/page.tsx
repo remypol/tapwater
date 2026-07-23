@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { AlertTriangle, FlaskConical, ShieldAlert, BookOpen } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "What are PFAS forever chemicals, where are they in UK water, and what can you do about them? Based on Environment Agency data.",
     openGraph: {
+      images: OG_IMAGE,
       title: `PFAS in UK Drinking Water (${year})`,
       description:
         "What are PFAS forever chemicals, where are they found in UK water, and what can you do about them?",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `PFAS in UK Drinking Water (${year})`,
       description:

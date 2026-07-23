@@ -25,6 +25,7 @@ import { RecommendationTracker } from "@/components/conversion-tracker";
 import { createAffiliatePayload } from "@/lib/affiliate";
 import { getProductBySlug } from "@/lib/products";
 import { Kicker } from "@/components/commerce";
+import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
 
@@ -34,6 +35,7 @@ export function generateMetadata(): Metadata {
     description:
       "An honest overview of every water filter type available in the UK. Find out which filter removes what, then read our specific buying guides.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:
         "Which water filter type do you actually need? Compare jug, countertop, under-sink, reverse osmosis, and whole-house systems.",
@@ -41,6 +43,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Best Water Filters for UK Tap Water (${year})`,
       description:

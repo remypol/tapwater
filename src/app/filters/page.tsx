@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema } from "@/components/json-ld";
 import { CATEGORY_META, CATEGORY_ORDER, getProductsByCategory } from "@/lib/products";
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Water Filters — Find the Right One",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
     "Compare water filters for UK water. Jugs, under-sink, RO, whole-house and shower filters with prices, specs and recommendations.",
   alternates: { canonical: "https://www.tapwater.uk/filters" },
   openGraph: {
+    images: OG_IMAGE,
     title: "Water Filters — Find the Right One",
     description:
       "Compare water filters for UK water. Jugs, under-sink, RO, whole-house and shower filters with prices, specs and recommendations.",
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
+    images: OG_IMAGE,
     card: "summary_large_image",
     title: "Water Filters — Find the Right One",
     description:

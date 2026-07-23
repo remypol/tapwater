@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BreadcrumbSchema } from '@/components/json-ld'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'Data Sources — Where We Get Our Data',
   description:
     'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'Data Sources — Where We Get Our Data',
     description:
       'Real drinking water test results from 16 UK water companies, plus Environment Agency monitoring. Fully transparent, open data.',
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'Data Sources — Where We Get Our Data',
     description:
