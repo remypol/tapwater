@@ -52,6 +52,19 @@ export type PriceTier = "budget" | "mid" | "premium";
 
 export type AffiliateProgram = "amazon" | "impact" | "direct";
 
+/**
+ * What we earn when someone buys through our link.
+ *
+ * Worth recording per product because the difference is enormous and invisible
+ * otherwise: an Amazon jug pays pence, while a partner paying a fixed bounty on a
+ * system pays tens of pounds. Without this you cannot see which pages are worth
+ * improving. Leave it undefined when the rate is genuinely unknown rather than
+ * guessing — an estimate that looks like a fact is worse than a blank.
+ */
+export type Commission =
+  | { type: "fixed"; gbp: number }
+  | { type: "percent"; rate: number };
+
 export interface FilterProduct {
   id: string;
   brand: string;
@@ -64,6 +77,8 @@ export interface FilterProduct {
   priceTier: PriceTier;
   affiliateUrl: string;
   affiliateProgram: AffiliateProgram;
+  /** Undefined means we have not confirmed the rate for this product. */
+  commission?: Commission;
   affiliateTag: string;
   imageUrl: string;
   rating: number;

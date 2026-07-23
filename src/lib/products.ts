@@ -18,6 +18,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0BT1HTR9Q?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/brita-marella.png",
     rating: 4.5,
@@ -57,6 +58,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B07J2HJMKQ?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/zerowater-12cup.jpg",
     rating: 4.3,
@@ -87,6 +89,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B09ZL1LN6V?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/aqua-optima.png",
     rating: 4.4,
@@ -117,6 +120,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B09LKTLVNR?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/pur-plus-pitcher.jpg",
     rating: 4.2,
@@ -149,6 +153,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0CT8JWHMX?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/waterdrop-fc06.png",
     rating: 4.3,
@@ -180,6 +185,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0CNY1KBT6?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/tapp-ecopro.jpeg",
     rating: 4.4,
@@ -213,6 +219,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0CG55SNPJ?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/waterdrop-10ua.png",
     rating: 4.4,
@@ -244,6 +251,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B01LWRZBC6?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/doulton-hip-ultracarb.jpg",
     rating: 4.6,
@@ -333,6 +341,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "premium",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0GQGCDFWG?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/frizzlife-pd600.png",
     rating: 4.5,
@@ -421,6 +430,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl:
       "https://www.osmiowater.co.uk/osmio-fusion.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjkiLCJ0cmFmZmljX3NvdXJjZSI6Im5vX3NvdXJjZSIsImFjY291bnRfaWQiOjIxM30",
     affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 65 },
     affiliateTag: "osmio-213",
     imageUrl: "",
     rating: 4.3,
@@ -462,6 +472,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl:
       "https://www.osmiowater.co.uk/osmio-fusion-3-0-installed-hydrogen-reverse-osmosis-system-black.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjE4IiwidHJhZmZpY19zb3VyY2UiOiJub19zb3VyY2UiLCJhY2NvdW50X2lkIjoyMTN9",
     affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 75 },
     affiliateTag: "osmio-213",
     imageUrl: "",
     rating: 4.1,
@@ -479,6 +490,47 @@ export const PRODUCTS: FilterProduct[] = [
     bestFor: "Buyers who specifically want tankless RO with hydrogen and chilled water",
     filterLife: "Not published by manufacturer",
   },
+  {
+    id: "osmio-zero",
+    brand: "Osmio",
+    model: "Zero 2.0 Countertop RO",
+    slug: "osmio-zero",
+    category: "reverse_osmosis",
+    removes: [
+      "Chlorine",
+      "Lead",
+      "Bacteria",
+      "Nitrate",
+      "Fluoride",
+      "Limescale",
+      "Heavy metals",
+    ],
+    certifications: [],
+    priceGbp: 495,
+    priceTier: "premium",
+    affiliateUrl:
+      "https://www.osmiowater.co.uk/zip-portable-reverse-osmosis-system.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjEiLCJ0cmFmZmljX3NvdXJjZSI6Im5vX3NvdXJjZSIsImFjY291bnRfaWQiOjIxM30",
+    affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 65 },
+    affiliateTag: "osmio-213",
+    imageUrl: "",
+    rating: 4.4,
+    badge: "best-value",
+    pros: [
+      "Plugs into a socket — the only RO here that needs no plumbing, so renters can use it",
+      "Wastes 1 litre for every 5 produced, far less than a typical under-sink RO",
+      "Dispenses at drinking temperature through to near-boiling, so it replaces the kettle too",
+    ],
+    cons: [
+      "No NSF or WRAS certification stated",
+      "Osmio does not publish a filter replacement interval, so annual running cost is unclear",
+      "Takes up real worktop space at 38cm tall and 7kg",
+    ],
+    bestFor: "Renters and anyone who wants RO water without a plumber",
+    flowRate: "7.8 L/hour",
+    filterLife: "6 months per filter set",
+    annualCost: 130,
+  },
   // ─── WHOLE HOUSE ────────────────────────────────────────────────────
   {
     id: "bwt-e1-whole-house",
@@ -492,6 +544,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B07DXR6TDF?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/bwt-e1.png",
     rating: 4.3,
@@ -597,6 +650,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateUrl:
       "https://www.osmiowater.co.uk/osmio-pro-iii-ultimate-whole-house-water-filter-system.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjE3IiwidHJhZmZpY19zb3VyY2UiOiJub19zb3VyY2UiLCJhY2NvdW50X2lkIjoyMTN9",
     affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 50 },
     affiliateTag: "osmio-213",
     imageUrl: "",
     rating: 4.4,
@@ -629,6 +683,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "premium",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0BM3DXSR3?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/jolie-showerhead.jpeg",
     rating: 4.5,
@@ -659,6 +714,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B01MUBU0YC?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/aquabliss-sf220.jpg",
     rating: 4.2,
@@ -689,6 +745,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "mid",
     affiliateUrl: "https://www.amazon.co.uk/dp/B07358SY5W?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/philips-awp1775.jpg",
     rating: 4.3,
@@ -723,6 +780,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B078FG1PWV?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/simplexhealth-13.jpg",
     rating: 4.1,
@@ -751,6 +809,7 @@ export const PRODUCTS: FilterProduct[] = [
     priceTier: "budget",
     affiliateUrl: "https://www.amazon.co.uk/dp/B0CXXLF9Q1?tag=tapwater2107-21",
     affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
     imageUrl: "/filters/sj-wave-16.jpg",
     rating: 4.0,
@@ -874,6 +933,16 @@ export function getProductsByCategory(
 /**
  * Look up a single product by its URL slug.
  */
+/**
+ * What a sale of this product earns us, in pounds. Null when the rate is unconfirmed,
+ * so callers show a blank rather than a made-up number.
+ */
+export function estimatedEarningsGbp(product: FilterProduct): number | null {
+  const c = product.commission;
+  if (!c) return null;
+  return c.type === "fixed" ? c.gbp : product.priceGbp * c.rate;
+}
+
 export function getProductBySlug(slug: string): FilterProduct | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
