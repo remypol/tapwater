@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { NavProgress } from "@/components/nav-progress";
 import { OrganizationSchema, WebSiteSchema } from "@/components/json-ld";
+import { Skimlinks } from "@/components/skimlinks";
 import "./globals.css";
 
 const GA_ID = "G-XB7714S0QN";
@@ -96,6 +97,7 @@ export default function RootLayout({
           gtag('config', '${GA_ID}');
         `}
       </Script>
+      <Skimlinks />
       <body className="min-h-screen flex flex-col antialiased">
         <a
           href="#main-content"
