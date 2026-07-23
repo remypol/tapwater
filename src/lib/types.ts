@@ -50,7 +50,7 @@ export type ProductCategory =
 
 export type PriceTier = "budget" | "mid" | "premium";
 
-export type AffiliateProgram = "amazon" | "impact" | "direct";
+export type AffiliateProgram = "amazon" | "impact" | "awin" | "direct";
 
 /**
  * What we earn when someone buys through our link.

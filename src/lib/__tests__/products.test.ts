@@ -21,7 +21,7 @@ describe("PRODUCTS catalogue", () => {
       expect(p.cons.length).toBeGreaterThan(0);
       expect(p.bestFor).toBeTruthy();
       expect(p.priceTier).toMatch(/^(budget|mid|premium)$/);
-      expect(p.affiliateProgram).toMatch(/^(amazon|impact|direct)$/);
+      expect(p.affiliateProgram).toMatch(/^(amazon|impact|awin|direct)$/);
     }
   });
 
