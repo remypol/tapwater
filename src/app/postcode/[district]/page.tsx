@@ -129,7 +129,6 @@ export default async function PostcodePage({ params }: Props) {
     .filter((r) => r.status !== "pass")
     .map((r) => r.name);
   const recommendationSignals = flaggedNames;
-  const filterRecs = recommendFilters(recommendationSignals, 3);
   const waterScoreBand = data.safetyScore >= 7 ? "good" : data.safetyScore >= 4 ? "attention" : "poor";
 
   // Find city page for breadcrumb linking
@@ -143,6 +142,13 @@ export default async function PostcodePage({ params }: Props) {
   const hardnessData = await getHardness(data.district);
   const hardnessValue = hardnessData?.value ?? null;
   const hardnessLabel = hardnessData?.label ?? null;
+
+  // Recommendations run after the hardness lookup: hard water is not a flagged
+  // contaminant, so without it the recommender cannot tell a scale problem from
+  // clean-but-hard water and falls back to a jug that does nothing about scale.
+  const filterRecs = recommendFilters(recommendationSignals, 3, {
+    hardnessValue,
+  });
 
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
