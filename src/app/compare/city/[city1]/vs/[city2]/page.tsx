@@ -9,26 +9,9 @@ import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { getCityBySlug } from "@/lib/cities";
+import { CITY_COMPARISON_PAIRS, canonicalCityPair } from "@/lib/city-comparisons";
 
 export const revalidate = 86400;
-
-// ── City pairs for static generation ──
-
-const CITY_PAIRS: [string, string][] = [
-  // London vs major cities
-  ["london", "manchester"], ["london", "birmingham"], ["london", "leeds"],
-  ["london", "glasgow"], ["london", "edinburgh"], ["london", "bristol"],
-  ["london", "liverpool"], ["london", "sheffield"], ["london", "nottingham"],
-  ["london", "cardiff"],
-  // Northern rivalries
-  ["manchester", "birmingham"], ["manchester", "leeds"], ["manchester", "liverpool"],
-  ["manchester", "sheffield"], ["manchester", "glasgow"],
-  // Other major pairs
-  ["birmingham", "leeds"], ["birmingham", "bristol"], ["birmingham", "nottingham"],
-  ["edinburgh", "glasgow"], ["leeds", "sheffield"],
-  ["bristol", "cardiff"], ["liverpool", "leeds"],
-  ["newcastle", "sunderland"], ["nottingham", "leicester"],
-];
 
 interface Props {
   params: Promise<{ city1: string; city2: string }>;
@@ -165,7 +148,7 @@ async function getCityStats(citySlug: string): Promise<CityStats | null> {
 
 export function generateStaticParams() {
   const params: { city1: string; city2: string }[] = [];
-  for (const [a, b] of CITY_PAIRS) {
+  for (const [a, b] of CITY_COMPARISON_PAIRS) {
     params.push({ city1: a, city2: b });
     params.push({ city1: b, city2: a });
   }
@@ -180,13 +163,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c2 = getCityBySlug(city2);
   if (!c1 || !c2) return { title: "Not Found" };
 
+  // Both directions render the same comparison, so point them at one canonical URL
+  // rather than letting them compete as duplicates and split their link equity.
+  const canonicalPair = canonicalCityPair(c1.slug, c2.slug);
+  const canonicalUrl = `https://www.tapwater.uk/compare/city/${
+    canonicalPair ? canonicalPair[0] : c1.slug
+  }/vs/${canonicalPair ? canonicalPair[1] : c2.slug}`;
+
   return {
     title: `${c1.name} vs ${c2.name} Water Quality`,
     description: `Compare tap water quality in ${c1.name} and ${c2.name}. Safety scores, contaminants, and which city has better water.`,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title: `${c1.name} vs ${c2.name} Water Quality Comparison`,
       description: `Compare tap water quality in ${c1.name} and ${c2.name}. Safety scores, contaminants, and which city has better water.`,
-      url: `https://www.tapwater.uk/compare/city/${c1.slug}/vs/${c2.slug}`,
+      url: canonicalUrl,
       type: "website",
     },
   };
@@ -277,7 +268,7 @@ export default async function CityComparisonPage({ params }: Props) {
     : [];
 
   // Other comparison links
-  const otherPairs = CITY_PAIRS
+  const otherPairs = CITY_COMPARISON_PAIRS
     .filter(([a, b]) => !(a === city1 && b === city2) && !(a === city2 && b === city1))
     .slice(0, 5);
 

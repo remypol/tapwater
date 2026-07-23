@@ -12,6 +12,7 @@ import { CompareSearch } from "@/components/compare-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { CITY_COMPARISON_PAIRS, cityLabel } from "@/lib/city-comparisons";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 
@@ -354,6 +355,32 @@ export default async function ComparePage() {
 
             <div className="max-w-xl">
               <PostcodeSearch size="sm" />
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* City-vs-city comparisons.
+            These pages were in the sitemap but linked from nowhere, which left 42 of
+            them with no incoming internal links at all. */}
+        <ScrollReveal>
+          <section className="mt-14">
+            <h2 className="font-display text-2xl italic text-ink">
+              Compare two cities
+            </h2>
+            <p className="text-body mt-2 max-w-2xl">
+              Side-by-side water quality for the UK&apos;s largest cities, based
+              on the same test data as the postcode reports.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {CITY_COMPARISON_PAIRS.map(([a, b]) => (
+                <Link
+                  key={`${a}-${b}`}
+                  href={`/compare/city/${a}/vs/${b}`}
+                  className="rounded-lg border border-rule px-3 py-1.5 text-sm text-body hover:border-accent/40 hover:text-ink transition-colors"
+                >
+                  {cityLabel(a)} vs {cityLabel(b)}
+                </Link>
+              ))}
             </div>
           </section>
         </ScrollReveal>

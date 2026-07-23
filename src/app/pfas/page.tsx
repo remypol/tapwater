@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/product-card";
 import { PfasMapWrapper as PfasMap } from "@/components/pfas-map-wrapper";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { getPfasNationalSummary } from "@/lib/pfas-data";
+import { CITIES } from "@/lib/cities";
 import { getProductIncludingUnavailable } from "@/lib/products";
 
 export const revalidate = 86400;
@@ -120,6 +121,9 @@ export default async function PfasNationalPage() {
     "en-GB",
     { day: "numeric", month: "long", year: "numeric" }
   );
+
+  const detectedSlugs = new Set(data.detectionsByCity.map((c) => c.slug));
+  const citiesWithoutDetections = CITIES.filter((c) => !detectedSlugs.has(c.slug));
 
   return (
     <div className="bg-hero min-h-screen">
@@ -320,6 +324,32 @@ export default async function PfasNationalPage() {
               &quot;Highest&quot; shows the single highest PFAS reading recorded
               at any monitoring point near the city.
             </p>
+
+            {/* Cities we hold a PFAS page for but which recorded no detections.
+                The table above only lists cities with detections, so these pages
+                had no incoming internal links — a crawl found 36 of them orphaned.
+                A city with nothing found is a useful answer in its own right. */}
+            {citiesWithoutDetections.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-sm font-semibold text-ink">
+                  Cities with no PFAS detections on record
+                </h3>
+                <p className="text-xs text-faint mt-1">
+                  Tested, nothing found. Each page shows what was sampled.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {citiesWithoutDetections.map((city) => (
+                    <Link
+                      key={city.slug}
+                      href={`/pfas/${city.slug}`}
+                      className="rounded-lg border border-rule px-2.5 py-1 text-sm text-body hover:border-accent/40 hover:text-ink transition-colors"
+                    >
+                      {city.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         </ScrollReveal>
 
