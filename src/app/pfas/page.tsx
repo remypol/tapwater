@@ -106,12 +106,35 @@ export default async function PfasNationalPage() {
 
           <div className="card-elevated rounded-2xl p-8 max-w-2xl">
             <p className="font-display text-2xl text-ink italic">
-              Data coming soon
+              No PFAS detections on record
             </p>
             <p className="text-base text-body leading-relaxed mt-3">
-              PFAS monitoring data is being collected. Check back soon.
+              Environment Agency monitoring near the cities we track has not
+              recorded a PFAS detection. Each city page below shows what was
+              sampled there.
             </p>
           </div>
+
+          {/* The per-city pages exist and have content whether or not any detection
+              was recorded, so link them from here too. Keeping these links only in
+              the detections table left 36 city pages with no incoming internal link
+              at all whenever the table was empty, which is the current state. */}
+          <section className="mt-10">
+            <h2 className="font-display text-xl italic text-ink">
+              PFAS by city
+            </h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {CITIES.map((city) => (
+                <Link
+                  key={city.slug}
+                  href={`/pfas/${city.slug}`}
+                  className="rounded-lg border border-rule px-2.5 py-1 text-sm text-body hover:border-accent/40 hover:text-ink transition-colors"
+                >
+                  {city.name}
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     );
