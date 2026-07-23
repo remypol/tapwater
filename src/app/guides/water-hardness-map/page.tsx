@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { FAQSchema, ArticleSchema } from "@/components/json-ld"
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
@@ -10,6 +11,7 @@ export function generateMetadata(): Metadata {
     description:
       "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
     openGraph: {
+      images: OG_IMAGE,
       title: `UK Water Hardness Map (${year})`,
       description:
         "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",

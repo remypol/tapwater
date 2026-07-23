@@ -3,6 +3,7 @@ import Link from "next/link"
 import { FlaskConical } from "lucide-react"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { ArticleSchema } from "@/components/json-ld"
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
     openGraph: {
+      images: OG_IMAGE,
       title: `How to Test Your Tap Water (${year})`,
       description:
         "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",

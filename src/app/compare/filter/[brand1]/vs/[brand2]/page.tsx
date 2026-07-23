@@ -14,6 +14,7 @@ import {
   type BrandComparison,
 } from "@/lib/brand-comparisons";
 import type { FilterProduct } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -50,12 +51,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical },
     openGraph: {
+      images: OG_IMAGE,
       title,
       description,
       url: canonical,
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title,
       description,

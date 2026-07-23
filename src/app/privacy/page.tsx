@@ -1,15 +1,18 @@
 import type { Metadata } from 'next'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'Privacy Policy',
     description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',
     url: 'https://www.tapwater.uk/privacy',
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'Privacy Policy',
     description: 'Privacy policy for TapWater.uk — how we collect, use, and protect your personal data.',

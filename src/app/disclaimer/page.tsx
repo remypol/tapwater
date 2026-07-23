@@ -1,15 +1,18 @@
 import type { Metadata } from 'next'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'Disclaimer',
   description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'Disclaimer',
     description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',
     url: 'https://www.tapwater.uk/disclaimer',
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'Disclaimer',
     description: 'Disclaimer for TapWater.uk — the limitations and intended use of our water quality information.',

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema } from "@/components/json-ld";
 import { getPostcodeIndex, type PostcodeIndexEntry } from "@/lib/data";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400; // Matches the postcode pages this links into.
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   alternates: { canonical: "https://www.tapwater.uk/postcode" },
   openGraph: {
+    images: OG_IMAGE,
     title: TITLE,
     description: DESCRIPTION,
     url: "https://www.tapwater.uk/postcode",

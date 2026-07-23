@@ -1,15 +1,18 @@
 import type { Metadata } from 'next'
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: 'Affiliate Disclosure',
   description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',
   openGraph: {
+    images: OG_IMAGE,
     title: 'Affiliate Disclosure',
     description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',
     url: 'https://www.tapwater.uk/affiliate-disclosure',
     type: 'website',
   },
   twitter: {
+    images: OG_IMAGE,
     card: 'summary',
     title: 'Affiliate Disclosure',
     description: 'Affiliate disclosure for TapWater.uk — how we earn revenue through product recommendations.',

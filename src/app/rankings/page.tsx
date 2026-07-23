@@ -7,6 +7,7 @@ import { getAllPostcodeDistricts, getPostcodeData } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -67,12 +68,14 @@ export function generateMetadata(): Metadata {
     title: `UK Water Quality Rankings (${year})`,
     description: `Which UK city has the best tap water? See ${year} rankings for all 51 major cities, water companies, and regions. Based on official Environment Agency data.`,
     openGraph: {
+      images: OG_IMAGE,
       title: `UK Water Quality Rankings ${year}`,
       description: "Which UK city has the best tap water? Rankings for 51 cities, water companies, and regions.",
       url: "https://www.tapwater.uk/rankings",
       type: "website",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `UK Water Quality Rankings ${year}`,
       description: "Which UK city has the best tap water? See the full rankings.",

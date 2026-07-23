@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { AlertTriangle, BookOpen, MapPin } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -16,6 +17,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/guides/moving-house-water-check",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: `Moving House? Check Your New Area's Water Quality (${year})`,
       description:
         "Different water companies, different source water, different pipes. A 10-minute drive can mean completely different tap water.",
@@ -23,6 +25,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Moving House? Check Your New Area's Water Quality (${year})`,
       description:

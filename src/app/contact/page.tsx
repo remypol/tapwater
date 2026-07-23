@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbSchema } from "@/components/json-ld";
+import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with TapWater.uk. For press enquiries, data corrections, water company feedback, or general questions about UK tap water quality.",
   openGraph: {
+    images: OG_IMAGE,
     title: "Contact Us",
     description:
       "Get in touch with TapWater.uk. For press enquiries, data corrections, water company feedback, or general questions about UK tap water quality.",
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
+    images: OG_IMAGE,
     card: "summary",
     title: "Contact Us",
     description:

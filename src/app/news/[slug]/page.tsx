@@ -7,6 +7,7 @@ import { getAllIncidentSlugs, getIncidentBySlug } from "@/lib/incidents";
 import { INCIDENT_TYPE_LABELS, SEVERITY_CONFIG } from "@/lib/incidents-types";
 import { marked } from "marked";
 import { notFound } from "next/navigation";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 300;
 
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     robots: "max-image-preview:large",
     openGraph: {
+      images: OG_IMAGE,
       title,
       description,
       url,
@@ -41,6 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: incident.last_checked,
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title,
       description,

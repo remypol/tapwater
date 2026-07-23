@@ -12,6 +12,7 @@ import {
   getProductsByCategory,
 } from "@/lib/products";
 import type { ProductCategory } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 /* ── slug ↔ category mapping ──────────────────────────────────────────── */
 
@@ -170,12 +171,14 @@ export async function generateMetadata({
     description,
     alternates: { canonical: url },
     openGraph: {
+      images: OG_IMAGE,
       title,
       description,
       url,
       type: "website",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title,
       description,

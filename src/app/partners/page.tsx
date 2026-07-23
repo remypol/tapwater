@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BreadcrumbSchema } from "@/components/json-ld";
 import { REGIONS } from "@/lib/regions";
 import { PartnerSignupForm } from "@/components/partner-signup-form";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -17,6 +18,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/partners",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: "Partner With TapWater.uk",
       description:
         "Get qualified water softener leads from homeowners in hard water areas. Join our installer partner network.",
@@ -24,6 +26,7 @@ export function generateMetadata(): Metadata {
       type: "website",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary",
       title: "Partner With TapWater.uk",
       description:

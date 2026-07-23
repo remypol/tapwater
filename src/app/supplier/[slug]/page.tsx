@@ -13,6 +13,7 @@ import { BreadcrumbSchema } from "@/components/json-ld";
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,12 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${supplier.name} Water Quality Report`,
     description,
     openGraph: {
+      images: OG_IMAGE,
       title: `${supplier.name} Water Quality Report`,
       description,
       url: `https://www.tapwater.uk/supplier/${supplier.id}`,
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `${supplier.name} Water Quality Report`,
       description,

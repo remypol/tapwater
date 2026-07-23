@@ -5,6 +5,7 @@ import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { ProductCard } from "@/components/product-card";
 import { getProductIncludingUnavailable } from "@/lib/products";
 import { AlertTriangle, ShieldCheck, BookOpen, Droplets } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -18,6 +19,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/guides/water-and-eczema",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: `Can Tap Water Make Eczema Worse? Hard Water & Chlorine (${year})`,
       description:
         "Research from Sheffield and King's College London links hard water to a damaged skin barrier. Here is what you need to know.",
@@ -25,6 +27,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Can Tap Water Make Eczema Worse? Hard Water & Chlorine (${year})`,
       description:

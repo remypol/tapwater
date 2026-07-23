@@ -5,6 +5,7 @@ import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { ProductCard } from "@/components/product-card";
 import { getProductIncludingUnavailable } from "@/lib/products";
 import { AlertTriangle, ShieldCheck, BookOpen, Droplets } from "lucide-react";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -18,6 +19,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/guides/water-quality-pregnancy",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: `Water Quality and Pregnancy: What You Need to Know (${year})`,
       description:
         "Lead crosses the placenta. Nitrate can affect oxygen in the blood. Here is what pregnant women need to know about UK tap water.",
@@ -25,6 +27,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Water Quality and Pregnancy: What You Need to Know (${year})`,
       description:

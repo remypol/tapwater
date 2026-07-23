@@ -10,6 +10,7 @@ import { getCityBySlug, CITIES } from "@/lib/cities";
 import { getPostcodesByCity } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
@@ -43,6 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: pageTitle,
     description: regionDesc,
     openGraph: {
+      images: OG_IMAGE,
       title: `Water Quality in ${region.name} — Is It Safe?`,
       description: `Water quality data for every postcode in ${region.name}. Check safety scores, contaminants, and supplier info.`,
       url: `https://www.tapwater.uk/region/${slug}`,

@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getProductsByCategory } from "@/lib/products";
+import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
 
@@ -41,6 +42,7 @@ export function generateMetadata(): Metadata {
       canonical: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
     },
     openGraph: {
+      images: OG_IMAGE,
       title: `Best Whole House Water Filter UK (${year})`,
       description:
         "Independent whole-house filter reviews tested against real UK water quality data from 2,800 postcodes.",
@@ -48,6 +50,7 @@ export function generateMetadata(): Metadata {
       type: "article",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Best Whole House Water Filter UK (${year})`,
       description:

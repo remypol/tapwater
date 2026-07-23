@@ -3,6 +3,7 @@ import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { SoftenerLeadForm } from "@/components/softener-lead-form"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
+import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
@@ -11,6 +12,7 @@ export function generateMetadata(): Metadata {
     description:
       "Check your water hardness by postcode. Find out if you have hard or soft water, what it means for your home, and whether you need a softener.",
     openGraph: {
+      images: OG_IMAGE,
       title: `Water Hardness Checker by Postcode (${year})`,
       description:
         "Check your water hardness by postcode. Understand what causes hard water and what you can do about it.",
@@ -18,6 +20,7 @@ export function generateMetadata(): Metadata {
       type: "website",
     },
     twitter: {
+      images: OG_IMAGE,
       card: "summary_large_image",
       title: `Water Hardness Checker (${year})`,
       description: "Is your water hard or soft? Check by postcode and find out what it means.",
