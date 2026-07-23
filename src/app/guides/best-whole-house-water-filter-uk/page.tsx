@@ -206,6 +206,9 @@ export default function BestWholeHouseFilterGuide() {
   const bwt = wholeHouseProducts.find((p) => p.id === "bwt-e1-whole-house")!;
   const waterdrop = wholeHouseProducts.find((p) => p.id === "waterdrop-whf3t")!;
   const aquasana = wholeHouseProducts.find((p) => p.id === "aquasana-eq1000")!;
+  const osmio = wholeHouseProducts.find(
+    (p) => p.id === "osmio-pro-iii-ultimate"
+  )!;
 
   const comparisonContaminants = [
     "Chlorine",
@@ -487,7 +490,7 @@ export default function BestWholeHouseFilterGuide() {
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The three best whole house filters for UK homes
+          The four best whole house filters for UK homes
         </h2>
 
         {/* Product cards at a glance */}
@@ -501,7 +504,9 @@ export default function BestWholeHouseFilterGuide() {
                   ? "Top pick \u2014 best overall"
                   : product.id === "bwt-e1-whole-house"
                     ? "Value pick \u2014 lowest running costs"
-                    : "Premium pick \u2014 maximum lifespan"
+                    : product.id === "osmio-pro-iii-ultimate"
+                      ? "Broad-spectrum pick \u2014 bacteria and metals"
+                      : "Premium pick \u2014 maximum lifespan"
               }
             />
           ))}
@@ -564,6 +569,26 @@ export default function BestWholeHouseFilterGuide() {
               "Pre-filter replacement every 3 months adds hassle",
             ]}
             ctaLabel="View on Amazon"
+          />
+
+          <ProductReview
+            product={osmio}
+            heading="Osmio PRO-III Ultimate — Broad-spectrum pick"
+            verdict="The widest contaminant list here, but it will not touch limescale."
+            review="The Osmio PRO-III Ultimate goes after a different problem than the other three. Alongside chlorine and sediment, Osmio list bacteria, nitrates, hormones, pharmaceutical residues and heavy metals including nickel, chromium, cadmium and mercury — the only unit here making those claims. It is certified to NSF/ANSI 42 and 61 through IAPMO, and also carries WaterMark approval. Three stages do the work: a ceramic block rated for three years or 300,000 litres, a 5-micron carbon block, and a GAC/KDF stage. In practice that means most years you only swap the carbon. Two things to be clear about. It does not soften water, and Osmio say so on their own product page, so if your postcode shows hard water you still need a softener alongside it. And there is no PFAS certification, which stands out because Osmio sell a separate PFAS filter. Running costs are the highest here at roughly £188/year once all three stages are counted. At £499 it makes sense if bacteria and metals are your concern; if you mainly want scale gone, look elsewhere."
+            pros={[
+              "Targets bacteria, nitrates and pharmaceutical residues — no other unit here claims this",
+              "NSF/ANSI 42 and 61 certified via IAPMO, plus WaterMark approval",
+              "Ceramic stage lasts three years, so most years need only a carbon change",
+              "Brass 1″ BSP fittings rather than plastic connections",
+            ]}
+            cons={[
+              "Does not soften water — hard-water homes still need a separate softener",
+              "No PFAS certification, despite Osmio selling a dedicated PFAS filter",
+              "Roughly £188/year in replacements, the highest running cost here",
+              "Osmio quote two different capacities for the GAC/KDF stage on the same page",
+            ]}
+            ctaLabel="View on Osmio"
           />
         </div>
 

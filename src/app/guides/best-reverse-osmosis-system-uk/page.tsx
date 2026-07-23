@@ -206,6 +206,8 @@ export default function BestReverseOsmosisGuide() {
   const waterdrop = roProducts.find((p) => p.id === "waterdrop-g3p600")!;
   const frizzlife = roProducts.find((p) => p.id === "frizzlife-pd600")!;
   const echo = roProducts.find((p) => p.id === "echo-water-hydrogen")!;
+  const fusion2 = roProducts.find((p) => p.id === "osmio-fusion-2")!;
+  const fusion3 = roProducts.find((p) => p.id === "osmio-fusion-3")!;
 
   const comparisonContaminants = [
     "PFAS (total)",
@@ -482,7 +484,7 @@ export default function BestReverseOsmosisGuide() {
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The three best RO systems for UK kitchens
+          The five best RO systems for UK kitchens
         </h2>
 
         {/* Product cards at a glance */}
@@ -496,7 +498,11 @@ export default function BestReverseOsmosisGuide() {
                   ? "Top pick \u2014 best overall"
                   : product.id === "frizzlife-pd600"
                     ? "Value pick \u2014 best for the money"
-                    : "Premium pick \u2014 maximum purification"
+                    : product.id === "osmio-fusion-2"
+                      ? "Remineralised pick \u2014 UK supplier"
+                      : product.id === "osmio-fusion-3"
+                        ? "Tankless pick \u2014 hydrogen and chilled"
+                        : "Premium pick \u2014 maximum purification"
               }
             />
           ))}
@@ -561,6 +567,43 @@ export default function BestReverseOsmosisGuide() {
               "Lower flow rate at 1.9 L/min compared to the other two",
             ]}
             ctaLabel="View on Echo Water"
+          />
+
+          <ProductReview
+            product={fusion2}
+            heading="Osmio Fusion 2.0 — Remineralised pick"
+            verdict="Puts minerals back after RO, from a UK supplier with UK spares."
+            review="Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that remineralises the water and lifts the pH back up, which is the main reason to choose it over the Waterdrop. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while certified alternatives exist for less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £495 it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install."
+            pros={[
+              "Bioceramic stage remineralises and raises pH, which most RO systems do not",
+              "Widest contaminant list here, covering fluoride and nitrates as well as lead",
+              "UK company, so spares and support do not ship from overseas",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated for this system",
+              "£62.90 filter set every 6 months, roughly £126/year",
+              "Needs plumbing into the cold feed — not a realistic DIY job",
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
+          <ProductReview
+            product={fusion3}
+            heading="Osmio Fusion 3.0 — Tankless pick"
+            verdict="No storage tank and chilled water, but thinner paperwork than the price suggests."
+            review="The Fusion 3.0 is the Fusion 2.0 with the tank taken out. Rather than filling a storage tank and waiting for it to refill, it feeds directly, so you are not rationed to a tankful at a time. It also adds a PEM hydrogen generator and chilled water in the same unit. The filtration claims match the 2.0. Whether the hydrogen is worth paying for is a separate question: as with the Echo, those health claims lack independent UK verification, so treat the filtration as what you are actually buying. The gaps matter at this price. Osmio publish no filter replacement interval for the 3.0, so unlike every other system here you cannot work out the yearly running cost before you buy. The manufacturer warranty is 12 months, shorter than most, and Osmio state that themselves. No certification is listed either. At £650 it is £155 more than the 2.0 for features that are about convenience rather than cleaner water. Worth it if tankless and chilled genuinely matter to you; otherwise the 2.0 filters the same for less."
+            pros={[
+              "Direct feed with no storage tank, so there is no waiting for a refill",
+              "Chilled water and hydrogen generation built into the same unit",
+              "Same broad contaminant coverage as the Fusion 2.0",
+            ]}
+            cons={[
+              "£155 more than the Fusion 2.0 for convenience rather than filtration",
+              "No published filter replacement interval, so yearly cost is unknown",
+              "12-month manufacturer warranty, shorter than most systems here",
+              "Hydrogen health claims lack independent UK verification",
+            ]}
+            ctaLabel="View on Osmio"
           />
         </div>
 
