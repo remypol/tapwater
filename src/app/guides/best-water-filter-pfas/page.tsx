@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, AlertTriangle, Check, Star, ArrowUpRight, ShieldCheck, Search } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { AffiliateLink } from "@/components/affiliate-link";
 import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
@@ -197,15 +198,20 @@ function ProductReview({
           <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
           {product.rating.toFixed(1)} average rating
         </span>
-        <a
+        <AffiliateLink
           href={product.affiliateUrl}
-          target="_blank"
-          rel="noopener noreferrer sponsored nofollow"
+          pageType="best-water-filter-pfas-guide"
+          pathname="/guides/best-water-filter-pfas"
+          recommendationReason={heading}
+          productCategory={product.category}
+          productSlug={product.slug}
+          placement="guide-review"
+          campaign="best-water-filter-pfas-guide"
           className="inline-flex items-center gap-1.5 bg-btn text-white rounded-lg px-5 py-2.5 text-sm font-medium hover:bg-btn-hover transition-colors"
         >
           {ctaLabel ?? "View deal"}
           <ArrowUpRight className="w-3.5 h-3.5" />
-        </a>
+        </AffiliateLink>
       </div>
     </div>
   );
@@ -620,6 +626,9 @@ export default function BestWaterFilterPfasGuide() {
         </p>
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
+            pageType="best-water-filter-pfas-guide"
+            pathname="/guides/best-water-filter-pfas"
+            campaign="best-water-filter-pfas-guide"
             products={featuredProducts}
             contaminants={comparisonContaminants}
           />
