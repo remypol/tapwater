@@ -709,37 +709,6 @@ export const PRODUCTS: FilterProduct[] = [
   },
 
   // ─── WATER SOFTENERS ─────────────────────────────────────────────────
-  {
-    id: "waterdrop-whr01",
-    brand: "Waterdrop",
-    model: "WHR01 Water Softener System",
-    slug: "waterdrop-whr01",
-    category: "water_softener",
-    removes: ["Calcium", "Magnesium", "Limescale"],
-    certifications: ["NSF components"],
-    priceGbp: 2200,
-    priceTier: "premium",
-    affiliateUrl: "https://waterdropfiltereu.pxf.io/c/5514161/2060304/25810?u=https%3A%2F%2Fwww.waterdropfilter.com%2Fproducts%2Fwaterdrop-water-softener-system-for-home",
-    affiliateProgram: "impact",
-    affiliateTag: "waterdropfiltereu-impact",
-    imageUrl: "/filters/waterdrop-whr01.png",
-    rating: 4.5,
-    badge: "premium",
-    pros: [
-      "Up-flow regeneration uses less salt and water than traditional softeners",
-      "Pre-assembled core components for faster installation",
-      "10-year resin tank warranty — longest in the category",
-    ],
-    cons: [
-      "Premium price point — £2,000+ before installation",
-      "Currently shipping from US — UK availability pending",
-      "Requires professional installation with drain connection",
-    ],
-    bestFor: "Homeowners in very hard water areas wanting the most efficient salt-based softener",
-    filterLife: "Resin lasts 10+ years with regular regeneration",
-    annualCost: 60,
-    availableInUk: false,
-  },
 
   // ─── TESTING KITS ──────────────────────────────────────────────────
   {
