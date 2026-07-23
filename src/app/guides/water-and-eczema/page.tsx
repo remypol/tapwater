@@ -266,7 +266,7 @@ export default function WaterAndEczemaGuide() {
               { href: "/guides/best-water-softener-uk", label: "Best Water Softeners UK" },
               { href: "/guides/best-shower-filter-uk", label: "Best Shower Filters UK" },
               { href: "/guides/water-hardness-map", label: "Water Hardness by Area" },
-              { href: "/filters/shower", label: "All Shower Filters Reviewed" },
+              { href: "/filters/shower-filters", label: "All Shower Filters Reviewed" },
             ].map(({ href, label }) => (
               <li key={href} className="flex gap-2">
                 <span className="mt-2 w-1.5 h-1.5 rounded-full bg-rule-strong shrink-0" aria-hidden="true" />

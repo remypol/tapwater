@@ -213,7 +213,7 @@ export default function WaterQualityPregnancyGuide() {
         <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">Reverse osmosis — the most thorough option</h3>
         <p className="text-base text-body leading-relaxed mb-4">
           Reverse osmosis systems push water through a semi-permeable membrane that removes 95–99% of lead, PFAS, nitrate, fluoride, and most other dissolved contaminants. They are the most comprehensive under-sink option for households with specific concerns — particularly lead pipe risk or confirmed PFAS detection. They require installation under the kitchen sink and connect to a separate filtered-water tap. See our{" "}
-          <Link href="/filters/reverse-osmosis" className="text-accent hover:underline font-medium">reverse osmosis guide</Link>{" "}for a full comparison.
+          <Link href="/filters/reverse-osmosis-systems" className="text-accent hover:underline font-medium">reverse osmosis guide</Link>{" "}for a full comparison.
         </p>
 
         {roProduct && (
@@ -273,7 +273,7 @@ export default function WaterQualityPregnancyGuide() {
               { href: "/guides/pfas-uk-explained", label: "PFAS in UK Water: The Full Picture" },
               { href: "/contaminant/lead", label: "Lead in UK Water: Postcode Data" },
               { href: "/contaminant/nitrate", label: "Nitrate in UK Water: Postcode Data" },
-              { href: "/filters/reverse-osmosis", label: "Best Reverse Osmosis Systems UK" },
+              { href: "/filters/reverse-osmosis-systems", label: "Best Reverse Osmosis Systems UK" },
             ].map(({ href, label }) => (
               <li key={href} className="flex gap-2">
                 <span className="mt-2 w-1.5 h-1.5 rounded-full bg-rule-strong shrink-0" aria-hidden="true" />

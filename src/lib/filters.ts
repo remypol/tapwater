@@ -18,18 +18,73 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
 };
 
 /**
+ * Readings and products name the same substance differently. Monitoring data uses
+ * official names ("Chlorine residual", "Coliform bacteria", "Hardness (CaCO3)"),
+ * products describe what they remove ("Chlorine", "Bacteria", "Limescale"). Comparing
+ * those as exact strings silently drops real matches: a postcode flagged for
+ * "Chlorine residual" would be shown no chlorine-capable filter at all.
+ *
+ * Keys are measured names (lowercased), values are product capabilities that genuinely
+ * address them. Anything not listed falls back to matching on its own name.
+ */
+const CONTAMINANT_ALIASES: Record<string, string[]> = {
+  "chlorine residual": ["chlorine", "chloramine"],
+  "coliform bacteria": ["bacteria"],
+  "e. coli": ["bacteria"],
+  pfos: ["pfas (total)"],
+  pfoa: ["pfas (total)"],
+  nitrate: ["nitrate", "nitrates"],
+  nitrates: ["nitrate", "nitrates"],
+  turbidity: ["sediment", "particles"],
+  "hardness (caco3)": ["limescale", "calcium", "magnesium"],
+  trihalomethanes: ["trihalomethanes"],
+};
+
+/** Product capabilities that genuinely address a given measured contaminant. */
+function capabilitiesFor(measured: string): string[] {
+  const key = measured.trim().toLowerCase();
+  return CONTAMINANT_ALIASES[key] ?? [key];
+}
+
+/** Does this product address the measured contaminant, allowing for naming differences? */
+export function productAddresses(
+  product: Pick<FilterProduct, "removes">,
+  measured: string,
+): boolean {
+  const wanted = capabilitiesFor(measured);
+  return product.removes.some((r) => wanted.includes(r.trim().toLowerCase()));
+}
+
+/** Hard water threshold in mg/L CaCO3, matching the site's "hard" classification. */
+export const HARD_WATER_THRESHOLD = 180;
+
+export interface RecommendationContext {
+  /** Measured hardness in mg/L CaCO3 for this location, when known. */
+  hardnessValue?: number | null;
+}
+
+/**
  * Recommend filters based on flagged contaminants.
- * Upgraded: PFAS boosts RO systems, excludes shower/testing from primary recs.
+ * PFAS boosts RO systems; hard water boosts products that actually treat scale;
+ * shower, testing and softener products are excluded from primary recommendations.
  */
 export function recommendFilters(
   flaggedContaminants: string[],
   maxResults: number = 3,
+  context: RecommendationContext = {},
 ): (FilterProduct & { matchedCount: number; matchedContaminants: string[] })[] {
   const drinkingFilters = PRODUCTS.filter(
     (f) => f.category !== "testing_kit" && f.category !== "shower" && f.category !== "water_softener",
   );
 
-  if (flaggedContaminants.length === 0) {
+  const hardWater =
+    typeof context.hardnessValue === "number" &&
+    context.hardnessValue >= HARD_WATER_THRESHOLD;
+
+  // Nothing flagged and normal water: fall back to the general picks. Nothing flagged
+  // but hard water is a different situation, so it drops through to the scoring below
+  // rather than recommending a jug that does nothing about scale.
+  if (flaggedContaminants.length === 0 && !hardWater) {
     return drinkingFilters
       .filter((f) => f.badge === "best-match" || f.badge === "budget")
       .slice(0, maxResults)
@@ -41,13 +96,16 @@ export function recommendFilters(
   );
 
   const results = drinkingFilters.map((f) => {
-    const matched = flaggedContaminants.filter((c) =>
-      f.removes.some((r) => r.toLowerCase() === c.toLowerCase()),
-    );
+    const matched = flaggedContaminants.filter((c) => productAddresses(f, c));
     const pfasBoost = hasPfas && f.category === "reverse_osmosis" ? 100 : 0;
+    // Hardness is a property of the supply rather than a flagged contaminant, so it
+    // never appears in the loop above. At this level a jug does nothing about scale,
+    // while a system that treats it genuinely is the better answer.
+    const hardWaterBoost =
+      hardWater && productAddresses(f, "hardness (caco3)") ? 50 : 0;
     return {
       ...f,
-      matchedCount: matched.length + pfasBoost,
+      matchedCount: matched.length + pfasBoost + hardWaterBoost,
       matchedContaminants: matched,
     };
   })
@@ -69,6 +127,20 @@ export function recommendFilters(
   for (const f of results) {
     if (diverse.length >= maxResults) break;
     if (!diverse.includes(f)) diverse.push(f);
+  }
+
+  // Few products treat scale, so hard water alone can leave the list one or two short
+  // and showing only £500 systems. Top it up with the general picks so there is still
+  // an affordable option next to them.
+  if (diverse.length < maxResults) {
+    const chosen = new Set(diverse.map((f) => f.id));
+    for (const f of drinkingFilters) {
+      if (diverse.length >= maxResults) break;
+      if (chosen.has(f.id)) continue;
+      if (f.badge !== "best-match" && f.badge !== "budget") continue;
+      diverse.push({ ...f, matchedCount: 0, matchedContaminants: [] });
+      chosen.add(f.id);
+    }
   }
 
   return diverse;
