@@ -147,10 +147,17 @@ function ResolvedIncidentCard({ incident }: { incident: Incident }) {
 }
 
 export default async function NewsPage() {
-  const { incidents } = await getAllIncidents(50);
+  const { incidents, total } = await getAllIncidents(50);
 
   const active = incidents.filter((i) => i.status === "active");
   const resolved = incidents.filter((i) => i.status === "resolved");
+
+  // The cards above show the 50 most recent, so every older incident had no incoming
+  // internal link at all — a crawl found 175 of them orphaned. The archive below lists
+  // the rest so each one stays reachable as the feed moves on.
+  const { incidents: allIncidents } = await getAllIncidents(Math.max(total, 50));
+  const shownIds = new Set(incidents.map((i) => i.id));
+  const archive = allIncidents.filter((i) => !shownIds.has(i.id));
 
   return (
     <div className="bg-hero min-h-screen">
@@ -245,6 +252,42 @@ export default async function NewsPage() {
                     />
                   ))}
                 </div>
+              </section>
+            </ScrollReveal>
+          </>
+        )}
+
+        {archive.length > 0 && (
+          <>
+            <hr className="border-rule mt-10" />
+            <ScrollReveal delay={0}>
+              <section className="mt-8">
+                <h2 className="font-display text-2xl text-ink italic mb-1">
+                  Archive
+                </h2>
+                <p className="text-sm text-faint mb-4">
+                  Every earlier incident we have recorded ({archive.length}).
+                </p>
+                <ul className="space-y-1.5">
+                  {archive.map((incident) => (
+                    <li key={incident.id}>
+                      <Link
+                        href={`/news/${incident.slug}`}
+                        className="group flex flex-wrap items-baseline gap-x-2 text-sm"
+                      >
+                        <time
+                          dateTime={incident.detected_at}
+                          className="text-faint tabular-nums shrink-0"
+                        >
+                          {formatDate(incident.detected_at)}
+                        </time>
+                        <span className="text-body group-hover:text-ink transition-colors">
+                          {incident.title}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </section>
             </ScrollReveal>
           </>

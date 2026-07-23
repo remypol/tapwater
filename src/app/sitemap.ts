@@ -7,6 +7,7 @@ import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
 import { getAllIncidentSlugs } from "@/lib/incidents";
 import { BRAND_COMPARISON_PAIRS } from "@/lib/brand-comparisons";
+import { CITY_COMPARISON_PAIRS } from "@/lib/city-comparisons";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -14,19 +15,6 @@ const CONTAMINANT_SLUGS = [
   "pfas", "lead", "nitrate", "copper", "chlorine", "fluoride", "trihalomethanes", "ecoli",
   "arsenic", "manganese", "iron", "mercury", "pesticides", "microplastics",
   "nitrite", "turbidity", "aluminium", "coliform", "cadmium", "chromium",
-];
-
-const CITY_COMPARISON_PAIRS: [string, string][] = [
-  ["london", "manchester"], ["london", "birmingham"], ["london", "leeds"],
-  ["london", "glasgow"], ["london", "edinburgh"], ["london", "bristol"],
-  ["london", "liverpool"], ["london", "sheffield"], ["london", "nottingham"],
-  ["london", "cardiff"],
-  ["manchester", "birmingham"], ["manchester", "leeds"], ["manchester", "liverpool"],
-  ["manchester", "sheffield"], ["manchester", "glasgow"],
-  ["birmingham", "leeds"], ["birmingham", "bristol"], ["birmingham", "nottingham"],
-  ["edinburgh", "glasgow"], ["leeds", "sheffield"],
-  ["bristol", "cardiff"], ["liverpool", "leeds"],
-  ["newcastle", "sunderland"], ["nottingham", "leicester"],
 ];
 
 const RANKING_SLUGS = [
@@ -167,21 +155,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    // City-vs-city comparison pages (both directions)
-    ...CITY_COMPARISON_PAIRS.flatMap(([a, b]) => [
-      {
-        url: `${BASE_URL}/compare/city/${a}/vs/${b}`,
-        lastModified: latestDataDate,
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-      },
-      {
-        url: `${BASE_URL}/compare/city/${b}/vs/${a}`,
-        lastModified: latestDataDate,
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-      },
-    ]),
+    // City-vs-city comparisons, canonical direction only. Both directions render and
+    // resolve, but the reverse now canonicalises to this one, so listing both would
+    // submit a URL that points its canonical elsewhere.
+    ...CITY_COMPARISON_PAIRS.map(([a, b]) => ({
+      url: `${BASE_URL}/compare/city/${a}/vs/${b}`,
+      lastModified: latestDataDate,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     // Brand filter comparison pages (both directions)
     ...BRAND_COMPARISON_PAIRS.flatMap(([a, b]) => [
       {
