@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       </p>
       ${hardnessValue ? `<p style="margin:0 0 16px;font-size:15px;color:#94a3b8;line-height:1.6;">Your area has <strong style="color:#f59e0b;">${hardnessLabel} water (${Math.round(hardnessValue)} mg/L)</strong>. A water softener can reduce limescale and protect your appliances.</p>` : ""}
       <p style="margin:0 0 24px;font-size:15px;color:#94a3b8;line-height:1.6;">
-        Up to 3 local installers will contact you within 24–48 hours with free, no-obligation quotes.
+        We&rsquo;ll be in touch as soon as we can match you with installers covering your area. No obligation, and you can opt out any time.
       </p>
       <div style="border-top:1px solid #334155;padding-top:20px;margin-top:8px;">
         <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">In the meantime</p>

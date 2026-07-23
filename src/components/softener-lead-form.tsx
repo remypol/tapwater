@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Droplets, ShieldCheck, Check, AlertCircle, MapPin } from "lucide-react";
 import { events } from "@/lib/analytics";
+import { softenerPartnerEnabled } from "@/lib/softener-partner";
+import { SoftenerPartnerCta } from "./softener-partner-cta";
 
 interface SoftenerLeadFormProps {
   postcode?: string;
@@ -12,7 +14,19 @@ interface SoftenerLeadFormProps {
   source: "postcode_page" | "hardness_page";
 }
 
-export function SoftenerLeadForm({
+/**
+ * Softener quote entry point. With a lead partner configured we hand the visitor over to that
+ * partner, who has the installer network. Without one we fall back to the on-site form, which
+ * stores the request but makes no callback promise we cannot keep.
+ */
+export function SoftenerLeadForm(props: SoftenerLeadFormProps) {
+  if (softenerPartnerEnabled) {
+    return <SoftenerPartnerCta {...props} />;
+  }
+  return <SoftenerLeadFormFallback {...props} />;
+}
+
+function SoftenerLeadFormFallback({
   postcode: initialPostcode,
   hardnessValue,
   hardnessLabel,
@@ -91,7 +105,7 @@ export function SoftenerLeadForm({
           <div>
             <p className="text-lg font-semibold text-ink">We&apos;ve received your request</p>
             <p className="text-sm text-muted mt-1">
-              Up to 3 local installers will contact you within 24–48 hours with free, no-obligation quotes for <span className="font-medium text-ink">{postcode}</span>.
+              We&apos;ll email you as soon as we can match you with installers covering <span className="font-medium text-ink">{postcode}</span>. No obligation, and you can opt out any time.
             </p>
             <p className="text-sm text-muted mt-2">
               Check your email at <span className="font-medium text-ink">{email}</span> for confirmation.
@@ -117,7 +131,7 @@ export function SoftenerLeadForm({
                 , a softener could save you £200+/year.
               </p>
               <p className="text-xs text-muted mt-1">
-                Get a free assessment — we&apos;ll tell you if it&apos;s worth it and connect you with trusted local installers.
+                Request a free assessment and we&apos;ll come back to you with local installer options for your area.
               </p>
             </div>
           </div>
@@ -212,7 +226,8 @@ export function SoftenerLeadForm({
                 className="mt-0.5 rounded border-rule text-amber-500 focus:ring-amber-500/20"
               />
               <span className="text-xs text-muted leading-relaxed">
-                I agree to be contacted by up to 3 local installers with quotes.
+                I agree to be contacted about water softener quotes, and to my
+                details being shared with local installers for that purpose.
                 No obligation. You can opt out any time.{" "}
                 <Link href="/privacy" className="underline underline-offset-2 hover:text-ink">
                   Privacy policy
@@ -235,11 +250,7 @@ export function SoftenerLeadForm({
             </div>
             <div className="text-center">
               <ShieldCheck className="w-4 h-4 text-muted mx-auto mb-0.5" />
-              <p className="text-xs text-muted">vetted installers</p>
-            </div>
-            <div className="text-center">
-              <p className="text-base font-bold text-ink">24h</p>
-              <p className="text-xs text-muted">response time</p>
+              <p className="text-xs text-muted">shared only with your consent</p>
             </div>
           </div>
         </>
