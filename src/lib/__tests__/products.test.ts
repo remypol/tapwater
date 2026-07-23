@@ -35,6 +35,18 @@ describe("PRODUCTS catalogue", () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
+  // A product whose link is missing its tracking still sends the visitor to the shop —
+  // we just earn nothing on the sale, which is worse than not linking at all. Deep links
+  // sometimes have to be fetched from a partner dashboard after the product is written,
+  // so this fails loudly for as long as a placeholder is left in place.
+  it("has no placeholder affiliate URLs", () => {
+    const unfinished = PRODUCTS.filter((p) =>
+      /placeholder/i.test(p.affiliateUrl),
+    ).map((p) => p.id);
+
+    expect(unfinished).toEqual([]);
+  });
+
   it("has products in every category", () => {
     const categories: ProductCategory[] = [
       "jug", "under_sink", "reverse_osmosis", "whole_house",

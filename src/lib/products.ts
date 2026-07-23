@@ -479,6 +479,46 @@ export const PRODUCTS: FilterProduct[] = [
     bestFor: "Buyers who specifically want tankless RO with hydrogen and chilled water",
     filterLife: "Not published by manufacturer",
   },
+  {
+    id: "osmio-zero",
+    brand: "Osmio",
+    model: "Zero 2.0 Countertop RO",
+    slug: "osmio-zero",
+    category: "reverse_osmosis",
+    removes: [
+      "Chlorine",
+      "Lead",
+      "Bacteria",
+      "Nitrate",
+      "Fluoride",
+      "Limescale",
+      "Heavy metals",
+    ],
+    certifications: [],
+    priceGbp: 413,
+    priceTier: "premium",
+    // PLACEHOLDER — replace with the tracked deep link from the Osmio dashboard
+    // (the Zero has its own campaign, separate from the Fusion campaigns already used).
+    // A guard test fails while this string is present, so it cannot ship untracked.
+    affiliateUrl: "https://www.osmiowater.co.uk/zip-portable-reverse-osmosis-system.html?PLACEHOLDER_NEEDS_TRACKED_DEEPLINK",
+    affiliateProgram: "direct",
+    affiliateTag: "osmio-213",
+    imageUrl: "",
+    rating: 4.4,
+    badge: "best-value",
+    pros: [
+      "Plugs into a socket — the only RO here that needs no plumbing, so renters can use it",
+      "Wastes 1 litre for every 5 produced, far less than a typical under-sink RO",
+      "Dispenses at drinking temperature through to near-boiling, so it replaces the kettle too",
+    ],
+    cons: [
+      "No NSF or WRAS certification stated",
+      "Osmio does not publish a filter replacement interval, so annual running cost is unclear",
+      "Takes up real worktop space at 38cm tall and 7kg",
+    ],
+    bestFor: "Renters and anyone who wants RO water without a plumber",
+    flowRate: "7.8 L/hour",
+  },
   // ─── WHOLE HOUSE ────────────────────────────────────────────────────
   {
     id: "bwt-e1-whole-house",

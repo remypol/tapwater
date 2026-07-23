@@ -178,7 +178,7 @@ function ProductReview({
         </div>
         <div>
           <p className="text-xs text-faint uppercase tracking-wider">Annual cost</p>
-          <p className="font-data text-sm text-ink font-medium">&pound;{product.annualCost}/yr</p>
+          <p className="font-data text-sm text-ink font-medium">{product.annualCost ? `£${product.annualCost}/yr` : "—"}</p>
         </div>
       </div>
 
@@ -211,6 +211,7 @@ export default function BestReverseOsmosisGuide() {
   const echo = roProducts.find((p) => p.id === "echo-water-hydrogen")!;
   const fusion2 = roProducts.find((p) => p.id === "osmio-fusion-2")!;
   const fusion3 = roProducts.find((p) => p.id === "osmio-fusion-3")!;
+  const zero = roProducts.find((p) => p.id === "osmio-zero")!;
 
   const comparisonContaminants = [
     "PFAS (total)",
@@ -487,7 +488,7 @@ export default function BestReverseOsmosisGuide() {
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The five best RO systems for UK kitchens
+          The six best RO systems for UK kitchens
         </h2>
 
         {/* Product cards at a glance */}
@@ -505,7 +506,9 @@ export default function BestReverseOsmosisGuide() {
                       ? "Remineralised pick \u2014 UK supplier"
                       : product.id === "osmio-fusion-3"
                         ? "Tankless pick \u2014 hydrogen and chilled"
-                        : "Premium pick \u2014 maximum purification"
+                        : product.id === "osmio-zero"
+                          ? "No-plumbing pick \u2014 plugs in"
+                          : "Premium pick \u2014 maximum purification"
               }
             />
           ))}
@@ -605,6 +608,25 @@ export default function BestReverseOsmosisGuide() {
               "No published filter replacement interval, so yearly cost is unknown",
               "12-month manufacturer warranty, shorter than most systems here",
               "Hydrogen health claims lack independent UK verification",
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
+          <ProductReview
+            product={zero}
+            heading="Osmio Zero 2.0 — No-plumbing pick"
+            verdict="RO water without a plumber, if you can spare the worktop space."
+            review="Every other system here has to be plumbed into your cold feed, which rules them out if you rent or do not fancy drilling the worktop. The Osmio Zero 2.0 is the exception: it stands on the counter, plugs into a socket, and you pour water into a 5-litre tank at the top. It produces up to 190 litres a day and dispenses anywhere from cold through to near-boiling, so it doubles as the kettle. It is also the most water-efficient system on this page, wasting one litre for every five it produces, where a typical under-sink RO wastes closer to one in three. The trade-offs are real. Osmio state no NSF or WRAS certification for it, and they do not publish a filter replacement interval, so unlike the others you cannot work out the yearly running cost before you buy. It is 38cm tall and 7kg, which is a genuine chunk of worktop. And at £413 you pay a premium over an under-sink system with comparable filtration. Buy it because it needs no plumbing, not because it filters better."
+            pros={[
+              "Plugs into a socket — the only system here needing no plumbing at all",
+              "Wastes 1 litre per 5 produced, roughly half the waste of a typical under-sink RO",
+              "Dispenses up to near-boiling, so it replaces the kettle as well",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated",
+              "No published filter replacement interval, so yearly cost is unknown",
+              "38cm tall and 7kg — it takes real worktop space",
+              "Costs more than an under-sink system with similar filtration",
             ]}
             ctaLabel="View on Osmio"
           />

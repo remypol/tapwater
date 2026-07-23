@@ -187,7 +187,7 @@ function ProductReview({
         </div>
         <div>
           <p className="text-xs text-faint uppercase tracking-wider">Annual cost</p>
-          <p className="font-data text-sm text-ink font-medium">&pound;{product.annualCost}/yr</p>
+          <p className="font-data text-sm text-ink font-medium">{product.annualCost ? `£${product.annualCost}/yr` : "—"}</p>
         </div>
       </div>
 
