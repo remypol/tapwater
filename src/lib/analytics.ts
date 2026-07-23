@@ -58,4 +58,10 @@ export const events = {
 
   softenerFormError: (postcode: string, error: string) =>
     trackEvent("softener_form_error", { postcode, error }),
+
+  softenerPartnerView: (postcode: string, source: string) =>
+    trackEvent("softener_partner_view", { postcode, source }),
+
+  softenerPartnerClick: (postcode: string, source: string) =>
+    trackEvent("softener_partner_click", { postcode, source }),
 };
