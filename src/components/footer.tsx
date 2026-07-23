@@ -3,6 +3,10 @@ import { Droplets } from "lucide-react";
 
 const navigateLinks = [
   { label: "Home", href: "/" },
+  // Site-wide entry point into the postcode network. Without a link from every page
+  // the index would itself have no incoming links, and the districts it exists to
+  // reach would stay orphaned.
+  { label: "All postcodes", href: "/postcode" },
   { label: "About", href: "/about" },
   { label: "Methodology", href: "/about/methodology" },
   { label: "Data Sources", href: "/about/data-sources" },

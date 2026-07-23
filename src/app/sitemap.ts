@@ -141,6 +141,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      // Index of every scored district. Postcode pages only linked to their own
+      // listed neighbours, leaving districts outside those lists with no incoming
+      // internal links at all.
+      url: `${BASE_URL}/postcode`,
+      lastModified: latestDataDate,
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/report/2026`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,

@@ -365,6 +365,42 @@ export async function getScoredPostcodeDistricts(): Promise<string[]> {
     .sort();
 }
 
+export interface PostcodeIndexEntry {
+  district: string;
+  areaName: string;
+  city: string;
+  region: string;
+  safetyScore: number;
+}
+
+/**
+ * Every scored district with the labels needed to list it, grouped by the caller.
+ *
+ * Exists for the /postcode index. Postcode pages previously only linked to the handful
+ * of neighbours in their own data, so any district outside someone else's neighbour
+ * list had no incoming internal links at all — a crawl found 188 of them orphaned,
+ * together pulling no organic traffic. The index gives every district one reliable
+ * link. Uses the same scored + recent filter as the sitemap so thin and stale pages
+ * are not linked into.
+ */
+export async function getPostcodeIndex(): Promise<PostcodeIndexEntry[]> {
+  const cache = await loadData();
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 3);
+  const cutoffStr = cutoff.toISOString().split("T")[0];
+
+  return Array.from(cache.values())
+    .filter((d) => d.safetyScore >= 0 && d.lastSampleDate >= cutoffStr)
+    .map((d) => ({
+      district: d.district,
+      areaName: d.areaName,
+      city: d.city,
+      region: d.region,
+      safetyScore: d.safetyScore,
+    }))
+    .sort((a, b) => a.district.localeCompare(b.district, "en", { numeric: true }));
+}
+
 /**
  * Returns the most recently updated scored postcodes — used on the homepage
  * to create direct crawl paths into the postcode network beyond popular searches.
