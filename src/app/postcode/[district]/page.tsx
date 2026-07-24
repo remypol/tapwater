@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin, Building2, ExternalLink } from "lucide-react";
+import { ChevronRight, MapPin, Building2, ExternalLink, Info } from "lucide-react";
 import { WaterDropScore } from "@/components/water-drop-score";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { StatCards } from "@/components/stat-cards";
@@ -149,6 +149,13 @@ export default async function PostcodePage({ params }: Props) {
   const recommendationSignals = flaggedNames;
   const waterScoreBand = data.safetyScore >= 7 ? "good" : data.safetyScore >= 4 ? "attention" : "poor";
 
+  // How many readings actually had a threshold to be judged against. Mirrors the
+  // scoredCount in scoring.ts, which feeds a lowConfidence flag nothing consumes.
+  const scoredCount = data.readings.filter(
+    (r) => (r.ukLimit ?? r.whoGuideline) !== null,
+  ).length;
+  const lowConfidence = data.safetyScore >= 0 && scoredCount > 0 && scoredCount < 3;
+
   // Find city page for breadcrumb linking
   const cityMatch = CITIES.find((c) =>
     c.matches.some((m) => m.toLowerCase() === data.city.toLowerCase()) ||
@@ -282,6 +289,25 @@ export default async function PostcodePage({ params }: Props) {
 
             {/* Sentinel: triggers sticky bar once scrolled past */}
             <ScoreSentinel />
+
+            {/* A score resting on one or two measurements reads exactly like a score
+                resting on twenty-two, and CO14 published "0.0/10 — Very Poor — your
+                water needs attention" off a single test. scoring.ts has computed a
+                lowConfidence flag for this all along, but nothing ever consumed it;
+                the same rule is applied here from the readings themselves, which
+                carry their own limits, so no schema change is needed. */}
+            {lowConfidence && (
+              <div className="mt-6 card p-4 flex items-start gap-3 border-l-2 border-warning">
+                <Info className="w-4 h-4 text-warning shrink-0 mt-0.5" />
+                <p className="text-sm text-body leading-relaxed">
+                  <span className="font-medium text-ink">Treat this score as provisional.</span>{" "}
+                  It rests on {scoredCount === 1 ? "a single measurement" : `${scoredCount} measurements`}{" "}
+                  with a legal limit to compare against, where a typical report has
+                  twenty or more. It reflects how little has been sampled near{" "}
+                  {data.district} as much as it reflects the water.
+                </p>
+              </div>
+            )}
 
             {/* Stat Cards */}
             <StatCards
