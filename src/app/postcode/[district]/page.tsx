@@ -25,6 +25,24 @@ import { WaterReportTracker } from "@/components/conversion-tracker";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
+/**
+ * Only the districts we actually hold exist at this route.
+ *
+ * With on-demand params, an unknown district rendered, hit notFound(), and Next
+ * cached that result as a prerender — which Vercel then served with HTTP 200
+ * (`x-nextjs-prerender: 1`, `x-vercel-cache: HIT`). So /postcode/ZZ99 and every
+ * typo answered "200 OK" with a page titled "Not Found", and the body was a
+ * loading skeleton that never resolved. Google is free to index those.
+ *
+ * generateStaticParams already enumerates every district we know about, so
+ * anything outside that list genuinely does not exist and should say so.
+ *
+ * Trade-off: a district added to the database after the last build 404s until the
+ * next one. The refresh cron fires a deploy hook, so that window is short, and a
+ * brief honest 404 beats a permanent indexable non-page.
+ */
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ district: string }>;
 }

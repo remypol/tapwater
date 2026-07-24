@@ -95,7 +95,11 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-gray-600 leading-relaxed">
-            Data sourced from the Environment Agency and Drinking Water Inspectorate. Updated daily.
+            {/* "Updated daily" ran on every page, including reports whose own banner
+                said the sample was over 26 years old. Each report carries its real
+                sample date, so point there instead of making a blanket claim. */}
+            Data sourced from UK water companies, the Environment Agency and the
+            Drinking Water Inspectorate. Each report shows when its sample was taken.
           </p>
           <p className="text-xs text-gray-600 flex-shrink-0">
             &copy; 2026
