@@ -353,6 +353,32 @@ export async function getAllPostcodeDistricts(): Promise<string[]> {
  * AND data from the last 3 years. Stale pages hurt credibility.
  * Use this for generating static pages and sitemap — avoids thin/stale pages.
  */
+/** Minimum measured parameters before a district may carry a public ranking claim. */
+export const MIN_TESTED_TO_RANK = 5;
+
+/**
+ * Whether a district may be named in a public ranking — the homepage lists, the
+ * /rankings pages and the press stories that hand journalists ready-made citations.
+ *
+ * Ranking on score alone put river and groundwater samples at the top of "highest
+ * lead levels in drinking water", some of them taken in 2000 and 2008, with named
+ * water companies attached. And a 10.0/10 built on two measured parameters says
+ * more about the sampling than about the water. A district has to be treated tap
+ * water, recently sampled, and actually tested to be worth naming.
+ */
+export function isRankable(p: PostcodeData): boolean {
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 3);
+  const cutoffStr = cutoff.toISOString().split("T")[0];
+
+  return (
+    p.safetyScore >= 0 &&
+    p.dataSource !== "ea-only" &&
+    p.lastSampleDate >= cutoffStr &&
+    p.contaminantsTested >= MIN_TESTED_TO_RANK
+  );
+}
+
 export async function getScoredPostcodeDistricts(): Promise<string[]> {
   const cache = await loadData();
   const cutoff = new Date();
@@ -542,19 +568,34 @@ export async function getRankedPostcodes(): Promise<{
         )
       `;
 
+      // These two lists are published on the homepage as "areas to watch" and
+      // "cleanest water", naming real places and their water company. Three guards
+      // decide what may carry that claim:
+      //
+      //  - drinking water only. Ranking by score alone surfaced river and groundwater
+      //    samples, because environmental monitoring flags far more than treated tap
+      //    water does. DA13 was headlined for lead off a sample taken in January 2000,
+      //    on a page that says "tap water tests not yet available for Thames Water".
+      //  - recent. Same three-year window the sitemap uses (getScoredPostcodeDistricts).
+      //  - actually tested. A 10.0/10 built on two measured parameters is not a
+      //    finding about the water, it is a finding about the sampling.
+      const cutoff = new Date();
+      cutoff.setFullYear(cutoff.getFullYear() - 3);
+      const cutoffStr = cutoff.toISOString().split("T")[0];
+      const MIN_TESTED_TO_RANK = 5;
+
+      const rankable = () =>
+        supabase!
+          .from("page_data")
+          .select(selectCols)
+          .gt("safety_score", 0)
+          .in("data_source", ["stream", "mixed"])
+          .gte("last_data_update", cutoffStr)
+          .gte("contaminants_tested", MIN_TESTED_TO_RANK);
+
       const [worstRes, bestRes] = await Promise.all([
-        supabase
-          .from("page_data")
-          .select(selectCols)
-          .gt("safety_score", 0)
-          .order("safety_score", { ascending: true })
-          .limit(3),
-        supabase
-          .from("page_data")
-          .select(selectCols)
-          .gt("safety_score", 0)
-          .order("safety_score", { ascending: false })
-          .limit(3),
+        rankable().order("safety_score", { ascending: true }).limit(3),
+        rankable().order("safety_score", { ascending: false }).limit(3),
       ]);
 
       if (!worstRes.error && !bestRes.error && worstRes.data && bestRes.data) {

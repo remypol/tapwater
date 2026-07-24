@@ -5,7 +5,7 @@ import { ChevronRight, Shield, Droplets, ArrowRight } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
-import { getAllPostcodeDistricts, getPostcodeData, getHardness } from "@/lib/data";
+import { getAllPostcodeDistricts, getPostcodeData, getHardness, isRankable } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
@@ -296,7 +296,9 @@ async function buildRankingData(slug: RankingSlug) {
     await Promise.all(districts.map((d) => getPostcodeData(d)))
   ).filter(Boolean) as PostcodeData[];
 
-  const scored = allData.filter((p) => p.safetyScore >= 0);
+  // Same bar as the homepage and the press stories: treated tap water, sampled
+  // within three years, and enough parameters measured to mean anything.
+  const scored = allData.filter(isRankable);
   const totalAnalysed = scored.length;
 
   let entries: RankedEntry[] = [];

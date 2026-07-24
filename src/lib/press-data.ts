@@ -5,7 +5,7 @@
  * packages results into journalist-ready story formats with CSV generation.
  */
 
-import { getAllPostcodeDistricts, getPostcodeData, getHardness } from "@/lib/data";
+import { getAllPostcodeDistricts, getPostcodeData, getHardness, isRankable } from "@/lib/data";
 import { getPfasNationalSummary } from "@/lib/pfas-data";
 import type { PostcodeData } from "@/lib/types";
 
@@ -69,7 +69,9 @@ async function loadScoredPostcodes(): Promise<PostcodeData[]> {
   const all = (await Promise.all(districts.map((d) => getPostcodeData(d)))).filter(
     Boolean
   ) as PostcodeData[];
-  return all.filter((p) => p.safetyScore >= 0);
+  // Press stories hand journalists a ready-made citation naming a postcode and its
+  // water company, so only districts that can carry that claim belong here.
+  return all.filter(isRankable);
 }
 
 // ── Per-slug data builders ──
@@ -110,10 +112,13 @@ async function buildWorstLead(): Promise<PressStoryData> {
     entries,
     rankingsLink: STORY_CONFIG["worst-lead"].rankingsLink,
     csvHeaders: ["Rank", "Postcode", "Area", "City", "Lead (mg/L)", "UK Limit (mg/L)", "Ratio to Limit"],
-    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/worst-lead)\nData: Environment Agency Water Quality Archive, analysed by TapWater.uk`,
-    lede: `Lead contamination remains one of the UK's most persistent drinking water challenges. TapWater.uk analysis of Environment Agency data reveals that ${worstDistrict} has lead levels ${multiplier}x above the legal limit of 0.01 mg/L — largely due to ageing Victorian-era pipe infrastructure that has never been replaced.`,
+    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/worst-lead)\nData: UK water company compliance testing via the Stream Water Data Portal, analysed by TapWater.uk`,
+    // No causal claim here. Attributing a reading to "Victorian-era pipes that have
+    // never been replaced" is not something a compliance sample can show, and this
+    // text is handed to journalists as a ready-made citation.
+    lede: `Lead contamination remains one of the UK's most persistent drinking water challenges. TapWater.uk analysis of water company compliance data reveals that ${worstDistrict} recorded lead at ${multiplier}x the legal limit of 0.01 mg/L in its most recent sample.`,
     context: `The UK tightened its legal limit for lead in drinking water from 0.025 to 0.01 mg/L in 2013 to align with WHO guidelines. An estimated 40% of UK homes still have lead service pipes, and there is no safe level of lead exposure — even low doses are linked to developmental effects in children.`,
-    methodology: `Based on analysis of Environment Agency Water Quality Archive data covering 2,800+ UK postcode districts, using the most recent compliance sample for each district.`,
+    methodology: `Based on water company compliance testing published via the Stream Water Data Portal, covering ${scored.length.toLocaleString("en-GB")} UK postcode districts with drinking water results sampled in the last three years. Districts with fewer than five measured parameters, or with only environmental river and groundwater monitoring, are excluded. Uses the most recent sample for each district.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
 }
@@ -154,10 +159,11 @@ async function buildWorstNitrate(): Promise<PressStoryData> {
     entries,
     rankingsLink: STORY_CONFIG["worst-nitrate"].rankingsLink,
     csvHeaders: ["Rank", "Postcode", "Area", "City", "Nitrate (mg/L)", "UK Limit (mg/L)", "% of Limit"],
-    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/worst-nitrate)\nData: Environment Agency Water Quality Archive, analysed by TapWater.uk`,
-    lede: `High nitrate levels in drinking water are a growing concern in UK agricultural regions, where fertiliser runoff leaches into groundwater sources. TapWater.uk analysis shows ${worstDistrict} recording nitrate at ${pct}% of the UK legal limit of 50 mg/L — close enough to the threshold that any wet season could tip it into non-compliance.`,
+    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/worst-nitrate)\nData: UK water company compliance testing via the Stream Water Data Portal, analysed by TapWater.uk`,
+    // "any wet season could tip it into non-compliance" was a forecast, not a finding.
+    lede: `High nitrate levels in drinking water are a growing concern in UK agricultural regions, where fertiliser runoff leaches into groundwater sources. TapWater.uk analysis shows ${worstDistrict} recording nitrate at ${pct}% of the UK legal limit of 50 mg/L in its most recent sample.`,
     context: `The UK Drinking Water Regulations set a 50 mg/L limit for nitrate, in line with EU standards. Nitrate above this level poses a risk of methaemoglobinaemia — reduced oxygen-carrying capacity in the blood — particularly in infants under six months. Water companies in affected zones must blend or treat supply to maintain compliance.`,
-    methodology: `Based on analysis of Environment Agency Water Quality Archive data covering 2,800+ UK postcode districts, using the most recent compliance sample for each district.`,
+    methodology: `Based on water company compliance testing published via the Stream Water Data Portal, covering ${scored.length.toLocaleString("en-GB")} UK postcode districts with drinking water results sampled in the last three years. Districts with fewer than five measured parameters, or with only environmental river and groundwater monitoring, are excluded. Uses the most recent sample for each district.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
 }
