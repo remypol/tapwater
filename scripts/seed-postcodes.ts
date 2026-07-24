@@ -12,6 +12,7 @@
 
 import { writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
+import { lookupPostcode as libLookupPostcode } from "../src/lib/ea-fetcher";
 
 // ── Target postcodes ──
 
@@ -158,27 +159,14 @@ interface PostcodeSeedData {
 
 // ── postcodes.io ──
 
+// Imported rather than copied: this file used to carry its own version, and when the
+// council disambiguation was fixed in ea-fetcher the copy here kept the old
+// admin_district[0] behaviour. The committed seed JSON and the database then
+// disagreed about which borough SW1A is in.
 async function lookupPostcode(district: string): Promise<PostcodeInfo | null> {
-  const url = `https://api.postcodes.io/outcodes/${encodeURIComponent(district)}`;
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const data = await res.json();
-    const r = data.result;
-    if (!r) return null;
-
-    return {
-      district: r.outcode,
-      areaName: r.admin_district?.[0] ?? r.admin_county?.[0] ?? district,
-      city: r.admin_district?.[0] ?? "",
-      region: r.region?.[0] ?? r.country?.[0] ?? "England",
-      latitude: r.latitude,
-      longitude: r.longitude,
-    };
-  } catch (e) {
-    console.error(`  [postcodes.io] Failed for ${district}:`, e);
-    return null;
-  }
+  const info = await libLookupPostcode(district);
+  if (!info) console.error(`  [postcodes.io] Failed for ${district}`);
+  return info;
 }
 
 // ── EA Water Quality API ──

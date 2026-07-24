@@ -78,6 +78,35 @@ export interface PostcodeSeedData {
 
 // ── postcodes.io ──
 
+/**
+ * The council covering an outcode's centre.
+ *
+ * An outcode's `admin_district` is every council the outcode touches, listed
+ * alphabetically — so taking `[0]` picks a neighbour whenever a district straddles
+ * a boundary. SW1A returns ["Wandsworth", "Westminster"] and the site labelled
+ * Buckingham Palace and Downing Street as Wandsworth. E1 read City of London
+ * (it is Tower Hamlets), NW3 read Barnet (Camden), SE1 read Lambeth (Southwark),
+ * SA1 read Neath Port Talbot (Swansea). A UK reader spots that instantly, and it
+ * costs the water data its credibility.
+ *
+ * Reverse-geocoding the centroid returns the single council that actually contains
+ * it. 500m already resolves every case tested; 1km is margin for sparse rural
+ * outcodes. Returns null when the lookup gives nothing, so the caller can fall back.
+ */
+async function councilAtCentre(lat: number, lon: number): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.postcodes.io/postcodes?lon=${lon}&lat=${lat}&limit=1&radius=1000`,
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const nearest = data?.result?.[0];
+    return typeof nearest?.admin_district === "string" ? nearest.admin_district : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function lookupPostcode(district: string): Promise<PostcodeInfo | null> {
   const url = `https://api.postcodes.io/outcodes/${encodeURIComponent(district)}`;
   try {
@@ -87,10 +116,17 @@ export async function lookupPostcode(district: string): Promise<PostcodeInfo | n
     const r = data.result;
     if (!r) return null;
 
+    const touched = r.admin_district?.[0] ?? r.admin_county?.[0] ?? district;
+    const council =
+      r.latitude != null && r.longitude != null
+        ? await councilAtCentre(r.latitude, r.longitude)
+        : null;
+    const areaName = council ?? touched;
+
     return {
       district: r.outcode,
-      areaName: r.admin_district?.[0] ?? r.admin_county?.[0] ?? district,
-      city: r.admin_district?.[0] ?? "",
+      areaName,
+      city: council ?? r.admin_district?.[0] ?? "",
       region: r.region?.[0] ?? r.country?.[0] ?? "England",
       latitude: r.latitude,
       longitude: r.longitude,
