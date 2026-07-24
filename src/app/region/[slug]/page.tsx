@@ -93,11 +93,17 @@ export default async function RegionPage({ params }: Props) {
   const allPostcodes = cityData.flatMap((c) => c.postcodes);
   const allUnscoredPostcodes = cityData.flatMap((c) => c.unscoredPostcodes);
   const totalPostcodes = allPostcodes.length;
-  const totalAllPostcodes = totalPostcodes + allUnscoredPostcodes.length;
 
-  // No data for this region yet — show a minimal page instead of 404
-  // (avoids build failures when seed data doesn't cover all regions)
-  if (totalAllPostcodes === 0) {
+  // No SCORED data for this region yet — show a minimal page instead of 404
+  // (avoids build failures when seed data doesn't cover all regions).
+  //
+  // The gate used to count unscored districts too. Scotland has 468 of them in the
+  // pipeline, all scoring -1 because the Environment Agency only covers England, so
+  // it slipped past and rendered the full template with an average of zero. That
+  // published "Scotland scores 0.0/10 for drinking water quality" and "below-average
+  // water quality that warrants attention" about a company supplying 5.5m people,
+  // indexable, off no measurements at all.
+  if (totalPostcodes === 0) {
     return (
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
