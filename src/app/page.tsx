@@ -19,7 +19,7 @@ import { REGIONS } from "@/lib/regions";
 export const metadata: Metadata = {
   title: "Check Your Tap Water Quality by Postcode",
   description:
-    "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and 100+ contaminants. Based on real drinking water tests.",
+    "Free water quality reports by UK postcode. Check PFAS, lead, nitrate and 29 regulated contaminants against their legal limits.",
   openGraph: {
     title: "What's in your tap water?",
     description:
@@ -91,9 +91,9 @@ export default async function HomePage() {
 
           {/* GEO: Crawlable summary — visually subtle, semantically rich */}
           <p className="text-sm text-muted mt-4 max-w-lg mx-auto">
-            Independent water quality reports for every UK postcode. Scores based
-            on real drinking water tests from UK water companies and Environment
-            Agency monitoring of 100+ contaminants.
+            Independent water quality reports by UK postcode. Scores compare real
+            drinking water tests from UK water companies and Environment Agency
+            monitoring against the legal limits for 29 regulated contaminants.
           </p>
         </div>
       </section>
