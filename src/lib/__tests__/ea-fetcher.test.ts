@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchRecentObservations } from "../ea-fetcher";
+import { fetchRecentObservations, lookupPostcode } from "../ea-fetcher";
 
 /**
  * The EA archive holds decades of readings per sampling point and hands them back
@@ -89,5 +89,61 @@ describe("fetchRecentObservations", () => {
 
     const obs = await fetchRecentObservations("SO-E0000957", 50);
     expect(obs.map((o) => o.determinand)).toEqual(["Nitrate as N"]);
+  });
+});
+
+/**
+ * An outcode's admin_district is every council it touches, alphabetically, so
+ * taking [0] labels a district with a neighbouring borough. SW1A (Buckingham
+ * Palace, Downing Street) returns ["Wandsworth", "Westminster"] and the site
+ * published it as Wandsworth. A UK reader spots that instantly.
+ */
+describe("lookupPostcode", () => {
+  function mockPostcodesIo(touched: string[], atCentre: string | null) {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (url: string) => {
+        if (url.includes("/outcodes/")) {
+          return {
+            ok: true,
+            json: async () => ({
+              result: {
+                outcode: "SW1A",
+                admin_district: touched,
+                country: ["England"],
+                latitude: 51.5045,
+                longitude: -0.1321,
+              },
+            }),
+          };
+        }
+        // Reverse geocode of the centroid.
+        return {
+          ok: true,
+          json: async () => ({
+            result: atCentre ? [{ admin_district: atCentre }] : null,
+          }),
+        };
+      }),
+    );
+  }
+
+  it("uses the council containing the centre, not the alphabetical first", async () => {
+    mockPostcodesIo(["Wandsworth", "Westminster"], "Westminster");
+
+    const info = await lookupPostcode("SW1A");
+
+    expect(info?.areaName).toBe("Westminster");
+    expect(info?.city).toBe("Westminster");
+  });
+
+  it("falls back to the touched council when the centre lookup finds nothing", async () => {
+    // Rural outcodes can have no postcode near their centroid. A slightly wrong
+    // label beats no page at all.
+    mockPostcodesIo(["Powys"], null);
+
+    const info = await lookupPostcode("LD1");
+
+    expect(info?.areaName).toBe("Powys");
   });
 });
