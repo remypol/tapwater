@@ -42,7 +42,9 @@ function getSecondaryLine(tested?: number, flagged?: number, score?: number): st
   } else {
     secondary = `${flagged} above recommended safe levels`
   }
-  return `We checked ${tested} things and found ${secondary}`
+  // "We checked 1 things" was live on every single-measurement report.
+  const subject = tested === 1 ? 'one thing' : `${tested} things`
+  return `We checked ${subject} and found ${secondary}`
 }
 
 export function WaterDropScore({ score, size = 200, tested, flagged, className }: Props) {
