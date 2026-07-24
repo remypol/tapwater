@@ -147,11 +147,43 @@ export async function fetchWaterSamplingPoints(
   return allPoints;
 }
 
+/**
+ * The EA collection endpoint returns observations OLDEST FIRST and offers no sort
+ * parameter, so a plain `?limit=n` hands back the first readings ever taken at that
+ * point. On SO-E0000957 that is January 2000, while the same point has readings from
+ * last month — and the site published the 2000 figures as current water quality.
+ *
+ * `?minyear=` is not accepted here (the API answers 400), so the only way to reach
+ * the recent end is to page to it: read `totalItems`, then skip to the tail. The
+ * count comes from a `limit=1` probe, which is a ~1KB response.
+ */
+async function fetchObservationCount(pointId: string): Promise<number | null> {
+  try {
+    const res = await fetch(
+      `${EA_BASE}/sampling-point/${encodeURIComponent(pointId)}/observation?limit=1`,
+      { headers: { Accept: "application/ld+json" } },
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const total = data?.totalItems;
+    return typeof total === "number" && total >= 0 ? total : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchRecentObservations(
   pointId: string,
   limit = 100,
 ): Promise<Observation[]> {
-  const url = `${EA_BASE}/sampling-point/${encodeURIComponent(pointId)}/observation?limit=${limit}`;
+  const total = await fetchObservationCount(pointId);
+  // Unknown count: fall back to the first page rather than fetching nothing. Those
+  // readings are stale, but the staleness warning on the page still tells the truth.
+  const skip = total !== null && total > limit ? total - limit : 0;
+
+  const url =
+    `${EA_BASE}/sampling-point/${encodeURIComponent(pointId)}/observation` +
+    `?limit=${limit}${skip > 0 ? `&skip=${skip}` : ""}`;
   try {
     const res = await fetch(url, {
       headers: { Accept: "application/ld+json" },
@@ -217,8 +249,15 @@ export async function processPostcode(district: string): Promise<PostcodeSeedDat
     isPfas(o.obs.determinandNotation, o.obs.determinand),
   );
 
+  // Newest first, so the de-dup below keeps the most recent reading per determinand.
+  // Without this the winner is whichever the API happened to return first, and the
+  // 30-reading cap can drop a recent measurement in favour of a decade-old one.
+  const byNewest = [...allObservations].sort((a, b) =>
+    (b.obs.sampleDate ?? "").localeCompare(a.obs.sampleDate ?? ""),
+  );
+
   const seenDeterminands = new Set<string>();
-  const topReadings = allObservations
+  const topReadings = byNewest
     .filter((o) => {
       if (seenDeterminands.has(o.obs.determinand)) return false;
       seenDeterminands.add(o.obs.determinand);

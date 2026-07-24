@@ -131,24 +131,31 @@ function isWaterUnit(unit: string): boolean {
  * Normalizes the observation value to match the unit expected by the LIMITS entry.
  * EA API sometimes reports metals in µg/L while our limits are in mg/L (factor of 1000).
  */
+/**
+ * Power of ten, in grams per litre, that one unit of `unit` represents — or null if
+ * it is not a mass concentration. Handles mangled unicode: ?g/L, µg/L, ug/L and μg/L
+ * all mean micrograms per litre.
+ */
+function massExponent(unit: string): number | null {
+  const u = unit.toLowerCase();
+  // Order matters: nanograms first, since "ng" would otherwise fall through to null
+  // and PFAS reported in ng/L would be compared against a µg/L guideline unconverted.
+  if (u.includes("ng")) return -9;
+  if (u.includes("ug") || u.includes("µg") || u.includes("μg") || u.includes("?g")) return -6;
+  if (u.includes("mg")) return -3;
+  return null;
+}
+
 function normalizeUnit(value: number, obsUnit: string, limitUnit: string): number {
-  const obs = obsUnit.toLowerCase();
-  const lim = limitUnit.toLowerCase();
+  const from = massExponent(obsUnit);
+  const to = massExponent(limitUnit);
 
-  // Handle mangled unicode: ?g/L, µg/L, ug/L, μg/L all mean micrograms/litre
-  const obsIsUg = obs.includes("ug") || obs.includes("µg") || obs.includes("μg") || obs.includes("?g");
-  const obsIsMg = obs.includes("mg");
-  const limIsUg = lim.includes("ug") || lim.includes("µg") || lim.includes("μg");
-  const limIsMg = lim.includes("mg");
+  // Not a mass concentration on either side (pH, NTU, °C): nothing to convert.
+  if (from === null || to === null) return value;
 
-  if (obsIsUg && limIsMg) {
-    return value / 1000;
-  }
-  if (obsIsMg && limIsUg) {
-    return value * 1000;
-  }
-
-  return value;
+  // Single multiplication by one power of ten. Scaling to grams and back instead
+  // costs precision: (5 * 1e-6) / 1e-3 is 0.004999999999999999, not 0.005.
+  return value * 10 ** (from - to);
 }
 
 // ── Score computation ──
@@ -233,8 +240,13 @@ export function computeScore(
       }
     }
 
-    // Skip zinc from weighted scoring (informational only — no meaningful limits)
-    if (key !== "zinc") {
+    // Only parameters with a real threshold can be scored. pH, temperature, dissolved
+    // oxygen, conductivity, phosphate and zinc have neither a UK limit nor a WHO
+    // guideline, so paramScore stays at its opening 10 — and letting that into the
+    // average silently dilutes the parameters that DO fail. Lead sitting exactly on
+    // the legal limit scores 0 "very poor" alone, but 6.7 "fair" once five limitless
+    // parameters are averaged in with it. They are still reported below, as context.
+    if (limit !== null) {
       const weight = TIER_WEIGHTS[limits.tier];
       weightedSum += paramScore * weight;
       totalWeight += weight;
@@ -263,8 +275,13 @@ export function computeScore(
       lower.includes("pfas")
     ) {
       pfasDetected = true;
-      if (pfasLevel === null || obs.value > pfasLevel) {
-        pfasLevel = obs.value;
+      // PFAS is reported in ng/L as often as µg/L. Comparing the raw numbers picks
+      // the biggest digit rather than the biggest concentration, and the result is
+      // then labelled µg/L below — so 45 ng/L (0.045 µg/L, well under the guideline)
+      // would publish as 45 µg/L, 450x the WHO figure, on a health page.
+      const level = normalizeUnit(obs.value, obs.unit, "µg/L");
+      if (pfasLevel === null || level > pfasLevel) {
+        pfasLevel = level;
       }
     }
   }
