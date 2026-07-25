@@ -30,7 +30,7 @@ const FAQ_DATA = [
   {
     question: "What are the running costs of a whole house water filter?",
     answer:
-      "Running costs vary dramatically by model. The BWT E1 has zero annual filter costs because it uses a backwash system that cleans itself — you just pull a lever periodically. The Waterdrop WHF21 costs around £120/year for replacement filter sets every 6 months. The Aquasana EQ-1000 costs £60/year for pre-filters, but the main tank lasts up to 10 years. Factor in the initial plumber installation cost of £150–£300 on top of the unit price.",
+      "Running costs vary dramatically by model. The BWT E1 has zero annual filter costs because it uses a backwash system that cleans itself — you just pull a lever periodically. The Waterdrop WHF3T-FG costs around £80/year for replacement filter sets every 6 months. The Aquasana EQ-1000 costs £60/year for pre-filters, but the main tank lasts up to 10 years. Factor in the initial plumber installation cost of £150–£300 on top of the unit price.",
   },
 ];
 
@@ -450,7 +450,7 @@ export default function BestWholeHouseFilterGuide() {
               This is the single most important spec. A whole-house filter must
               not reduce your water pressure. Look for a minimum of 20 L/min
               for a typical UK household. Larger homes with multiple bathrooms
-              need 30+ L/min. The Waterdrop WHF21 delivers 56 L/min — you will
+              need 30+ L/min. The Waterdrop WHF3T-FG delivers 56 L/min — you will
               not notice it is there.
             </p>
           </div>
@@ -475,7 +475,7 @@ export default function BestWholeHouseFilterGuide() {
             </h3>
             <p className="text-base text-body leading-relaxed">
               Single-stage filters handle sediment only. Multi-stage systems
-              (like the Waterdrop WHF21 with three stages) handle sediment,
+              (like the Waterdrop WHF3T-FG with three stages) handle sediment,
               chlorine, and metals. The more stages, the more contaminants
               removed — but also the higher the annual filter replacement cost.
               Match the number of stages to your actual water problems.
@@ -490,7 +490,7 @@ export default function BestWholeHouseFilterGuide() {
               The purchase price is just the start. Add professional
               installation (&pound;150&ndash;&pound;300) and annual filter
               replacements. Over 5 years: the BWT E1 costs roughly &pound;500
-              total (no filters to replace), the Waterdrop WHF21 costs about
+              total (no filters to replace), the Waterdrop WHF3T-FG costs about
               &pound;1,350, and the Aquasana EQ-1000 costs roughly &pound;1,400
               but with the main tank lasting a full decade.
             </p>
@@ -525,9 +525,9 @@ export default function BestWholeHouseFilterGuide() {
         <div className="space-y-8">
           <ProductReview
             product={waterdrop}
-            heading="Waterdrop WHF21 \u2014 Top pick"
+            heading="Waterdrop WHF3T-FG \u2014 Top pick"
             verdict="The most comprehensive whole-house filtration for UK mains water."
-            review="The Waterdrop WHF21 is the whole-house filter we recommend for most UK homes. Three filtration stages handle sediment, chlorine, iron, and manganese — the four most common whole-house concerns we see in our postcode data. NSF/ANSI 42 certified for chlorine taste and odour removal. The 56 L/min flow rate is the highest here, which means zero noticeable pressure drop even in larger homes with multiple bathrooms running simultaneously. At £600 it is a significant investment, and the £120/year filter replacement cost adds up. But if you want clean water from every tap in the house, this is the system that does the most."
+            review="The Waterdrop WHF3T-FG is the whole-house filter we recommend for most UK homes. Three filtration stages handle sediment, chlorine, iron, and manganese — the four most common whole-house concerns we see in our postcode data. NSF/ANSI 42 certified for chlorine taste and odour removal. The 56 L/min flow rate is the highest here, which means zero noticeable pressure drop even in larger homes with multiple bathrooms running simultaneously. At £330 it is a significant investment, and the £80/year filter replacement cost adds up. But if you want clean water from every tap in the house, this is the system that does the most."
             pros={[
               "NSF/ANSI 42 certified for chlorine taste and odour removal",
               "Three-stage filtration handles sediment, chlorine, iron, and manganese",
@@ -535,8 +535,8 @@ export default function BestWholeHouseFilterGuide() {
               "Handles both mains water and well/borehole supply",
             ]}
             cons={[
-              "Highest upfront cost at £600 plus installation",
-              "£120/year in replacement filter sets every 6 months",
+              "Highest upfront cost at £330 plus installation",
+              "£80/year in replacement filter sets every 6 months",
               "Requires professional plumbing installation — not DIY",
             ]}
             ctaLabel="View on Waterdrop"
@@ -565,7 +565,7 @@ export default function BestWholeHouseFilterGuide() {
             product={aquasana}
             heading="Aquasana EQ-1000 Rhino \u2014 Premium pick"
             verdict="The 10-year solution for homeowners who want to install and forget."
-            review="The Aquasana EQ-1000 Rhino is built for the long game. The main filter tank has a 1,000,000-gallon capacity — that is roughly 10 years for an average UK household. It removes chlorine, lead, mercury, copper, and sediment, making it the most comprehensive contaminant removal in the whole-house category. NSF/ANSI 42 and 61 dual certified. The downside is the upfront cost: £800 for the unit plus £150–£300 for installation. And even though the main tank lasts a decade, the pre-filter needs replacing every 3 months at £15 each. The system also has a larger physical footprint than the other two — you will need dedicated utility space. For homeowners who plan to stay in their home long-term, the Aquasana is the premium choice."
+            review="The Aquasana EQ-1000 Rhino is built for the long game. The main filter tank has a 1,000,000-gallon capacity — that is roughly 10 years for an average UK household. It removes chlorine, lead, mercury, copper, and sediment, making it the most comprehensive contaminant removal in the whole-house category. NSF/ANSI 42 and 61 dual certified. The downside is the upfront cost: £1,159 for the unit plus £150–£300 for installation. And even though the main tank lasts a decade, the pre-filter needs replacing every 3 months at £15 each. The system also has a larger physical footprint than the other two — you will need dedicated utility space. For homeowners who plan to stay in their home long-term, the Aquasana is the premium choice."
             pros={[
               "1,000,000-gallon capacity — lasts most homes a full decade",
               "Removes lead and mercury alongside chlorine and sediment",
@@ -625,7 +625,7 @@ export default function BestWholeHouseFilterGuide() {
         </h2>
         <div className="prose-section">
           <p className="text-base text-body leading-relaxed">
-            The <strong className="text-ink">Waterdrop WHF21</strong> is the
+            The <strong className="text-ink">Waterdrop WHF3T-FG</strong> is the
             whole-house filter we recommend for most UK homes. Three-stage
             filtration, NSF 42 certified, and a 56 L/min flow rate that ensures
             you never notice a pressure drop. At &pound;600 plus installation,
@@ -647,24 +647,34 @@ export default function BestWholeHouseFilterGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
+          <AffiliateLink
             href={waterdrop.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-whole-house-filter-guide"
+            pathname="/guides/best-whole-house-water-filter-uk"
+            recommendationReason="verdict"
+            productCategory={waterdrop.category}
+            productSlug={waterdrop.slug}
+            placement="guide-verdict"
+            campaign="best-whole-house-filter-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
-            Get the Waterdrop WHF21
+            Get the Waterdrop WHF3T-FG
             <ArrowRight className="w-4 h-4" />
-          </a>
-          <a
+          </AffiliateLink>
+          <AffiliateLink
             href={bwt.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-whole-house-filter-guide"
+            pathname="/guides/best-whole-house-water-filter-uk"
+            recommendationReason="verdict"
+            productCategory={bwt.category}
+            productSlug={bwt.slug}
+            placement="guide-verdict"
+            campaign="best-whole-house-filter-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Get the BWT E1 (value pick)
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </AffiliateLink>
         </div>
 
         {/* ── FAQ ──────────────────────────────────────────────────── */}

@@ -618,24 +618,34 @@ export default function BestShowerFilterGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
+          <AffiliateLink
             href={jolie.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-shower-filter-guide"
+            pathname="/guides/best-shower-filter-uk"
+            recommendationReason="verdict"
+            productCategory={jolie.category}
+            productSlug={jolie.slug}
+            placement="guide-verdict"
+            campaign="best-shower-filter-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
             Get the Jolie Filtered Showerhead
             <ArrowRight className="w-4 h-4" />
-          </a>
-          <a
+          </AffiliateLink>
+          <AffiliateLink
             href={aquabliss.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-shower-filter-guide"
+            pathname="/guides/best-shower-filter-uk"
+            recommendationReason="verdict"
+            productCategory={aquabliss.category}
+            productSlug={aquabliss.slug}
+            placement="guide-verdict"
+            campaign="best-shower-filter-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Try the AquaBliss SF220 (budget pick)
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </AffiliateLink>
         </div>
 
         {/* ── FAQ ──────────────────────────────────────────────────── */}
