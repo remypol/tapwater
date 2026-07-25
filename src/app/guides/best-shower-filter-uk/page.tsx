@@ -5,6 +5,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
+import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
@@ -590,6 +591,23 @@ export default function BestShowerFilterGuide() {
             contaminants={comparisonContaminants}
           />
         </div>
+
+        {/* Cartridges dominate the total within months, so the sticker price the
+
+            reader is comparing on is the least useful number on the page. */}
+
+        <RunningCostComparison
+
+          products={showerProducts}
+
+          pageType="best-shower-filter-guide"
+
+          pathname="/guides/best-shower-filter-uk"
+
+          campaign="best-shower-filter-guide"
+
+        />
+
 
         {/* ── Verdict ──────────────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">

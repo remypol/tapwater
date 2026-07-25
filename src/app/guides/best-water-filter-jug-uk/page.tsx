@@ -5,6 +5,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
+import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
@@ -212,6 +213,8 @@ function ProductReview({
 
 export default function BestWaterFilterJugGuide() {
   const jugProducts = getProductsByCategory("jug");
+  // Shown alongside the jugs in the running-cost table, not as a separate pitch.
+  const underSinkProducts = getProductsByCategory("under_sink");
   const brita = jugProducts.find((p) => p.id === "brita-maxtra-pro")!;
   const zerowater = jugProducts.find((p) => p.id === "zerowater-12cup")!;
   const aquaOptima = jugProducts.find((p) => p.id === "aqua-optima-evolve")!;
@@ -633,6 +636,20 @@ export default function BestWaterFilterJugGuide() {
             contaminants={comparisonContaminants}
           />
         </div>
+
+        {/* ── What they cost to own ────────────────────────────────
+             The reader arrived comparing sticker prices, which for this category
+             is close to meaningless: cartridges run £36-£120 a year and overtake
+             the purchase within months. Putting the under-sink options in the same
+             table is the honest version of an upgrade prompt — it lets the reader
+             see that the £59 filter costs a third of the £40 jug over five years,
+             rather than being told so. */}
+        <RunningCostComparison
+          products={[...jugProducts, ...underSinkProducts]}
+          pageType="best-water-filter-jug-guide"
+          pathname="/guides/best-water-filter-jug-uk"
+          campaign="best-water-filter-jug-guide"
+        />
 
         {/* ── Verdict ──────────────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
