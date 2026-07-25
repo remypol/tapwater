@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { PostcodeSearch } from "@/components/postcode-search";
+import { ProductCard } from "@/components/product-card";
+import { recommendFilters } from "@/lib/filters";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { OG_IMAGE } from "@/lib/og";
 
@@ -370,6 +372,10 @@ export default async function ContaminantPage({ params }: Props) {
     notFound();
   }
 
+  // The slug is the lookup key, not the display name: names carry extra wording
+  // ("PFAS (Forever Chemicals)") that the capability matcher does not recognise.
+  const contaminantFilters = recommendFilters([slug], 2);
+
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <BreadcrumbSchema
@@ -654,6 +660,41 @@ export default async function ContaminantPage({ params }: Props) {
           ))}
         </ul>
       </section>
+
+      {/* 7b. Filters that address it
+           Section 7 explains which technologies remove this contaminant and section 9
+           links to a guide, but nothing here has ever named a product. These are the
+           highest-intent pages on the site — the reader has just learned they may have
+           a specific problem — and they were the only pages offering no answer to it. */}
+      {contaminantFilters.length > 0 && (
+        <section className="mt-10">
+          <h2 className="font-display text-xl italic text-ink mb-1">
+            Filters that address {contaminant.name}
+          </h2>
+          <p className="text-sm text-muted mb-4 max-w-2xl">
+            {contaminantFilters[0].matchedCount > 0
+              ? `These list ${contaminant.name.toLowerCase()} among what they reduce. Check your own report first — a filter is only worth buying for a contaminant your supply actually has.`
+              : `No filter we list names ${contaminant.name.toLowerCase()} specifically. Reverse osmosis is shown because it rejects dissolved contaminants broadly rather than by name. Check your own report before buying.`}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {contaminantFilters.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                pageType="contaminant"
+                pathname={`/contaminant/${slug}`}
+                placement="contaminant-solution"
+                recommendationReason={slug}
+                highlight={
+                  product.matchedCount > 0
+                    ? `Listed to reduce ${contaminant.name}`
+                    : undefined
+                }
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 8. Check Your Area */}
       <section className="mt-10 bg-wash rounded-xl border border-rule p-6">
