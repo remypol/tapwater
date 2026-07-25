@@ -559,15 +559,20 @@ export default function BestWaterTestingKitGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
+          <AffiliateLink
             href={simplex.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-water-testing-kit-guide"
+            pathname="/guides/best-water-testing-kit-uk"
+            recommendationReason="verdict"
+            productCategory={simplex.category}
+            productSlug={simplex.slug}
+            placement="guide-verdict"
+            campaign="best-water-testing-kit-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Get the SimplexHealth strips (&pound;13)
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </AffiliateLink>
         </div>
 
         {/* ── FAQ ──────────────────────────────────────────────────── */}

@@ -663,24 +663,34 @@ export default function BestWaterFilterPfasGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
+          <AffiliateLink
             href={waterdropRO.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-water-filter-pfas-guide"
+            pathname="/guides/best-water-filter-pfas"
+            recommendationReason="verdict"
+            productCategory={waterdropRO.category}
+            productSlug={waterdropRO.slug}
+            placement="guide-verdict"
+            campaign="best-water-filter-pfas-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
             Get the Waterdrop G3P600
             <ArrowRight className="w-4 h-4" />
-          </a>
-          <a
+          </AffiliateLink>
+          <AffiliateLink
             href={zerowater.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-water-filter-pfas-guide"
+            pathname="/guides/best-water-filter-pfas"
+            recommendationReason="verdict"
+            productCategory={zerowater.category}
+            productSlug={zerowater.slug}
+            placement="guide-verdict"
+            campaign="best-water-filter-pfas-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Get ZeroWater jug (budget pick)
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </AffiliateLink>
         </div>
 
         {/* ── FAQ ──────────────────────────────────────────────────── */}

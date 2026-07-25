@@ -129,12 +129,18 @@ export function recommendFilters(
     if (!diverse.includes(f)) diverse.push(f);
   }
 
-  // Few products treat scale, so hard water alone can leave the list one or two short
-  // and showing only £500 systems. Top it up with the general picks so there is still
-  // an affordable option next to them.
+  // Top up any remaining slots from the general picks.
+  //
+  // Note for hard water specifically: this does not fire. Only three products list
+  // Limescale and they are the three Osmio systems, so the loops above already
+  // return three and a hard-water report shows £495-£650 and nothing else. An
+  // earlier comment here claimed this top-up prevented that; it never did.
+  // Padding the list with a £25 jug would be worse rather than better — carbon
+  // does nothing about scale — so the real answer is the water_softener category,
+  // which is currently empty and excluded at the top of this function.
   if (diverse.length < maxResults) {
     const chosen = new Set(diverse.map((f) => f.id));
-    for (const f of drinkingFilters) {
+    for (const f of topUpOrder(flaggedContaminants, results.length, drinkingFilters)) {
       if (diverse.length >= maxResults) break;
       if (chosen.has(f.id)) continue;
       if (f.badge !== "best-match" && f.badge !== "budget") continue;
@@ -144,6 +150,46 @@ export function recommendFilters(
   }
 
   return diverse;
+}
+
+/**
+ * Which products fill the remaining slots, and in what order.
+ *
+ * Normally source order is fine — it puts an affordable option next to an expensive
+ * one. But scoring only counts name matches against each product's `removes` list,
+ * and that list does not cover everything the scoring engine can flag. Nitrite,
+ * ammonia, phosphate, bromate, antimony, selenium, boron and aluminium appear in
+ * LIMITS and in no product at all, so every candidate scores zero and the whole
+ * list comes from here, in source order — which begins with a £25 jug whose own
+ * cons read "Does not remove PFAS, fluoride, or nitrates".
+ *
+ * SW1A flagged nitrite and was shown exactly that, with "What it won't do: does not
+ * remove nitrates" printed underneath "Our pick". The visitor with a real problem
+ * got the cheapest thing on the shelf and a note saying it would not help.
+ *
+ * So when something was flagged and nothing in the catalogue claims it, lead with
+ * reverse osmosis. RO is a membrane process that rejects dissolved contaminants
+ * broadly rather than by name, which is why the site's own PFAS guidance points
+ * there. The card still says "no direct match" — that stays honest — but the
+ * product behind it is one that plausibly helps.
+ */
+function topUpOrder(
+  flaggedContaminants: string[],
+  matchedProductCount: number,
+  candidates: FilterProduct[],
+): FilterProduct[] {
+  const nothingClaimedIt = flaggedContaminants.length > 0 && matchedProductCount === 0;
+  if (!nothingClaimedIt) return candidates;
+
+  const breadth: Record<string, number> = {
+    reverse_osmosis: 0,
+    under_sink: 1,
+    whole_house: 2,
+    countertop: 3,
+  };
+  return [...candidates].sort(
+    (a, b) => (breadth[a.category] ?? 9) - (breadth[b.category] ?? 9),
+  );
 }
 
 /**

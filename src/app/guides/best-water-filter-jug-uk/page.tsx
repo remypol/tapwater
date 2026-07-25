@@ -668,24 +668,34 @@ export default function BestWaterFilterJugGuide() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <a
+          <AffiliateLink
             href={zerowater.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-water-filter-jug-guide"
+            pathname="/guides/best-water-filter-jug-uk"
+            recommendationReason="verdict"
+            productCategory={zerowater.category}
+            productSlug={zerowater.slug}
+            placement="guide-verdict"
+            campaign="best-water-filter-jug-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
             Get the ZeroWater 12-Cup
             <ArrowRight className="w-4 h-4" />
-          </a>
-          <a
+          </AffiliateLink>
+          <AffiliateLink
             href={brita.affiliateUrl}
-            target="_blank"
-            rel="noopener noreferrer sponsored nofollow"
+            pageType="best-water-filter-jug-guide"
+            pathname="/guides/best-water-filter-jug-uk"
+            recommendationReason="verdict"
+            productCategory={brita.category}
+            productSlug={brita.slug}
+            placement="guide-verdict"
+            campaign="best-water-filter-jug-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
             Get the BRITA Marella XL (taste pick)
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </AffiliateLink>
         </div>
 
         {/* ── FAQ ──────────────────────────────────────────────────── */}
