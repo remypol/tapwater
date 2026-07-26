@@ -280,10 +280,10 @@ export default async function PostcodePage({ params }: Props) {
             {/* Score */}
             <div className="flex justify-center py-8 lg:py-14 animate-fade-in delay-3">
               <div className="block sm:hidden">
-                <WaterDropScore score={data.safetyScore} size={150} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} />
+                <WaterDropScore score={data.safetyScore} size={150} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} hardnessValue={hardnessValue} />
               </div>
               <div className="hidden sm:block">
-                <WaterDropScore score={data.safetyScore} size={200} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} />
+                <WaterDropScore score={data.safetyScore} size={200} tested={data.contaminantsTested} flagged={data.contaminantsFlagged} hardnessValue={hardnessValue} />
               </div>
             </div>
 

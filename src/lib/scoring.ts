@@ -18,6 +18,15 @@ interface LimitEntry {
   unit: string;
   tier: 1 | 2 | 3; // Health significance tier
   displayName: string;
+  /**
+   * Point past which the parameter starts costing the household something, for
+   * things that are not a health risk and have no legal limit. Scored, so it moves
+   * the number, but never counted as an exceedance — hard water is unpleasant and
+   * expensive, not unsafe, and the report must not blur those.
+   */
+  nuisanceFrom?: number;
+  /** Value at which the nuisance score bottoms out. */
+  nuisanceFloor?: number;
 }
 
 const LIMITS: Record<string, LimitEntry> = {
@@ -55,6 +64,16 @@ const LIMITS: Record<string, LimitEntry> = {
   conductivity: { ukLimit: null, whoGuideline: null, unit: "µS/cm", tier: 3, displayName: "Conductivity" },
   aluminium: { ukLimit: 0.2, whoGuideline: null, unit: "mg/L", tier: 3, displayName: "Aluminium" },
   colour: { ukLimit: 20, whoGuideline: null, unit: "mg/L Pt/Co", tier: 3, displayName: "Colour" },
+  // No legal limit: hard water is safe to drink. It is scored because it is the
+  // thing UK households actually notice — scale in the kettle, film on tea, a
+  // boiler that costs more to run — and a report that stays silent about it is
+  // answering a question nobody asked. 180 mg/L is where scale starts costing
+  // money (the same threshold the softener recommendation uses); 400 is where
+  // the score stops falling.
+  hardness: {
+    ukLimit: null, whoGuideline: null, unit: "mg/L", tier: 2,
+    displayName: "Hardness (as CaCO3)", nuisanceFrom: 180, nuisanceFloor: 400,
+  },
 };
 
 const TIER_WEIGHTS = { 1: 3.0, 2: 2.0, 3: 1.0 };
@@ -68,6 +87,9 @@ function normalizeDeterminand(label: string): string | null {
   if (LIMITS[lower]) return lower;
 
   // Common EA label variations
+  // "Hardness (Total) as CaCO3" and "Hardness total" are the two spellings in the
+  // data; alkalinity is a different measurement and must not be folded in.
+  if (lower.includes("hardness") && !lower.includes("alkalinity")) return "hardness";
   if (lower.includes("lead") && !lower.includes("mislead")) return "lead";
   if (lower.includes("arsenic")) return "arsenic";
   // Bacteria excluded — EA monitors raw environmental water, not treated tap water.
@@ -238,6 +260,14 @@ export function computeScore(
         status = "fail";
         flagged++;
       }
+    } else if (limits.nuisanceFrom != null && limits.nuisanceFloor != null) {
+      // A nuisance, not a breach. Full marks until it starts costing the household
+      // something, then falling linearly to the floor. `status` deliberately stays
+      // "pass" and `flagged` is untouched: nothing here has exceeded anything, and
+      // a reader must never be told their water failed because it is hard.
+      const over = normalizedValue - limits.nuisanceFrom;
+      const span = limits.nuisanceFloor - limits.nuisanceFrom;
+      paramScore = over <= 0 ? 10 : Math.max(0, 10 * (1 - over / span));
     }
 
     // Only parameters with a real threshold can be scored. pH, temperature, dissolved
@@ -246,7 +276,9 @@ export function computeScore(
     // average silently dilutes the parameters that DO fail. Lead sitting exactly on
     // the legal limit scores 0 "very poor" alone, but 6.7 "fair" once five limitless
     // parameters are averaged in with it. They are still reported below, as context.
-    if (limit !== null) {
+    // Nuisance parameters count too: they have no legal limit but a real threshold
+    // to be judged against, which is the distinction that matters here.
+    if (limit !== null || limits.nuisanceFrom != null) {
       const weight = TIER_WEIGHTS[limits.tier];
       weightedSum += paramScore * weight;
       totalWeight += weight;
