@@ -8,6 +8,8 @@ interface Props {
   size?: number
   tested?: number
   flagged?: number
+  /** mg/L CaCO3, when known. Changes the wording, never the safety verdict. */
+  hardnessValue?: number | null
   className?: string
 }
 
@@ -25,8 +27,35 @@ const BADGE_STYLES = {
   danger:  { background: 'var(--color-danger-light)',  color: 'var(--color-danger)'  },
 }
 
-function getPrimaryLine(score: number): string {
-  if (score >= 7) return 'Your water is safe'
+/**
+ * The headline used to come from the score alone, so a report could read "Your
+ * water is safe" at 8.6/10 while one regulated parameter sat above its legal
+ * limit — W6 says exactly that with nitrite at 118%. A weighted average over
+ * twenty parameters cannot move far on one exceedance, which is fine for the
+ * number and wrong for the sentence on top of it.
+ *
+ * So an exceedance decides the wording, whatever the average says. Hard water
+ * is handled separately: it is not a safety matter, but it is the thing people
+ * mean when they say they cannot drink their tap water, and a report that calls
+ * it safe and stops there is answering a question nobody asked.
+ */
+function getPrimaryLine(
+  score: number,
+  flagged?: number,
+  hardnessValue?: number | null,
+): string {
+  if (flagged && flagged > 0) {
+    if (score >= 7) return 'Your water is within limits, with one thing to check'
+    if (score >= 5) return 'Your water has something above recommended levels'
+    return 'Your water needs attention'
+  }
+  if (score >= 7) {
+    return hardnessValue != null && hardnessValue >= 250
+      ? 'Your water is safe, but very hard'
+      : hardnessValue != null && hardnessValue >= 180
+        ? 'Your water is safe, but hard'
+        : 'Your water is safe'
+  }
   if (score >= 5) return 'Your water is mostly fine'
   if (score >= 3) return 'Your water has some issues'
   return 'Your water needs attention'
@@ -47,7 +76,7 @@ function getSecondaryLine(tested?: number, flagged?: number, score?: number): st
   return `We checked ${subject} and found ${secondary}`
 }
 
-export function WaterDropScore({ score, size = 200, tested, flagged, className }: Props) {
+export function WaterDropScore({ score, size = 200, tested, flagged, hardnessValue, className }: Props) {
   const level = getScoreColor(score)
   const grade = getScoreGrade(score)
   const gradient = GRADIENTS[level]
@@ -139,7 +168,7 @@ export function WaterDropScore({ score, size = 200, tested, flagged, className }
   const gradientId = `drop-gradient-${level}`
   const clipId = `drop-clip`
 
-  const primaryLine = getPrimaryLine(score)
+  const primaryLine = getPrimaryLine(score, flagged, hardnessValue)
   const secondaryLine = getSecondaryLine(tested, flagged, score)
 
   const ariaLabel = `Water quality score: ${score} out of 10, rated ${grade}. ${primaryLine}.${secondaryLine ? ` ${secondaryLine}.` : ''}`
