@@ -284,47 +284,77 @@ interface SeedEntry {
 // ── Public API (all async) ──
 
 /**
- * Returns the average water hardness (mg/L CaCO3) for a postcode district,
- * queried directly from drinking_water_readings since hardness isn't a
- * regulated contaminant and is excluded from the scored page_data readings.
+ * Average water hardness (mg/L CaCO3) per district, loaded once.
+ *
+ * Hardness is not a regulated contaminant, so it never reaches the scored
+ * page_data readings and has to come from drinking_water_readings directly.
+ *
+ * The promise is cached rather than the Map. The previous version assigned an
+ * empty Map before awaiting the query, and a build renders thousands of postcode
+ * pages concurrently — so every call after the first found a cache that existed
+ * but was still empty, skipped the load and returned null. It worked when called
+ * sequentially from a script, which is exactly why the gap was invisible.
  */
-let hardnessCache: Map<string, number | null> | null = null;
+/** The only two spellings this column uses for total hardness. */
+const HARDNESS_DETERMINANDS = ["Hardness (Total) as CaCO3", "Hardness total"];
+
+let hardnessCache: Promise<Map<string, number>> | null = null;
+
+async function loadHardness(): Promise<Map<string, number>> {
+  const result = new Map<string, number>();
+  if (!supabase) return result;
+
+  try {
+    const PAGE_SIZE = 1000;
+    const rows: { postcode_district: string; value: number }[] = [];
+
+    for (let offset = 0; ; offset += PAGE_SIZE) {
+      const page = await supabase
+        .from("drinking_water_readings")
+        .select("postcode_district, value")
+        // Exact names, not ILIKE "%hardness%". A leading wildcard cannot use an
+        // index, so that version took 5.4s against this table — fine from a script,
+        // but a build fires it from every worker at once and Postgres answered
+        // "canceling statement due to statement timeout" on all of them. Hardness
+        // then silently vanished from the entire site. These two are the only
+        // spellings present, and matching them exactly runs in ~300ms.
+        .in("determinand", HARDNESS_DETERMINANDS)
+        // Paging without an explicit order is not stable in Postgres: rows repeat
+        // across pages and others never appear. Unordered this resolved 521
+        // districts from the same rows; ordered, 697.
+        .order("id", { ascending: true })
+        .range(offset, offset + PAGE_SIZE - 1);
+
+      if (page.error) break;
+      rows.push(...(page.data ?? []));
+      if (!page.data || page.data.length < PAGE_SIZE) break;
+    }
+
+    const sums = new Map<string, { total: number; count: number }>();
+    for (const row of rows) {
+      const key = row.postcode_district.toUpperCase();
+      const entry = sums.get(key) ?? { total: 0, count: 0 };
+      entry.total += Number(row.value);
+      entry.count += 1;
+      sums.set(key, entry);
+    }
+    for (const [key, { total, count }] of sums) {
+      result.set(key, Math.round(total / count));
+    }
+  } catch {
+    // Hardness is informational; a failure here must not take the report down.
+  }
+
+  return result;
+}
 
 export async function getHardness(
   district: string,
 ): Promise<{ value: number; label: string } | null> {
   if (!supabase) return null;
 
-  // Bulk-load all hardness data on first call (one query vs per-page)
-  if (!hardnessCache) {
-    hardnessCache = new Map();
-    try {
-      const { data, error } = await supabase
-        .from("drinking_water_readings")
-        .select("postcode_district, value")
-        .or("determinand.ilike.%hardness%,determinand.ilike.Hardness (Total) as CaCO3")
-        .not("determinand", "ilike", "%alkalinity%");
-
-      if (!error && data) {
-        // Average per district
-        const sums = new Map<string, { total: number; count: number }>();
-        for (const row of data) {
-          const key = row.postcode_district.toUpperCase();
-          const entry = sums.get(key) ?? { total: 0, count: 0 };
-          entry.total += Number(row.value);
-          entry.count += 1;
-          sums.set(key, entry);
-        }
-        for (const [key, { total, count }] of sums) {
-          hardnessCache.set(key, Math.round(total / count));
-        }
-      }
-    } catch {
-      // Silently fail — hardness is informational only
-    }
-  }
-
-  const value = hardnessCache.get(district.toUpperCase());
+  hardnessCache ??= loadHardness();
+  const value = (await hardnessCache).get(district.toUpperCase());
   if (value == null) return null;
 
   const label = value < 60 ? "soft"
