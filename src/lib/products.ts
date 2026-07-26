@@ -296,12 +296,21 @@ export const PRODUCTS: FilterProduct[] = [
       "Nickel",
     ],
     certifications: ["NSF/ANSI 58", "NSF/ANSI 372"],
-    priceGbp: 399,
+    // Was an Impact link on publisher 5514161 — not our account. Ours (CCC Impact,
+    // 6413869) was declined by Impact in January for not meeting their partner
+    // standards, so nothing here was ever going to reach us. Waterdrop is on Awin
+    // as merchant 117649, which we joined on 21 July, so this now runs through our
+    // own publisher id at 7%.
+    //
+    // Price corrected at source: the old £399 matched neither store. waterdropfilter
+    // .co.uk lists £549.98 and the .eu store the old link pointed at lists €549.99.
+    priceGbp: 550,
     priceTier: "premium",
     affiliateUrl:
-      "https://waterdropfiltereu.pxf.io/c/5514161/2060304/25810?u=https%3A%2F%2Fwww.waterdropfilter.eu%2Fcollections%2Fwaterdrop-g-series%2Fproducts%2Freverse-osmosis-water-filtration-system-g3p600",
-    affiliateProgram: "impact",
-    affiliateTag: "waterdropfiltereu-impact",
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=2996923&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Fwaterdrop-reverse-osmosis-water-filtration-system",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.07 },
+    affiliateTag: "awin-2996923",
     imageUrl: "/filters/waterdrop-g3p600.png",
     rating: 4.6,
     badge: "best-match",
