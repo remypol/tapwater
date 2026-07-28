@@ -642,8 +642,8 @@ export default function BestWaterFilterJugGuide() {
              is close to meaningless: cartridges run £36-£120 a year and overtake
              the purchase within months. Putting the under-sink options in the same
              table is the honest version of an upgrade prompt — it lets the reader
-             see that the £59 filter costs a third of the £40 jug over five years,
-             rather than being told so. */}
+             see the five-year totals side by side rather than being told which is
+             cheaper. */}
         <RunningCostComparison
           products={[...jugProducts, ...underSinkProducts]}
           pageType="best-water-filter-jug-guide"
