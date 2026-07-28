@@ -215,7 +215,10 @@ export const PRODUCTS: FilterProduct[] = [
     category: "under_sink",
     removes: ["Chlorine", "Lead", "PFAS (total)"],
     certifications: ["NSF/ANSI 42"],
-    priceGbp: 59,
+    // Checked at source 25 July: waterdropfilter.co.uk lists the WD-10UA variant at
+    // £74.99. Our £59 came from an earlier reading and has since drifted; the guide
+    // and the running-cost table both quote this figure.
+    priceGbp: 75,
     priceTier: "budget",
     // Waterdrop's own UK programme via Awin pays 7%, where the Amazon listing paid 3%.
     affiliateUrl:
