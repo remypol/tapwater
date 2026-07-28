@@ -7,6 +7,7 @@ import {
   createAffiliatePayload,
   type AffiliateContext,
 } from "@/lib/affiliate";
+import { buildClickPayload, sendClickBeacon } from "@/lib/click-log";
 
 interface AffiliateLinkProps extends Omit<AffiliateContext, "destinationUrl"> {
   href: string;
@@ -31,6 +32,14 @@ export function AffiliateLink({
     events.affiliateClick(createAffiliatePayload({
       ...context,
       destinationUrl: trackedHref,
+    }));
+    // First-party copy of the same click; GA4 sits on an account we cannot read.
+    sendClickBeacon(buildClickPayload({
+      destinationUrl: trackedHref,
+      productSlug: context.productSlug,
+      pathname: context.pathname,
+      placement: context.placement,
+      campaign: context.campaign,
     }));
   }
 
