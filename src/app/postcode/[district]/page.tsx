@@ -11,8 +11,9 @@ import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
 import { getPostcodeData, getAllPostcodeDistricts, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
-import { recommendFilters } from "@/lib/filters";
+import { recommendFilters, HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
+import { HardWaterBudgetNote } from "@/components/hard-water-budget-note";
 import { SoftenerLeadBanner } from "@/components/softener-lead-banner";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { RelatedGuides } from "@/components/related-guides";
@@ -474,7 +475,14 @@ export default async function PostcodePage({ params }: Props) {
                   postcodeDistrict={data.district}
                   contaminantsFlagged={0}
                   waterScoreBand={waterScoreBand}
+                  hardWater={hardnessValue != null && hardnessValue >= HARD_WATER_THRESHOLD}
                 />
+                {hardnessValue != null && hardnessValue >= HARD_WATER_THRESHOLD && (
+                  <HardWaterBudgetNote
+                    postcodeDistrict={data.district}
+                    waterScoreBand={waterScoreBand}
+                  />
+                )}
               </ScrollReveal>
             )}
 
