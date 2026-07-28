@@ -58,6 +58,13 @@ export function productAddresses(
 /** Hard water threshold in mg/L CaCO3, matching the site's "hard" classification. */
 export const HARD_WATER_THRESHOLD = 180;
 
+/**
+ * What a visitor with clean, normal water sees, in display order: the jug with
+ * actual recorded orders, the under-sink step-up on the site's own 7% programme,
+ * and the budget anchor. Curated on purpose; see the comment at the use site.
+ */
+const DEFAULT_PICK_IDS = ["zerowater-12cup", "waterdrop-10ua", "brita-maxtra-pro"];
+
 export interface RecommendationContext {
   /** Measured hardness in mg/L CaCO3 for this location, when known. */
   hardnessValue?: number | null;
@@ -84,9 +91,26 @@ export function recommendFilters(
   // Nothing flagged and normal water: fall back to the general picks. Nothing flagged
   // but hard water is a different situation, so it drops through to the scoring below
   // rather than recommending a jug that does nothing about scale.
+  //
+  // Curated rather than "first three badge products in source order", because source
+  // order resolved to three near-identical £25-35 jugs on every clean-water page.
+  // A ladder across price points and categories serves the same visitor better and
+  // stops routing every click to the lowest-commission products by accident.
   if (flaggedContaminants.length === 0 && !hardWater) {
-    return drinkingFilters
-      .filter((f) => f.badge === "best-match" || f.badge === "budget")
+    const picks: FilterProduct[] = [];
+    for (const id of DEFAULT_PICK_IDS) {
+      const pick = drinkingFilters.find((f) => f.id === id);
+      if (pick) picks.push(pick);
+    }
+    // If a curated id ever disappears from the catalogue, refill from the badge
+    // products so the section never comes up short.
+    for (const f of drinkingFilters) {
+      if (picks.length >= maxResults) break;
+      if (f.badge !== "best-match" && f.badge !== "budget") continue;
+      if (picks.some((p) => p.id === f.id)) continue;
+      picks.push(f);
+    }
+    return picks
       .slice(0, maxResults)
       .map((f) => ({ ...f, matchedCount: 0, matchedContaminants: [] }));
   }

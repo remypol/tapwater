@@ -123,6 +123,19 @@ describe("recommendFilters", () => {
     expect(recommendFilters([], 3, { hardnessValue: null }).length).toBeGreaterThan(0);
   });
 
+  it("ladders the clean-water picks across types instead of three identical jugs", () => {
+    const recs = recommendFilters([], 3, { hardnessValue: 40 });
+
+    // Display order is deliberate: proven seller, own-programme step-up, budget anchor.
+    expect(recs.map((r) => r.id)).toEqual([
+      "zerowater-12cup",
+      "waterdrop-10ua",
+      "brita-maxtra-pro",
+    ]);
+    // The old failure mode was a wall of one product type.
+    expect(new Set(recs.map((r) => r.category)).size).toBeGreaterThan(1);
+  });
+
   it("never recommends showers, testing kits or softeners as drinking water filters", () => {
     const recs = recommendFilters(["Lead", "Nitrate", "Chlorine residual"], 5);
     for (const r of recs) {
