@@ -22,17 +22,20 @@ function RecommendationRecord({
   filter,
   postcodeDistrict,
   waterScoreBand,
+  recommendationReason,
 }: {
   filter: RecommendedFilter;
   postcodeDistrict: string;
   waterScoreBand: string;
+  recommendationReason?: string;
 }) {
   const matched = filter.matchedContaminants;
   const alsoListed = filter.removes.filter(
     (r) => !matched.some((m) => m.toLowerCase() === r.toLowerCase()),
   );
   const candour = getCandourRows(filter);
-  const recommendationReason = matched.join("+").toLowerCase() || "optional-taste-convenience";
+  const reason =
+    recommendationReason ?? (matched.join("+").toLowerCase() || "optional-taste-convenience");
   const retailer = filter.affiliateProgram === "amazon" ? "on Amazon" : `at ${filter.brand}`;
 
   return (
@@ -121,7 +124,7 @@ function RecommendationRecord({
             pathname={`/postcode/${postcodeDistrict}`}
             postcodeArea={postcodeDistrict}
             waterScoreBand={waterScoreBand}
-            recommendationReason={recommendationReason}
+            recommendationReason={reason}
             productCategory={filter.category}
             productSlug={filter.slug}
             placement="postcode-summary"
@@ -198,6 +201,12 @@ interface FilterRecommendationsProps {
   postcodeDistrict: string;
   contaminantsFlagged: number;
   waterScoreBand: string;
+  /**
+   * Water is hard (>= 180 mg/L CaCO3) with nothing flagged. The recommender then
+   * returns scale-treating systems, and the generic "a filter is optional" framing
+   * would misdescribe why they are here.
+   */
+  hardWater?: boolean;
 }
 
 export function FilterRecommendations({
@@ -205,17 +214,23 @@ export function FilterRecommendations({
   postcodeDistrict,
   contaminantsFlagged,
   waterScoreBand,
+  hardWater = false,
 }: FilterRecommendationsProps) {
   if (recommendations.length === 0) return null;
 
   const hero = recommendations[0];
   const alternatives = recommendations.slice(1);
   const matchedLen = hero.matchedContaminants.length;
-  const reason = hero.matchedContaminants.join("+").toLowerCase() || "optional-taste-convenience";
+  const hardWaterOnly = hardWater && contaminantsFlagged === 0;
+  const reason =
+    hero.matchedContaminants.join("+").toLowerCase() ||
+    (hardWaterOnly ? "hard-water-scale" : "optional-taste-convenience");
 
   const kicker = contaminantsFlagged > 0
     ? `Filter match · ${contaminantsFlagged} flagged in ${postcodeDistrict}`
-    : `Filter guidance · ${postcodeDistrict}`;
+    : hardWaterOnly
+      ? `Hard water · ${postcodeDistrict}`
+      : `Filter guidance · ${postcodeDistrict}`;
 
   const verdict =
     matchedLen > 0 && matchedLen >= contaminantsFlagged
@@ -224,13 +239,17 @@ export function FilterRecommendations({
         ? `Matched to ${matchedLen} of ${contaminantsFlagged} concerns flagged in ${postcodeDistrict}`
         : matchedLen === 0 && contaminantsFlagged > 0
           ? `No direct match for the concerns flagged in ${postcodeDistrict}`
-          : `A filter is optional in ${postcodeDistrict}`;
+          : hardWaterOnly
+            ? `Hard water in ${postcodeDistrict}: these treat scale`
+            : `A filter is optional in ${postcodeDistrict}`;
 
-  const message = getRecommendationMessage({
-    postcodeDistrict,
-    contaminantsFlagged,
-    matchedContaminants: hero.matchedContaminants,
-  });
+  const message = hardWaterOnly
+    ? `Nothing was flagged in ${postcodeDistrict}, but at this hardness limescale builds up in kettles, boilers and pipework. A jug or carbon filter will not change that. The systems below genuinely treat scale; for whole-house protection, a softener quote is further down the page.`
+    : getRecommendationMessage({
+        postcodeDistrict,
+        contaminantsFlagged,
+        matchedContaminants: hero.matchedContaminants,
+      });
 
   return (
     <RecommendationTracker payload={createAffiliatePayload({
@@ -261,6 +280,7 @@ export function FilterRecommendations({
           filter={hero}
           postcodeDistrict={postcodeDistrict}
           waterScoreBand={waterScoreBand}
+          recommendationReason={reason}
         />
       </div>
 
