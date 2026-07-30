@@ -24,14 +24,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // s.skimresources.com serves the Skimlinks monetisation script. Without
-              // it here the script is blocked with no visible symptom — the site looks
-              // fine and simply earns nothing.
-              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://*.sentry.io https://s.skimresources.com`,
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://*.sentry.io`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              `connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com https://va.vercel-scripts.com https://*.sentry.io https://*.skimresources.com https://*.skimlinks.com${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
+              `connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://api.mapbox.com https://*.tiles.mapbox.com https://events.mapbox.com https://va.vercel-scripts.com https://*.sentry.io${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
               "worker-src 'self' blob:",
               "frame-ancestors 'none'",
             ].join("; "),
