@@ -201,7 +201,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-water-filter-pfas-guide"
-          pathname="/guides/best-water-filter-pfas"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -627,7 +626,6 @@ export default function BestWaterFilterPfasGuide() {
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
             pageType="best-water-filter-pfas-guide"
-            pathname="/guides/best-water-filter-pfas"
             campaign="best-water-filter-pfas-guide"
             products={featuredProducts}
             contaminants={comparisonContaminants}
@@ -666,7 +664,6 @@ export default function BestWaterFilterPfasGuide() {
           <AffiliateLink
             href={waterdropRO.affiliateUrl}
             pageType="best-water-filter-pfas-guide"
-            pathname="/guides/best-water-filter-pfas"
             recommendationReason="verdict"
             productCategory={waterdropRO.category}
             productSlug={waterdropRO.slug}
@@ -680,7 +677,6 @@ export default function BestWaterFilterPfasGuide() {
           <AffiliateLink
             href={zerowater.affiliateUrl}
             pageType="best-water-filter-pfas-guide"
-            pathname="/guides/best-water-filter-pfas"
             recommendationReason="verdict"
             productCategory={zerowater.category}
             productSlug={zerowater.slug}

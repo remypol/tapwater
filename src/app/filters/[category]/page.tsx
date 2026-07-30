@@ -279,7 +279,6 @@ export default async function CategoryPage({
             </h2>
             <ProductComparisonTable
               pageType="category"
-              pathname={`/filters/${slug}`}
               campaign={`category-${slug}`}
               products={products}
             />

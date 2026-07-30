@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { RecommendationTracker } from "@/components/conversion-tracker";
-import { createAffiliatePayload } from "@/lib/affiliate";
 import { getProductBySlug } from "@/lib/products";
 import { Kicker } from "@/components/commerce";
 import { OG_IMAGE } from "@/lib/og";
@@ -358,22 +357,20 @@ export default function BestWaterFiltersGuide() {
               {topPicks.map(({ product, highlight, reason }) => product && (
                 <RecommendationTracker
                   key={product.id}
-                  payload={createAffiliatePayload({
+                  context={{
                     pageType: "best-water-filters-guide",
-                    pathname: "/guides/best-water-filters-uk",
                     recommendationReason: reason,
                     productCategory: product.category,
                     productSlug: product.slug,
                     placement: "guide-quick-picks",
                     campaign: "best-water-filters-guide",
                     destinationUrl: product.affiliateUrl,
-                  })}
+                  }}
                 >
                   <ProductCard
                     product={product}
                     highlight={highlight}
                     pageType="best-water-filters-guide"
-                    pathname="/guides/best-water-filters-uk"
                     placement="guide-quick-picks"
                     recommendationReason={reason}
                   />

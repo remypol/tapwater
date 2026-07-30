@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Star, ChevronDown } from "lucide-react";
+import { ExternalLink, ChevronDown } from "lucide-react";
 import type { FilterProduct } from "@/lib/types";
 import { CATEGORY_LABELS } from "@/lib/filters";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { RecommendationTracker } from "@/components/conversion-tracker";
 import { getRecommendationMessage } from "@/lib/recommendation";
-import { createAffiliatePayload } from "@/lib/affiliate";
 import { Kicker, TypicalPrice, AffiliateNote, getCandourRows } from "@/components/commerce";
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
@@ -121,7 +120,6 @@ function RecommendationRecord({
           <AffiliateLink
             href={filter.affiliateUrl}
             pageType="postcode"
-            pathname={`/postcode/${postcodeDistrict}`}
             postcodeArea={postcodeDistrict}
             waterScoreBand={waterScoreBand}
             recommendationReason={reason}
@@ -177,7 +175,6 @@ function AlternativeRow({
       <AffiliateLink
         href={filter.affiliateUrl}
         pageType="postcode"
-        pathname={`/postcode/${postcodeDistrict}`}
         postcodeArea={postcodeDistrict}
         waterScoreBand={waterScoreBand}
         recommendationReason={filter.matchedContaminants.join("+").toLowerCase() || "alternative"}
@@ -252,9 +249,8 @@ export function FilterRecommendations({
       });
 
   return (
-    <RecommendationTracker payload={createAffiliatePayload({
+    <RecommendationTracker context={{
       pageType: "postcode",
-      pathname: `/postcode/${postcodeDistrict}`,
       postcodeArea: postcodeDistrict,
       waterScoreBand,
       recommendationReason: reason,
@@ -263,7 +259,7 @@ export function FilterRecommendations({
       placement: "postcode-summary",
       campaign: "postcode-result",
       destinationUrl: hero.affiliateUrl,
-    })}>
+    }}>
     <section id="filter-recommendation" className="mt-8 scroll-mt-24">
       {/* Section header — the answer, before any product */}
       <header className="max-w-2xl">
@@ -320,57 +316,5 @@ export function FilterRecommendations({
       </p>
     </section>
     </RecommendationTracker>
-  );
-}
-
-interface FilterCardsProps {
-  filters: FilterProduct[];
-  postcode: string;
-}
-
-export function FilterCards({ filters }: FilterCardsProps) {
-  return (
-    <section>
-      <div className="space-y-3">
-        {filters.map((filter) => (
-          <div key={filter.id} className="card p-4 flex items-center gap-4">
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-faint">{CATEGORY_LABELS[filter.category]}</p>
-              <p className="font-semibold text-ink text-sm">{filter.brand} {filter.model}</p>
-              {filter.certifications.length > 0 && (
-                <p className="text-xs text-muted mt-0.5">{filter.certifications.join(", ")}</p>
-              )}
-            </div>
-            <div className="text-right shrink-0">
-              <p className="font-data font-bold text-ink">{filter.priceGbp > 0 ? `£${filter.priceGbp.toLocaleString("en-GB")}` : "Check price"}</p>
-              <div className="flex items-center gap-0.5 justify-end">
-                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                <span className="text-xs text-muted">{filter.rating}</span>
-              </div>
-            </div>
-            <AffiliateLink
-              href={filter.affiliateUrl}
-              pageType="filter-list"
-              pathname="/filters"
-              recommendationReason="product-catalog"
-              productCategory={filter.category}
-              productSlug={filter.slug}
-              placement="filter-grid"
-              campaign="product-catalog"
-              className="shrink-0 text-sm font-medium text-accent hover:underline flex items-center gap-1 p-3"
-            >
-              View
-              <ExternalLink className="w-3.5 h-3.5" />
-            </AffiliateLink>
-          </div>
-        ))}
-      </div>
-      <p className="text-xs text-faint mt-4">
-        We may earn a commission through affiliate links.{" "}
-        <Link href="/affiliate-disclosure" className="text-accent hover:underline">
-          Affiliate disclosure
-        </Link>
-      </p>
-    </section>
   );
 }

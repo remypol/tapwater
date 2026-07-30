@@ -193,7 +193,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-whole-house-filter-guide"
-          pathname="/guides/best-whole-house-water-filter-uk"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -613,7 +612,6 @@ export default function BestWholeHouseFilterGuide() {
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
             pageType="best-whole-house-filter-guide"
-            pathname="/guides/best-whole-house-water-filter-uk"
             campaign="best-whole-house-filter-guide"
             products={wholeHouseProducts}
             contaminants={comparisonContaminants}
@@ -630,7 +628,6 @@ export default function BestWholeHouseFilterGuide() {
 
           pageType="best-whole-house-filter-guide"
 
-          pathname="/guides/best-whole-house-water-filter-uk"
 
           campaign="best-whole-house-filter-guide"
 
@@ -668,7 +665,6 @@ export default function BestWholeHouseFilterGuide() {
           <AffiliateLink
             href={waterdrop.affiliateUrl}
             pageType="best-whole-house-filter-guide"
-            pathname="/guides/best-whole-house-water-filter-uk"
             recommendationReason="verdict"
             productCategory={waterdrop.category}
             productSlug={waterdrop.slug}
@@ -682,7 +678,6 @@ export default function BestWholeHouseFilterGuide() {
           <AffiliateLink
             href={bwt.affiliateUrl}
             pageType="best-whole-house-filter-guide"
-            pathname="/guides/best-whole-house-water-filter-uk"
             recommendationReason="verdict"
             productCategory={bwt.category}
             productSlug={bwt.slug}

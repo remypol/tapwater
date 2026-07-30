@@ -5,7 +5,6 @@ interface Props {
   products: FilterProduct[];
   years?: number;
   pageType: string;
-  pathname: string;
   campaign: string;
 }
 
@@ -27,7 +26,6 @@ export function RunningCostComparison({
   products,
   years = 5,
   pageType,
-  pathname,
   campaign,
 }: Props) {
   const rows = products
@@ -118,7 +116,6 @@ export function RunningCostComparison({
                   <AffiliateLink
                     href={product.affiliateUrl}
                     pageType={pageType}
-                    pathname={pathname}
                     recommendationReason="running-cost"
                     productCategory={product.category}
                     productSlug={product.slug}

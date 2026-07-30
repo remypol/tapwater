@@ -35,7 +35,6 @@ export function HardWaterBudgetNote({
           <AffiliateLink
             href={jug.affiliateUrl}
             pageType="postcode"
-            pathname={`/postcode/${postcodeDistrict}`}
             postcodeArea={postcodeDistrict}
             waterScoreBand={waterScoreBand}
             recommendationReason="hard-water-budget-alternative"
