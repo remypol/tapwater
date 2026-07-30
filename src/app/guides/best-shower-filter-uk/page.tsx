@@ -193,7 +193,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-shower-filter-guide"
-          pathname="/guides/best-shower-filter-uk"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -585,7 +584,6 @@ export default function BestShowerFilterGuide() {
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
             pageType="best-shower-filter-guide"
-            pathname="/guides/best-shower-filter-uk"
             campaign="best-shower-filter-guide"
             products={showerProducts}
             contaminants={comparisonContaminants}
@@ -602,7 +600,6 @@ export default function BestShowerFilterGuide() {
 
           pageType="best-shower-filter-guide"
 
-          pathname="/guides/best-shower-filter-uk"
 
           campaign="best-shower-filter-guide"
 
@@ -639,7 +636,6 @@ export default function BestShowerFilterGuide() {
           <AffiliateLink
             href={jolie.affiliateUrl}
             pageType="best-shower-filter-guide"
-            pathname="/guides/best-shower-filter-uk"
             recommendationReason="verdict"
             productCategory={jolie.category}
             productSlug={jolie.slug}
@@ -653,7 +649,6 @@ export default function BestShowerFilterGuide() {
           <AffiliateLink
             href={aquabliss.affiliateUrl}
             pageType="best-shower-filter-guide"
-            pathname="/guides/best-shower-filter-uk"
             recommendationReason="verdict"
             productCategory={aquabliss.category}
             productSlug={aquabliss.slug}

@@ -9,7 +9,6 @@ interface ProductCardProps {
   product: FilterProduct;
   highlight?: string;
   pageType?: string;
-  pathname?: string;
   placement?: string;
   postcodeArea?: string;
   recommendationReason?: string;
@@ -19,7 +18,6 @@ export function ProductCard({
   product,
   highlight,
   pageType = "filter-category",
-  pathname = "/filters",
   placement = "product-card",
   postcodeArea,
   recommendationReason = "product-comparison",
@@ -105,7 +103,6 @@ export function ProductCard({
           <AffiliateLink
             href={product.affiliateUrl}
             pageType={pageType}
-            pathname={pathname}
             postcodeArea={postcodeArea}
             recommendationReason={recommendationReason}
             productCategory={product.category}

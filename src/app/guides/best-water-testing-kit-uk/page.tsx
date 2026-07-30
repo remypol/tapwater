@@ -157,7 +157,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-water-testing-kit-guide"
-          pathname="/guides/best-water-testing-kit-uk"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -562,7 +561,6 @@ export default function BestWaterTestingKitGuide() {
           <AffiliateLink
             href={simplex.affiliateUrl}
             pageType="best-water-testing-kit-guide"
-            pathname="/guides/best-water-testing-kit-uk"
             recommendationReason="verdict"
             productCategory={simplex.category}
             productSlug={simplex.slug}

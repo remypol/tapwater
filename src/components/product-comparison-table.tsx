@@ -8,10 +8,10 @@ interface ComparisonTableProps {
   /**
    * Where this table is rendered. Required rather than optional so a new caller
    * cannot quietly ship a table whose clicks land in analytics with no idea which
-   * page they came from.
+   * page they came from. The page path itself is not here: AffiliateLink reads
+   * that from the router.
    */
   pageType: string;
-  pathname: string;
   campaign: string;
 }
 
@@ -19,7 +19,6 @@ export function ProductComparisonTable({
   products,
   contaminants,
   pageType,
-  pathname,
   campaign,
 }: ComparisonTableProps) {
   const showContaminants = contaminants ?? [
@@ -47,7 +46,6 @@ export function ProductComparisonTable({
                 <AffiliateLink
                   href={product.affiliateUrl}
                   pageType={pageType}
-                  pathname={pathname}
                   recommendationReason={product.bestFor ?? "comparison-table"}
                   productCategory={product.category}
                   productSlug={product.slug}

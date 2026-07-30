@@ -682,7 +682,6 @@ export default async function ContaminantPage({ params }: Props) {
                 key={product.id}
                 product={product}
                 pageType="contaminant"
-                pathname={`/contaminant/${slug}`}
                 placement="contaminant-solution"
                 recommendationReason={slug}
                 highlight={

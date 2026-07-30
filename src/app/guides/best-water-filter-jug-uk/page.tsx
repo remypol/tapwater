@@ -193,7 +193,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-water-filter-jug-guide"
-          pathname="/guides/best-water-filter-jug-uk"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -630,7 +629,6 @@ export default function BestWaterFilterJugGuide() {
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
             pageType="best-water-filter-jug-guide"
-            pathname="/guides/best-water-filter-jug-uk"
             campaign="best-water-filter-jug-guide"
             products={jugProducts}
             contaminants={comparisonContaminants}
@@ -647,7 +645,6 @@ export default function BestWaterFilterJugGuide() {
         <RunningCostComparison
           products={[...jugProducts, ...underSinkProducts]}
           pageType="best-water-filter-jug-guide"
-          pathname="/guides/best-water-filter-jug-uk"
           campaign="best-water-filter-jug-guide"
         />
 
@@ -688,7 +685,6 @@ export default function BestWaterFilterJugGuide() {
           <AffiliateLink
             href={zerowater.affiliateUrl}
             pageType="best-water-filter-jug-guide"
-            pathname="/guides/best-water-filter-jug-uk"
             recommendationReason="verdict"
             productCategory={zerowater.category}
             productSlug={zerowater.slug}
@@ -702,7 +698,6 @@ export default function BestWaterFilterJugGuide() {
           <AffiliateLink
             href={brita.affiliateUrl}
             pageType="best-water-filter-jug-guide"
-            pathname="/guides/best-water-filter-jug-uk"
             recommendationReason="verdict"
             productCategory={brita.category}
             productSlug={brita.slug}

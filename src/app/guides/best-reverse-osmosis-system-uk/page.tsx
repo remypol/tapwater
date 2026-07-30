@@ -193,7 +193,6 @@ function ProductReview({
         <AffiliateLink
           href={product.affiliateUrl}
           pageType="best-reverse-osmosis-guide"
-          pathname="/guides/best-reverse-osmosis-system-uk"
           recommendationReason={heading}
           productCategory={product.category}
           productSlug={product.slug}
@@ -650,7 +649,6 @@ export default function BestReverseOsmosisGuide() {
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
             pageType="best-reverse-osmosis-guide"
-            pathname="/guides/best-reverse-osmosis-system-uk"
             campaign="best-reverse-osmosis-guide"
             products={roProducts}
             contaminants={comparisonContaminants}
@@ -667,7 +665,6 @@ export default function BestReverseOsmosisGuide() {
 
           pageType="best-reverse-osmosis-guide"
 
-          pathname="/guides/best-reverse-osmosis-system-uk"
 
           campaign="best-reverse-osmosis-guide"
 
@@ -705,7 +702,6 @@ export default function BestReverseOsmosisGuide() {
           <AffiliateLink
             href={waterdrop.affiliateUrl}
             pageType="best-reverse-osmosis-guide"
-            pathname="/guides/best-reverse-osmosis-system-uk"
             recommendationReason="verdict"
             productCategory={waterdrop.category}
             productSlug={waterdrop.slug}
@@ -719,7 +715,6 @@ export default function BestReverseOsmosisGuide() {
           <AffiliateLink
             href={frizzlife.affiliateUrl}
             pageType="best-reverse-osmosis-guide"
-            pathname="/guides/best-reverse-osmosis-system-uk"
             recommendationReason="verdict"
             productCategory={frizzlife.category}
             productSlug={frizzlife.slug}
