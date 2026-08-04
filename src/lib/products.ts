@@ -2,7 +2,13 @@ import type { FilterProduct, ProductCategory } from "./types";
 
 /**
  * Canonical product catalogue — single source of truth for all filter products.
- * 22 products across 7 categories.
+ * 22 products across 7 categories (water_softener is defined but empty: Osmio pays
+ * no bounty on softeners, so that segment waits on a lead partner).
+ *
+ * Every entry must carry our own affiliate tracking. `every product carries our
+ * affiliate tracking` in products.test.ts enforces it: an untracked link renders
+ * and clicks through exactly like a tracked one, so nothing on the page or in the
+ * click log reveals the loss. Three products sat here untracked for weeks that way.
  */
 export const PRODUCTS: FilterProduct[] = [
   // ─── JUGS ───────────────────────────────────────────────────────────
@@ -375,51 +381,6 @@ export const PRODUCTS: FilterProduct[] = [
     annualCost: 70,
     flowRate: "2.3 L/min",
   },
-  {
-    id: "echo-water-hydrogen",
-    brand: "Echo Water",
-    model: "Hydrogen RO System",
-    slug: "echo-water-hydrogen",
-    category: "reverse_osmosis",
-    removes: [
-      "Lead",
-      "PFAS (total)",
-      "Fluoride",
-      "Arsenic",
-      "Nitrate",
-      "Chlorine",
-      "Trihalomethanes",
-      "Mercury",
-      "Cadmium",
-      "Chromium",
-      "Copper",
-      "Nickel",
-      "Bacteria",
-    ],
-    certifications: ["NSF/ANSI 58"],
-    priceGbp: 499,
-    priceTier: "premium",
-    affiliateUrl: "https://echowater.sjv.io/7XbX9d",
-    affiliateProgram: "impact",
-    affiliateTag: "ref=tapwater",
-    imageUrl: "/filters/echo-one.jpeg",
-    rating: 4.4,
-    badge: "premium",
-    pros: [
-      "Adds molecular hydrogen after RO for antioxidant benefits",
-      "Removes virtually all contaminants at 0.0001 micron",
-      "Premium build quality with stainless steel fittings",
-    ],
-    cons: [
-      "Most expensive option in the catalogue at £499",
-      "Hydrogen benefit claims lack independent UK verification",
-      "Requires professional plumbing installation",
-    ],
-    bestFor: "Health enthusiasts wanting the most thorough purification system",
-    filterLife: "12 months",
-    annualCost: 100,
-    flowRate: "1.9 L/min",
-  },
 
   {
     id: "osmio-fusion-2",
@@ -578,69 +539,6 @@ export const PRODUCTS: FilterProduct[] = [
     annualCost: 0,
     flowRate: "25 L/min",
   },
-  {
-    id: "waterdrop-whf3t",
-    brand: "Waterdrop",
-    model: "WHF3T-FG 3-Stage Whole House",
-    slug: "waterdrop-whf3t",
-    category: "whole_house",
-    removes: ["Chlorine", "Sediment", "Manganese", "Iron"],
-    certifications: ["NSF/ANSI 372"],
-    priceGbp: 330,
-    priceTier: "premium",
-    affiliateUrl:
-      "https://www.waterdropfilter.com/products/whole-house-iron-filter-for-well-water-wd-whf3t-fg",
-    affiliateProgram: "direct",
-    affiliateTag: "waterdrop-direct",
-    imageUrl: "/filters/WaterDrop-WHF21-FG.jpg",
-    rating: 4.5,
-    badge: "best-match",
-    pros: [
-      "7-stage filtration reduces 95.9% iron and 99.7% manganese",
-      "High 15 GPM flow rate won't reduce water pressure",
-      "100,000-gallon filter capacity for long-lasting performance",
-    ],
-    cons: [
-      "Professional installation essential — not a DIY job",
-      "Replacement filter set costs around £80/year",
-      "Large unit requires utility space near mains inlet",
-    ],
-    bestFor: "Whole-house iron, manganese, and chlorine removal",
-    filterLife: "6–12 months per filter set",
-    annualCost: 80,
-    flowRate: "56 L/min",
-  },
-  {
-    id: "aquasana-eq1000",
-    brand: "Aquasana",
-    model: "EQ-1000 Rhino",
-    slug: "aquasana-eq1000",
-    category: "whole_house",
-    removes: ["Chlorine", "Lead", "Mercury", "Copper", "Sediment"],
-    certifications: ["NSF/ANSI 42", "NSF/ANSI 61"],
-    priceGbp: 1159,
-    priceTier: "premium",
-    affiliateUrl: "https://www.aquasanaeurope.com/aquasana-rhino-eq-1000-whole-house-water-filter/",
-    affiliateProgram: "direct",
-    affiliateTag: "aquasana-direct",
-    imageUrl: "/filters/aquasana-eq1000.png",
-    rating: 4.4,
-    badge: "premium",
-    pros: [
-      "1,000,000-gallon capacity — lasts most homes 10 years",
-      "Removes lead and mercury alongside chlorine and sediment",
-      "NSF 42 + 61 dual certification for structural and taste safety",
-    ],
-    cons: [
-      "Highest upfront cost in the whole-house category",
-      "Large footprint — needs dedicated utility space",
-      "Pre-filter needs replacing every 3 months",
-    ],
-    bestFor: "Long-term whole-house filtration for heavy metal and chlorine removal",
-    filterLife: "10 years (main tank), 3 months (pre-filter)",
-    annualCost: 60,
-    flowRate: "26 L/min",
-  },
 
   {
     id: "osmio-pro-iii-ultimate",
@@ -668,7 +566,7 @@ export const PRODUCTS: FilterProduct[] = [
     affiliateTag: "osmio-213",
     imageUrl: "",
     rating: 4.4,
-    badge: "premium",
+    badge: "best-match",
     pros: [
       "The only whole-house unit here that also targets bacteria, nitrates and pharmaceutical residues",
       "NSF/ANSI 42 and 61 certified via IAPMO, with WaterMark approval as well",
@@ -777,6 +675,70 @@ export const PRODUCTS: FilterProduct[] = [
     bestFor: "Mid-range chlorine removal from a brand you recognise",
     filterLife: "3 months",
     annualCost: 48,
+  },
+  {
+    id: "osmio-vitafresh-inline",
+    brand: "Osmio",
+    model: "Vitafresh Inline Vitamin C Combo Pack",
+    slug: "osmio-vitafresh-inline",
+    category: "shower",
+    removes: ["Chlorine", "Chloramine"],
+    certifications: [],
+    priceGbp: 59,
+    priceTier: "mid",
+    affiliateUrl:
+      "https://www.osmiowater.co.uk/water-filters/shower-filters/osmio-vitafresh-advanced-shower-filter-combo-pack.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjQiLCJ0cmFmZmljX3NvdXJjZSI6Im5vX3NvdXJjZSIsImFjY291bnRfaWQiOjIxM30",
+    affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 10 },
+    affiliateTag: "osmio-213",
+    imageUrl: "",
+    rating: 4.3,
+    badge: "best-value",
+    pros: [
+      "Vitamin C neutralises chlorine chemically rather than adsorbing it, so it keeps working at shower temperature",
+      "Fits inline above your existing head, so you keep the showerhead you already have",
+      "Pharmaceutical food grade vitamin C, stated as compliant with UK and European standards",
+    ],
+    cons: [
+      "Cartridges last around 2 months, the shortest here, so roughly £70/year in replacements",
+      "The fabric pre-filter is a separate consumable on top of that",
+      "No independent certification listed, unlike the NSF-certified systems elsewhere on this site",
+    ],
+    bestFor: "Chlorine-heavy supplies where you want to keep your own showerhead",
+    filterLife: "2 months per cartridge",
+    annualCost: 70,
+  },
+  {
+    id: "osmio-vitafresh-handheld",
+    brand: "Osmio",
+    model: "Vitafresh Handheld Vitamin C",
+    slug: "osmio-vitafresh-handheld",
+    category: "shower",
+    removes: ["Chlorine", "Chloramine"],
+    certifications: [],
+    priceGbp: 37.5,
+    priceTier: "budget",
+    affiliateUrl:
+      "https://www.osmiowater.co.uk/water-filters/shower-filters/vitamin-c-shower-filter.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjMiLCJ0cmFmZmljX3NvdXJjZSI6Im5vX3NvdXJjZSIsImFjY291bnRfaWQiOjIxM30",
+    affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 5 },
+    affiliateTag: "osmio-213",
+    imageUrl: "",
+    rating: 4.2,
+    badge: "budget",
+    pros: [
+      "Replaces the handset itself and fits in seconds with no tools",
+      "Same pharmaceutical-grade vitamin C stage as the inline version at a lower entry price",
+      "Cartridge goes clear when the vitamin C is spent, so you can see when to change it",
+    ],
+    cons: [
+      "Cartridges last around 2 months, so the £70/year running cost is the same as the inline version",
+      "You lose your existing handset, unlike the inline option",
+      "Osmio warn the stainless steel plate is unsuitable for some electric showers",
+    ],
+    bestFor: "The cheapest way into vitamin C shower filtering",
+    filterLife: "2 months per cartridge",
+    annualCost: 70,
   },
 
   // ─── WATER SOFTENERS ─────────────────────────────────────────────────
@@ -893,7 +855,7 @@ export const CATEGORY_META: Record<
     description:
       "Installed at the mains inlet, these systems filter every drop of water entering your home.",
     bestFor: "Homeowners wanting filtered water from every tap and shower",
-    priceRange: "£250–£1,159",
+    priceRange: "£250–£499",
   },
   shower: {
     title: "Shower Filters",

@@ -31,7 +31,7 @@ const FAQ_DATA = [
   {
     question: "What are the running costs of a whole house water filter?",
     answer:
-      "Running costs vary dramatically by model. The BWT E1 has zero annual filter costs because it uses a backwash system that cleans itself — you just pull a lever periodically. The Waterdrop WHF3T-FG costs around £80/year for replacement filter sets every 6 months. The Aquasana EQ-1000 costs £60/year for pre-filters, but the main tank lasts up to 10 years. Factor in the initial plumber installation cost of £150–£300 on top of the unit price.",
+      "Running costs vary dramatically by model. The BWT E1 has zero annual filter costs because it uses a backwash system that cleans itself — you just pull a lever periodically. The Osmio PRO-III Ultimate runs to roughly £188/year once all three stages are counted, though the ceramic stage lasts three years so most years only need a carbon change. Factor in the initial plumber installation cost of £150–£300 on top of the unit price.",
   },
 ];
 
@@ -213,8 +213,6 @@ function ProductReview({
 export default function BestWholeHouseFilterGuide() {
   const wholeHouseProducts = getProductsByCategory("whole_house");
   const bwt = wholeHouseProducts.find((p) => p.id === "bwt-e1-whole-house")!;
-  const waterdrop = wholeHouseProducts.find((p) => p.id === "waterdrop-whf3t")!;
-  const aquasana = wholeHouseProducts.find((p) => p.id === "aquasana-eq1000")!;
   const osmio = wholeHouseProducts.find(
     (p) => p.id === "osmio-pro-iii-ultimate"
   )!;
@@ -333,17 +331,17 @@ export default function BestWholeHouseFilterGuide() {
               <div>
                 <p className="text-xs text-accent font-medium uppercase tracking-wider">Top pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
-                  {waterdrop.brand} {waterdrop.model}
+                  {osmio.brand} {osmio.model}
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  NSF 42 certified, three-stage filtration, 56 L/min flow rate
+                  NSF 42 and 61 certified, eight stages, also targets bacteria and nitrates
                 </p>
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
-                &pound;{waterdrop.priceGbp}
+                &pound;{osmio.priceGbp}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs text-accent font-medium uppercase tracking-wider">Value pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
@@ -355,20 +353,6 @@ export default function BestWholeHouseFilterGuide() {
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
                 &pound;{bwt.priceGbp}
-              </span>
-            </div>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs text-accent font-medium uppercase tracking-wider">Premium pick</p>
-                <p className="font-display text-base italic text-ink mt-0.5">
-                  {aquasana.brand} {aquasana.model}
-                </p>
-                <p className="text-sm text-muted mt-0.5">
-                  1,000,000-gallon capacity, removes lead and mercury, 10-year main tank
-                </p>
-              </div>
-              <span className="font-data text-lg font-bold text-ink shrink-0">
-                &pound;{aquasana.priceGbp}
               </span>
             </div>
           </div>
@@ -450,8 +434,10 @@ export default function BestWholeHouseFilterGuide() {
               This is the single most important spec. A whole-house filter must
               not reduce your water pressure. Look for a minimum of 20 L/min
               for a typical UK household. Larger homes with multiple bathrooms
-              need 30+ L/min. The Waterdrop WHF3T-FG delivers 56 L/min — you will
-              not notice it is there.
+              need 30+ L/min. The BWT E1 delivers 25 L/min, which is adequate
+              for a typical UK household. Osmio do not publish a flow rate for
+              the PRO-III Ultimate, so ask before buying if you have several
+              bathrooms running at once.
             </p>
           </div>
 
@@ -475,8 +461,8 @@ export default function BestWholeHouseFilterGuide() {
             </h3>
             <p className="text-base text-body leading-relaxed">
               Single-stage filters handle sediment only. Multi-stage systems
-              (like the Waterdrop WHF3T-FG with three stages) handle sediment,
-              chlorine, and metals. The more stages, the more contaminants
+              (like the Osmio PRO-III Ultimate with eight stages) handle
+              sediment, chlorine, and metals. The more stages, the more contaminants
               removed — but also the higher the annual filter replacement cost.
               Match the number of stages to your actual water problems.
             </p>
@@ -490,16 +476,17 @@ export default function BestWholeHouseFilterGuide() {
               The purchase price is just the start. Add professional
               installation (&pound;150&ndash;&pound;300) and annual filter
               replacements. Over 5 years: the BWT E1 costs roughly &pound;500
-              total (no filters to replace), the Waterdrop WHF3T-FG costs about
-              &pound;1,350, and the Aquasana EQ-1000 costs roughly &pound;1,400
-              but with the main tank lasting a full decade.
+              total (no filters to replace), while the Osmio PRO-III Ultimate
+              runs to about &pound;1,650 once its &pound;188/year of filters are
+              counted, though the ceramic stage lasts three years so the cost is
+              not evenly spread.
             </p>
           </div>
         </div>
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The four best whole house filters for UK homes
+          The two best whole house filters for UK homes
         </h2>
 
         {/* Product cards at a glance */}
@@ -509,13 +496,9 @@ export default function BestWholeHouseFilterGuide() {
               key={product.id}
               product={product}
               highlight={
-                product.id === "waterdrop-whf3t"
-                  ? "Top pick \u2014 best overall"
-                  : product.id === "bwt-e1-whole-house"
-                    ? "Value pick \u2014 lowest running costs"
-                    : product.id === "osmio-pro-iii-ultimate"
-                      ? "Broad-spectrum pick \u2014 bacteria and metals"
-                      : "Premium pick \u2014 maximum lifespan"
+                product.id === "osmio-pro-iii-ultimate"
+                  ? "Top pick \u2014 bacteria, metals and nitrates"
+                  : "Value pick \u2014 lowest running costs"
               }
             />
           ))}
@@ -524,29 +507,30 @@ export default function BestWholeHouseFilterGuide() {
         {/* Detailed reviews */}
         <div className="space-y-8">
           <ProductReview
-            product={waterdrop}
-            heading="Waterdrop WHF3T-FG \u2014 Top pick"
-            verdict="The most comprehensive whole-house filtration for UK mains water."
-            review="The Waterdrop WHF3T-FG is the whole-house filter we recommend for most UK homes. Three filtration stages handle sediment, chlorine, iron, and manganese — the four most common whole-house concerns we see in our postcode data. NSF/ANSI 42 certified for chlorine taste and odour removal. The 56 L/min flow rate is the highest here, which means zero noticeable pressure drop even in larger homes with multiple bathrooms running simultaneously. At £330 it is a significant investment, and the £80/year filter replacement cost adds up. But if you want clean water from every tap in the house, this is the system that does the most."
+            product={osmio}
+            heading="Osmio PRO-III Ultimate — Top pick"
+            verdict="The widest contaminant list here, but it will not touch limescale."
+            review="The Osmio PRO-III Ultimate goes after a different problem than the BWT. Alongside chlorine and sediment, Osmio list bacteria, nitrates, hormones, pharmaceutical residues and heavy metals including nickel, chromium, cadmium and mercury — the only unit here making those claims. It is certified to NSF/ANSI 42 and 61 through IAPMO, and also carries WaterMark approval. Three stages do the work: a ceramic block rated for three years or 300,000 litres, a 5-micron carbon block, and a GAC/KDF stage. In practice that means most years you only swap the carbon. Two things to be clear about. It does not soften water, and Osmio say so on their own product page, so if your postcode shows hard water you still need a softener alongside it. And there is no PFAS certification, which stands out because Osmio sell a separate PFAS filter. Running costs are the highest here at roughly £188/year once all three stages are counted. At £499 it makes sense if bacteria and metals are your concern; if you mainly want scale gone, look elsewhere."
             pros={[
-              "NSF/ANSI 42 certified for chlorine taste and odour removal",
-              "Three-stage filtration handles sediment, chlorine, iron, and manganese",
-              "56 L/min flow rate — the highest here, no pressure drop",
-              "Handles both mains water and well/borehole supply",
+              "Targets bacteria, nitrates and pharmaceutical residues, which the BWT does not claim",
+              "NSF/ANSI 42 and 61 certified via IAPMO, plus WaterMark approval",
+              "Ceramic stage lasts three years, so most years need only a carbon change",
+              "Brass 1″ BSP fittings rather than plastic connections",
             ]}
             cons={[
-              "Highest upfront cost at £330 plus installation",
-              "£80/year in replacement filter sets every 6 months",
-              "Requires professional plumbing installation — not DIY",
+              "Does not soften water — hard-water homes still need a separate softener",
+              "No PFAS certification, despite Osmio selling a dedicated PFAS filter",
+              "Roughly £188/year in replacements, the highest running cost here",
+              "Osmio quote two different capacities for the GAC/KDF stage on the same page",
             ]}
-            ctaLabel="View on Waterdrop"
+            ctaLabel="View on Osmio"
           />
 
           <ProductReview
             product={bwt}
             heading="BWT E1 \u2014 Value pick"
             verdict="WRAS approved, self-cleaning, and zero annual filter costs."
-            review="The BWT E1 takes a fundamentally different approach. Instead of disposable filter cartridges, it uses a stainless steel mesh that you clean with a simple backwash lever — pull it once a month and the filter flushes itself. That means zero annual filter replacement costs, which makes it the cheapest whole-house filter to run over 5 years. WRAS approved, which is the UK plumbing industry gold standard. The trade-off: it only removes sediment, chlorine, and particles. It does not remove heavy metals, iron, or manganese like the Waterdrop. At £250 it is the most affordable option here, and the 25 L/min flow rate is adequate for most UK homes. If your primary concern is sediment and chlorine, the BWT E1 is the smartest investment."
+            review="The BWT E1 takes a fundamentally different approach. Instead of disposable filter cartridges, it uses a stainless steel mesh that you clean with a simple backwash lever — pull it once a month and the filter flushes itself. That means zero annual filter replacement costs, which makes it the cheapest whole-house filter to run over 5 years. WRAS approved, which is the UK plumbing industry gold standard. The trade-off: it only removes sediment, chlorine, and particles. It does not remove heavy metals, iron, or manganese like the Osmio. At £250 it is the more affordable option here, and the 25 L/min flow rate is adequate for most UK homes. If your primary concern is sediment and chlorine, the BWT E1 is the smartest investment."
             pros={[
               "WRAS approved — the UK plumbing industry gold standard",
               "Self-cleaning backwash system — zero annual filter costs",
@@ -561,44 +545,7 @@ export default function BestWholeHouseFilterGuide() {
             ctaLabel="View on Amazon"
           />
 
-          <ProductReview
-            product={aquasana}
-            heading="Aquasana EQ-1000 Rhino \u2014 Premium pick"
-            verdict="The 10-year solution for homeowners who want to install and forget."
-            review="The Aquasana EQ-1000 Rhino is built for the long game. The main filter tank has a 1,000,000-gallon capacity — that is roughly 10 years for an average UK household. It removes chlorine, lead, mercury, copper, and sediment, making it the most comprehensive contaminant removal in the whole-house category. NSF/ANSI 42 and 61 dual certified. The downside is the upfront cost: £1,159 for the unit plus £150–£300 for installation. And even though the main tank lasts a decade, the pre-filter needs replacing every 3 months at £15 each. The system also has a larger physical footprint than the other two — you will need dedicated utility space. For homeowners who plan to stay in their home long-term, the Aquasana is the premium choice."
-            pros={[
-              "1,000,000-gallon capacity — lasts most homes a full decade",
-              "Removes lead and mercury alongside chlorine and sediment",
-              "NSF/ANSI 42 and 61 dual certification",
-              "Install once and forget for 10 years (main tank)",
-            ]}
-            cons={[
-              "Highest upfront cost at £800 plus professional installation",
-              "Large physical footprint — needs dedicated utility space",
-              "Pre-filter replacement every 3 months adds hassle",
-            ]}
-            ctaLabel="View on Amazon"
-          />
 
-          <ProductReview
-            product={osmio}
-            heading="Osmio PRO-III Ultimate — Broad-spectrum pick"
-            verdict="The widest contaminant list here, but it will not touch limescale."
-            review="The Osmio PRO-III Ultimate goes after a different problem than the other three. Alongside chlorine and sediment, Osmio list bacteria, nitrates, hormones, pharmaceutical residues and heavy metals including nickel, chromium, cadmium and mercury — the only unit here making those claims. It is certified to NSF/ANSI 42 and 61 through IAPMO, and also carries WaterMark approval. Three stages do the work: a ceramic block rated for three years or 300,000 litres, a 5-micron carbon block, and a GAC/KDF stage. In practice that means most years you only swap the carbon. Two things to be clear about. It does not soften water, and Osmio say so on their own product page, so if your postcode shows hard water you still need a softener alongside it. And there is no PFAS certification, which stands out because Osmio sell a separate PFAS filter. Running costs are the highest here at roughly £188/year once all three stages are counted. At £499 it makes sense if bacteria and metals are your concern; if you mainly want scale gone, look elsewhere."
-            pros={[
-              "Targets bacteria, nitrates and pharmaceutical residues — no other unit here claims this",
-              "NSF/ANSI 42 and 61 certified via IAPMO, plus WaterMark approval",
-              "Ceramic stage lasts three years, so most years need only a carbon change",
-              "Brass 1″ BSP fittings rather than plastic connections",
-            ]}
-            cons={[
-              "Does not soften water — hard-water homes still need a separate softener",
-              "No PFAS certification, despite Osmio selling a dedicated PFAS filter",
-              "Roughly £188/year in replacements, the highest running cost here",
-              "Osmio quote two different capacities for the GAC/KDF stage on the same page",
-            ]}
-            ctaLabel="View on Osmio"
-          />
         </div>
 
         {/* ── Comparison table ─────────────────────────────────────── */}
@@ -606,8 +553,8 @@ export default function BestWholeHouseFilterGuide() {
           Side-by-side comparison
         </h2>
         <p className="text-base text-muted mb-6">
-          The BWT handles basics cheaply. The Waterdrop covers the most
-          contaminants. The Aquasana lasts the longest.
+          The BWT handles the basics cheaply and cleans itself. The Osmio
+          covers far more contaminants, and costs more every year to do it.
         </p>
         <div className="card p-4 lg:p-6">
           <ProductComparisonTable
@@ -640,12 +587,12 @@ export default function BestWholeHouseFilterGuide() {
         </h2>
         <div className="prose-section">
           <p className="text-base text-body leading-relaxed">
-            The <strong className="text-ink">Waterdrop WHF3T-FG</strong> is the
-            whole-house filter we recommend for most UK homes. Three-stage
-            filtration, NSF 42 certified, and a 56 L/min flow rate that ensures
-            you never notice a pressure drop. At &pound;600 plus installation,
-            it is not cheap — but it is the most comprehensive protection for
-            your entire home.
+            The <strong className="text-ink">Osmio PRO-III Ultimate</strong> is
+            the whole-house filter we recommend where bacteria, nitrates or
+            heavy metals are the concern. Eight stages, NSF 42 and 61 certified
+            through IAPMO, and a ceramic block rated for three years. At
+            &pound;499 plus installation it is not cheap, and at roughly
+            &pound;188 a year it is not cheap to run either.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             If your concern is primarily sediment and chlorine, the{" "}
@@ -654,25 +601,24 @@ export default function BestWholeHouseFilterGuide() {
             filter costs make it the cheapest system to run long-term.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            For homeowners who want a set-and-forget solution, the{" "}
-            <strong className="text-ink">Aquasana EQ-1000 Rhino</strong> lasts
-            a decade and removes the most contaminants. Premium price, premium
-            lifespan.
+            Neither softens water. If your postcode shows hard water, a
+            whole-house filter is not the answer to limescale and you will
+            still need a softener alongside it.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
           <AffiliateLink
-            href={waterdrop.affiliateUrl}
+            href={osmio.affiliateUrl}
             pageType="best-whole-house-filter-guide"
             recommendationReason="verdict"
-            productCategory={waterdrop.category}
-            productSlug={waterdrop.slug}
+            productCategory={osmio.category}
+            productSlug={osmio.slug}
             placement="guide-verdict"
             campaign="best-whole-house-filter-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
-            Get the Waterdrop WHF3T-FG
+            Get the Osmio PRO-III Ultimate
             <ArrowRight className="w-4 h-4" />
           </AffiliateLink>
           <AffiliateLink
