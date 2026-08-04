@@ -214,7 +214,6 @@ export default function BestReverseOsmosisGuide() {
   const roProducts = getProductsByCategory("reverse_osmosis");
   const waterdrop = roProducts.find((p) => p.id === "waterdrop-g3p600")!;
   const frizzlife = roProducts.find((p) => p.id === "frizzlife-pd600")!;
-  const echo = roProducts.find((p) => p.id === "echo-water-hydrogen")!;
   const fusion2 = roProducts.find((p) => p.id === "osmio-fusion-2")!;
   const fusion3 = roProducts.find((p) => p.id === "osmio-fusion-3")!;
   const zero = roProducts.find((p) => p.id === "osmio-zero")!;
@@ -360,14 +359,14 @@ export default function BestReverseOsmosisGuide() {
               <div>
                 <p className="text-xs text-accent font-medium uppercase tracking-wider">Premium pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
-                  {echo.brand} {echo.model}
+                  {fusion3.brand} {fusion3.model}
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  NSF 58 certified, hydrogen infusion, 13 contaminant categories removed
+                  Tankless, hydrogen generator and chilled water, UK supplier with UK spares
                 </p>
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
-                &pound;{echo.priceGbp}
+                &pound;{fusion3.priceGbp}
               </span>
             </div>
           </div>
@@ -494,7 +493,7 @@ export default function BestReverseOsmosisGuide() {
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The six best RO systems for UK kitchens
+          The five best RO systems for UK kitchens
         </h2>
 
         {/* Product cards at a glance */}
@@ -511,10 +510,8 @@ export default function BestReverseOsmosisGuide() {
                     : product.id === "osmio-fusion-2"
                       ? "Remineralised pick \u2014 UK supplier"
                       : product.id === "osmio-fusion-3"
-                        ? "Tankless pick \u2014 hydrogen and chilled"
-                        : product.id === "osmio-zero"
-                          ? "No-plumbing pick \u2014 plugs in"
-                          : "Premium pick \u2014 maximum purification"
+                        ? "Premium pick \u2014 tankless, hydrogen and chilled"
+                        : "No-plumbing pick \u2014 plugs in"
               }
             />
           ))}
@@ -559,26 +556,6 @@ export default function BestReverseOsmosisGuide() {
               "Fewer certifications \u2014 NSF 58 only, no NSF 372",
             ]}
             ctaLabel="View on Amazon"
-          />
-
-          <ProductReview
-            product={echo}
-            heading="Echo Water Hydrogen \u2014 Premium pick"
-            verdict="The most thorough purification available, with hydrogen infusion."
-            review="The Echo Water Hydrogen system is for buyers who want the absolute maximum from their water. It starts with standard reverse osmosis at 0.0001 micron filtration \u2014 removing everything the other two systems remove plus bacteria \u2014 then adds a hydrogen infusion stage. Molecular hydrogen is claimed to provide antioxidant benefits, though this is still being studied and independent UK verification is limited. What is not in question: the build quality is noticeably premium, with stainless steel fittings where competitors use plastic. NSF 58 certified. At \u00a3499 and \u00a3100/year in running costs, this is a significant investment. We recommend it only if you want the broadest contaminant removal and are interested in the hydrogen angle."
-            pros={[
-              "Removes 13 contaminant categories \u2014 the most comprehensive list here",
-              "Premium build with stainless steel fittings throughout",
-              "Hydrogen infusion stage for claimed antioxidant benefits",
-              "NSF/ANSI 58 certified for RO performance",
-            ]}
-            cons={[
-              "Most expensive option at \u00a3499 with \u00a3100/year running costs",
-              "Hydrogen benefit claims lack independent UK verification",
-              "Requires professional installation \u2014 not a realistic DIY job",
-              "Lower flow rate at 1.9 L/min compared to the other two",
-            ]}
-            ctaLabel="View on Echo Water"
           />
 
           <ProductReview
@@ -692,9 +669,10 @@ export default function BestReverseOsmosisGuide() {
             identical. For most households, this is the smart choice.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            The <strong className="text-ink">Echo Water Hydrogen</strong> is for
-            buyers who want the absolute broadest contaminant removal and are drawn
-            to the hydrogen angle. Premium build, premium price.
+            The <strong className="text-ink">Osmio Fusion 3.0</strong> is for
+            buyers who specifically want tankless RO with a hydrogen stage and
+            chilled water, from a UK supplier that stocks UK spares. Premium
+            price, and note Osmio do not publish a filter replacement interval.
           </p>
         </div>
 

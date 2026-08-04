@@ -47,6 +47,45 @@ describe("PRODUCTS catalogue", () => {
     expect(unfinished).toEqual([]);
   });
 
+  // The placeholder check above only catches links we knew were unfinished. This one
+  // catches the worse case: a link that looks completely normal and works for the
+  // visitor, but carries someone else's tracking or none at all. Three products sat
+  // in this catalogue that way — a £499 system paying a stranger's Impact account, and
+  // two bare shop links including the most expensive item on the site. Nothing on the
+  // page, in the build, or in the click log looked wrong, because nothing was wrong
+  // except who got paid. So every link must prove which of our accounts it credits.
+  it("every product carries our affiliate tracking", () => {
+    const OUR_TRACKING: Record<string, (url: URL) => boolean> = {
+      // Amazon Associates: the tag is the whole attribution.
+      "amazon.co.uk": (u) => u.searchParams.get("tag") === "tapwater2107-21",
+      // Awin: publisher id, not the merchant id, is the part that pays us.
+      "awin1.com": (u) => u.searchParams.get("awinaffid") === "2996923",
+      // Osmio runs its own Magento program. The account id sits inside a base64
+      // payload, so a truncated or hand-edited token has to be decoded to be caught.
+      "osmiowater.co.uk": (u) => {
+        const token = u.searchParams.get("aw_affiliate");
+        if (!token) return false;
+        try {
+          const payload = JSON.parse(
+            Buffer.from(token, "base64").toString("utf8"),
+          );
+          return payload.account_id === 213 && Boolean(payload.campaign_id);
+        } catch {
+          return false;
+        }
+      },
+    };
+
+    const untracked = PRODUCTS.filter((p) => {
+      const url = new URL(p.affiliateUrl);
+      const host = url.hostname.replace(/^www\./, "");
+      const check = OUR_TRACKING[host];
+      return !check || !check(url);
+    }).map((p) => `${p.id} -> ${p.affiliateUrl}`);
+
+    expect(untracked).toEqual([]);
+  });
+
   it("has products in every category", () => {
     const categories: ProductCategory[] = [
       "jug", "under_sink", "reverse_osmosis", "whole_house",

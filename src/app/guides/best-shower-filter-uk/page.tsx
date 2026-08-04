@@ -215,6 +215,12 @@ export default function BestShowerFilterGuide() {
   const jolie = showerProducts.find((p) => p.id === "jolie-filtered-showerhead")!;
   const aquabliss = showerProducts.find((p) => p.id === "aquabliss-sf220")!;
   const philips = showerProducts.find((p) => p.id === "philips-awp1775")!;
+  const osmioInline = showerProducts.find(
+    (p) => p.id === "osmio-vitafresh-inline"
+  )!;
+  const osmioHandheld = showerProducts.find(
+    (p) => p.id === "osmio-vitafresh-handheld"
+  )!;
 
   const comparisonContaminants = [
     "Chlorine",
@@ -493,7 +499,7 @@ export default function BestShowerFilterGuide() {
 
         {/* ── Product reviews ──────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          The three best shower filters for UK bathrooms
+          The five best shower filters for UK bathrooms
         </h2>
 
         {/* Product cards at a glance */}
@@ -507,7 +513,11 @@ export default function BestShowerFilterGuide() {
                   ? "Top pick \u2014 best overall"
                   : product.id === "philips-awp1775"
                     ? "Value pick \u2014 best for the money"
-                    : "Budget pick \u2014 lowest cost"
+                    : product.id === "osmio-vitafresh-inline"
+                      ? "Vitamin C pick \u2014 keeps your own showerhead"
+                      : product.id === "osmio-vitafresh-handheld"
+                        ? "Vitamin C pick \u2014 cheapest way in"
+                        : "Budget pick \u2014 lowest cost"
               }
             />
           ))}
@@ -571,6 +581,42 @@ export default function BestShowerFilterGuide() {
             ]}
             ctaLabel="View on Amazon"
           />
+
+          <ProductReview
+            product={osmioInline}
+            heading="Osmio Vitafresh Inline — Vitamin C pick"
+            verdict="A different chemistry to the others, with the shortest cartridge life here."
+            review="The three filters above all work by adsorption: KDF and carbon media hold onto chlorine as the water passes through. The Osmio Vitafresh works chemically instead, releasing vitamin C that neutralises chlorine and chloramine outright. That matters in a shower, because adsorption media lose efficiency as water gets hotter and a chemical reaction does not. It fits inline between your shower arm and whatever head you already own, so you are not forced to give up a showerhead you like. Osmio describe the vitamin C as pharmaceutical food grade and state it is tested against UK and European standards, but there is no NSF or WRAS certification on this product, unlike the systems elsewhere on this site. The real cost is the cartridge. It lasts around two months, which is the shortest here, and at roughly £11.67 a cartridge that is about £70 a year before you count the separate fabric pre-filter. Cheaper than the Jolie to buy, more expensive than any of them to keep running."
+            pros={[
+              "Vitamin C neutralises chlorine chemically, so hot water does not reduce its effect",
+              "Fits inline above your existing showerhead rather than replacing it",
+              "See-through housing lets you watch the vitamin C level drop, so you know when to change it",
+            ]}
+            cons={[
+              "Cartridges last about 2 months, roughly £70/year, the highest running cost here",
+              "The fabric pre-filter is a separate consumable on top of that",
+              "No NSF or WRAS certification, unlike the certified systems elsewhere on this site",
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
+          <ProductReview
+            product={osmioHandheld}
+            heading="Osmio Vitafresh Handheld — Vitamin C pick"
+            verdict="The same vitamin C stage as the inline version, £21.50 cheaper up front."
+            review="This is the handset version of the filter above. Instead of sitting between your shower arm and your head, it replaces the handset entirely and fits in seconds without tools. The filtration is the same vitamin C chemistry and the same cartridge, so the performance argument and the running cost argument are both identical to the inline version. Which one you want comes down to whether you would rather keep your existing showerhead or spend £21.50 less. One caveat worth taking seriously: Osmio warn that the fine-holed stainless steel plate is not suitable for some electric showers, so check your setup before ordering. At £37.50 this is the cheapest way to find out whether vitamin C filtering does anything for your skin, as long as you accept the £70 a year that follows."
+            pros={[
+              "Cheapest entry point to vitamin C filtering at £37.50",
+              "Fits in seconds with no tools and no plumbing",
+              "Same pharmaceutical-grade vitamin C stage as the inline version",
+            ]}
+            cons={[
+              "Same 2-month cartridge life, so the same roughly £70/year running cost",
+              "Replaces your handset rather than working with the one you have",
+              "Osmio warn the steel plate is unsuitable for some electric showers",
+            ]}
+            ctaLabel="View on Osmio"
+          />
         </div>
 
         {/* ── Comparison table ─────────────────────────────────────── */}
@@ -629,6 +675,14 @@ export default function BestShowerFilterGuide() {
             <strong className="text-ink">AquaBliss SF220</strong> at &pound;25.
             If you notice a difference in your skin and hair, upgrade to the
             Jolie later.
+          </p>
+          <p className="text-base text-body leading-relaxed mt-4">
+            The two <strong className="text-ink">Osmio Vitafresh</strong>{" "}
+            filters are the option to consider if you want vitamin C rather than
+            KDF and carbon, since a chemical reaction does not weaken as the
+            water gets hotter. Go in with your eyes open on the running cost:
+            cartridges last about two months, which works out near &pound;70 a
+            year and makes them the most expensive filters here to keep going.
           </p>
         </div>
 
