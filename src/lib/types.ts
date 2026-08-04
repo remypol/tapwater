@@ -46,7 +46,8 @@ export type ProductCategory =
   | "shower"
   | "testing_kit"
   | "countertop"
-  | "water_softener";
+  | "water_softener"
+  | "filter_tap";
 
 export type PriceTier = "budget" | "mid" | "premium";
 

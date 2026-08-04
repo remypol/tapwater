@@ -160,9 +160,14 @@ export async function generateMetadata({
   const meta = CATEGORY_META[category];
   const count = getProductsByCategory(category).length;
 
-  const title = `${meta.title} — Compare ${count} Filters`;
-  const descFull = `${meta.description} ${count} products compared with prices, ratings, and contaminant removal data.`;
-  const descShort = `${meta.description} ${count} products compared with prices and ratings.`;
+  // A category can legitimately hold one product, so nothing here may hard-code a
+  // plural: "Compare 1 Filters" is the kind of wording that ends up in a search result.
+  const filters = count === 1 ? "1 Filter" : `${count} Filters`;
+  const products = count === 1 ? "1 product" : `${count} products`;
+
+  const title = `${meta.title} — Compare ${filters}`;
+  const descFull = `${meta.description} ${products} compared with prices, ratings, and contaminant removal data.`;
+  const descShort = `${meta.description} ${products} compared with prices and ratings.`;
   const description = descFull.length <= 155 ? descFull : descShort;
   const url = `https://www.tapwater.uk/filters/${meta.slug}`;
 

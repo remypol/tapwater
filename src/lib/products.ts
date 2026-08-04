@@ -2,8 +2,8 @@ import type { FilterProduct, ProductCategory } from "./types";
 
 /**
  * Canonical product catalogue — single source of truth for all filter products.
- * 22 products across 7 categories (water_softener is defined but empty: Osmio pays
- * no bounty on softeners, so that segment waits on a lead partner).
+ * 23 products across 8 populated categories (water_softener is defined but empty:
+ * Osmio pays no bounty on softeners, so that segment waits on a lead partner).
  *
  * Every entry must carry our own affiliate tracking. `every product carries our
  * affiliate tracking` in products.test.ts enforces it: an untracked link renders
@@ -741,6 +741,42 @@ export const PRODUCTS: FilterProduct[] = [
     annualCost: 70,
   },
 
+  // ─── FILTER TAPS ────────────────────────────────────────────────────
+  {
+    id: "osmio-sofia-triflow",
+    brand: "Osmio",
+    model: "Sofia Long Reach 3-Way Triflow Tap",
+    slug: "osmio-sofia-triflow-tap",
+    category: "filter_tap",
+    // A tap is plumbing, not filtration. It removes nothing on its own, so the
+    // list stays empty rather than inheriting claims from whatever sits behind it.
+    removes: [],
+    certifications: [],
+    priceGbp: 207,
+    priceTier: "premium",
+    affiliateUrl:
+      "https://www.osmiowater.co.uk/osmio-sofia-long-reach-3-way-triflow-kitchen-tap.html?aw_affiliate=eyJjYW1wYWlnbl9pZCI6IjE1IiwidHJhZmZpY19zb3VyY2UiOiJub19zb3VyY2UiLCJhY2NvdW50X2lkIjoyMTN9",
+    affiliateProgram: "direct",
+    commission: { type: "fixed", gbp: 20 },
+    affiliateTag: "osmio-213",
+    imageUrl: "",
+    rating: 4.8,
+    badge: "premium",
+    pros: [
+      "Separate spout keeps filtered water from mixing with the hot and cold supply",
+      "Hot, cold and filtered from one fitting, so no second spout on the worktop",
+      "Made in Italy, with a 3-year warranty on parts and valves",
+    ],
+    cons: [
+      "Filters nothing by itself: you still need an under-sink or RO system behind it, from about £60 extra",
+      "Osmio recommend a pressurised hot water system; on gravity-fed hot water the flow may be too low unless it is pumped",
+      "Rated 97/100 by Osmio, but on only 4 reviews, and the finish is warranted for 1 year against 3 on the valves",
+    ],
+    bestFor:
+      "Replacing the kitchen tap so filtered water comes out of the main fitting",
+    filterLife: "Not applicable, the tap holds no cartridge",
+  },
+
   // ─── WATER SOFTENERS ─────────────────────────────────────────────────
 
   // ─── TESTING KITS ──────────────────────────────────────────────────
@@ -881,6 +917,15 @@ export const CATEGORY_META: Record<
     bestFor: "Anyone who wants data before spending money on filtration",
     priceRange: "£13–£15",
   },
+  filter_tap: {
+    title: "Filter Taps",
+    slug: "filter-taps",
+    description:
+      "Three-way taps that bring hot, cold and filtered water to one fitting, with a separate spout so filtered water never mixes with the mains supply. The tap is the outlet, not the filter: you still need a filter system plumbed in behind it.",
+    bestFor:
+      "Kitchens where a second countertop spout is not wanted, paired with an under-sink or RO system",
+    priceRange: "£207",
+  },
 };
 
 /**
@@ -893,6 +938,7 @@ export const CATEGORY_ORDER: ProductCategory[] = [
   "reverse_osmosis",
   "whole_house",
   "shower",
+  "filter_tap",
   "testing_kit",
   "water_softener",
 ];

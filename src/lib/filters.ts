@@ -15,6 +15,7 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   shower: "Shower Filter",
   testing_kit: "Testing Kit",
   water_softener: "Water Softener",
+  filter_tap: "Filter Tap",
 };
 
 /**
