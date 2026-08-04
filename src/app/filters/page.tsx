@@ -71,7 +71,7 @@ export default function FiltersHubPage() {
                   <ArrowRight className="w-4 h-4 text-faint group-hover:text-accent transition-colors shrink-0 mt-1" />
                 </div>
                 <div className="mt-3 flex gap-3 text-xs text-muted">
-                  <span>{count} products</span>
+                  <span>{count === 1 ? "1 product" : `${count} products`}</span>
                   <span>{meta.priceRange}</span>
                 </div>
               </Link>

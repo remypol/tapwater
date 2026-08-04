@@ -89,7 +89,7 @@ describe("PRODUCTS catalogue", () => {
   it("has products in every category", () => {
     const categories: ProductCategory[] = [
       "jug", "under_sink", "reverse_osmosis", "whole_house",
-      "shower", "testing_kit", "countertop",
+      "shower", "testing_kit", "countertop", "filter_tap",
     ];
     for (const cat of categories) {
       const products = getProductsByCategory(cat);
