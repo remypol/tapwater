@@ -590,7 +590,7 @@ export default function BestShowerFilterGuide() {
             pros={[
               "Vitamin C neutralises chlorine chemically, so hot water does not reduce its effect",
               "Fits inline above your existing showerhead rather than replacing it",
-              "Cartridge goes clear when the vitamin C is spent, so you can see when to change it",
+              "See-through housing lets you watch the vitamin C level drop, so you know when to change it",
             ]}
             cons={[
               "Cartridges last about 2 months, roughly £70/year, the highest running cost here",

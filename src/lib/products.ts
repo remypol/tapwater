@@ -729,7 +729,7 @@ export const PRODUCTS: FilterProduct[] = [
     pros: [
       "Replaces the handset itself and fits in seconds with no tools",
       "Same pharmaceutical-grade vitamin C stage as the inline version at a lower entry price",
-      "Cartridge goes clear when the vitamin C is spent, so you can see when to change it",
+      "See-through housing lets you watch the vitamin C level drop, so you know when to change it",
     ],
     cons: [
       "Cartridges last around 2 months, so the £70/year running cost is the same as the inline version",
