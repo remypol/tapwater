@@ -23,6 +23,20 @@ import { getActiveIncidentsForCity } from "@/lib/incidents";
 
 export const revalidate = 86400;
 
+/**
+ * Only the cities in CITIES exist at this route.
+ *
+ * The notFound() in the page body was never enough on its own: with on-demand
+ * params an unknown slug rendered, hit notFound(), and Next cached that result
+ * as a prerender, which Vercel then served as HTTP 200. So /city/verzonnen
+ * answered 200 for any invented slug, exactly as /postcode/ZZ99 used to.
+ *
+ * Same fix as /postcode/[district]: generateStaticParams already enumerates
+ * every city we publish, so anything outside that list 404s at the routing
+ * layer, before it can be rendered and cached.
+ */
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug: string }>;
 }

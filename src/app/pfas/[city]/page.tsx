@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ChevronRight, MapPin, ShieldCheck } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -14,6 +15,23 @@ import { getProductIncludingUnavailable } from "@/lib/products";
 import { CITIES } from "@/lib/cities";
 
 export const revalidate = 86400;
+
+/**
+ * Only the cities in CITIES have a PFAS page.
+ *
+ * With on-demand params this route answered 200 for anything: getPfasCityData()
+ * falls back to an empty result whose `city` is the raw slug, so /pfas/asdfqwer
+ * rendered a complete "no PFAS detected" page titled "PFAS in asdfqwer Water".
+ * Nothing ever called notFound(), so an unbounded space of invented slugs was
+ * indexable, and anyone could link a URL that looked legitimate.
+ *
+ * Same fix as /postcode/[district]: generateStaticParams already enumerates
+ * every city we publish, so anything outside that list genuinely does not exist.
+ *
+ * The sibling static route /pfas/data-request is unaffected. Static segments win
+ * over dynamic ones during routing, so it never reaches this file.
+ */
+export const dynamicParams = false;
 
 interface Props {
   params: Promise<{ city: string }>;
@@ -72,6 +90,14 @@ function getNearbyCities(currentSlug: string): { slug: string; name: string }[] 
 
 export default async function PfasCityPage({ params }: Props) {
   const { city: citySlug } = await params;
+
+  // Belt and braces alongside dynamicParams above, and the same guard
+  // /city/[slug] and /contaminant/[slug] carry. getPfasCityData() answers every
+  // slug with an empty-but-renderable result, so without this the only thing
+  // standing between an invented slug and a published page is the route config.
+  // Reads the same list generateStaticParams does, so the two cannot drift.
+  if (!getPfasCitySlugs().includes(citySlug)) notFound();
+
   const data = await getPfasCityData(citySlug);
   const year = new Date().getFullYear();
   const roProduct = getProductIncludingUnavailable("waterdrop-g3p600");
