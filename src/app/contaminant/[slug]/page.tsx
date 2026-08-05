@@ -331,6 +331,19 @@ const CONTAMINANT_GUIDE_MAP: Record<string, { guideTitle: string; guideHref: str
 
 type Props = { params: Promise<{ slug: string }> };
 
+/**
+ * Only the twenty contaminants in CONTAMINANTS exist at this route.
+ *
+ * The notFound() in the page body was never enough on its own: with on-demand
+ * params an unknown slug rendered, hit notFound(), and Next cached that result
+ * as a prerender, which Vercel then served as HTTP 200. So /contaminant/verzonnen
+ * answered 200 for any invented slug, exactly as /postcode/ZZ99 used to.
+ *
+ * Same fix as /postcode/[district]. CONTAMINANTS is a literal in this file, so
+ * generateStaticParams cannot lag behind the data the way a queried list can.
+ */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return Object.keys(CONTAMINANTS).map((slug) => ({ slug }));
 }
