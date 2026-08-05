@@ -185,7 +185,10 @@ function AlternativeRow({
         className="shrink-0 p-3.5 -mr-1.5 rounded-lg text-accent hover:bg-accent-light transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         ariaLabel={`View ${filter.brand} ${filter.model}`}
       >
-        <ExternalLink className="w-4 h-4" aria-hidden="true" />
+        <span className="inline-flex items-center gap-1.5 text-sm font-medium">
+          View
+          <ExternalLink className="w-4 h-4" aria-hidden="true" />
+        </span>
       </AffiliateLink>
     </div>
   );
@@ -280,9 +283,13 @@ export function FilterRecommendations({
         />
       </div>
 
-      {/* Alternatives — a subordinate index */}
+      {/* Alternatives — subordinate to the pick, but not hidden behind a click.
+          Collapsed by default they were invisible in practice, and on a clean-water
+          report the top pick is the cheapest jug while the alternatives include the
+          under-sink system that actually suits a household that filters daily. The
+          order is unchanged: this only stops the other two being a secret. */}
       {alternatives.length > 0 && (
-        <details className="mt-4 group">
+        <details open className="mt-4 group">
           <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent hover:underline rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
             <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" />
             Compare {alternatives.length} alternative{alternatives.length !== 1 ? "s" : ""}
