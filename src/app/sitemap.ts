@@ -192,6 +192,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      // Static page, not part of the /pfas/[city] set below. It changes only when
+      // the regulator's position does, so it is not on the weekly data cadence.
+      url: `${BASE_URL}/pfas/data-request`,
+      lastModified: new Date("2026-08-05"),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    },
+    {
       url: `${BASE_URL}/supplier`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
