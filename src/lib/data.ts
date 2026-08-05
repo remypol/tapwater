@@ -295,14 +295,51 @@ interface SeedEntry {
  * but was still empty, skipped the load and returned null. It worked when called
  * sequentially from a script, which is exactly why the gap was invisible.
  */
-/** The only two spellings this column uses for total hardness. */
-const HARDNESS_DETERMINANDS = ["Hardness (Total) as CaCO3", "Hardness total"];
+/**
+ * Every spelling this column uses for total hardness.
+ *
+ * "Total hardness" was missing here and the comment above the list asserted there
+ * were only two. There are three, and the missing one covers 480 rows across 75
+ * districts that were reading as "no hardness data" and falling through to a jug.
+ * Counted directly against the table rather than inferred, so if a fourth spelling
+ * ever appears the same check finds it:
+ *
+ *   select determinand, count(*) from drinking_water_readings
+ *   where determinand ilike '%ardness%' group by 1;
+ */
+const HARDNESS_DETERMINANDS = [
+  "Hardness (Total) as CaCO3",
+  "Hardness total",
+  "Total hardness",
+];
 
-let hardnessCache: Promise<Map<string, number>> | null = null;
+/** Hardness for a district, and whether it was measured there or inferred nearby. */
+export interface HardnessReading {
+  value: number;
+  label: string;
+  /** True when no reading exists for this district and the postcode area was used. */
+  estimated: boolean;
+  /** Postcode area the estimate came from, e.g. "AL". Only set when estimated. */
+  estimatedFrom?: string;
+}
 
-async function loadHardness(): Promise<Map<string, number>> {
+interface HardnessIndex {
+  /** Districts with their own measurement. */
+  byDistrict: Map<string, number>;
+  /** Median per postcode area, for districts with no measurement of their own. */
+  byArea: Map<string, number>;
+}
+
+let hardnessCache: Promise<HardnessIndex> | null = null;
+
+/** "AL1" -> "AL". Hardness follows supply geography, which tracks the area letters. */
+function postcodeArea(district: string): string {
+  return district.toUpperCase().match(/^[A-Z]{1,2}/)?.[0] ?? district.toUpperCase();
+}
+
+async function loadHardness(): Promise<HardnessIndex> {
   const result = new Map<string, number>();
-  if (!supabase) return result;
+  if (!supabase) return { byDistrict: result, byArea: new Map() };
 
   try {
     const PAGE_SIZE = 1000;
@@ -345,25 +382,65 @@ async function loadHardness(): Promise<Map<string, number>> {
     // Hardness is informational; a failure here must not take the report down.
   }
 
-  return result;
+  // Only 697 of 2,782 districts carry a reading of their own. Hardness is a property
+  // of the supply rather than of a postcode, so neighbours in the same postcode area
+  // are a reasonable stand-in and cover a further 286 districts. Median rather than
+  // mean: a single soft-water outlier in a hard area should not drag the estimate
+  // under the threshold. Where areas were checked with four or more readings, about
+  // two thirds sit within 100 mg/L end to end, so this is a fair indication and not a
+  // measurement — callers get `estimated: true` and must label it as such.
+  const areaValues = new Map<string, number[]>();
+  for (const [district, value] of result) {
+    const area = postcodeArea(district);
+    const list = areaValues.get(area) ?? [];
+    list.push(value);
+    areaValues.set(area, list);
+  }
+  const byArea = new Map<string, number>();
+  for (const [area, values] of areaValues) {
+    values.sort((a, b) => a - b);
+    const mid = Math.floor(values.length / 2);
+    byArea.set(
+      area,
+      values.length % 2 ? values[mid] : Math.round((values[mid - 1] + values[mid]) / 2),
+    );
+  }
+
+  return { byDistrict: result, byArea };
 }
 
-export async function getHardness(
-  district: string,
-): Promise<{ value: number; label: string } | null> {
-  if (!supabase) return null;
-
-  hardnessCache ??= loadHardness();
-  const value = (await hardnessCache).get(district.toUpperCase());
-  if (value == null) return null;
-
-  const label = value < 60 ? "soft"
+function hardnessLabelFor(value: number): string {
+  return value < 60 ? "soft"
     : value < 120 ? "moderately soft"
     : value < 180 ? "moderately hard"
     : value < 250 ? "hard"
     : "very hard";
+}
 
-  return { value, label };
+export async function getHardness(
+  district: string,
+): Promise<HardnessReading | null> {
+  if (!supabase) return null;
+
+  hardnessCache ??= loadHardness();
+  const { byDistrict, byArea } = await hardnessCache;
+  const key = district.toUpperCase();
+
+  const measured = byDistrict.get(key);
+  if (measured != null) {
+    return { value: measured, label: hardnessLabelFor(measured), estimated: false };
+  }
+
+  const area = postcodeArea(key);
+  const nearby = byArea.get(area);
+  if (nearby == null) return null;
+
+  return {
+    value: nearby,
+    label: hardnessLabelFor(nearby),
+    estimated: true,
+    estimatedFrom: area,
+  };
 }
 
 export async function getPostcodeData(

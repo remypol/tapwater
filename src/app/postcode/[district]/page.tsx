@@ -168,6 +168,11 @@ export default async function PostcodePage({ params }: Props) {
   const hardnessData = await getHardness(data.district);
   const hardnessValue = hardnessData?.value ?? null;
   const hardnessLabel = hardnessData?.label ?? null;
+  // Most districts have no reading of their own and fall back to their postcode area.
+  // That is good enough to pick a filter, but it is not a measurement of this district,
+  // so every place the number is shown has to say which of the two it is.
+  const hardnessEstimated = hardnessData?.estimated ?? false;
+  const hardnessArea = hardnessData?.estimatedFrom ?? null;
 
   // Recommendations run after the hardness lookup: hard water is not a flagged
   // contaminant, so without it the recommender cannot tell a scale problem from
@@ -193,7 +198,7 @@ export default async function PostcodePage({ params }: Props) {
     },
     ...(hardnessValue != null ? [{
       question: `Is ${data.district} water hard or soft?`,
-      answer: `Water in ${data.district} (${data.areaName}) has a hardness of ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}. ${hardnessValue >= 180 ? "Hard water can cause limescale buildup. A water softener or filter jug may help." : hardnessValue < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`,
+      answer: `${hardnessEstimated ? `No hardness reading has been published for ${data.district} itself. Across the ${hardnessArea} postcode area the typical value is ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}` : `Water in ${data.district} (${data.areaName}) has a hardness of ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}`}. ${hardnessValue >= 180 ? "Hard water can cause limescale buildup. A water softener or filter jug may help." : hardnessValue < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`,
     }] : []),
     ...(hasData ? [{
       question: `Should I use a water filter in ${data.district}?`,
@@ -339,6 +344,13 @@ export default async function PostcodePage({ params }: Props) {
                 <div>
                   <p className="text-sm font-medium text-ink">
                     Water hardness: {hardnessValue} mg/L ({hardnessLabel})
+                    {hardnessEstimated ? (
+                      <span className="font-normal text-muted">
+                        {" "}
+                        &mdash; typical for the {hardnessArea} area, not measured in{" "}
+                        {data.district}
+                      </span>
+                    ) : null}
                   </p>
                   <p className="text-sm text-muted mt-0.5">
                     {hardnessValue >= 180
