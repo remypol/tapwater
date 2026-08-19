@@ -29,6 +29,11 @@ const FAQ_DATA = [
       "No plumber needed. Inline shower filters (like the Philips AWP1775) screw between your existing shower arm and showerhead — five minutes with no tools. Filtered showerheads (like the Jolie) replace your existing showerhead entirely. Both use standard half-inch BSP fittings that match virtually every UK shower arm. The only exception is electric showers with non-standard fittings — check your fitting size before buying.",
   },
   {
+    question: "Should I buy a filter shower head or an inline shower filter?",
+    answer:
+      "A filter shower head replaces your entire showerhead with one that has the filtration built in, with the Jolie as the best-known example. An inline shower filter screws between the shower arm and the head you already own, like the Philips AWP1775 or the Osmio Vitafresh Inline. Filtration performance is comparable, so choose on practicality: a filter shower head makes sense if your current head is due an upgrade anyway, while an inline filter lets you keep a spray pattern you like. Renters often prefer inline filters because everything unscrews and moves out with you.",
+  },
+  {
     question: "How often do I need to replace a shower filter cartridge?",
     answer:
       "Every 3 to 6 months depending on the model and your water usage. A household of two showering daily will hit the 3-month mark on most filters. The AquaBliss SF220 claims 6 months, but performance drops noticeably after 3–4 months in hard water areas. You will notice reduced water flow or the return of a chlorine smell when the cartridge is spent. Annual replacement costs range from £20 to £60 depending on the brand.",
@@ -37,9 +42,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Shower Filter UK ${year} — Hard Water`,
+    title: `Best Shower Filter UK ${year}: Filter Shower Heads & Inline`,
     description:
-      "We analysed 2,800 UK postcodes to find where shower filters matter most. Independent reviews focused on chlorine removal and skin benefits.",
+      "Filter shower heads and inline shower filters compared against water data from 2,800 UK postcodes. Chlorine removal, running costs, skin benefits.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-shower-filter-uk",
     },
@@ -299,10 +304,12 @@ export default function BestShowerFilterGuide() {
             filter — the question is which one.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            We tested the three most popular shower filters available in the UK,
-            focusing on what actually matters: chlorine removal, build quality,
-            ease of installation, and real running costs. No plumber needed for
-            any of them.
+            We compared five of the most popular options sold in the UK, both
+            filter shower heads that replace your existing head (like the
+            Jolie) and inline shower filters that sit behind it, focusing on
+            what actually matters: chlorine removal, build quality, ease of
+            installation, and real running costs. No plumber needed for any of
+            them.
           </p>
         </div>
 
@@ -459,12 +466,12 @@ export default function BestShowerFilterGuide() {
 
           <div>
             <h3 className="font-semibold text-ink text-lg mb-2">
-              Inline vs showerhead replacement
+              Filter shower head or inline shower filter?
             </h3>
             <p className="text-base text-body leading-relaxed">
               Inline filters (like the Philips AWP1775) screw between your
               shower arm and existing showerhead. You keep the showerhead you
-              like. Filtered showerheads (like the Jolie) replace the whole
+              like. A filter shower head (like the Jolie) replaces the whole
               head — better looking, but you lose your current showerhead&apos;s
               spray pattern. Both work equally well for filtration.
             </p>
@@ -624,7 +631,7 @@ export default function BestShowerFilterGuide() {
           Side-by-side comparison
         </h2>
         <p className="text-base text-muted mb-6">
-          All three handle chlorine. The differences are in build quality,
+          All five handle chlorine. The differences are in build quality,
           running costs, and what else they filter.
         </p>
         <div className="card p-4 lg:p-6">
