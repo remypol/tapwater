@@ -292,6 +292,23 @@ export default function WaterHardnessCheckerPage() {
               most day-to-day inconveniences.
             </p>
           </div>
+
+          <div className="card p-5">
+            <h3 className="font-sans font-semibold text-ink mb-2">Shower filter (skin and hair)</h3>
+            <p className="text-base text-body leading-relaxed mb-2">
+              A shower filter does not reduce hardness; the scale stays. What it removes
+              is chlorine, which strips natural oils and is the usual culprit when hard
+              water areas report dry skin and brittle hair, because scale and chlorine
+              compound each other&apos;s effects.
+            </p>
+            <p className="text-sm text-muted">
+              We compared{" "}
+              <Link href="/guides/best-shower-filter-uk" className="underline hover:text-ink transition-colors">
+                filter shower heads and inline shower filters
+              </Link>
+              {" "}against real UK water data.
+            </p>
+          </div>
         </div>
 
         <p className="text-sm text-muted mb-8">

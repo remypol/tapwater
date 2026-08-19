@@ -512,14 +512,14 @@ export default async function PostcodePage({ params }: Props) {
             {/* Supplementary recommendations */}
             <section className="mt-6 grid gap-3 sm:grid-cols-2">
               <Link
-                href="/filters/shower-filters"
+                href="/guides/best-shower-filter-uk"
                 className="card p-4 group hover:border-accent/30 transition-colors"
               >
                 <p className="font-semibold text-ink text-sm group-hover:text-accent transition-colors">
-                  Shower filters
+                  Filter shower heads
                 </p>
                 <p className="text-sm text-muted mt-1">
-                  Remove chlorine for better skin and hair
+                  Shower filters reviewed for chlorine, skin and hair
                 </p>
               </Link>
               <Link
