@@ -4,6 +4,14 @@ import { withSentryConfig } from "@sentry/nextjs";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // Google indexed /Guides (stray capital G) and still ranks it for
+      // "filter shower head" while it 404s in production; consolidate that
+      // casing onto the real index so the ranking is not lost to a dead URL.
+      { source: "/Guides", destination: "/guides", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

@@ -91,7 +91,7 @@ const GUIDES = [
   {
     slug: "best-shower-filter-uk",
     title: "Best Shower Filter UK",
-    subtitle: "Remove chlorine for better skin and hair",
+    subtitle: "Filter shower heads and inline filters for chlorine, skin and hair",
     icon: Sparkles,
     iconColor: "text-cyan-600",
     iconBg: "bg-cyan-50",
