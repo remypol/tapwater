@@ -44,6 +44,9 @@ const GUIDE_SLUGS = [
   "water-quality-pregnancy",
   "water-and-eczema",
   "moving-house-water-check",
+  "how-long-does-bottled-water-last",
+  "can-you-drink-rainwater-uk",
+  "what-is-smart-water",
 ];
 
 /**
