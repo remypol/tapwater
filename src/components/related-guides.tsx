@@ -1,61 +1,14 @@
 import Link from "next/link";
 import { BookOpen, ChevronRight } from "lucide-react";
+import { pickRelatedGuides, type RelatedGuideSignals } from "@/lib/guides";
 
-interface GuideEntry {
-  href: string;
-  title: string;
-  description: string;
-}
-
-interface RelatedGuidesProps {
-  pfasDetected: boolean;
-  hasLeadFlagged: boolean;
-  isHardWater: boolean;
-  hasContaminantsFlagged: boolean;
-}
-
-export function RelatedGuides({
-  pfasDetected,
-  hasLeadFlagged,
-  isHardWater,
-  hasContaminantsFlagged,
-}: RelatedGuidesProps) {
-  const guides: GuideEntry[] = [
-    {
-      href: "/guides/is-uk-tap-water-safe/",
-      title: "Is UK Tap Water Safe?",
-      description: "Everything you need to know about tap water safety in the UK",
-    },
-  ];
-
-  if (pfasDetected) {
-    guides.push({
-      href: "/guides/pfas-uk-explained/",
-      title: "PFAS Forever Chemicals",
-      description: "What PFAS are and how to reduce your exposure at home",
-    });
-  }
-  if (hasLeadFlagged) {
-    guides.push({
-      href: "/guides/lead-pipes-uk/",
-      title: "Lead Pipes in the UK",
-      description: "How to check for lead pipes and reduce exposure",
-    });
-  }
-  if (isHardWater) {
-    guides.push({
-      href: "/hardness/",
-      title: "Water Hardness Checker",
-      description: "Check your water hardness and what it means for your home",
-    });
-  }
-  if (hasContaminantsFlagged) {
-    guides.push({
-      href: "/filters/",
-      title: "Water Filter Recommendations",
-      description: "Find the right filter for your water quality issues",
-    });
-  }
+/**
+ * The internal-link engine for the programmatic pages (rendered on every
+ * postcode and city page). Selection logic lives in pickRelatedGuides so it
+ * is unit-testable; this component only renders the cards.
+ */
+export function RelatedGuides(signals: RelatedGuideSignals) {
+  const guides = pickRelatedGuides(signals);
 
   return (
     <section className="mt-8">
@@ -69,8 +22,8 @@ export function RelatedGuides({
       <div className="grid gap-3 sm:grid-cols-2">
         {guides.map((guide) => (
           <Link
-            key={guide.href}
-            href={guide.href}
+            key={guide.slug}
+            href={`/guides/${guide.slug}/`}
             className="card p-4 flex items-start justify-between gap-3 group"
           >
             <div className="min-w-0">
