@@ -600,6 +600,21 @@ export async function getSuppliersList(): Promise<SupplierData[]> {
 }
 
 /**
+ * Single supplier by its id/slug.
+ *
+ * The detail page used to read MOCK_SUPPLIERS directly while the homepage
+ * read getSuppliersList (Supabase-first), so a supplier added in Supabase
+ * rendered on the homepage but 404'd on its own page. Resolving through the
+ * same list keeps every surface consistent.
+ */
+export async function getSupplierBySlug(
+  slug: string,
+): Promise<SupplierData | null> {
+  const suppliers = await getSuppliersList();
+  return suppliers.find((s) => s.id === slug) ?? null;
+}
+
+/**
  * Lightweight trust metrics — single aggregate query instead of loading all postcodes.
  */
 export async function getTrustMetrics(): Promise<
