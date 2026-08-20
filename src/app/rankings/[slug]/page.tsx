@@ -204,6 +204,11 @@ interface RankedEntry {
 
 // ── Static params ──
 
+// Every ranking slug is enumerated at build time from the repo. Without this,
+// notFound() alone can still serve a cached 200 on Vercel — see the comment in
+// /postcode/[district]/page.tsx for the measured behaviour.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return ALL_SLUGS.map((slug) => ({ slug }));
 }

@@ -147,6 +147,11 @@ async function getCityStats(citySlug: string): Promise<CityStats | null> {
 
 // ── Static generation ──
 
+// Every comparison pair is enumerated at build time from the repo. Without
+// this, notFound() alone can still serve a cached 200 on Vercel — see the
+// comment in /postcode/[district]/page.tsx for the measured behaviour.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   const params: { city1: string; city2: string }[] = [];
   for (const [a, b] of CITY_COMPARISON_PAIRS) {

@@ -181,6 +181,11 @@ const CATEGORY_FAQS: Partial<
 
 /* ── static params ────────────────────────────────────────────────────── */
 
+// Every category slug is enumerated at build time from CATEGORY_ORDER. Without
+// this, notFound() alone can still serve a cached 200 on Vercel — see the
+// comment in /postcode/[district]/page.tsx for the measured behaviour.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return CATEGORY_ORDER.map((cat) => ({
     category: CATEGORY_META[cat].slug,
