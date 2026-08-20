@@ -30,9 +30,9 @@ const year = new Date().getFullYear();
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Water Filters UK (${year})`,
+    title: `Best Water Filters UK ${year}: Home Filtration Compared`,
     description:
-      "An honest overview of every water filter type available in the UK. Find out which filter removes what, then read our specific buying guides.",
+      "Which home water filtration system do you need? Every water filter type compared on what it actually removes, with detailed buying guides per category.",
     openGraph: {
       images: OG_IMAGE,
       title: `Best Water Filters for UK Tap Water (${year})`,
@@ -51,6 +51,41 @@ export function generateMetadata(): Metadata {
   };
 }
 
+/* ── FAQ data (rendered visibly and fed to FAQSchema) ───────────────── */
+
+const HUB_FAQS = [
+  {
+    question: "What is the best water filter for UK tap water?",
+    answer:
+      "It depends on what you want to remove. For basic chlorine and taste improvement, a jug filter like BRITA is fine. For PFAS, fluoride, and heavy metals, you need a reverse osmosis system. Our buying guides cover each category in detail.",
+  },
+  {
+    question: "What is the best water filter system for home use?",
+    answer:
+      "For a single kitchen tap, an under sink water filter or reverse osmosis unit gives the best litre-for-litre value. If you want every tap and shower covered, a whole house water filtration system installed at the mains is the route, with a softener alongside it in hard water areas. The comparison table on this page shows what each type removes, and every category links to its own buying guide.",
+  },
+  {
+    question: "Do I need a water filter in the UK?",
+    answer:
+      "UK tap water is legally safe to drink and meets strict standards set by the Drinking Water Inspectorate. However, trace levels of contaminants like chlorine, lead from old pipes, and PFAS can be present below legal limits. A filter can reduce these if you want extra peace of mind, but it is not strictly necessary for safety.",
+  },
+  {
+    question: "Do water filters remove PFAS?",
+    answer:
+      "Only certain types. Reverse osmosis systems (certified to NSF/ANSI 58) remove 90-99% of PFAS compounds. Some activated carbon filters certified to NSF/ANSI 53 offer partial reduction. Basic jug filters and countertop filters typically do not remove PFAS.",
+  },
+  {
+    question: "How much does a water filter cost in the UK?",
+    answer:
+      "Jug filters cost between £20-£45 upfront with replacement cartridges around £5-8 each. Countertop systems range from £100-£200. Under-sink reverse osmosis systems cost £200-£500. Whole-house systems start at £500 and can exceed £1,000 for premium models.",
+  },
+  {
+    question: "Which type of water filter removes the most contaminants?",
+    answer:
+      "Reverse osmosis removes the widest range of contaminants including PFAS, fluoride, lead, bacteria, and hardness minerals. It is the most thorough filtration technology available for home use, but it also removes beneficial minerals and wastes some water in the process.",
+  },
+];
+
 /* ── Guide link data ────────────────────────────────────────────────── */
 
 const BUYING_GUIDES = [
@@ -60,6 +95,24 @@ const BUYING_GUIDES = [
     description:
       "BRITA vs ZeroWater vs the rest. We test jugs against real contaminant data and tell you which ones are worth the money.",
     icon: GlassWater,
+    iconColor: "text-sky-600",
+    iconBg: "bg-sky-50",
+  },
+  {
+    slug: "best-under-sink-water-filter-uk",
+    title: "Best Under Sink Water Filter UK",
+    description:
+      "On-demand filtered water from a unit hidden in the cupboard. Certified carbon and ceramic options compared on real running costs.",
+    icon: Droplets,
+    iconColor: "text-teal-600",
+    iconBg: "bg-teal-50",
+  },
+  {
+    slug: "best-water-filter-tap-uk",
+    title: "Best Water Filter Taps UK",
+    description:
+      "Tap-mounted filters that fit in minutes, and the 3-way triflow tap that finishes an under-sink install properly.",
+    icon: Droplets,
     iconColor: "text-sky-600",
     iconBg: "bg-sky-50",
   },
@@ -240,35 +293,7 @@ export default function BestWaterFiltersGuide() {
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
-      <FAQSchema
-        faqs={[
-          {
-            question: "What is the best water filter for UK tap water?",
-            answer:
-              "It depends on what you want to remove. For basic chlorine and taste improvement, a jug filter like BRITA is fine. For PFAS, fluoride, and heavy metals, you need a reverse osmosis system. Our buying guides cover each category in detail.",
-          },
-          {
-            question: "Do I need a water filter in the UK?",
-            answer:
-              "UK tap water is legally safe to drink and meets strict standards set by the Drinking Water Inspectorate. However, trace levels of contaminants like chlorine, lead from old pipes, and PFAS can be present below legal limits. A filter can reduce these if you want extra peace of mind, but it is not strictly necessary for safety.",
-          },
-          {
-            question: "Do water filters remove PFAS?",
-            answer:
-              "Only certain types. Reverse osmosis systems (certified to NSF/ANSI 58) remove 90-99% of PFAS compounds. Some activated carbon filters certified to NSF/ANSI 53 offer partial reduction. Basic jug filters and countertop filters typically do not remove PFAS.",
-          },
-          {
-            question: "How much does a water filter cost in the UK?",
-            answer:
-              "Jug filters cost between \u00a320-\u00a345 upfront with replacement cartridges around \u00a35-8 each. Countertop systems range from \u00a3100-\u00a3200. Under-sink reverse osmosis systems cost \u00a3200-\u00a3500. Whole-house systems start at \u00a3500 and can exceed \u00a31,000 for premium models.",
-          },
-          {
-            question: "Which type of water filter removes the most contaminants?",
-            answer:
-              "Reverse osmosis removes the widest range of contaminants including PFAS, fluoride, lead, bacteria, and hardness minerals. It is the most thorough filtration technology available for home use, but it also removes beneficial minerals and wastes some water in the process.",
-          },
-        ]}
-      />
+      <FAQSchema faqs={HUB_FAQS} />
 
       <div className="max-w-3xl mx-auto">
         {/* Breadcrumb */}
@@ -320,9 +345,11 @@ export default function BestWaterFiltersGuide() {
             But &ldquo;legal&rdquo; and &ldquo;ideal&rdquo; are different things
             &mdash; trace amounts of chlorine, lead from old pipes, PFAS, and
             nitrates from farming can all be present within legal limits. The
-            right filter depends on what is in your water and what you want to
-            remove. This page helps you work out which type you need, then links
-            to our detailed buying guides for each category.
+            right home water filtration setup depends on what is in your water
+            and what you want to remove: a single filtered tap for drinking
+            water, or a whole-home water filter system at the mains. This page
+            helps you work out which type you need, then links to our detailed
+            buying guides for each category.
           </p>
         </div>
 
@@ -542,6 +569,21 @@ export default function BestWaterFiltersGuide() {
             Emerging contaminants: PFAS, pharmaceuticals, pesticides.
           </li>
         </ul>
+
+        {/* ── FAQ — the visible copy for the FAQSchema markup above ── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-6">
+          Frequently asked questions
+        </h2>
+        <div className="space-y-6">
+          {HUB_FAQS.map((faq) => (
+            <div key={faq.question}>
+              <h3 className="font-semibold text-ink text-base">{faq.question}</h3>
+              <p className="text-sm text-body leading-relaxed mt-2">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
 
         {/* ── Check your postcode CTA ──────────────────────────────── */}
         <div id="postcode-check" className="mt-14 card-elevated p-8 text-center rounded-2xl scroll-mt-24">
