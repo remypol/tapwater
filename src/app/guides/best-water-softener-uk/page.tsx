@@ -30,13 +30,23 @@ const FAQ_DATA = [
     answer:
       "Softened water is safe for most adults. The ion exchange process replaces calcium and magnesium with a small amount of sodium, which is well within safe limits for most people. However, the Drinking Water Inspectorate (DWI) recommends keeping an unsoftened tap for drinking and cooking — especially for making up baby formula, as infants should not consume water with added sodium. Most installers fit a bypass on the kitchen cold tap as standard.",
   },
+  {
+    question: "Is there such a thing as a hard water filter?",
+    answer:
+      "Mostly as a marketing term. A standard water filter does not reduce hardness: carbon, ceramic, and under-sink cartridges leave calcium and magnesium untouched, so the limescale stays. Products sold as hard water filters or limescale filters for the mains are usually scale inhibitors, which condition the minerals rather than remove them and give inconsistent results. The two technologies that genuinely deal with hardness are an ion exchange water softener, which this guide covers, and reverse osmosis for a single drinking tap.",
+  },
+  {
+    question: "How much does water softener installation cost in the UK?",
+    answer:
+      "Professional water softener installation typically costs £150 to £300 on top of the unit. That covers connection at the mains, a drain line for the regeneration cycle, and a hard-water bypass tap for the kitchen. Awkward pipework or a tight cupboard pushes the price toward the top of the range, and some suppliers bundle fitting with the unit at a discount. DIY is possible for a confident plumber, but the regeneration drainage has to be right or the softener cannot flush itself.",
+  },
 ];
 
 export function generateMetadata(): Metadata {
   return {
     title: `Best Water Softener UK (${year})`,
     description:
-      "Compare water softeners for UK homes. Salt vs salt-free, costs, and which areas need one most.",
+      "Compare water softeners for UK homes. Salt vs salt-free, hard water filters explained, installation costs, and which areas need one most.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-water-softener-uk",
     },
@@ -44,7 +54,7 @@ export function generateMetadata(): Metadata {
       images: OG_IMAGE,
       title: `Best Water Softener UK (${year})`,
       description:
-        "Compare water softeners for UK homes. Salt vs salt-free, costs, and which areas need one most.",
+        "Compare water softeners for UK homes. Salt vs salt-free, hard water filters explained, installation costs, and which areas need one most.",
       url: "https://www.tapwater.uk/guides/best-water-softener-uk",
       type: "article",
     },
@@ -53,7 +63,7 @@ export function generateMetadata(): Metadata {
       card: "summary_large_image",
       title: `Best Water Softener UK (${year})`,
       description:
-        "Compare water softeners for UK homes. Salt vs salt-free, costs, and which areas need one most.",
+        "Compare water softeners for UK homes. Salt vs salt-free, hard water filters explained, installation costs, and which areas need one most.",
     },
   };
 }
@@ -197,6 +207,32 @@ export default function BestWaterSoftenerGuide() {
           Enter your postcode below to check your water hardness. If your area
           reports above 200&nbsp;mg/L calcium carbonate, a softener is worth
           serious consideration.
+        </p>
+
+        {/* ── Hard water filter or water softener? ─────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
+          Hard water filter or water softener?
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          Plenty of products are sold as a hard water filter, a limescale
+          filter, or a mains water filter for hard water. Read the small print
+          and most are scale inhibitors: they condition the calcium so it is
+          less likely to stick, they do not remove it, and results vary with
+          temperature and flow. A normal drinking-water filter does not touch
+          hardness at all.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          If the goal is no more limescale, the proven route is the ion
+          exchange softener this guide covers. If you also want sediment and
+          chlorine handled across every tap, pair it with a{" "}
+          <Link href="/guides/best-whole-house-water-filter-uk" className="text-accent hover:underline">
+            whole house water filter
+          </Link>
+          ; for a single drinking tap without added sodium,{" "}
+          <Link href="/guides/best-reverse-osmosis-system-uk" className="text-accent hover:underline">
+            reverse osmosis
+          </Link>{" "}
+          removes hardness minerals too.
         </p>
 
         <div className="mt-8 card-elevated p-8 text-center rounded-2xl">
