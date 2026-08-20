@@ -24,6 +24,11 @@ const FAQ_DATA = [
       "Most UK households do not need one for health reasons — tap water meets strict DWI standards. But whole-house filters make a real difference if you have visible sediment or rust in your water, a boiler or appliances that keep scaling up, hard water that leaves limescale on everything, or you want chlorine-free water from every tap and shower. If your main concern is drinking water quality, an under-sink or RO system is more effective and much cheaper.",
   },
   {
+    question: "Is a whole house water filtration system the same as a water softener?",
+    answer:
+      "No. A whole house water filtration system removes sediment, chlorine, and in some models iron and other contaminants from all the water entering your home, but it leaves the calcium and magnesium that cause limescale. A water softener does the opposite: it swaps those hardness minerals for sodium and does nothing about chlorine or sediment. If limescale is your main problem, you need a softener; if taste, staining, or sediment is the problem, a filtration system; in very hard water areas many households end up installing both.",
+  },
+  {
     question: "Do I need a plumber to install a whole house filter?",
     answer:
       "Yes, professional installation is essential. Whole-house filters connect at the mains water inlet before the stopcock, which means cutting into the main supply pipe. This is not a DIY job — a qualified plumber will typically charge £150–£300 for installation depending on your home's plumbing layout. Some installers offer the filter and fitting as a package deal. Budget for installation on top of the filter cost.",
@@ -37,9 +42,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Whole House Water Filter UK (${year})`,
+    title: `Best Whole House Water Filter UK ${year}: Filtration Systems`,
     description:
-      "We analysed UK postcodes to find where whole-house filtration matters most. Independent reviews: sediment removal, appliance protection, running costs.",
+      "Whole house water filtration systems compared against real UK water data: sediment removal, chlorine, appliance protection, and true running costs.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-whole-house-water-filter-uk",
     },
@@ -292,15 +297,14 @@ export default function BestWholeHouseFilterGuide() {
             A whole-house water filter treats every drop that enters your home —
             kitchen taps, showers, washing machine, boiler. We analysed water
             quality data from 2,800 UK postcodes and found that sediment, chlorine,
-            and iron are the three most common reasons homeowners invest in
-            whole-house filtration.
+            and iron are the three most common reasons homeowners invest in a
+            whole house water filtration system.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             This is not a small purchase. Whole-house filters range from &pound;250
-            to &pound;800 and require professional installation. We tested the
-            three leading systems available in the UK, compared their real running
-            costs over 5 years, and identified which homes actually benefit from
-            them.
+            to &pound;800 and require professional installation. We compared the
+            two leading systems available in the UK on real running costs over 5
+            years, and identified which homes actually benefit from them.
           </p>
         </div>
 
