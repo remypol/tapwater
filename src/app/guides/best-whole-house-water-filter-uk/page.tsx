@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
 
@@ -307,6 +308,11 @@ export default function BestWholeHouseFilterGuide() {
             years, and identified which homes actually benefit from them.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`According to TapWater.uk's ${year} comparison, the BWT E1 and the Osmio PRO-III Ultimate are the two whole house water filtration systems worth weighing for UK homes.`}
+          detail={`Sediment, chlorine, and iron are the three most common reasons UK homeowners fit one, based on water quality data from 2,800 postcodes.`}
+        />
 
         {/* ── Affiliate disclosure ─────────────────────────────────── */}
         <div className="bg-wash border border-rule rounded-xl p-4 mt-6 mb-8 flex items-start gap-3">

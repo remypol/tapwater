@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
 
@@ -312,6 +313,11 @@ export default function BestShowerFilterGuide() {
             them.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`According to TapWater.uk's analysis of 2,800 UK postcodes, every district in Britain receives chlorinated water, which is exactly what a shower filter removes.`}
+          detail={`Our ${year} top pick is the Jolie Filtered Showerhead; the Philips AWP1775 is the inline value pick.`}
+        />
 
         {/* ── Affiliate disclosure ─────────────────────────────────── */}
         <div className="bg-wash border border-rule rounded-xl p-4 mt-6 mb-8 flex items-start gap-3">

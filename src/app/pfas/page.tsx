@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, MapPin, FlaskConical, Activity } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
@@ -273,18 +274,11 @@ export default async function PfasNationalPage() {
         </header>
 
         {/* GEO summary callout */}
-        <div className="card p-5 border-l-4 border-l-[#a855f7] mb-8">
-          <p className="text-base text-body leading-relaxed">
-            <strong className="text-ink">
-              According to TapWater.uk&apos;s analysis of Environment Agency
-              monitoring data, PFAS compounds have been detected at{" "}
-              {data.totalSamplingPoints.toLocaleString()} sampling points
-              across {data.citiesWithDetections} UK cities.
-            </strong>{" "}
-            England and Wales have no statutory limit for PFAS in drinking water
-            as of {year}, only a 0.1 µg/L regulator&apos;s guideline.
-          </p>
-        </div>
+        <GeoCitation
+          accentBorderClass="border-l-[#a855f7]"
+          headline={`According to TapWater.uk's analysis of Environment Agency monitoring data, PFAS compounds have been detected at ${data.totalSamplingPoints.toLocaleString()} sampling points across ${data.citiesWithDetections} UK cities.`}
+          detail={`England and Wales have no statutory limit for PFAS in drinking water as of ${year}, only a 0.1 µg/L regulator's guideline.`}
+        />
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-up delay-4">

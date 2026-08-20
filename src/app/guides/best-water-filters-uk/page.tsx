@@ -6,6 +6,7 @@ import {
   ArticleSchema,
   BreadcrumbSchema,
 } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import {
   ShieldCheck,
   Check,
@@ -352,6 +353,11 @@ export default function BestWaterFiltersGuide() {
             buying guides for each category.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`According to TapWater.uk's analysis of 2,800 UK postcode districts, the right home water filtration system depends on which contaminants your area actually carries.`}
+          detail={`Reverse osmosis removes the widest range, including PFAS and fluoride; a certified jug is the cheapest genuine improvement.`}
+        />
 
         {/* Affiliate notice */}
         <div className="bg-wash border border-rule rounded-xl p-4 mt-6 mb-8 flex items-start gap-3">

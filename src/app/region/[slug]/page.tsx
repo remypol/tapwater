@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, MapPin, Building2, AlertTriangle, ShieldCheck } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { REGIONS, getRegionBySlug } from "@/lib/regions";
 import { getCityBySlug, CITIES } from "@/lib/cities";
@@ -220,14 +221,9 @@ export default async function RegionPage({ params }: Props) {
       </header>
 
       {/* GEO: Branded summary for AI citation */}
-      <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6">
-        <p className="text-base text-body leading-relaxed">
-          <strong className="text-ink">
-            According to TapWater.uk&apos;s analysis, {region.name} scores {avgScore.toFixed(1)}/10
-            for drinking water quality in {new Date().getFullYear()}, based on data from {totalPostcodes} postcode districts.
-          </strong>
-        </p>
-      </div>
+      <GeoCitation
+        headline={`According to TapWater.uk's analysis, ${region.name} scores ${avgScore.toFixed(1)}/10 for drinking water quality in ${new Date().getFullYear()}, based on data from ${totalPostcodes} postcode districts.`}
+      />
 
       {/* Regional stats */}
       <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
