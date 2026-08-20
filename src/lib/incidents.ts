@@ -80,6 +80,23 @@ export async function getActiveIncidentsForCity(
   return (data ?? []) as Incident[];
 }
 
+export async function getActiveIncidentsForSupplier(
+  supplierId: string,
+): Promise<Incident[]> {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from("incidents")
+    .select("*")
+    .eq("status", "active")
+    .eq("supplier_id", supplierId);
+
+  if (error) {
+    console.error("Failed to fetch incidents for supplier:", error);
+    return [];
+  }
+  return (data ?? []) as Incident[];
+}
+
 export async function getIncidentBySlug(
   slug: string,
 ): Promise<Incident | null> {
