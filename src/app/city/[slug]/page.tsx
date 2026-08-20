@@ -13,6 +13,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { RelatedGuides } from "@/components/related-guides";
+import { EmbedCta } from "@/components/embed-cta";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -739,6 +740,10 @@ export default async function CityPage({ params }: Props) {
             </div>
           </section>
         </ScrollReveal>
+
+        {bestPostcodes.length > 0 && (
+          <EmbedCta district={bestPostcodes[0].district} />
+        )}
 
         <hr className="border-rule mt-10" />
 

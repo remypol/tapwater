@@ -17,6 +17,7 @@ import { HardWaterBudgetNote } from "@/components/hard-water-budget-note";
 import { SoftenerLeadBanner } from "@/components/softener-lead-banner";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { RelatedGuides } from "@/components/related-guides";
+import { EmbedCta } from "@/components/embed-cta";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { CITIES } from "@/lib/cities";
@@ -542,6 +543,8 @@ export default async function PostcodePage({ params }: Props) {
               isHardWater={(hardnessValue ?? 0) >= 180}
               hasContaminantsFlagged={data.contaminantsFlagged > 0}
             />
+
+            <EmbedCta district={data.district} />
 
             {/* Environmental Water Quality — EA data, clearly labelled */}
             {data.environmentalReadings.length > 0 && (
