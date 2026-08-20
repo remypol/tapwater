@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, MapPin, ShieldCheck } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
@@ -219,19 +220,11 @@ export default async function PfasCityPage({ params }: Props) {
           </header>
 
           {/* GEO summary */}
-          <div className="card p-5 border-l-4 border-l-[#a855f7] mb-8">
-            <p className="text-base text-body leading-relaxed">
-              <strong className="text-ink">
-                According to TapWater.uk&apos;s analysis,{" "}
-                {data.compoundsDetected.length} PFAS compound
-                {data.compoundsDetected.length !== 1 ? "s have" : " has"} been
-                detected across {data.samplingPointCount} sampling point
-                {data.samplingPointCount !== 1 ? "s" : ""} in {data.city}.
-              </strong>{" "}
-              The highest recorded level is {data.highestLevel.toFixed(3)}{" "}
-              &micro;g/L ({data.highestCompound}).
-            </p>
-          </div>
+          <GeoCitation
+            accentBorderClass="border-l-[#a855f7]"
+            headline={`According to TapWater.uk's analysis, ${data.compoundsDetected.length} PFAS compound${data.compoundsDetected.length !== 1 ? "s have" : " has"} been detected across ${data.samplingPointCount} sampling point${data.samplingPointCount !== 1 ? "s" : ""} in ${data.city}.`}
+            detail={`The highest recorded level is ${data.highestLevel.toFixed(3)} µg/L (${data.highestCompound}).`}
+          />
 
           {/* Stat cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-up delay-4">
@@ -592,15 +585,10 @@ export default async function PfasCityPage({ params }: Props) {
         </header>
 
         {/* GEO summary — no detections */}
-        <div className="card p-5 border-l-4 border-l-[#22c55e] mb-8">
-          <p className="text-base text-body leading-relaxed">
-            <strong className="text-ink">
-              Good news: Environment Agency monitoring has not detected PFAS
-              compounds in water sources near {data.city} as of the latest
-              available data.
-            </strong>
-          </p>
-        </div>
+        <GeoCitation
+          accentBorderClass="border-l-[#22c55e]"
+          headline={`Good news: Environment Agency monitoring has not detected PFAS compounds in water sources near ${data.city} as of the latest available data.`}
+        />
 
         {/* Single stat */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md animate-fade-up delay-4">

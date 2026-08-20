@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
@@ -129,6 +130,11 @@ export default function SmartWaterGuide() {
             the honest comparison with what comes out of a UK tap.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`Smartwater is vapour-distilled water with flavour-level electrolytes added back, and most UK tap water already carries more minerals, according to TapWater.uk's comparison.`}
+          detail={`Hydration is identical; taste and price per litre are the only real differences.`}
+        />
 
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
           The electrolyte claim, measured

@@ -12,6 +12,7 @@ import {
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { RelatedGuides } from "@/components/related-guides";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
@@ -315,16 +316,10 @@ export default async function CityPage({ params }: Props) {
 
         {/* GEO: Branded summary for AI citation */}
         {scored.length > 0 && (
-          <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6">
-            <p className="text-base text-body leading-relaxed">
-              <strong className="text-ink">
-                According to TapWater.uk&apos;s analysis, {city.name} scores {avgScore.toFixed(1)}/10
-                for drinking water quality in {year}.
-              </strong>{" "}
-              Water is supplied by {primarySupplier.name} and has been tested for {contaminantCount} contaminants
-              across {scored.length} postcode districts.
-            </p>
-          </div>
+          <GeoCitation
+            headline={`According to TapWater.uk's analysis, ${city.name} scores ${avgScore.toFixed(1)}/10 for drinking water quality in ${year}.`}
+            detail={`Water is supplied by ${primarySupplier.name} and has been tested for ${contaminantCount} contaminants across ${scored.length} postcode districts.`}
+          />
         )}
 
         {/* Aggregate stats */}

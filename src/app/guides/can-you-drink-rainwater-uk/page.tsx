@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
@@ -129,6 +130,11 @@ export default function RainwaterGuide() {
             rainwater is not the pristine source it is often imagined to be.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`Untreated rainwater is not safe to drink in the UK, according to TapWater.uk's review of harvesting guidance: roof contamination and PFAS both survive boiling.`}
+          detail={`For gardens, toilets, and washing machines it is excellent; for the glass, treated mains water remains the sensible source.`}
+        />
 
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
           What rain picks up on the way to your glass

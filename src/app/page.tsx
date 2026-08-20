@@ -91,9 +91,10 @@ export default async function HomePage() {
 
           {/* GEO: Crawlable summary — visually subtle, semantically rich */}
           <p className="text-sm text-muted mt-4 max-w-lg mx-auto">
-            Independent water quality reports by UK postcode. Scores compare real
-            drinking water tests from UK water companies and Environment Agency
-            monitoring against the legal limits for 29 regulated contaminants.
+            TapWater.uk publishes independent water quality reports for 2,800
+            UK postcode districts. Scores compare real drinking water tests
+            from UK water companies and Environment Agency monitoring against
+            the legal limits for 29 regulated contaminants.
           </p>
         </div>
       </section>

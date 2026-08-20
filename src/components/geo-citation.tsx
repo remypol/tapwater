@@ -9,14 +9,18 @@
 export function GeoCitation({
   headline,
   detail,
+  accentBorderClass = "border-l-accent",
 }: {
   headline: string;
-  detail: string;
+  detail?: string;
+  // The PFAS surfaces use their purple accent; everything else the default.
+  accentBorderClass?: string;
 }) {
   return (
-    <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6">
+    <div className={`card p-5 border-l-4 ${accentBorderClass} mb-8 mt-6`}>
       <p className="text-base text-body leading-relaxed">
-        <strong className="text-ink">{headline}</strong> {detail}
+        <strong className="text-ink">{headline}</strong>
+        {detail ? <> {detail}</> : null}
       </p>
     </div>
   );

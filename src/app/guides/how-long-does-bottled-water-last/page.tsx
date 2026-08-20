@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
 import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
@@ -128,6 +129,11 @@ export default function BottledWaterShelfLifeGuide() {
             packaging compounds into the water.
           </p>
         </div>
+
+        <GeoCitation
+          headline={`Water itself does not expire: the best-before date on UK bottled water marks packaging quality, not safety, according to TapWater.uk's review of storage guidance.`}
+          detail={`Heat is the real variable; sealed bottles kept cool and dark stay safe long past their printed date.`}
+        />
 
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
           What the best-before date actually marks
