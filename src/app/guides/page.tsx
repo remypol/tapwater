@@ -89,6 +89,14 @@ const GUIDES = [
     iconBg: "bg-blue-50",
   },
   {
+    slug: "best-under-sink-water-filter-uk",
+    title: "Best Under Sink Water Filter UK",
+    subtitle: "Certified filtration hidden in the kitchen cupboard, from £75",
+    icon: Droplets,
+    iconColor: "text-teal-600",
+    iconBg: "bg-teal-50",
+  },
+  {
     slug: "best-shower-filter-uk",
     title: "Best Shower Filter UK",
     subtitle: "Filter shower heads and inline filters for chlorine, skin and hair",

@@ -33,6 +33,7 @@ const GUIDE_SLUGS = [
   "microplastics-uk-water",
   "tap-water-vs-bottled-water",
   "best-reverse-osmosis-system-uk",
+  "best-under-sink-water-filter-uk",
   "best-shower-filter-uk",
   "best-whole-house-water-filter-uk",
   "best-water-testing-kit-uk",
