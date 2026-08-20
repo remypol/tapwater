@@ -14,6 +14,17 @@ const FULL_POSTCODE_RE =
   /^\/postcode\/([A-Z]{1,2}\d[A-Z\d]?)\d[A-Z]{2}$/i;
 
 export function middleware(request: NextRequest) {
+  // Google indexed /Guides (stray capital G) and ranks it while it 404s; send
+  // that casing to the real index. This must live here and not in
+  // next.config redirects: config redirects match case-INsensitively, so the
+  // same rule there also matched /guides and looped it onto itself. The exact
+  // string comparison below cannot match the lowercase route.
+  if (request.nextUrl.pathname === "/Guides") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/guides";
+    return NextResponse.redirect(url, 308);
+  }
+
   const match = request.nextUrl.pathname.match(FULL_POSTCODE_RE);
   if (match) {
     const district = match[1].toUpperCase();
@@ -26,5 +37,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/postcode/:path*",
+  matcher: ["/postcode/:path*", "/Guides"],
 };
