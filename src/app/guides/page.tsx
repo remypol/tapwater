@@ -136,6 +136,14 @@ const GUIDES = [
     iconColor: "text-blue-600",
     iconBg: "bg-blue-50",
   },
+  {
+    slug: "best-water-filter-tap-uk",
+    title: "Best Water Filter Taps UK",
+    subtitle: "3-way triflow taps and tap-mounted filters, honestly separated",
+    icon: Droplets,
+    iconColor: "text-sky-600",
+    iconBg: "bg-sky-50",
+  },
 ];
 
 export default function GuidesPage() {
