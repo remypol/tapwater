@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { EmbedCta } from "@/components/embed-cta";
 import { IncidentAlerts } from "@/components/incident-alert";
 
 import { MOCK_SUPPLIERS } from "@/lib/mock-data";
@@ -622,6 +623,8 @@ export default async function SupplierPage({ params }: Props) {
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
+
+          {bestArea && <EmbedCta district={bestArea.area} />}
 
           {/* Related reading */}
           <div className="card p-6">
