@@ -4,14 +4,10 @@ import { withSentryConfig } from "@sentry/nextjs";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
-  async redirects() {
-    return [
-      // Google indexed /Guides (stray capital G) and still ranks it for
-      // "filter shower head" while it 404s in production; consolidate that
-      // casing onto the real index so the ranking is not lost to a dead URL.
-      { source: "/Guides", destination: "/guides", permanent: true },
-    ];
-  },
+  // NOTE: no redirects() here. Config redirects match case-INsensitively, so a
+  // "/Guides" -> "/guides" rule also matches "/guides" itself and loops the
+  // guides index forever (broke production on 19 Aug). The case fix lives in
+  // src/middleware.ts, where an exact string comparison is case-sensitive.
   async headers() {
     return [
       {
