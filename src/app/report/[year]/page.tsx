@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   ChevronRight,
   TrendingUp,
@@ -27,8 +28,16 @@ export const revalidate = 86400;
 
 // ── Static params ──
 
+// Only the published report years exist; anything else (e.g. /report/1999)
+// rendered a full 200 page before this. Without dynamicParams=false,
+// notFound() alone can still serve a cached 200 on Vercel — see the comment
+// in /postcode/[district]/page.tsx for the measured behaviour.
+export const dynamicParams = false;
+
+const REPORT_YEARS = ["2026"];
+
 export function generateStaticParams() {
-  return [{ year: "2026" }];
+  return REPORT_YEARS.map((year) => ({ year }));
 }
 
 // ── Score colour helpers ──
@@ -254,6 +263,7 @@ export default async function ReportPage({
   params: Promise<{ year: string }>;
 }) {
   const { year } = await params;
+  if (!REPORT_YEARS.includes(year)) notFound();
   const data = await buildReportData();
 
   const formattedDate = new Date(data.latestDate).toLocaleDateString("en-GB", {

@@ -24,6 +24,11 @@ interface Props {
 
 // ── Static params: both directions for all 4 pairs ──
 
+// Every brand pair is enumerated at build time from the repo. Without this,
+// notFound() alone can still serve a cached 200 on Vercel — see the comment in
+// /postcode/[district]/page.tsx for the measured behaviour.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   const out: { brand1: string; brand2: string }[] = [];
   for (const [a, b] of BRAND_COMPARISON_PAIRS) {
