@@ -207,6 +207,11 @@ export default async function CityPage({ params }: Props) {
         ? `${city.name} tap water is safe to drink but some areas scored below average. Across ${scored.length} areas tested, the average water quality score is ${avgScore.toFixed(1)}/10. ${topConcerns.length > 0 ? `The most common issues were ${topConcerns.slice(0, 3).map(([name]) => name).join(", ")}.` : ""}`
         : `${city.name} tap water meets legal requirements but several areas showed elevated contaminant levels. Across ${scored.length} areas tested, the average water quality score is ${avgScore.toFixed(1)}/10. Check your specific postcode for details.`;
 
+  const canYouDrinkAnswer =
+    avgScore >= 4
+      ? `Yes, you can drink tap water in ${city.name}. It is regulated to UK drinking water standards, and across ${scored.length} tested areas the average water quality score is ${avgScore.toFixed(1)}/10. ${avgScore >= 7 ? "Enter your postcode for the readings in your exact area." : "Some areas scored below average, so it is worth checking your own postcode."}`
+      : `Tap water in ${city.name} meets legal requirements, so you can drink it, but several areas showed elevated contaminant levels (average score ${avgScore.toFixed(1)}/10 across ${scored.length} areas tested). Check your specific postcode for details.`;
+
   const supplierAnswer = `Water in ${city.name} is supplied by ${primarySupplier.name}${supplierCounts.size > 1 ? ` (covering most areas), with ${supplierCounts.size - 1} other supplier${supplierCounts.size > 2 ? "s" : ""} serving parts of the city` : ""}. ${city.description}`;
 
   const contaminantsAnswer =
@@ -244,6 +249,16 @@ export default async function CityPage({ params }: Props) {
   const contaminantCount = uniqueContaminants.size;
   const year = new Date().getFullYear();
 
+  const cityFaqs = [
+    { question: `Is ${city.name} tap water safe to drink?`, answer: safetyAnswer },
+    { question: `Can you drink tap water in ${city.name}?`, answer: canYouDrinkAnswer },
+    { question: `What is the water quality in ${city.name}?`, answer: contaminantsAnswer },
+    { question: `Is ${city.name} water hard or soft?`, answer: hardnessAnswer },
+    { question: `Which areas of ${city.name} have the best water?`, answer: bestAreasAnswer },
+    { question: `Who supplies water in ${city.name}?`, answer: supplierAnswer },
+    { question: `Are there PFAS in ${city.name} water?`, answer: pfasAnswer },
+  ];
+
   return (
     <div className="bg-score-safe">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
@@ -257,16 +272,7 @@ export default async function CityPage({ params }: Props) {
             },
           ]}
         />
-        <FAQSchema
-          faqs={[
-            { question: `Is ${city.name} tap water safe to drink?`, answer: safetyAnswer },
-            { question: `What is the water quality in ${city.name}?`, answer: contaminantsAnswer },
-            { question: `Is ${city.name} water hard or soft?`, answer: hardnessAnswer },
-            { question: `Which areas of ${city.name} have the best water?`, answer: bestAreasAnswer },
-            { question: `Who supplies water in ${city.name}?`, answer: supplierAnswer },
-            { question: `Are there PFAS in ${city.name} water?`, answer: pfasAnswer },
-          ]}
-        />
+        <FAQSchema faqs={cityFaqs} />
 
         {/* Breadcrumb */}
         <nav
@@ -711,6 +717,28 @@ export default async function CityPage({ params }: Props) {
             </ScrollReveal>
           </>
         )}
+
+        {/* FAQ — the visible copy for the FAQSchema markup above */}
+        <hr className="border-rule mt-10" />
+        <ScrollReveal delay={0}>
+          <section className="mt-8">
+            <h2 className="font-display text-2xl text-ink italic mb-5">
+              {city.name} tap water: frequently asked questions
+            </h2>
+            <div className="space-y-6">
+              {cityFaqs.map((faq) => (
+                <div key={faq.question}>
+                  <h3 className="font-semibold text-ink text-base">
+                    {faq.question}
+                  </h3>
+                  <p className="text-sm text-body leading-relaxed mt-2">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </ScrollReveal>
 
         <hr className="border-rule mt-10" />
 
