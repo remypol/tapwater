@@ -45,6 +45,32 @@ const CATEGORY_GUIDE: Partial<
     title: "Best Water Filter Jug UK",
     href: "/guides/best-water-filter-jug-uk/",
   },
+  under_sink: {
+    title: "Best Under Sink Water Filter UK",
+    href: "/guides/best-under-sink-water-filter-uk/",
+  },
+  filter_tap: {
+    title: "Best Water Filter Taps UK",
+    href: "/guides/best-water-filter-tap-uk/",
+  },
+  countertop: {
+    title: "Best Water Filter Taps UK (tap-mounted picks)",
+    href: "/guides/best-water-filter-tap-uk/",
+  },
+  water_softener: {
+    title: "Best Water Softener UK",
+    href: "/guides/best-water-softener-uk/",
+  },
+};
+
+/* ── optional per-category long intro (rendered when present) ─────────── */
+
+const CATEGORY_INTRO: Partial<Record<ProductCategory, string[]>> = {
+  reverse_osmosis: [
+    "A reverse osmosis water filter pushes mains water through a semi-permeable membrane with pores small enough to reject dissolved contaminants that carbon filters let through: PFAS, fluoride, nitrates, heavy metals, and the hardness minerals behind limescale. A carbon pre-filter protects the membrane from chlorine, and a post-filter polishes the taste on the way out.",
+    "In the UK the case for an RO system is specific rather than general. Tap water here meets strict legal standards, but PFAS currently has no statutory limit in England and Wales, fluoride passes every other filter type, and most of the country lives with hard water. Reverse osmosis is the one home technology that answers all three at once, which is why it anchors the top of our removal comparison.",
+    "The practical trade-offs: RO wastes some water (modern tankless systems run around 3:1 pure-to-drain), strips beneficial minerals along with the bad (remineralisation stages exist for that), and filters drinking water at one tap rather than the whole house. Check your postcode below to see whether your water actually carries the contaminants an RO system is built for.",
+  ],
 };
 
 /* ── per-category FAQs ────────────────────────────────────────────────── */
@@ -89,6 +115,21 @@ const CATEGORY_FAQS: Partial<
     },
   ],
   reverse_osmosis: [
+    {
+      question: "What is a reverse osmosis water filter?",
+      answer:
+        "A reverse osmosis water filter forces tap water through a semi-permeable membrane whose pores reject dissolved contaminants, backed by carbon pre- and post-filters. It removes the widest range of anything available for home use, including PFAS, fluoride, nitrates, heavy metals, and hardness minerals.",
+    },
+    {
+      question: "How much does a reverse osmosis system cost in the UK?",
+      answer:
+        "The systems we review run from £329 to £650 up front. Budget £60-£120 a year for replacement filters depending on the model, and factor the membrane itself every two to three years. Tankless designs cost more up front but save cupboard space and waste less water.",
+    },
+    {
+      question: "Is reverse osmosis water safe to drink?",
+      answer:
+        "Yes. RO water is safe and is used worldwide for drinking water. The debate is about minerals: RO strips calcium and magnesium along with the contaminants. A balanced diet supplies far more of both than tap water does, and several systems add a remineralisation stage for taste.",
+    },
     {
       question: "Does reverse osmosis waste a lot of water?",
       answer:
@@ -205,6 +246,7 @@ export default async function CategoryPage({
   const meta = CATEGORY_META[category];
   const products = getProductsByCategory(category);
   const guide = CATEGORY_GUIDE[category];
+  const intro = CATEGORY_INTRO[category] ?? [];
   const faqs = CATEGORY_FAQS[category] ?? [];
   const showComparison = category !== "testing_kit";
 
@@ -257,6 +299,17 @@ export default async function CategoryPage({
             Read our full guide: {guide.title}
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
+        )}
+
+        {/* Long intro (only categories that define one) */}
+        {intro.length > 0 && (
+          <div className="mt-6 space-y-4 max-w-2xl">
+            {intro.map((paragraph) => (
+              <p key={paragraph.slice(0, 40)} className="text-base text-body leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </div>
         )}
 
         {/* Postcode search */}
