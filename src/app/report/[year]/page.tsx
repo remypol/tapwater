@@ -195,6 +195,33 @@ async function buildReportData() {
     .filter((s) => s.postcodeCount >= 2)
     .sort((a, b) => b.avgScore - a.avgScore);
 
+  // ── Regional rankings — the ready-made local press angles ──
+  const regionMap = new Map<
+    string,
+    { scores: number[]; best: (typeof scored)[number]; worst: (typeof scored)[number] }
+  >();
+  for (const p of scored) {
+    const region = p.region || "Other";
+    const existing = regionMap.get(region);
+    if (existing) {
+      existing.scores.push(p.safetyScore);
+      if (p.safetyScore > existing.best.safetyScore) existing.best = p;
+      if (p.safetyScore < existing.worst.safetyScore) existing.worst = p;
+    } else {
+      regionMap.set(region, { scores: [p.safetyScore], best: p, worst: p });
+    }
+  }
+  const regionRankings = Array.from(regionMap.entries())
+    .map(([name, { scores, best, worst }]) => ({
+      name,
+      avgScore: scores.reduce((s, v) => s + v, 0) / scores.length,
+      postcodeCount: scores.length,
+      best: { district: best.district, areaName: best.areaName, score: best.safetyScore },
+      worst: { district: worst.district, areaName: worst.areaName, score: worst.safetyScore },
+    }))
+    .filter((r) => r.postcodeCount >= 5)
+    .sort((a, b) => b.avgScore - a.avgScore);
+
   // ── Most common contaminants ──
   const contaminantCounts = new Map<string, number>();
   for (const p of scored) {
@@ -248,6 +275,7 @@ async function buildReportData() {
     bottom5Cities,
     cityRankings,
     supplierRankings,
+    regionRankings,
     topContaminants,
     hardWaterCount,
     hardnessChecked,
@@ -734,6 +762,81 @@ export default async function ReportPage({
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Best water softeners
                 </Link>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        <hr className="border-rule mt-12" />
+
+        {/* ── Regional headlines — ready-made local angles ── */}
+        <ScrollReveal delay={0}>
+          <section className="mt-10">
+            <div className="flex items-center gap-3 mb-2">
+              <BarChart3 className="w-6 h-6 text-[var(--color-accent)]" />
+              <h2 className="font-display text-3xl text-ink italic">
+                Regional headlines
+              </h2>
+            </div>
+            <p className="text-base text-muted mt-2 max-w-2xl">
+              The same dataset, cut by region: ready-made local angles, free to
+              cite with attribution to TapWater.uk.
+            </p>
+            <div className="mt-6 space-y-3">
+              {data.regionRankings.map((region) => (
+                <div key={region.name} className="card p-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+                  <p className="font-semibold text-ink min-w-[10rem]">{region.name}</p>
+                  <p className="text-sm text-body">
+                    avg <span className="font-data font-bold">{region.avgScore.toFixed(1)}/10</span>{" "}
+                    over {region.postcodeCount} districts
+                  </p>
+                  <p className="text-sm text-body">
+                    best:{" "}
+                    <Link href={`/postcode/${region.best.district}`} className="text-accent hover:underline font-data font-bold">
+                      {region.best.district}
+                    </Link>{" "}
+                    ({region.best.score.toFixed(1)})
+                  </p>
+                  <p className="text-sm text-body">
+                    lowest:{" "}
+                    <Link href={`/postcode/${region.worst.district}`} className="text-accent hover:underline font-data font-bold">
+                      {region.worst.district}
+                    </Link>{" "}
+                    ({region.worst.score.toFixed(1)})
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Journalist datasets */}
+            <div className="card p-6 mt-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Database className="w-5 h-5 text-accent shrink-0" />
+                <h3 className="font-semibold text-ink">
+                  Writing about this? The datasets are free.
+                </h3>
+              </div>
+              <p className="text-sm text-body leading-relaxed mb-3">
+                Five ready-made datasets as CSV, plus citation text and an
+                embeddable postcode widget, all free to use with attribution.
+              </p>
+              <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                {[
+                  { slug: "hardest-water", label: "Hardest water (CSV)" },
+                  { slug: "best-worst-overall", label: "Best & worst overall (CSV)" },
+                  { slug: "worst-lead", label: "Highest lead (CSV)" },
+                  { slug: "worst-nitrate", label: "Highest nitrate (CSV)" },
+                  { slug: "most-pfas", label: "PFAS detections (CSV)" },
+                ].map((dataset) => (
+                  <a
+                    key={dataset.slug}
+                    href={`/api/press/data/${dataset.slug}`}
+                    className="text-accent hover:underline"
+                  >
+                    {dataset.label}
+                  </a>
+                ))}
+                <Link href="/press" className="text-accent hover:underline font-medium">Press page</Link>
               </div>
             </div>
           </section>

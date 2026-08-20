@@ -12,6 +12,17 @@ import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 
+// Which press dataset (src/lib/press-data.ts) backs each ranking. The two
+// overall rankings share the combined best/worst story.
+const PRESS_CSV_BY_RANKING: Record<string, string> = {
+  "worst-lead": "worst-lead",
+  "worst-nitrate": "worst-nitrate",
+  "worst-pfas": "most-pfas",
+  "hardest-water": "hardest-water",
+  "best-water": "best-worst-overall",
+  "worst-water": "best-worst-overall",
+};
+
 // ── Rankings config ──
 
 const RANKINGS = {
@@ -531,6 +542,25 @@ export default async function RankingPage({
               UK postcodes, {keyFinding}.
             </p>
           </div>
+
+          {/* Journalist strip: this ranking as a ready-made dataset */}
+          {PRESS_CSV_BY_RANKING[slug] && (
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm animate-fade-up delay-4">
+              <span className="text-muted">
+                Writing about this? Free to cite with attribution.
+              </span>
+              <a
+                href={`/api/press/data/${PRESS_CSV_BY_RANKING[slug]}`}
+                className="text-accent hover:underline inline-flex items-center gap-1"
+              >
+                Download this dataset (CSV)
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+              <Link href="/press" className="text-accent hover:underline">
+                Press page
+              </Link>
+            </div>
+          )}
 
           {/* Key stat cards */}
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3 animate-fade-up delay-4">
