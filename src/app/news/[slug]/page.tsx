@@ -38,8 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const incident = await getIncidentBySlug(slug);
   if (!incident) return {};
 
-  const title = incident.title;
-  const description = incident.summary;
+  // Headlines run to 60+ characters on their own; drop the site suffix rather
+  // than truncate the headline so the SERP title stays within ~60 characters.
+  const title = { absolute: incident.title };
+  const description = incident.summary.length > 155 ? `${incident.summary.slice(0, 152).replace(/\s+\S*$/, "")}...` : incident.summary;
   const url = `https://www.tapwater.uk/news/${slug}`;
 
   // Stale or thin articles stay live for anyone who lands on them, but are
@@ -63,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       images: OG_IMAGE,
       card: "summary_large_image",
-      title,
+      title: incident.title,
       description,
     },
     alternates: {

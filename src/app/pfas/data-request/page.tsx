@@ -17,7 +17,7 @@ import { OG_IMAGE } from "@/lib/og";
 
 const TITLE = "We Asked the Regulator for PFAS Results by Area";
 const DESCRIPTION =
-  "We asked the Drinking Water Inspectorate for PFAS monitoring results by water supply zone. The request was refused on cost grounds. Here is what we asked, what they said, and what is actually known.";
+  "We asked the Drinking Water Inspectorate for PFAS results by water supply zone. The request was refused on cost grounds. What we asked, what they said, what is known.";
 const URL = "https://www.tapwater.uk/pfas/data-request";
 
 export const metadata: Metadata = {

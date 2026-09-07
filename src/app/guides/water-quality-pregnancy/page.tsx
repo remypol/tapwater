@@ -12,7 +12,7 @@ export const revalidate = 86400;
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Water Quality and Pregnancy: What You Need to Know (${year})`,
+    title: `Tap Water and Pregnancy: Is It Safe? (${year})`,
     description:
       "Lead, nitrate, and PFAS in tap water during pregnancy. What the NHS says, what the science shows, and how to check your postcode.",
     alternates: {

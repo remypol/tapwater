@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { ProductComparisonTable } from "@/components/product-comparison-table";
@@ -252,6 +252,9 @@ export async function generateMetadata({
 
   const meta = CATEGORY_META[category];
   const count = getProductsByCategory(category).length;
+  // An empty category (water_softener: units are sold through installers) redirects
+  // to its guide in the page component; keep it out of the index meanwhile.
+  if (count === 0) return { title: meta.title, robots: { index: false, follow: true } };
 
   // A category can legitimately hold one product, so nothing here may hard-code a
   // plural: "Compare 1 Filters" is the kind of wording that ends up in a search result.
@@ -261,7 +264,10 @@ export async function generateMetadata({
   const title = `${meta.title} — Compare ${filters}`;
   const descFull = `${meta.description} ${products} compared with prices, ratings, and contaminant removal data.`;
   const descShort = `${meta.description} ${products} compared with prices and ratings.`;
-  const description = descFull.length <= 155 ? descFull : descShort;
+  const firstSentence = meta.description.split(/(?<=\.)\s/)[0];
+  const descMin = `${firstSentence} ${products} compared with prices and ratings.`;
+  const description =
+    descFull.length <= 155 ? descFull : descShort.length <= 155 ? descShort : descMin.slice(0, 155);
   const url = `https://www.tapwater.uk/filters/${meta.slug}`;
 
   return {
@@ -294,6 +300,11 @@ export default async function CategoryPage({
   const { category: slug } = await params;
   const category = SLUG_TO_CATEGORY[slug];
   if (!category) notFound();
+  // Softener units are sold through installers, so the category has no products:
+  // send the visitor (and Google) to the guide that actually answers the question.
+  if (category === "water_softener" && getProductsByCategory(category).length === 0) {
+    permanentRedirect("/guides/best-water-softener-uk");
+  }
 
   const meta = CATEGORY_META[category];
   const products = getProductsByCategory(category);

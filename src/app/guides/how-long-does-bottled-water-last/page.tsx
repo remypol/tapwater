@@ -33,7 +33,7 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: "How Long Does Bottled Water Last? UK Best-Before Explained",
+    title: "How Long Does Bottled Water Last? (UK)",
     description:
       "Does bottled water expire? What the UK best-before date really means, how long opened and unopened bottles last, and when heat becomes the real problem.",
     alternates: {

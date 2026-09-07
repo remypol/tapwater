@@ -12,7 +12,7 @@ export const revalidate = 86400;
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Can Tap Water Make Eczema Worse? Hard Water, Chlorine & Skin (${year})`,
+    title: `Does Tap Water Make Eczema Worse? (${year})`,
     description:
       "University of Sheffield research found hard water damages the skin barrier. What UK water does to eczema, and what you can do about it.",
     alternates: {

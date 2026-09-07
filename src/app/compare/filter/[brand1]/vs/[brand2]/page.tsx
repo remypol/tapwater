@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [a, b] = [comparison.brand1Label, comparison.brand2Label];
   const canonical = getCanonicalUrl(comparison);
 
-  const title = `${a} vs ${b} UK (2026) — Which Filter is Better?`;
+  const title = `${a} vs ${b} UK (2026): Which Is Better?`;
   const description = `${a} vs ${b}: independent comparison covering filtration, certifications, running costs, and which is right for your home.`;
 
   return {
