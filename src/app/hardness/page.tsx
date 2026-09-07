@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ArrowDown, ArrowRight } from "lucide-react"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { SoftenerLeadForm } from "@/components/softener-lead-form"
+import { ProductCard } from "@/components/product-card"
+import { AffiliateNote } from "@/components/commerce"
+import { getProductBySlug } from "@/lib/products"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
 import { OG_IMAGE } from "@/lib/og";
 
@@ -31,6 +35,8 @@ export function generateMetadata(): Metadata {
 export default function WaterHardnessCheckerPage() {
   const year = new Date().getFullYear()
   const dateModified = new Date().toISOString().split("T")[0]
+  const showerFilter = getProductBySlug("jolie-filtered-showerhead")
+  const countertopRo = getProductBySlug("osmio-zero")
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-14">
@@ -251,39 +257,106 @@ export default function WaterHardnessCheckerPage() {
           The right solution depends on your hardness level and what you actually want to fix.
         </p>
 
-        <div className="space-y-4 mb-6">
-          <div className="card p-5">
-            <h3 className="font-sans font-semibold text-ink mb-2">Water softener (whole-house)</h3>
-            <p className="text-base text-body leading-relaxed mb-2">
+        {/* Each option is a ruled entry rather than a card: two of them carry a
+            ProductCard, and a card inside a card reads as a widget, not an article. */}
+        <div className="divide-y divide-rule border-y border-rule mb-6">
+          <div className="py-7">
+            <h3 className="font-display text-xl italic text-ink">Water softener, for the whole house</h3>
+            <p className="text-base text-body leading-relaxed mt-2">
               An ion exchange softener is the most effective solution. It replaces calcium and
               magnesium ions with sodium ions, producing genuinely soft water throughout the
               house. Units cost £500&ndash;£1,500 installed, with ongoing costs of roughly
               £5&ndash;£10 per month for salt. Life expectancy is 15&ndash;20 years.
             </p>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-muted mt-2">
               Important: softened water should not be used as drinking water from the cold tap
               due to elevated sodium. Keep one unsoftened tap in the kitchen.
             </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Link
+                href="#softener-quotes"
+                className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                Get softener quotes for your postcode
+                <ArrowDown className="w-4 h-4" aria-hidden="true" />
+              </Link>
+              <p className="text-sm text-muted">Free, from local installers. No obligation.</p>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+              <Link
+                href="/guides/water-softener-cost-uk"
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-accent transition-colors"
+              >
+                What a softener really costs
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/guides/do-i-need-a-water-softener"
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-accent transition-colors"
+              >
+                Do I actually need one?
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
 
-          <div className="card p-5">
-            <h3 className="font-sans font-semibold text-ink mb-2">Water filter (drinking water)</h3>
-            <p className="text-base text-body leading-relaxed mb-2">
+          <div className="py-7">
+            <h3 className="font-display text-xl italic text-ink">Shower filter, for skin and hair</h3>
+            <p className="text-base text-body leading-relaxed mt-2">
+              A shower filter does not reduce hardness; the scale stays. What it removes
+              is chlorine, which strips natural oils and is the usual culprit when hard
+              water areas report dry skin and brittle hair, because scale and chlorine
+              compound each other&apos;s effects.
+            </p>
+            {showerFilter && (
+              <div className="mt-5">
+                <ProductCard
+                  product={showerFilter}
+                  highlight="Our shower filter pick"
+                  pageType="hardness"
+                  placement="hardness-solutions"
+                  recommendationReason="hard-water-shower"
+                />
+              </div>
+            )}
+            <p className="text-sm text-muted mt-3">
+              We compared{" "}
+              <Link href="/guides/best-shower-filter-uk" className="underline hover:text-ink transition-colors">
+                filter shower heads and inline shower filters
+              </Link>
+              {" "}against real UK water data.
+            </p>
+          </div>
+
+          <div className="py-7">
+            <h3 className="font-display text-xl italic text-ink">Reverse osmosis, for drinking water</h3>
+            <p className="text-base text-body leading-relaxed mt-2">
               Standard filter jugs and most under-sink filters do not significantly reduce
               hardness &mdash; they are designed to improve taste by removing chlorine and
               some contaminants. For hardness reduction from a filter, you need a reverse
               osmosis system, which removes virtually all dissolved minerals including
               calcium and magnesium.
             </p>
-            <p className="text-sm text-muted">
+            {countertopRo && (
+              <div className="mt-5">
+                <ProductCard
+                  product={countertopRo}
+                  highlight="Reverse osmosis without a plumber"
+                  pageType="hardness"
+                  placement="hardness-solutions"
+                  recommendationReason="hard-water-drinking"
+                />
+              </div>
+            )}
+            <p className="text-sm text-muted mt-3">
               <Link href="/filters/" className="underline hover:text-ink transition-colors">Browse water filters</Link>
               {" "}for options suited to your water type.
             </p>
           </div>
 
-          <div className="card p-5">
-            <h3 className="font-sans font-semibold text-ink mb-2">Descaling products (maintenance)</h3>
-            <p className="text-base text-body leading-relaxed">
+          <div className="py-7">
+            <h3 className="font-display text-xl italic text-ink">Descaling, for what is already there</h3>
+            <p className="text-base text-body leading-relaxed mt-2">
               For managing existing limescale without a softener, regular descaling is the
               practical option. Citric acid-based descalers work well on kettles and shower
               heads. Dishwasher salt and correct hardness settings on your dishwasher make
@@ -292,24 +365,9 @@ export default function WaterHardnessCheckerPage() {
               most day-to-day inconveniences.
             </p>
           </div>
-
-          <div className="card p-5">
-            <h3 className="font-sans font-semibold text-ink mb-2">Shower filter (skin and hair)</h3>
-            <p className="text-base text-body leading-relaxed mb-2">
-              A shower filter does not reduce hardness; the scale stays. What it removes
-              is chlorine, which strips natural oils and is the usual culprit when hard
-              water areas report dry skin and brittle hair, because scale and chlorine
-              compound each other&apos;s effects.
-            </p>
-            <p className="text-sm text-muted">
-              We compared{" "}
-              <Link href="/guides/best-shower-filter-uk" className="underline hover:text-ink transition-colors">
-                filter shower heads and inline shower filters
-              </Link>
-              {" "}against real UK water data.
-            </p>
-          </div>
         </div>
+
+        <AffiliateNote withFundingLink className="mb-8" />
 
         <p className="text-sm text-muted mb-8">
           Read more in our guide:{" "}
