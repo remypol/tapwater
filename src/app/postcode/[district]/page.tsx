@@ -188,8 +188,15 @@ export default async function PostcodePage({ params }: Props) {
   });
 
   // PFAS measured in rivers and groundwater within 10 km. Not tap water, and not
-  // the lead of this page: it feeds the module below the tap-water data.
+  // the lead of this page: it feeds the module below the tap-water data, and it
+  // stands in for the page_data PFAS fields when those are empty so the FAQ and
+  // the banner up top never say "none detected" above a module listing detections.
   const pfasNearby = hasData ? await getPfasNearDistrict(data.district) : null;
+  const pfasOnPage = data.pfasDetected && data.pfasLevel != null;
+  const pfasAnywhere = pfasOnPage || pfasNearby !== null;
+  const pfasNearbySentence = pfasNearby
+    ? `Environment Agency monitoring found PFAS in ${pfasNearby.detectionCount.toLocaleString("en-GB")} river and groundwater samples from ${pfasNearby.samplingPointCount} sites within ${pfasNearby.radiusKm} km of ${data.district}, the highest being ${pfasNearby.highest.compound} at ${pfasNearby.highest.value} µg/L about ${pfasNearby.highest.distanceKm} km away. These are environmental samples, not tests of tap water.`
+    : "";
 
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
@@ -200,7 +207,7 @@ export default async function PostcodePage({ params }: Props) {
     },
     {
       question: `What contaminants are in ${data.district} water?`,
-      answer: `We tested ${data.contaminantsTested} contaminants in ${data.district} water. ${data.contaminantsFlagged > 0 ? `${data.contaminantsFlagged} were flagged, including ${flaggedNames.slice(0, 3).join(", ")}.` : "None exceeded recommended safe levels."}${data.pfasDetected ? ` PFAS (forever chemicals) were also detected at ${data.pfasLevel} µg/L.` : ""}`,
+      answer: `We tested ${data.contaminantsTested} contaminants in ${data.district} water. ${data.contaminantsFlagged > 0 ? `${data.contaminantsFlagged} were flagged, including ${flaggedNames.slice(0, 3).join(", ")}.` : "None exceeded recommended safe levels."}${pfasOnPage ? ` PFAS (forever chemicals) were also detected at ${data.pfasLevel} µg/L in ${data.pfasSource === "drinking" ? "local drinking water tests" : "nearby environmental monitoring"}.` : pfasNearby ? ` PFAS (forever chemicals) were also measured in rivers and groundwater within ${pfasNearby.radiusKm} km, though not in the tap-water tests themselves.` : ""}`,
     },
     {
       question: `Who supplies water in ${data.district}?`,
@@ -213,15 +220,17 @@ export default async function PostcodePage({ params }: Props) {
     ...(hasData ? [{
       question: `Should I use a water filter in ${data.district}?`,
       answer: `${data.contaminantsFlagged > 0
-        ? `With ${data.contaminantsFlagged} contaminant${data.contaminantsFlagged > 1 ? "s" : ""} above recommended levels in ${data.district}, a water filter could help. ${data.pfasDetected ? "A reverse osmosis or activated carbon filter is recommended for PFAS removal." : "A filter jug or under-sink filter can reduce most common contaminants."}`
+        ? `With ${data.contaminantsFlagged} contaminant${data.contaminantsFlagged > 1 ? "s" : ""} above recommended levels in ${data.district}, a water filter could help. ${pfasAnywhere ? "A reverse osmosis or activated carbon filter is recommended for PFAS removal." : "A filter jug or under-sink filter can reduce most common contaminants."}`
         : `${data.district} water scored ${data.safetyScore}/10 with no contaminants above recommended levels. A filter is optional but can improve taste, especially if you notice a chlorine flavour.`
       } See our filter recommendations for your area.`,
     }] : []),
     ...(hasData ? [{
       question: `Are there PFAS forever chemicals in ${data.district} water?`,
-      answer: data.pfasDetected
+      answer: pfasOnPage
         ? `Yes, PFAS (per- and polyfluoroalkyl substances) have been detected in ${data.district} at ${data.pfasLevel} µg/L from ${data.pfasSource} monitoring. The UK currently has no legal limit for PFAS in drinking water. Reverse osmosis and activated carbon filters can reduce PFAS levels.`
-        : `No PFAS (forever chemicals) have been detected in ${data.district} based on available monitoring data. PFAS are tested at environmental monitoring sites near your postcode.`,
+        : pfasNearby
+          ? `The tap-water tests we hold for ${data.district} do not include a PFAS result. ${pfasNearbySentence} The UK currently has no legal limit for PFAS in drinking water; the Drinking Water Inspectorate uses a 0.1 µg/L guideline for individual compounds. Reverse osmosis filters can reduce PFAS levels.`
+          : `No PFAS (forever chemicals) result is attached to the tap-water tests for ${data.district}, and the Environment Agency has no PFAS detections in rivers or groundwater within 10 km of it. That reflects where sampling has happened as much as the water itself.`,
     }] : []),
   ] : [];
 
@@ -334,8 +343,10 @@ export default async function PostcodePage({ params }: Props) {
               lastUpdated={data.lastUpdated}
             />
 
-            {/* PFAS Banner */}
-            {data.pfasDetected && (
+            {/* PFAS Banner. page_data's own reading when it has one; otherwise the
+                quieter nearby variant, from the same EA samples as the module below,
+                so the top of the page and the module never disagree. */}
+            {pfasOnPage ? (
               <div className="mt-6">
                 <PfasBanner
                   detected={data.pfasDetected}
@@ -343,7 +354,17 @@ export default async function PostcodePage({ params }: Props) {
                   postcode={data.district}
                 />
               </div>
-            )}
+            ) : pfasNearby ? (
+              <div className="mt-6">
+                <PfasBanner
+                  detected
+                  level={pfasNearby.highest.value}
+                  postcode={data.district}
+                  source="nearby"
+                  radiusKm={pfasNearby.radiusKm}
+                />
+              </div>
+            ) : null}
 
             {/* Water hardness — one of the most searched water questions */}
             {hardnessValue != null && (
@@ -406,7 +427,7 @@ export default async function PostcodePage({ params }: Props) {
                 ) : (
                   <>No contaminants exceeded recommended safe levels.</>
                 )}
-                {data.pfasDetected && data.pfasLevel != null && (
+                {pfasOnPage ? (
                   <>
                     {" "}PFAS (forever chemicals) were detected at{" "}
                     <span className="font-data">{data.pfasLevel}</span> µg/L
@@ -415,7 +436,15 @@ export default async function PostcodePage({ params }: Props) {
                       : " in nearby environmental monitoring"}. The UK currently has no
                     legal limit for PFAS in drinking water.
                   </>
-                )}
+                ) : pfasNearby ? (
+                  <>
+                    {" "}PFAS (forever chemicals) were also{" "}
+                    <a href="#pfas-nearby" className="text-ink underline underline-offset-2 decoration-rule hover:decoration-accent">
+                      measured in rivers and groundwater within {pfasNearby.radiusKm} km
+                    </a>
+                    , though not in these tap-water tests.
+                  </>
+                ) : null}
                 {" "}Data is from{" "}
                 {data.sampleCount > 0 ? `${data.sampleCount.toLocaleString()} samples collected up to ` : "samples last taken "}
                 {data.lastSampleDate}, sourced from{" "}
@@ -561,7 +590,7 @@ export default async function PostcodePage({ params }: Props) {
 
             {/* Contextual guide links — relevant to flagged issues */}
             <RelatedGuides
-              pfasDetected={data.pfasDetected}
+              pfasDetected={pfasAnywhere}
               hasLeadFlagged={data.readings.some(r => /lead/i.test(r.name) && r.status !== "pass")}
               isHardWater={(hardnessValue ?? 0) >= 180}
               hasContaminantsFlagged={data.contaminantsFlagged > 0}
@@ -594,7 +623,7 @@ export default async function PostcodePage({ params }: Props) {
                 Learn more
               </h2>
               <div className="flex flex-wrap gap-2">
-                {data.pfasDetected && (
+                {pfasAnywhere && (
                   <Link href="/contaminant/pfas" className="pill">PFAS explained</Link>
                 )}
                 {flaggedNames.some((n) => /lead/i.test(n)) && (
