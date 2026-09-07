@@ -14,6 +14,7 @@ import {
   Building2,
 } from "lucide-react";
 import { WaterSurface } from "@/components/water-surface";
+import { FixPicks } from "@/components/fix-picks";
 import { REGIONS } from "@/lib/regions";
 
 export const metadata: Metadata = {
@@ -260,6 +261,25 @@ export default async function HomePage() {
         </section>
 
       </div>
+
+      {/* The fixes people actually buy — the homepage's only commercial step.
+          Fixed three picks: the rail claims to be "most clicked", so it must not
+          reshuffle with whatever the click log says this week. */}
+      <FixPicks
+        className="mt-14"
+        pageType="home"
+        placement="home-picks"
+        title="The fixes people actually buy"
+        intro={
+          <>
+            Of everything we link to, these three are what readers click most: a jug
+            for drinking water, a shower filter for chlorine, and a reverse osmosis
+            unit that needs no plumbing. They are starting points, not a prescription.
+            Check your postcode above and the report tells you what your own water
+            actually needs.
+          </>
+        }
+      />
 
       {/* Popular searches */}
       <section className="mt-12">
