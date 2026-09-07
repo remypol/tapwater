@@ -12,7 +12,7 @@ import { CompareSearch } from "@/components/compare-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { FixPicks } from "@/components/fix-picks";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
-import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts, isRankable } from "@/lib/data";
 import { CITY_COMPARISON_PAIRS, cityLabel } from "@/lib/city-comparisons";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -41,13 +41,19 @@ interface SupplierRanking {
 async function buildRankings() {
   const districts = await getAllPostcodeDistricts();
 
+  // Only treated tap water with recent, reasonably complete tests may be named
+  // in a public best/worst list. See isRankable for why.
   const allScored: PostcodeData[] = [];
   for (const d of districts) {
     const data = await getPostcodeData(d);
-    if (data && data.safetyScore >= 0) {
+    if (data && isRankable(data)) {
       allScored.push(data);
     }
   }
+
+  const contaminantCount = new Set(
+    allScored.flatMap((p) => p.readings.map((r) => r.name)),
+  ).size;
 
   // Sort for best/worst
   const sorted = [...allScored].sort(
@@ -85,21 +91,44 @@ async function buildRankings() {
     }))
     .sort((a, b) => b.avgScore - a.avgScore);
 
-  return { best, worst, suppliers, totalTested: allScored.length };
+  return {
+    best,
+    worst,
+    suppliers,
+    totalTested: allScored.length,
+    contaminantCount,
+  };
+}
+
+/** "SW1A (Westminster) 9.4" — one ranked area as prose. */
+function areaClause(p: PostcodeData): string {
+  return `${p.district} (${p.areaName}) at ${p.safetyScore.toFixed(1)}/10`;
+}
+
+/** Join names the way a sentence does: "A, B and C". */
+function joinProse(parts: string[]): string {
+  if (parts.length <= 1) return parts.join("");
+  return `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
 }
 
 // ── Metadata ──
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { totalTested } = await buildRankings();
-  const description = `See which UK postcodes have the best and worst tap water quality. Rankings based on ${totalTested}+ real drinking water tests. Updated daily.`;
+  const { best, worst, totalTested } = await buildRankings();
+  const lead =
+    best[0] && worst[0]
+      ? `${best[0].district} (${best[0].areaName}) scores highest, ${worst[0].district} (${worst[0].areaName}) lowest.`
+      : "Ranked by real drinking-water tests.";
+  const description =
+    `Best and worst tap water in the UK, ranked across ${totalTested} postcode districts. ${lead}`.slice(0, 155);
+  const title = `Best Tap Water in the UK ${year}: Ranked by Area`;
 
   return {
-    title: `Best & Worst UK Tap Water — ${year} Rankings`,
+    title,
     description,
     openGraph: {
       images: OG_IMAGE,
-      title: `Best & Worst UK Tap Water — ${year} Rankings`,
+      title,
       description,
       url: "https://www.tapwater.uk/compare",
       type: "article",
@@ -107,7 +136,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       images: OG_IMAGE,
       card: "summary_large_image",
-      title: `Best & Worst UK Tap Water — ${year}`,
+      title,
       description,
     },
   };
@@ -165,27 +194,68 @@ function RankingCard({
   );
 }
 
+/** Inline ranked list for the intro: "SW1A (Westminster) 9.4, ..." with links. */
+function RankedNames({ areas }: { areas: PostcodeData[] }) {
+  return (
+    <>
+      {areas.map((p, i) => (
+        <span key={p.district}>
+          {i > 0 && (i === areas.length - 1 ? " and " : ", ")}
+          <Link
+            href={`/postcode/${p.district}`}
+            className="text-ink font-medium hover:text-accent transition-colors"
+          >
+            {p.district} ({p.areaName})
+          </Link>{" "}
+          <span className={`font-data ${scoreTextClass(p.safetyScore)}`}>
+            {p.safetyScore.toFixed(1)}
+          </span>
+        </span>
+      ))}
+    </>
+  );
+}
+
 // ── Page ──
 
 export default async function ComparePage() {
-  const { best, worst, suppliers, totalTested } = await buildRankings();
+  const { best, worst, suppliers, totalTested, contaminantCount } =
+    await buildRankings();
 
   const bestArea = best[0];
   const worstArea = worst[0];
   const bestSupplier = suppliers[0];
+  const topThree = best.slice(0, 3);
+  const bottomThree = worst.slice(0, 3);
 
-  // FAQ answers
-  const bestAnswer = bestArea
-    ? `${bestArea.district} (${bestArea.areaName}) has the best tap water quality in the UK with a score of ${bestArea.safetyScore.toFixed(1)}/10, supplied by ${bestArea.supplier}. ${bestArea.contaminantsFlagged === 0 ? "No contaminants were flagged above recommended levels." : `Only ${bestArea.contaminantsFlagged} contaminant${bestArea.contaminantsFlagged > 1 ? "s were" : " was"} flagged.`}`
-    : "We're still collecting enough data to determine the best area.";
+  const cleanestCity = topThree[0]?.city ?? null;
 
-  const worstAnswer = worstArea
-    ? `${worstArea.district} (${worstArea.areaName}) currently has the lowest water quality score in the UK at ${worstArea.safetyScore.toFixed(1)}/10, supplied by ${worstArea.supplier}. ${worstArea.contaminantsFlagged} contaminant${worstArea.contaminantsFlagged !== 1 ? "s were" : " was"} flagged above recommended levels. This doesn't necessarily mean the water is unsafe — it still meets legal requirements.`
-    : "We're still collecting enough data to determine the worst area.";
-
-  const bestSupplierAnswer = bestSupplier
-    ? `${bestSupplier.name} currently has the highest average water quality score at ${bestSupplier.avgScore.toFixed(1)}/10, based on ${bestSupplier.postcodeCount} postcode area${bestSupplier.postcodeCount > 1 ? "s" : ""} we monitor.`
-    : "We're still collecting enough data to rank water companies.";
+  const faqs = [
+    {
+      question: "Where is the best tap water in the UK?",
+      answer: topThree.length
+        ? `On the most recent tests, the highest-scoring areas are ${joinProse(topThree.map(areaClause))}. ${bestArea.contaminantsFlagged === 0 ? `Nothing in ${bestArea.district}'s water came close to a legal limit.` : `${bestArea.district} had ${bestArea.contaminantsFlagged} reading${bestArea.contaminantsFlagged === 1 ? "" : "s"} worth watching, but every one stayed inside the legal limit.`} Rankings move as new test results come in.`
+        : "We are still gathering enough recent test results to name a best area.",
+    },
+    {
+      question: "Which UK city has the cleanest tap water?",
+      answer: cleanestCity
+        ? `${cleanestCity} currently has the top-scoring district, ${bestArea.district} (${bestArea.areaName}), at ${bestArea.safetyScore.toFixed(1)}/10, supplied by ${bestArea.supplier}. Water quality varies street by street rather than city by city, so two postcodes in the same city can sit at opposite ends of this list. Check your own postcode for the reading that applies to your tap.${bestSupplier ? ` Across whole companies, ${bestSupplier.name} has the highest average at ${bestSupplier.avgScore.toFixed(1)}/10.` : ""}`
+        : "We are still gathering enough recent test results to name a cleanest city.",
+    },
+    {
+      question: "Is UK tap water safe to drink?",
+      answer: `Yes. UK tap water is among the most tested in the world and almost every sample passes the legal limits. A low score here does not mean the water is unsafe.${worstArea ? ` Even ${worstArea.district} (${worstArea.areaName}), the lowest-scoring area at ${worstArea.safetyScore.toFixed(1)}/10, is supplied as drinking water that meets the rules.` : ""} A low score means some readings sat closer to their limits than elsewhere, which is worth knowing if you are pregnant, have a baby or are sensitive to taste.`,
+    },
+    {
+      question: "Why does tap water quality differ by area?",
+      answer: `Because the water starts in different places. Areas fed by upland reservoirs tend to have soft water with few dissolved minerals. Areas drawing on chalk or sandstone aquifers have hard water and, where farmland sits above, more nitrate. Older pipes can add lead, and the disinfection needed to keep water clean leaves traces of chlorine and its by-products. ${bottomThree.length ? `The lowest-scoring areas right now are ${joinProse(bottomThree.map(areaClause))}.` : ""}`,
+    },
+    {
+      question: "How is the score calculated?",
+      answer: `Every area gets a score out of 10. For each of the ${contaminantCount} substances tested, we measure how close the reading came to its legal limit: a reading at a tenth of the limit scores 9, a reading at the limit scores 0. Substances that matter most for health, such as lead, PFAS and bacteria, count three times as much as ones that mostly affect taste, such as chlorine or hardness. Drinking-water tests make up 80% of the final score and Environment Agency river and groundwater monitoring the other 20%. The full method is on our methodology page.`,
+    },
+  ];
 
   return (
     <div className="bg-score-safe">
@@ -196,22 +266,7 @@ export default async function ComparePage() {
             { name: "Compare", url: "https://www.tapwater.uk/compare" },
           ]}
         />
-        <FAQSchema
-          faqs={[
-            {
-              question: "Which UK area has the best tap water?",
-              answer: bestAnswer,
-            },
-            {
-              question: "Which UK area has the worst tap water?",
-              answer: worstAnswer,
-            },
-            {
-              question: "Which water company has the best water quality?",
-              answer: bestSupplierAnswer,
-            },
-          ]}
-        />
+        <FAQSchema faqs={faqs} />
 
         {/* Breadcrumb */}
         <nav
@@ -228,24 +283,34 @@ export default async function ComparePage() {
         {/* Header */}
         <header className="mt-6">
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight animate-fade-up delay-2 italic">
-            Best and worst tap water in the UK
+            The best and worst tap water in the UK in {year}
           </h1>
-          <p className="text-muted mt-2 max-w-2xl animate-fade-up delay-3">
-            Rankings based on {totalTested} postcode areas tested. Scores
-            reflect contaminant levels, PFAS, and overall water quality from
-            real drinking water tests and environmental monitoring.
-          </p>
 
-          {/* GEO: Summary for AI citation */}
-          {bestArea && worstArea && (
-            <p className="text-base text-body leading-relaxed max-w-3xl mt-4 mb-8">
-              As of {new Date().getFullYear()}, <strong className="text-ink">{bestArea.district} ({bestArea.areaName})</strong> has
-              the best tap water quality in the UK with a score of{" "}
-              <span className="font-data font-bold">{bestArea.safetyScore.toFixed(1)}/10</span>, while{" "}
-              <strong className="text-ink">{worstArea.district} ({worstArea.areaName})</strong> scores
-              lowest at <span className="font-data font-bold">{worstArea.safetyScore.toFixed(1)}/10</span>.{" "}
-              Rankings are based on {totalTested} postcode districts tested for
-              100+ contaminants including lead, PFAS, nitrate, and trihalomethanes.
+          {/* The answer, first. Names and scores come straight from the ranking. */}
+          {topThree.length > 0 && bottomThree.length > 0 ? (
+            <div className="mt-5 max-w-3xl animate-fade-up delay-3">
+              <p className="text-lg text-body leading-relaxed">
+                The cleanest tap water in the UK right now is in{" "}
+                <RankedNames areas={topThree} />. The lowest scores are in{" "}
+                <RankedNames areas={bottomThree} />.
+              </p>
+              <p className="text-sm text-muted leading-relaxed mt-3">
+                Scores are out of 10 and compare the latest drinking-water tests
+                for {totalTested} postcode districts against the legal limit for
+                each of {contaminantCount} substances. Even the lowest-scoring
+                area meets the rules for drinking water: a low score means readings
+                sat closer to their limits, not that the water is unsafe.{" "}
+                <Link
+                  href="/about/methodology"
+                  className="text-accent underline underline-offset-2 hover:text-accent-hover transition-colors"
+                >
+                  How the score works
+                </Link>
+              </p>
+            </div>
+          ) : (
+            <p className="text-muted mt-2 max-w-2xl animate-fade-up delay-3">
+              Rankings appear here once enough recent test results are in.
             </p>
           )}
         </header>
@@ -388,6 +453,41 @@ export default async function ComparePage() {
             </div>
           </section>
         </ScrollReveal>
+
+        <hr className="border-rule mt-14" />
+
+        {/* Common questions — plain answers, built from the same ranking */}
+        <section className="mt-10" aria-labelledby="compare-faq-heading">
+          <h2 id="compare-faq-heading" className="font-display text-2xl text-ink italic">
+            Common questions
+          </h2>
+          <dl className="mt-5 max-w-3xl divide-y divide-rule border-y border-rule">
+            {faqs.map(({ question, answer }) => (
+              <div
+                key={question}
+                className="py-5 grid gap-2 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8"
+              >
+                <dt className="font-display text-lg text-ink italic leading-snug">
+                  {question}
+                </dt>
+                <dd className="text-sm text-body leading-relaxed">
+                  {answer}
+                  {question === "How is the score calculated?" && (
+                    <>
+                      {" "}
+                      <Link
+                        href="/about/methodology"
+                        className="text-accent underline underline-offset-2 hover:text-accent-hover transition-colors"
+                      >
+                        Read the methodology
+                      </Link>
+                    </>
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
         <hr className="border-rule mt-14" />
 
