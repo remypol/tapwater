@@ -477,3 +477,53 @@ describe("runPfasIngest", () => {
     expect(result.citiesSkippedForDeadline).toBe(2);
   });
 });
+
+describe("runPfasIngest retries the EA WAF", () => {
+  const codelist = {
+    member: [{ notation: "2959", prefLabel: "Perfluorooctanesulfonic acid (linear)", altLabel: "PFOS (L)" }],
+  };
+  const pointPage = {
+    totalItems: 1,
+    member: [{ notation: POINT.id, prefLabel: POINT.label, geometry: { asWKT: "POINT(-0.31 51.49) <crs>" } }],
+  };
+
+  function flakyEa(statuses: number[]) {
+    let call = 0;
+    const fetchFn = vi.fn(async (input: string | URL | Request) => {
+      const url = new URL(String(input));
+      if (url.pathname.endsWith("/observation")) {
+        const status = statuses[Math.min(call, statuses.length - 1)];
+        call++;
+        if (status !== 200) return { ok: false, status, text: async () => "Forbidden", json: async () => ({}) };
+        const body = { totalItems: 1, member: [observation({ simple: 0.0049 })] };
+        return { ok: true, status: 200, text: async () => "", json: async () => body };
+      }
+      const body = url.pathname.includes("/codelist/") ? codelist : pointPage;
+      return { ok: true, status: 200, text: async () => "", json: async () => body };
+    });
+    return { fetchFn: fetchFn as unknown as typeof fetch, calls: () => call };
+  }
+
+  it("recovers when a 403 is followed by a 200", async () => {
+    const { db, upserted } = fakeDb();
+    const { fetchFn, calls } = flakyEa([403, 403, 200]);
+    const result = await runPfasIngest({
+      db, deadlineMs: 60_000, cities: [LONDON], fetchFn, pauseMs: 0, retryDelaysMs: [0, 0, 0],
+      now: new Date("2026-09-07T03:00:00Z"), log: () => {},
+    });
+    expect(calls()).toBe(3);
+    expect(result.errors).toEqual([]);
+    expect(upserted.length).toBeGreaterThan(0);
+  });
+
+  it("gives up after the configured retries and says so", async () => {
+    const { db } = fakeDb();
+    const { fetchFn, calls } = flakyEa([403]);
+    const result = await runPfasIngest({
+      db, deadlineMs: 60_000, cities: [LONDON], fetchFn, pauseMs: 0, retryDelaysMs: [0, 0, 0],
+      now: new Date("2026-09-07T03:00:00Z"), log: () => {},
+    });
+    expect(calls()).toBe(4);
+    expect(result.errors.join(" ")).toContain("after 3 retries");
+  });
+});

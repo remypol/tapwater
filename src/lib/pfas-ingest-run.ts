@@ -114,6 +114,12 @@ export interface PfasIngestOptions {
   now?: Date;
   /** Pause between EA requests (ms). The API returns 403 under concurrency. */
   pauseMs?: number;
+  /**
+   * Back-off delays for 403/429/5xx answers. The EA WAF starts answering 403
+   * instantly once it decides a client is too quick; waiting and retrying is
+   * what gets a city through, so a run must not give up on the first refusal.
+   */
+  retryDelaysMs?: number[];
   radiusKm?: number;
   /** Parse and count but do not write to Supabase. */
   dryRun?: boolean;
@@ -156,7 +162,8 @@ export async function runPfasIngest(opts: PfasIngestOptions): Promise<PfasIngest
     deadlineMs,
     fetchFn = fetch,
     now = new Date(),
-    pauseMs = 150,
+    pauseMs = 250,
+    retryDelaysMs = [2000, 5000, 12000],
     radiusKm = 15,
     dryRun = false,
     log = (line) => console.log(`[pfas-ingest] ${line}`),
@@ -164,15 +171,26 @@ export async function runPfasIngest(opts: PfasIngestOptions): Promise<PfasIngest
   const startedMs = Date.now();
   const pastDeadline = () => Date.now() - startedMs > deadlineMs;
 
+  const RETRYABLE = new Set([403, 429, 500, 502, 503, 504]);
   async function eaJson(url: string): Promise<unknown> {
-    const res = await fetchFn(url, { headers: EA_HEADERS });
-    if (!res.ok) {
+    for (let attempt = 0; ; attempt++) {
+      const res = await fetchFn(url, { headers: EA_HEADERS });
+      if (res.ok) {
+        const json = await res.json();
+        await sleep(pauseMs);
+        return json;
+      }
       const body = (await res.text().catch(() => "")).slice(0, 120);
-      throw new Error(`EA API ${res.status} for ${url}${body ? ` — ${body}` : ""}`);
+      if (RETRYABLE.has(res.status) && attempt < retryDelaysMs.length) {
+        await sleep(retryDelaysMs[attempt]);
+        continue;
+      }
+      // Slow down before surfacing the error too: an instant 403 that is
+      // rethrown instantly only makes the next request faster, not likelier.
+      await sleep(pauseMs);
+      const retries = attempt > 0 ? ` (after ${attempt} retries)` : "";
+      throw new Error(`EA API ${res.status} for ${url}${body ? ` — ${body}` : ""}${retries}`);
     }
-    const json = await res.json();
-    await sleep(pauseMs);
-    return json;
   }
 
   // 1. PFAS determinand codes — the API filters observations server-side by these.
