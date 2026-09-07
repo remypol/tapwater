@@ -493,7 +493,14 @@ export async function getScoredPostcodeDistricts(): Promise<string[]> {
   const cutoffStr = cutoff.toISOString().split("T")[0];
 
   return Array.from(cache.entries())
-    .filter(([, data]) => data.safetyScore >= 0 && data.lastSampleDate >= cutoffStr)
+    .filter(
+      ([, data]) =>
+        data.safetyScore >= 0 &&
+        data.lastSampleDate >= cutoffStr &&
+        // ea-only pages are noindexed (see the postcode route), so the sitemap
+        // must not advertise them either.
+        data.dataSource !== "ea-only",
+    )
     .map(([district]) => district)
     .sort();
 }

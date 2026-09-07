@@ -140,6 +140,7 @@ export function ArticleSchema({
   dateModified,
   authorName,
   authorUrl,
+  image,
 }: {
   headline: string;
   description: string;
@@ -148,6 +149,8 @@ export function ArticleSchema({
   dateModified: string;
   authorName: string;
   authorUrl: string;
+  /** Absolute image URL. Google's Article rich result requires one; defaults to the site OG image. */
+  image?: string;
 }) {
   const schema = {
     "@context": "https://schema.org",
@@ -155,6 +158,7 @@ export function ArticleSchema({
     headline,
     description,
     url,
+    image: [image ?? "https://www.tapwater.uk/opengraph-image"],
     datePublished,
     dateModified,
     author: {
@@ -166,6 +170,7 @@ export function ArticleSchema({
       "@type": "Organization",
       name: "TapWater.uk",
       url: "https://www.tapwater.uk",
+      logo: { "@type": "ImageObject", url: "https://www.tapwater.uk/icon.png", width: 512, height: 512 },
     },
     mainEntityOfPage: url,
   };

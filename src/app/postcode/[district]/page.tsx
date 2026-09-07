@@ -87,8 +87,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: pageTitle,
     description,
-    // Prevent thin pages from polluting the index — keep follow for link equity
-    ...(hasData ? {} : { robots: "noindex, follow" }),
+    // Prevent thin pages from polluting the index — keep follow for link equity.
+    // ea-only districts rest on river/groundwater samples, not tap tests: they
+    // stay live for visitors but are not a page we want Google to judge us on.
+    ...(hasData && data.dataSource !== "ea-only" ? {} : { robots: "noindex, follow" }),
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,
