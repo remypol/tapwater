@@ -156,7 +156,8 @@ export default async function RegionPage({ params }: Props) {
 
   const scoreLabel = avgScore >= 7 ? "safe" : avgScore >= 4 ? "moderate" : "below average";
 
-  const allRegionReadings = allPostcodes.flatMap(p => [...p.readings, ...p.environmentalReadings]);
+  // Drinking-water readings only; environmental samples do not describe tap water.
+  const allRegionReadings = allPostcodes.flatMap(p => p.readings);
   const hardnessReadings = allRegionReadings.filter(r =>
     /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
   );

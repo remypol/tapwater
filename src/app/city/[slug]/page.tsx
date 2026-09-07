@@ -223,7 +223,10 @@ export default async function CityPage({ params }: Props) {
       : `No contaminants were flagged above recommended levels across ${city.name}. All tested areas passed on the parameters measured.`;
 
   // Compute hardness for the city
-  const allCityReadings = scored.flatMap(p => [...p.readings, ...p.environmentalReadings]);
+  // Drinking-water readings only. River and groundwater samples say nothing
+  // about what comes out of the tap: Manchester's rivers run hard while its
+  // mains water is soft, and mixing the two called the city hard.
+  const allCityReadings = scored.flatMap(p => p.readings);
   const hardnessReadings = allCityReadings.filter(r =>
     /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
   );
