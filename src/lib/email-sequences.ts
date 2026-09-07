@@ -37,6 +37,21 @@ const COLORS = {
   dangerDark: "#dc2626",
 };
 
+/* ── Hard water ────────────────────────────────────────────────── */
+
+/** Readings arrive under several names ("Total hardness", "Hardness (Total) as CaCO3"). */
+export function isHardnessConcern(name: string): boolean {
+  return /hardness/i.test(name) || (/caco3/i.test(name) && !/alkalinity/i.test(name));
+}
+
+const HARDNESS_EXPLAINER = {
+  source: "Hardness is calcium and magnesium picked up as rain filters through chalk and limestone. It is not a contaminant and not a health risk; it is the reason for the scale in your kettle and on your taps.",
+  risk: "Scale builds up on heating elements, inside the boiler and in the shower. It costs money rather than health: appliances work harder, fail sooner, and you use more detergent and descaler.",
+  fix: "Only an ion-exchange water softener removes hardness. Filter jugs, under-sink filters and shower filters do not; they help with taste and chlorine. A softener typically costs \u00a31,000\u20132,500 installed and pays back through lower running costs in hard-water homes.",
+  stat: "60%",
+  statLabel: "of England has hard or very hard water. Above 200 mg/L, a softener starts to pay for itself.",
+};
+
 /* ── Contaminant explainers ────────────────────────────────────── */
 
 const CONTAMINANT_EXPLAINERS: Record<string, { source: string; risk: string; fix: string; stat: string; statLabel: string }> = {
@@ -420,7 +435,8 @@ function buildDay3(sub: SubscriberSequenceState): string {
 
   if (topConcerns.length > 0) {
     const concern = topConcerns[0];
-    const explainer = CONTAMINANT_EXPLAINERS[concern];
+    const explainer =
+      CONTAMINANT_EXPLAINERS[concern] ?? (isHardnessConcern(concern) ? HARDNESS_EXPLAINER : undefined);
 
     if (explainer) {
       inner += topicHeader(
@@ -528,6 +544,19 @@ function buildDay7(sub: SubscriberSequenceState): string {
     inner += contentBlock(
       p("We haven\u2019t found specific filter matches for your area\u2019s contaminant profile yet. Browse our full catalogue to find what works for you."),
     );
+  }
+
+  if (topConcerns.some(isHardnessConcern)) {
+    let hardHtml = "";
+    hardHtml += heading("Your water is hard: what actually fixes limescale");
+    hardHtml += p(
+      "None of the filters above reduce hardness. They improve taste and take out chlorine, but the scale in your kettle and boiler stays. The only fix that removes hardness is a water softener, typically \u00a31,000\u20132,500 installed, and in water like yours it usually pays for itself in lower running costs.",
+    );
+    hardHtml += p(
+      `<a href="${BASE_URL}/guides/do-i-need-a-water-softener/" style="color:${COLORS.accent};">Do I need a water softener?</a> &middot; <a href="${BASE_URL}/guides/water-softener-cost-uk/" style="color:${COLORS.accent};">What one costs</a> &middot; <a href="${BASE_URL}/guides/best-kettle-for-hard-water-uk/" style="color:${COLORS.accent};">Kettles that cope with hard water</a>`,
+    );
+    inner += contentBlock(hardHtml);
+    inner += ctaButton(`${BASE_URL}/hardness#softener-quotes`, "Get softener quotes");
   }
 
   inner += disclosureBox();

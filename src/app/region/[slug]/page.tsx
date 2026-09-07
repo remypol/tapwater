@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight, MapPin, Building2, AlertTriangle, ShieldCheck } from "lucide-react";
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { HardWaterCta } from "@/components/hard-water-cta";
 import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { REGIONS, getRegionBySlug } from "@/lib/regions";
@@ -262,6 +263,13 @@ export default async function RegionPage({ params }: Props) {
       <div className="mt-8 max-w-xl">
         <PostcodeSearch size="lg" />
       </div>
+
+      <HardWaterCta
+        placeName={region.name}
+        hardness={avgHardness}
+        hardnessClass={hardnessClass}
+        className="mt-10"
+      />
 
       {/* Cities in this region */}
       <ScrollReveal delay={0}>

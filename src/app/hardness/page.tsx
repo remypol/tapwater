@@ -13,12 +13,12 @@ import { OG_IMAGE } from "@/lib/og";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `Water Hardness Checker by Postcode (${year})`,
+    title: `Water Hardness by Postcode: How Hard Is My Water? (${year})`,
     description:
       "Check your water hardness by postcode. Find out if you have hard or soft water, what it means for your home, and whether you need a softener.",
     openGraph: {
       images: OG_IMAGE,
-      title: `Water Hardness Checker by Postcode (${year})`,
+      title: `Water Hardness by Postcode: How Hard Is My Water? (${year})`,
       description:
         "Check your water hardness by postcode. Understand what causes hard water and what you can do about it.",
       url: "https://www.tapwater.uk/hardness",
@@ -101,7 +101,7 @@ export default function WaterHardnessCheckerPage() {
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          Water Hardness Checker: Is Your Water Hard or Soft? ({year})
+          How Hard Is My Water? Check Water Hardness by Postcode ({year})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>

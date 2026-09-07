@@ -43,7 +43,7 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Shower Filter UK ${year}: Filter Shower Heads & Inline`,
+    title: `Best Shower Filter for Hard Water UK (${year}): 5 Compared`,
     description:
       "Filter shower heads and inline shower filters compared against water data from 2,800 UK postcodes. Chlorine removal, running costs, skin benefits.",
     alternates: {

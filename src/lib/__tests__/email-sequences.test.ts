@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getNextEmail, shouldSendEmail, buildEmailHtml } from "../email-sequences";
+import { getNextEmail, shouldSendEmail, buildEmailHtml, isHardnessConcern } from "../email-sequences";
 import type { SubscriberSequenceState } from "../types";
 
 const baseSubscriber: SubscriberSequenceState = {
@@ -135,5 +135,28 @@ describe("buildEmailHtml", () => {
     expect(html).toContain("SE15");
     // Should have fallback content
     expect(html).toContain("looks good");
+  });
+});
+
+describe("hard water in the drip sequence", () => {
+  it("recognises the names hardness readings arrive under", () => {
+    expect(isHardnessConcern("Total hardness")).toBe(true);
+    expect(isHardnessConcern("Hardness (Total) as CaCO3")).toBe(true);
+    expect(isHardnessConcern("Alkalinity as CaCO3")).toBe(false);
+    expect(isHardnessConcern("Lead")).toBe(false);
+  });
+
+  it("sends the softener route, not just filters, when hardness is a concern", () => {
+    const sub = {
+      ...baseSubscriber,
+      waterDataSnapshot: { ...baseSubscriber.waterDataSnapshot, topConcerns: ["Total hardness"], contaminantsFlagged: 1 },
+      lastEmailSent: 3 as const,
+      lastEmailSentAt: "2026-04-04T10:00:00Z",
+    };
+    const html = buildEmailHtml(sub, 7);
+    expect(html).toContain("/hardness#softener-quotes");
+    expect(html).toContain("do-i-need-a-water-softener");
+    const day3 = buildEmailHtml(sub, 3);
+    expect(day3).toContain("ion-exchange water softener");
   });
 });

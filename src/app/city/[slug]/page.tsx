@@ -15,6 +15,7 @@ import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
 import { RelatedGuides } from "@/components/related-guides";
 import { EmbedCta } from "@/components/embed-cta";
+import { HardWaterCta } from "@/components/hard-water-cta";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -563,6 +564,13 @@ export default async function CityPage({ params }: Props) {
                 </Link>
               </div>
             )}
+
+            <HardWaterCta
+              placeName={city.name}
+              hardness={avgHardness}
+              hardnessClass={hardnessClass}
+              className="mt-6"
+            />
 
             {/* Supplier card */}
             <div className="mt-4">
