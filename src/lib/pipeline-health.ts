@@ -31,6 +31,13 @@ export interface SourceCheckSummary {
   is_failing: boolean;
 }
 
+export interface SoftenerLeadBacklog {
+  /** Rows in softener_leads still marked 'new', i.e. not yet forwarded to an installer. */
+  newCount: number;
+  /** Age in whole days of the oldest unforwarded request; null when there are none. */
+  oldestAgeDays: number | null;
+}
+
 export interface HealthReport {
   generatedAt: string;
   pageData: {
@@ -48,7 +55,41 @@ export interface HealthReport {
     failingCount: number;
   };
   supplierCoverage: SupplierCoverage[];
+  softenerLeads: SoftenerLeadBacklog;
   issues: string[];
+}
+
+// ── Softener lead backlog ────────────────────────────────────────────────────
+//
+// A quote request is money left on the table for every day it sits unforwarded,
+// and nothing else in the system notices: the form succeeds, the row is written,
+// and silence follows. So the weekly report carries it as an issue whenever the
+// backlog is non-empty, not only past some threshold.
+
+export function summariseSoftenerLeadBacklog(
+  newCount: number,
+  oldestCreatedAt: string | null,
+  now: Date = new Date(),
+): SoftenerLeadBacklog {
+  if (newCount <= 0 || !oldestCreatedAt) {
+    return { newCount: Math.max(0, newCount), oldestAgeDays: null };
+  }
+  const createdMs = new Date(oldestCreatedAt).getTime();
+  if (Number.isNaN(createdMs)) {
+    return { newCount, oldestAgeDays: null };
+  }
+  const ageDays = Math.max(0, Math.floor((now.getTime() - createdMs) / (1000 * 60 * 60 * 24)));
+  return { newCount, oldestAgeDays: ageDays };
+}
+
+export function describeSoftenerLeadBacklog(backlog: SoftenerLeadBacklog): string | null {
+  if (backlog.newCount <= 0) return null;
+  const noun = backlog.newCount === 1 ? "request" : "requests";
+  const age =
+    backlog.oldestAgeDays === null
+      ? "age unknown"
+      : `oldest ${backlog.oldestAgeDays} day${backlog.oldestAgeDays === 1 ? "" : "s"}`;
+  return `${backlog.newCount} softener quote ${noun} waiting to be forwarded, ${age}`;
 }
 
 // ── Health report ─────────────────────────────────────────────────────────────
@@ -67,6 +108,7 @@ export async function getHealthReport(): Promise<HealthReport> {
     latestRunData,
     sourceChecksData,
     supplierData,
+    newLeadsData,
   ] = await Promise.all([
     // All page_data rows with data_source for breakdown
     db.from("page_data").select("data_source"),
@@ -107,7 +149,20 @@ export async function getHealthReport(): Promise<HealthReport> {
     db
       .from("postcode_districts")
       .select("supplier_id"),
+
+    // Softener quote requests not yet forwarded: exact count plus the oldest row
+    db
+      .from("softener_leads")
+      .select("created_at", { count: "exact" })
+      .eq("status", "new")
+      .order("created_at", { ascending: true })
+      .limit(1),
   ]);
+
+  const softenerLeads = summariseSoftenerLeadBacklog(
+    newLeadsData.count ?? 0,
+    newLeadsData.data?.[0]?.created_at ?? null,
+  );
 
   // Build data_source breakdown
   const sourceCounts: Record<string, number> = {};
@@ -197,6 +252,9 @@ export async function getHealthReport(): Promise<HealthReport> {
     issues.push(`${failingCount} incident feed sources are failing`);
   }
 
+  const leadIssue = describeSoftenerLeadBacklog(softenerLeads);
+  if (leadIssue) issues.push(leadIssue);
+
   return {
     generatedAt: new Date().toISOString(),
     pageData: {
@@ -209,6 +267,7 @@ export async function getHealthReport(): Promise<HealthReport> {
     pipeline: { latestRun },
     incidentSources: { checks, failingCount },
     supplierCoverage,
+    softenerLeads,
     issues,
   };
 }
@@ -246,6 +305,11 @@ ${issueList}
       : "No pipeline runs found"
   }</p>
 <p><strong>Incident feeds:</strong> ${report.incidentSources.failingCount} failing out of ${report.incidentSources.checks.length} sources.</p>
+<p><strong>Softener leads:</strong> ${report.softenerLeads.newCount} waiting to be forwarded${
+    report.softenerLeads.oldestAgeDays !== null
+      ? `, oldest ${report.softenerLeads.oldestAgeDays} day(s)`
+      : ""
+  }.</p>
 `.trim();
 
   try {
