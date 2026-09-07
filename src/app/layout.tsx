@@ -35,7 +35,10 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: {
     default: "TapWater.uk — Is Your Tap Water Safe?",
-    template: "%s | TapWater.uk",
+    // No brand suffix: Google shows the site name from the WebSite schema above
+    // the title anyway, and the 14-character suffix pushed 45 guide titles past
+    // the ~60 characters a result shows before truncation.
+    template: "%s",
   },
   description:
     "Free water quality reports for every UK postcode. Check PFAS, lead, nitrate and more near you. Based on official monitoring data.",
