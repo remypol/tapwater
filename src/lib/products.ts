@@ -838,6 +838,260 @@ export const PRODUCTS: FilterProduct[] = [
     ],
     bestFor: "Ongoing monthly monitoring with plenty of test strips",
   },
+
+  // ─── KETTLES FOR HARD WATER ─────────────────────────────────────────
+  // Appended block: hard-water appliance cluster (kettles + boiling taps).
+  // A kettle is not a filter. `removes` stays empty unless the kettle carries a
+  // genuine treatment cartridge; a spout "limescale filter" is a mesh that
+  // catches flakes already formed and treats nothing.
+  {
+    id: "russell-hobbs-brita-purity-glass-1-5l",
+    brand: "Russell Hobbs",
+    model: "BRITA Purity Glass Kettle 1.5L",
+    slug: "russell-hobbs-brita-purity-glass-kettle",
+    category: "kettle",
+    removes: ["Temporary hardness", "Chlorine"],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B072MZZBT5?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/81177lUUPZL._AC_UL320_.jpg",
+    rating: 4.5,
+    badge: "best-match",
+    pros: [
+      "Water passes through a BRITA MAXTRA PRO Limescale Expert cartridge before it is boiled, so less scale forms on the element",
+      "Glass body shows scale early, and wipes clean rather than hiding it",
+      "1.5L is enough for a family pot of tea; 4.5 stars across 5,600+ reviews",
+    ],
+    cons: [
+      "Does not make hard water soft: it reduces temporary hardness, and the cartridge needs replacing roughly every 4 weeks",
+      "Cartridges add about £50 a year in running costs, so it is the dearest kettle to live with here",
+      "Filtering slows the fill; you pour into the top chamber and wait for it to drain",
+    ],
+    bestFor: "Hard and very hard water areas where scale keeps coming back within weeks",
+    filterLife: "About 4 weeks per MAXTRA PRO cartridge",
+    annualCost: 52,
+  },
+  {
+    id: "russell-hobbs-brita-purity-1l",
+    brand: "Russell Hobbs",
+    model: "BRITA Purity Kettle 1L",
+    slug: "russell-hobbs-brita-purity-kettle-1l",
+    category: "kettle",
+    removes: ["Temporary hardness", "Chlorine"],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B01GFPWHZ4?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/71Ml8hHPmSL._AC_UL320_.jpg",
+    rating: 4.4,
+    badge: "best-value",
+    pros: [
+      "Same BRITA MAXTRA PRO cartridge as the glass model, in a smaller plastic body",
+      "The most-reviewed filter kettle on Amazon UK: 4.4 stars across 12,700+ reviews",
+      "1L capacity suits one or two people and boils quickly",
+    ],
+    cons: [
+      "Does not make hard water soft: it reduces temporary hardness, and the cartridge needs replacing roughly every 4 weeks",
+      "1L is small for a household; you will refill often",
+      "Plastic body hides scale until you look inside",
+    ],
+    bestFor: "Couples and small kitchens in hard water areas",
+    filterLife: "About 4 weeks per MAXTRA PRO cartridge",
+    annualCost: 52,
+  },
+  {
+    id: "russell-hobbs-illuminating-glass-1-7l",
+    brand: "Russell Hobbs",
+    model: "Illuminating Glass Kettle 1.7L",
+    slug: "russell-hobbs-illuminating-glass-kettle",
+    category: "kettle",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B071X4RKZJ?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/71Cxt41Fs2L._AC_UL320_.jpg",
+    rating: 4.4,
+    badge: "budget",
+    pros: [
+      "Glass body: you see scale as soon as it starts, so you descale before it thickens",
+      "Washable anti-scale mesh in the spout keeps flakes out of your cup",
+      "Full 1.7L capacity; 4.4 stars across 15,000+ reviews",
+    ],
+    cons: [
+      "Does not stop scale forming: the spout mesh only catches flakes that have already broken off",
+      "Glass shows scale sooner than steel, which is useful but not pretty between descales",
+      "Blue light on boil is a matter of taste",
+    ],
+    bestFor: "Anyone who wants to see and wipe scale away rather than treat the water",
+    filterLife: "Washable mesh, no replacement",
+  },
+  {
+    id: "cosori-stainless-1-7l",
+    brand: "Cosori",
+    model: "Plastic-Free Stainless Steel Kettle 1.7L",
+    slug: "cosori-stainless-steel-kettle",
+    category: "kettle",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0GN41PZLS?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/71qMYl1p-EL._AC_UL320_.jpg",
+    rating: 4.3,
+    badge: "premium",
+    pros: [
+      "Stainless steel interior with no plastic touching the water",
+      "Removable spout filter lifts out for rinsing under the tap",
+      "Enormous review base: 4.3 stars across 37,000+ reviews",
+    ],
+    cons: [
+      "Does not stop scale forming: the spout filter only catches flakes that have already formed",
+      "Steel hides scale, so set a descaling reminder rather than waiting to see it",
+      "Heavier than a plastic kettle when full",
+    ],
+    bestFor: "Households that want to avoid plastic and are happy to descale on a schedule",
+    filterLife: "Removable mesh, no replacement",
+  },
+  {
+    id: "morphy-richards-hive-1-5l",
+    brand: "Morphy Richards",
+    model: "Hive Kettle 1.5L",
+    slug: "morphy-richards-hive-kettle",
+    category: "kettle",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0HC399Z7B?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/619MuaxnL5L._AC_UL320_.jpg",
+    rating: 4.4,
+    badge: "best-value",
+    pros: [
+      "Limescale filter in the spout keeps flakes out of drinks",
+      "Textured Hive body from a long-standing British brand",
+      "4.4 stars across 3,000+ reviews",
+    ],
+    cons: [
+      "Does not stop scale forming: the spout filter only catches flakes that have already formed",
+      "Opaque body hides scale until you open the lid",
+      "1.5L rather than the full 1.7L",
+    ],
+    bestFor: "A good-looking everyday kettle in a moderately hard area",
+    filterLife: "Washable mesh, no replacement",
+  },
+  {
+    id: "tefal-loft-1-7l",
+    brand: "Tefal",
+    model: "Loft Kettle 1.7L",
+    slug: "tefal-loft-kettle",
+    category: "kettle",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B087BCNH9H?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61nlGk5ALBL._AC_UL320_.jpg",
+    rating: 4.5,
+    badge: "budget",
+    pros: [
+      "Removable anti-scale filter rinses clean under the tap",
+      "Wide lid opening makes descaling and wiping the element area easy",
+      "Highest rating in this group at 4.5 stars, though on a smaller 400+ review base",
+    ],
+    cons: [
+      "Does not stop scale forming: the anti-scale filter only catches flakes that have already formed",
+      "Far fewer reviews than the others here, so the rating is less settled",
+      "Plastic body hides scale",
+    ],
+    bestFor: "A simple, well-rated kettle that is easy to clean",
+    filterLife: "Removable mesh, no replacement",
+  },
+  {
+    id: "swan-windsor-1-7l",
+    brand: "Swan",
+    model: "Windsor Kettle 1.7L",
+    slug: "swan-windsor-kettle",
+    category: "kettle",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0D637X6KK?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/71T2rSbmiIL._AC_UL320_.jpg",
+    rating: 4.3,
+    badge: "budget",
+    pros: [
+      "Removable limescale filter in the spout",
+      "Traditional Windsor styling in a full 1.7L size",
+      "4.3 stars across 2,000+ reviews",
+    ],
+    cons: [
+      "Does not stop scale forming: the spout filter only catches flakes that have already formed",
+      "Lowest rating of the group alongside the Cosori",
+      "Opaque body hides scale",
+    ],
+    bestFor: "A classic-looking kettle where budget matters more than features",
+    filterLife: "Removable mesh, no replacement",
+  },
+
+  // ─── BOILING WATER TAPS ─────────────────────────────────────────────
+  // Quooker, Qettle, Fohen, Franke and Hanstrom are not sold on Amazon UK in any
+  // credible listing and we have no affiliate deal with them. They are covered
+  // by name, with plain links, in /guides/best-boiling-water-tap-uk. This is
+  // the one reputable Amazon UK product in the space.
+  {
+    id: "insinkerator-hot150",
+    brand: "InSinkErator",
+    model: "HOT150 Instant Hot Water Dispenser",
+    slug: "insinkerator-hot150",
+    category: "boiling_tap",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "premium",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B01M3MOW5N?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61ZeK+Rjj6L._AC_UL320_.jpg",
+    rating: 4.5,
+    badge: "best-value",
+    pros: [
+      "Near-boiling water on demand from a small under-sink tank, without a £1,000+ kitchen refit",
+      "The only boiling-water product in this space with a credible Amazon UK listing: 4.5 stars across 900+ reviews",
+      "Sold as a tank-and-tap set for under-sink fitting",
+    ],
+    cons: [
+      "Does not reach a true boil: it dispenses near-boiling water at around 98°C, so it is a hot water dispenser rather than a boiling tap",
+      "Does not include a scale filter, so in hard water the tank needs regular descaling or an inline filter fitted upstream",
+      "Separate tap rather than a 3-in-1 or 4-in-1 mixer; your existing kitchen tap stays",
+    ],
+    bestFor: "Instant hot water for tea and cooking where a Quooker-style 3-in-1 is out of budget",
+    filterLife: "No cartridge supplied",
+  },
 ];
 
 /**
@@ -926,6 +1180,23 @@ export const CATEGORY_META: Record<
       "Kitchens where a second countertop spout is not wanted, paired with an under-sink or RO system",
     priceRange: "£207",
   },
+  // ── Hard-water appliances (appended block) ─────────────────────────
+  kettle: {
+    title: "Kettles for Hard Water",
+    slug: "kettles-hard-water",
+    description:
+      "Kettles that cope with limescale: a filter cartridge that reduces hardness before the water boils, glass bodies that show scale early, and spout meshes that keep flakes out of your cup.",
+    bestFor: "Households in hard and very hard water areas tired of furred-up elements and flakes in their tea",
+    priceRange: "£25–£70",
+  },
+  boiling_tap: {
+    title: "Boiling Water Taps",
+    slug: "boiling-water-taps",
+    description:
+      "Instant hot and boiling water from a tank under the sink. The premium 3-in-1 and 4-in-1 taps are sold direct by their makers; this is the Amazon-available alternative.",
+    bestFor: "Kitchens that want to retire the kettle, in any area where hardness has been checked first",
+    priceRange: "£250–£400",
+  },
 };
 
 /**
@@ -941,6 +1212,9 @@ export const CATEGORY_ORDER: ProductCategory[] = [
   "filter_tap",
   "testing_kit",
   "water_softener",
+  // Hard-water appliances (appended block)
+  "kettle",
+  "boiling_tap",
 ];
 
 /**
@@ -962,7 +1236,11 @@ export function getProductsByCategory(
 export function estimatedEarningsGbp(product: FilterProduct): number | null {
   const c = product.commission;
   if (!c) return null;
-  return c.type === "fixed" ? c.gbp : product.priceGbp * c.rate;
+  if (c.type === "fixed") return c.gbp;
+  // priceGbp of 0 means "price unknown, render Check price". A percentage of an
+  // unknown price is not an estimate, so it gets the same blank as an unknown rate.
+  if (product.priceGbp <= 0) return null;
+  return product.priceGbp * c.rate;
 }
 
 export function getProductBySlug(slug: string): FilterProduct | undefined {

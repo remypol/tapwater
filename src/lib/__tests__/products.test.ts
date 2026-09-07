@@ -90,6 +90,7 @@ describe("PRODUCTS catalogue", () => {
     const categories: ProductCategory[] = [
       "jug", "under_sink", "reverse_osmosis", "whole_house",
       "shower", "testing_kit", "countertop", "filter_tap",
+      "kettle", "boiling_tap",
     ];
     for (const cat of categories) {
       const products = getProductsByCategory(cat);
@@ -119,10 +120,14 @@ describe("commission data", () => {
     }
   });
 
-  it("returns null rather than a guess when the rate is unconfirmed", () => {
+  it("returns null rather than a guess when the rate or price is unconfirmed", () => {
     for (const p of PRODUCTS) {
       const earnings = estimatedEarningsGbp(p);
-      if (p.commission) expect(earnings).toBeGreaterThan(0);
+      // A percentage of an unknown price (priceGbp 0 renders "Check price") is
+      // not an estimate either, so it must come back blank, not zero.
+      const knowable =
+        p.commission && (p.commission.type === "fixed" || p.priceGbp > 0);
+      if (knowable) expect(earnings).toBeGreaterThan(0);
       else expect(earnings).toBeNull();
     }
   });

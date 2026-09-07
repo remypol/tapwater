@@ -4,6 +4,18 @@ import { withSentryConfig } from "@sentry/nextjs";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  images: {
+    // Amazon product photography for catalogue entries we have no local asset
+    // for (kettles, boiling taps). Locked to the /images/I/ path so nothing
+    // else on that host can be proxied through our optimiser.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+        pathname: "/images/I/**",
+      },
+    ],
+  },
   // NOTE: no redirects() here. Config redirects match case-INsensitively, so a
   // "/Guides" -> "/guides" rule also matches "/guides" itself and loops the
   // guides index forever (broke production on 19 Aug). The case fix lives in

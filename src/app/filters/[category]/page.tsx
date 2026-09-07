@@ -61,6 +61,15 @@ const CATEGORY_GUIDE: Partial<
     title: "Best Water Softener UK",
     href: "/guides/best-water-softener-uk/",
   },
+  // Hard-water appliances (appended block)
+  kettle: {
+    title: "Best Kettle for Hard Water UK",
+    href: "/guides/best-kettle-for-hard-water-uk/",
+  },
+  boiling_tap: {
+    title: "Best Boiling Water Tap UK",
+    href: "/guides/best-boiling-water-tap-uk/",
+  },
 };
 
 /* ── optional per-category long intro (rendered when present) ─────────── */
@@ -175,6 +184,31 @@ const CATEGORY_FAQS: Partial<
       question: "What should I test my water for?",
       answer:
         "At minimum, test for hardness, pH, chlorine, lead, and nitrates. If you are concerned about PFAS or microplastics, you will need a lab test as strip kits cannot detect these.",
+    },
+  ],
+  // Hard-water appliances (appended block)
+  kettle: [
+    {
+      question: "Does a kettle limescale filter stop limescale?",
+      answer:
+        "No. On most kettles the 'limescale filter' is a fine mesh in the spout. It catches flakes of scale that have already broken off the element so they do not land in your cup. Scale still forms inside. The exception is a kettle with a treatment cartridge, such as the Russell Hobbs BRITA models, which reduces temporary hardness before the water is boiled.",
+    },
+    {
+      question: "Is a glass or stainless steel kettle better for hard water?",
+      answer:
+        "Neither material changes how much scale forms; that depends on your water. Glass shows scale sooner, which most people find useful because you descale before it thickens and it wipes clean. Steel and plastic hide scale until you look inside, so you need a routine rather than a visual cue.",
+    },
+  ],
+  boiling_tap: [
+    {
+      question: "Is the InSinkErator HOT150 a boiling water tap?",
+      answer:
+        "Not strictly. It is an instant hot water dispenser that delivers near-boiling water at around 98°C from a tank under the sink. True boiling taps from Quooker, Qettle, Fohen, Franke and Hanstrom hold water at or above 100°C under pressure. For tea, coffee and most cooking the difference is small; for some recipes it matters.",
+    },
+    {
+      question: "Do boiling water taps work in hard water areas?",
+      answer:
+        "Yes, but only with a filter cartridge in the feed and regular replacement. The tank holds water at very high temperature for hours, which is exactly the condition that drives scale to form fastest. Check your hardness by postcode before buying and follow the manufacturer's hardness limit; in very hard areas some makers recommend a softener.",
     },
   ],
 };

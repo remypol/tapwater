@@ -47,7 +47,10 @@ export type ProductCategory =
   | "testing_kit"
   | "countertop"
   | "water_softener"
-  | "filter_tap";
+  | "filter_tap"
+  // ── Hard-water appliances (kettles / boiling taps cluster) ──────────
+  | "kettle"
+  | "boiling_tap";
 
 export type PriceTier = "budget" | "mid" | "premium";
 

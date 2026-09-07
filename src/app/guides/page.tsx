@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves, Coffee, Flame } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
@@ -175,6 +175,23 @@ const GUIDES = [
     icon: Droplets,
     iconColor: "text-sky-600",
     iconBg: "bg-sky-50",
+  },
+  // Hard-water appliances (appended block)
+  {
+    slug: "best-kettle-for-hard-water-uk",
+    title: "Best Kettle for Hard Water UK",
+    subtitle: "Why kettles fur up, what a limescale filter really does, seven kettles compared",
+    icon: Coffee,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "best-boiling-water-tap-uk",
+    title: "Best Boiling Water Tap UK",
+    subtitle: "Quooker, Qettle, Fohen, Franke and Hanstrom compared, and what hard water does to them",
+    icon: Flame,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
   },
 ];
 
