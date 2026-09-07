@@ -1,4 +1,5 @@
 import type { ContaminantReading } from "@/lib/types";
+import type { PfasNearbySummary } from "@/lib/pfas-data";
 
 interface PostcodeDatasetSchemaProps {
   district: string;
@@ -12,6 +13,8 @@ interface PostcodeDatasetSchemaProps {
   lastUpdated: string;
   contaminantsTested: number;
   readings: ContaminantReading[];
+  /** Environment Agency PFAS samples near the district; omitted when none in range. */
+  pfasNearby?: PfasNearbySummary | null;
 }
 
 interface BreadcrumbSchemaProps {
@@ -194,8 +197,24 @@ export function PostcodeDatasetSchema({
   lastUpdated,
   contaminantsTested,
   readings,
+  pfasNearby,
 }: PostcodeDatasetSchemaProps) {
   const hasScore = score >= 0;
+
+  // PFAS from Environment Agency river and groundwater samples within a radius of
+  // the district. The name and description say so explicitly: this is environmental
+  // monitoring, and the Dataset must not present it as a tap-water measurement.
+  const pfasProperties = pfasNearby
+    ? [
+        {
+          "@type": "PropertyValue",
+          name: `PFAS, highest reading in Environment Agency river and groundwater samples within ${pfasNearby.radiusKm} km`,
+          description: `${pfasNearby.highest.compound}, ${pfasNearby.detectionCount} detections across ${pfasNearby.samplingPointCount} environmental sampling sites, most recent ${pfasNearby.latestDate}. Environmental monitoring, not tap water.`,
+          value: String(parseFloat(pfasNearby.highest.value.toPrecision(6))),
+          unitText: "µg/L",
+        },
+      ]
+    : [];
 
   // Build per-contaminant PropertyValues for rich snippets
   const contaminantProperties = readings
@@ -253,6 +272,7 @@ export function PostcodeDatasetSchema({
           ]
         : []),
       ...contaminantProperties,
+      ...pfasProperties,
     ],
   };
 

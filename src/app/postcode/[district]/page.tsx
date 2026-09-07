@@ -249,6 +249,7 @@ export default async function PostcodePage({ params }: Props) {
           lastUpdated={data.lastUpdated}
           contaminantsTested={data.contaminantsTested}
           readings={data.readings}
+          pfasNearby={pfasNearby}
         />
         <BreadcrumbSchema
           items={[
