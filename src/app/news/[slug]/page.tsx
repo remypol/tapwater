@@ -1,10 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, MapPin, ExternalLink, Clock, CheckCircle } from "lucide-react";
+import {
+  ChevronRight,
+  MapPin,
+  ExternalLink,
+  Clock,
+  CheckCircle,
+  Activity,
+  Megaphone,
+  Droplets,
+} from "lucide-react";
 import { BreadcrumbSchema, NewsArticleSchema } from "@/components/json-ld";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { PostcodeSearch } from "@/components/postcode-search";
 import { getAllIncidentSlugs, getIncidentBySlug } from "@/lib/incidents";
+import { getSupplierBySlug } from "@/lib/data";
+import { getSupplierIncidentPage } from "@/lib/supplier-incident-pages";
 import { INCIDENT_TYPE_LABELS, SEVERITY_CONFIG } from "@/lib/incidents-types";
+import { isIncidentIndexable } from "@/lib/incident-indexing";
 import { marked } from "marked";
 import { notFound } from "next/navigation";
 import { OG_IMAGE } from "@/lib/og";
@@ -29,10 +42,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = incident.summary;
   const url = `https://www.tapwater.uk/news/${slug}`;
 
+  // Stale or thin articles stay live for anyone who lands on them, but are
+  // kept out of the index so they cannot dilute the rest of the site. The
+  // canonical stays on the page itself in both cases.
+  const indexable = isIncidentIndexable(incident);
+
   return {
     title,
     description,
-    robots: "max-image-preview:large",
+    robots: indexable ? "max-image-preview:large" : "noindex, follow",
     openGraph: {
       images: OG_IMAGE,
       title,
@@ -49,6 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
     },
     alternates: {
+      canonical: url,
       types: {
         "application/rss+xml": "https://www.tapwater.uk/news/rss.xml",
       },
@@ -86,6 +105,16 @@ export default async function NewsArticlePage({ params }: Props) {
   const config = SEVERITY_CONFIG[incident.severity];
   const url = `https://www.tapwater.uk/news/${slug}`;
   const articleHtml = await marked.parse(incident.article_markdown);
+
+  // The supplier's own live page beats our snapshot for "is it fixed yet?".
+  // Verified live-incident URLs first, then the supplier's homepage.
+  const supplier = incident.supplier_id
+    ? await getSupplierBySlug(incident.supplier_id)
+    : null;
+  const liveIncidentPage = getSupplierIncidentPage(incident.supplier_id);
+  const supplierLink = liveIncidentPage ?? supplier?.website ?? null;
+  const supplierName = supplier?.name ?? "your water company";
+  const isActive = incident.status === "active";
 
   return (
     <div className="bg-hero min-h-screen">
@@ -187,6 +216,111 @@ export default async function NewsArticlePage({ params }: Props) {
               </p>
             )}
 
+            {/* What you can do now — the useful part for someone with no water */}
+            <section
+              aria-labelledby="what-you-can-do"
+              className="mt-8 rounded-xl border border-[var(--color-rule)] bg-[var(--color-wash)]"
+            >
+              <div className="px-5 pt-5 pb-3 sm:px-6">
+                <h2
+                  id="what-you-can-do"
+                  className="font-display italic text-2xl text-ink tracking-tight"
+                >
+                  What you can do now
+                </h2>
+              </div>
+
+              <ul className="divide-y divide-[var(--color-rule)]">
+                {supplierLink && (
+                  <li className="flex gap-3 px-5 py-4 sm:px-6">
+                    <Activity className="w-4 h-4 mt-0.5 shrink-0 text-accent" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-body leading-relaxed">
+                        {liveIncidentPage
+                          ? `${supplierName} lists every current problem in its area and updates it as crews report back. It is the fastest way to find out whether this one is fixed.`
+                          : `${supplierName} publishes its own updates. Check there before relying on this page.`}
+                      </p>
+                      <a
+                        href={supplierLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
+                      >
+                        {liveIncidentPage
+                          ? `Open ${supplierName}'s live incident page`
+                          : `Open ${supplierName}'s website`}
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </li>
+                )}
+
+                {incident.action_required && (
+                  <li className="flex gap-3 px-5 py-4 sm:px-6">
+                    <Megaphone
+                      className="w-4 h-4 mt-0.5 shrink-0"
+                      style={{ color: config.color }}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-body leading-relaxed">
+                        The supplier's advice, as published:
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-ink leading-relaxed">
+                        {incident.action_required}
+                      </p>
+                    </div>
+                  </li>
+                )}
+
+                <li className="flex gap-3 px-5 py-4 sm:px-6">
+                  <Droplets className="w-4 h-4 mt-0.5 shrink-0 text-accent" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm text-body leading-relaxed">
+                      {isActive
+                        ? "Once the water is back, it can run cloudy or taste of chlorine for a day. See what your tap water is normally like and whether your area has a history of problems."
+                        : "See what your tap water is normally like and whether your area has a history of problems."}
+                    </p>
+                    {incident.affected_postcodes.length > 0 && (
+                      <div className="mt-2.5 flex flex-wrap gap-1.5">
+                        {incident.affected_postcodes.slice(0, 8).map((postcode) => (
+                          <Link
+                            key={postcode}
+                            href={`/postcode/${postcode}`}
+                            className="pill flex items-center gap-1 text-xs"
+                          >
+                            <MapPin className="w-2.5 h-2.5" />
+                            {postcode}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-3 max-w-sm">
+                      <PostcodeSearch size="sm" />
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[var(--color-rule)] px-5 py-3 sm:px-6 text-xs text-faint">
+                <Clock className="w-3.5 h-3.5 shrink-0" />
+                <span>
+                  {isActive
+                    ? "Last checked against the source"
+                    : "Marked resolved"}
+                </span>
+                <time
+                  dateTime={
+                    isActive ? incident.last_checked : incident.resolved_at ?? incident.last_checked
+                  }
+                  className="font-mono text-ink"
+                >
+                  {formatDate(
+                    isActive ? incident.last_checked : incident.resolved_at ?? incident.last_checked,
+                  )}
+                </time>
+              </div>
+            </section>
+
             <hr className="border-rule my-8" />
 
             {/* Article body */}
@@ -207,7 +341,11 @@ export default async function NewsArticlePage({ params }: Props) {
             {/* Auto-generated notice */}
             <p className="mt-8 text-xs text-faint italic border-t border-[var(--color-rule)] pt-4">
               This article was automatically generated from official incident
-              data. Last updated {timeAgo(incident.last_checked)}.
+              data and last checked against the source{" "}
+              <time dateTime={incident.last_checked} className="font-mono not-italic">
+                {formatDate(incident.last_checked)}
+              </time>
+              .
             </p>
           </article>
 

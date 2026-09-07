@@ -1,4 +1,5 @@
 import { getAllIncidents } from "@/lib/incidents";
+import { isNewsSitemapEligible } from "@/lib/incident-indexing";
 
 export const revalidate = 300;
 
@@ -15,10 +16,13 @@ export async function GET() {
   const { incidents } = await getAllIncidents(100);
 
   const baseUrl = "https://www.tapwater.uk";
-  const cutoff = Date.now() - 48 * 60 * 60 * 1000; // 48 hours — Google News requirement
 
-  const recentIncidents = incidents.filter(
-    (incident) => new Date(incident.detected_at).getTime() > cutoff,
+  // Google News requires articles from the last 48 hours; we additionally
+  // require the article to pass the site's indexability rule, so a thin
+  // auto-generated stub never reaches News even when it is brand new.
+  const now = new Date();
+  const recentIncidents = incidents.filter((incident) =>
+    isNewsSitemapEligible(incident, now),
   );
 
   const urlEntries = recentIncidents

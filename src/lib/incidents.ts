@@ -8,6 +8,11 @@ import type {
   IncidentType,
   IncidentSource,
 } from "@/lib/incidents-types";
+import {
+  ACTIVE_INDEX_WINDOW_DAYS,
+  RESOLVED_INDEX_WINDOW_DAYS,
+  type IndexableIncidentFields,
+} from "@/lib/incident-indexing";
 
 // ── Helpers ──
 
@@ -145,6 +150,42 @@ export async function getAllIncidentSlugs(): Promise<string[]> {
 
   if (error) return [];
   return (data ?? []).map((row: { slug: string }) => row.slug);
+}
+
+export type SitemapIncident = IndexableIncidentFields & { slug: string };
+
+/**
+ * Candidates for the sitemaps: only incidents that could still pass the
+ * indexability rule by date. The word/filler half of the rule needs the
+ * article body, so the date filter runs in SQL to avoid pulling every body
+ * for hundreds of long-dead incidents. Callers still apply
+ * isIncidentIndexable() to the result.
+ */
+export async function getSitemapIncidentCandidates(
+  now: Date = new Date(),
+): Promise<SitemapIncident[]> {
+  const supabase = getSupabase();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const activeCutoff = new Date(
+    now.getTime() - ACTIVE_INDEX_WINDOW_DAYS * dayMs,
+  ).toISOString();
+  const resolvedCutoff = new Date(
+    now.getTime() - RESOLVED_INDEX_WINDOW_DAYS * dayMs,
+  ).toISOString();
+
+  const { data, error } = await supabase
+    .from("incidents")
+    .select("slug, status, detected_at, resolved_at, last_checked, article_markdown")
+    .or(
+      `and(status.eq.active,detected_at.gte.${activeCutoff}),and(status.eq.resolved,resolved_at.gte.${resolvedCutoff})`,
+    )
+    .order("detected_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch sitemap incident candidates:", error);
+    return [];
+  }
+  return (data ?? []) as SitemapIncident[];
 }
 
 // ── Mutations ──

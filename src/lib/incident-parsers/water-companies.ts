@@ -1,6 +1,12 @@
 import type { RawIncident, IncidentType, IncidentSeverity } from "@/lib/incidents-types";
 import { generateSourceHash } from "@/lib/incidents";
 import { extractPostcodeDistricts, mapPostcodesToCities } from "./postcode-matcher";
+import {
+  getSourceIncidentId,
+  isCheckableSourceUrl,
+  outcomeFromFeedBody,
+  type SourceCheckOutcome,
+} from "@/lib/incident-staleness";
 
 export interface WaterCompanyFeed {
   supplierId: string;
@@ -193,10 +199,24 @@ export async function parseWaterCompanyFeeds(): Promise<{
   return { incidents, checks };
 }
 
-export async function isIncidentStillActive(
+/**
+ * Re-check an incident against its source feed.
+ *
+ * Returns "active" only on a positive match, "gone" only when the source was
+ * reachable and no longer lists the incident, and "unknown" for everything
+ * we could not verify: an unfetchable URL (Severn Trent stores
+ * "#incident-tab-panel-0"), an HTTP error, a network error, or a source
+ * record with no id to look for. Callers must not treat "unknown" as
+ * confirmation: it neither resolves the incident nor refreshes last_checked,
+ * which leaves the 7-day stale rule to resolve it.
+ */
+export async function checkIncidentAtSource(
   feedUrl: string,
   sourceData: Record<string, unknown>,
-): Promise<boolean> {
+): Promise<SourceCheckOutcome> {
+  const id = getSourceIncidentId(sourceData);
+  if (!id || !isCheckableSourceUrl(feedUrl)) return "unknown";
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15_000);
 
@@ -207,16 +227,12 @@ export async function isIncidentStillActive(
     });
     clearTimeout(timeout);
 
-    if (!res.ok) return false;
+    if (!res.ok) return "unknown";
 
     const body = await res.text();
-    const id = String(sourceData.id ?? sourceData.incidentId ?? "");
-    if (!id) return false;
-
-    return body.includes(id);
+    return outcomeFromFeedBody(body, id);
   } catch {
     clearTimeout(timeout);
-    // On network error, assume still active to avoid false resolution
-    return true;
+    return "unknown";
   }
 }
