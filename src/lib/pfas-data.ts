@@ -1,5 +1,6 @@
-import { getSupabase } from "./supabase";
+import { getSupabase, supabase } from "./supabase";
 import { CITIES } from "./cities";
+import { getPostcodeData } from "./data";
 
 // --- Types ---
 
@@ -336,4 +337,205 @@ export async function getPfasCityData(citySlug: string): Promise<PfasCityData> {
 
 export function getPfasCitySlugs(): string[] {
   return CITIES.map((c) => c.slug);
+}
+
+// --- PFAS near a postcode district ---
+//
+// The postcode page leads with tap-water tests. PFAS sits underneath it as a
+// clearly labelled module built from Environment Agency river and groundwater
+// samples within a radius of the district centroid. Nothing here describes tap
+// water, and the copy that consumes it must not say it does.
+
+/** The columns the nearby summary needs; the rest of the row is never loaded. */
+export interface PfasNearbyRow {
+  sampling_point_id: string;
+  sampling_point_label: string;
+  lat: number;
+  lng: number;
+  city: string;
+  compound: string;
+  value: number;
+  sample_date: string;
+}
+
+export interface PfasNearbyHighest {
+  /** µg/L */
+  value: number;
+  compound: string;
+  date: string;
+  samplingPointLabel: string;
+  distanceKm: number;
+}
+
+export interface PfasNearbyCompound {
+  compound: string;
+  detectionCount: number;
+}
+
+export interface PfasNearbySummary {
+  radiusKm: number;
+  detectionCount: number;
+  samplingPointCount: number;
+  highest: PfasNearbyHighest;
+  /** Up to three compounds, most detections first. */
+  topCompounds: PfasNearbyCompound[];
+  latestDate: string;
+  /** Slug of the closest city that has a /pfas/[city] page, or null. */
+  nearestCitySlug: string | null;
+  nearestCityName: string | null;
+}
+
+/**
+ * The Drinking Water Inspectorate's guideline for individual PFAS compounds in
+ * drinking water, in µg/L. England and Wales have no statutory limit; this is the
+ * reference value the /pfas pages already quote. Environmental samples are not
+ * drinking water, so it is a yardstick for scale, never a pass/fail.
+ */
+export const DWI_PFAS_GUIDELINE_UG_L = 0.1;
+
+const EARTH_RADIUS_KM = 6371;
+
+/** Great-circle distance between two WGS84 points, in km. */
+export function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+/**
+ * Aggregate every row within `radiusKm` of a point. Pure, so it is unit-tested
+ * directly; the loader below only supplies the rows and the centroid.
+ *
+ * A cheap bounding box runs first: one degree of latitude is ~111 km and a degree
+ * of longitude at UK latitudes is ~65 km, so the box is padded generously and the
+ * haversine only runs on the handful of rows that survive it.
+ */
+export function summarisePfasNearby(
+  rows: PfasNearbyRow[],
+  lat: number,
+  lng: number,
+  radiusKm: number,
+): PfasNearbySummary | null {
+  const latPad = radiusKm / 111 + 0.01;
+  const lngPad = radiusKm / (111 * Math.cos((lat * Math.PI) / 180)) + 0.01;
+
+  let highest: PfasNearbyHighest | null = null;
+  let latestDate = "";
+  let nearestKm = Infinity;
+  let nearestCity: string | null = null;
+  const points = new Set<string>();
+  const compounds = new Map<string, number>();
+  let detectionCount = 0;
+
+  for (const row of rows) {
+    if (Math.abs(row.lat - lat) > latPad || Math.abs(row.lng - lng) > lngPad) continue;
+    const distanceKm = haversineKm(lat, lng, row.lat, row.lng);
+    if (distanceKm > radiusKm) continue;
+    if (!(row.value > 0)) continue;
+
+    detectionCount++;
+    points.add(row.sampling_point_id);
+    compounds.set(row.compound, (compounds.get(row.compound) ?? 0) + 1);
+    if (row.sample_date > latestDate) latestDate = row.sample_date;
+    if (distanceKm < nearestKm) {
+      nearestKm = distanceKm;
+      nearestCity = row.city;
+    }
+    if (
+      !highest ||
+      row.value > highest.value ||
+      (row.value === highest.value && row.sample_date > highest.date)
+    ) {
+      highest = {
+        value: row.value,
+        compound: row.compound,
+        date: row.sample_date,
+        samplingPointLabel: row.sampling_point_label,
+        distanceKm: Math.round(distanceKm * 10) / 10,
+      };
+    }
+  }
+
+  if (!highest || detectionCount === 0) return null;
+
+  const topCompounds = Array.from(compounds.entries())
+    .map(([compound, count]) => ({ compound, detectionCount: count }))
+    .sort((a, b) => b.detectionCount - a.detectionCount || a.compound.localeCompare(b.compound))
+    .slice(0, 3);
+
+  const cityInfo = nearestCity ? CITIES.find((c) => c.name === nearestCity) : undefined;
+
+  return {
+    radiusKm,
+    detectionCount,
+    samplingPointCount: points.size,
+    highest,
+    topCompounds,
+    latestDate,
+    nearestCitySlug: cityInfo?.slug ?? null,
+    nearestCityName: cityInfo?.name ?? null,
+  };
+}
+
+/**
+ * Every detection, loaded once per process and shared by all postcode pages.
+ *
+ * ~12,000 rows of eight narrow columns, twelve paginated requests. A build
+ * renders 2,782 postcode pages; one shared load beats one radius query per page
+ * many times over. The promise is cached, not the result, for the same reason
+ * as `getHardness` in data.ts: concurrent callers must wait on the same load,
+ * not each find an empty cache and start their own.
+ */
+let pfasRowsCache: Promise<PfasNearbyRow[]> | null = null;
+
+async function loadAllPfasRows(): Promise<PfasNearbyRow[]> {
+  if (!supabase) return [];
+  const rows: PfasNearbyRow[] = [];
+  const PAGE_SIZE = 1000;
+
+  try {
+    for (let offset = 0; ; offset += PAGE_SIZE) {
+      const page = await supabase
+        .from("pfas_detections")
+        .select("sampling_point_id, sampling_point_label, lat, lng, city, compound, value, sample_date")
+        // Paging without an order is not stable in Postgres.
+        .order("id", { ascending: true })
+        .range(offset, offset + PAGE_SIZE - 1);
+      if (page.error) {
+        console.error("Error fetching PFAS rows for nearby summaries:", page.error);
+        break;
+      }
+      rows.push(...((page.data ?? []) as PfasNearbyRow[]));
+      if (!page.data || page.data.length < PAGE_SIZE) break;
+    }
+  } catch (err) {
+    // The module is supplementary; a failure here must not take the page down.
+    console.error("PFAS nearby load failed:", err);
+  }
+
+  return rows;
+}
+
+function getAllPfasRows(): Promise<PfasNearbyRow[]> {
+  if (!pfasRowsCache) pfasRowsCache = loadAllPfasRows();
+  return pfasRowsCache;
+}
+
+/**
+ * PFAS measured in rivers and groundwater within `radiusKm` of a postcode
+ * district's centroid. Null when the district is unknown or nothing was
+ * sampled within range, in which case the page renders no PFAS module.
+ */
+export async function getPfasNearDistrict(
+  district: string,
+  radiusKm = 10,
+): Promise<PfasNearbySummary | null> {
+  const postcode = await getPostcodeData(district);
+  if (!postcode) return null;
+  const rows = await getAllPfasRows();
+  return summarisePfasNearby(rows, postcode.latitude, postcode.longitude, radiusKm);
 }
