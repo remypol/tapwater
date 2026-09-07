@@ -241,6 +241,23 @@ const GUIDES = [
     iconColor: "text-red-600",
     iconBg: "bg-red-50",
   },
+  // Boiling-tap head-to-heads (appended block)
+  {
+    slug: "qettle-vs-quooker",
+    title: "Qettle vs Quooker",
+    subtitle: "Both store 100°C water; one costs half as much. Filters, warranty and hard water compared",
+    icon: GitCompare,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
+  },
+  {
+    slug: "fohen-vs-quooker",
+    title: "Fohen vs Quooker",
+    subtitle: "The £289 tap against the £1,050 benchmark: temperature, tank, filter and hard water",
+    icon: GitCompare,
+    iconColor: "text-red-600",
+    iconBg: "bg-red-50",
+  },
 ];
 
 export default function GuidesPage() {

@@ -57,6 +57,9 @@ const GUIDE_SLUGS = [
   // Hard-water appliances (appended block)
   "best-kettle-for-hard-water-uk",
   "best-boiling-water-tap-uk",
+  // Boiling-tap head-to-heads (appended block)
+  "qettle-vs-quooker",
+  "fohen-vs-quooker",
 ];
 
 /**
