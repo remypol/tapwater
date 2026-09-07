@@ -5,6 +5,7 @@ import { BreadcrumbSchema, NewsArticleSchema } from "@/components/json-ld";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { getAllIncidentSlugs, getIncidentBySlug } from "@/lib/incidents";
 import { INCIDENT_TYPE_LABELS, SEVERITY_CONFIG } from "@/lib/incidents-types";
+import { isIncidentIndexable } from "@/lib/incident-indexing";
 import { marked } from "marked";
 import { notFound } from "next/navigation";
 import { OG_IMAGE } from "@/lib/og";
@@ -29,10 +30,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = incident.summary;
   const url = `https://www.tapwater.uk/news/${slug}`;
 
+  // Stale or thin articles stay live for anyone who lands on them, but are
+  // kept out of the index so they cannot dilute the rest of the site. The
+  // canonical stays on the page itself in both cases.
+  const indexable = isIncidentIndexable(incident);
+
   return {
     title,
     description,
-    robots: "max-image-preview:large",
+    robots: indexable ? "max-image-preview:large" : "noindex, follow",
     openGraph: {
       images: OG_IMAGE,
       title,
@@ -49,6 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
     },
     alternates: {
+      canonical: url,
       types: {
         "application/rss+xml": "https://www.tapwater.uk/news/rss.xml",
       },

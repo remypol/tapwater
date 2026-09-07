@@ -5,7 +5,8 @@ import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
-import { getAllIncidentSlugs } from "@/lib/incidents";
+import { getSitemapIncidentCandidates } from "@/lib/incidents";
+import { getIncidentLastModified, isIncidentIndexable } from "@/lib/incident-indexing";
 import { BRAND_COMPARISON_PAIRS } from "@/lib/brand-comparisons";
 import { CITY_COMPARISON_PAIRS } from "@/lib/city-comparisons";
 
@@ -70,13 +71,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // noindexed and should not waste crawl budget or dilute quality signals.
   const scoredDistricts = await getScoredPostcodeDistricts();
 
-  const incidentSlugs = await getAllIncidentSlugs();
-  const newsPaths = incidentSlugs.map((slug) => ({
-    url: `${BASE_URL}/news/${slug}`,
-    lastModified: new Date(),
+  // Incident articles are only listed while they pass the indexability rule
+  // (fresh + substantive). Everything else is noindexed on the page itself and
+  // has no business in the sitemap. lastModified is the incident's own
+  // timestamp, not the build time.
+  const now = new Date();
+  const indexableIncidents = (await getSitemapIncidentCandidates(now)).filter(
+    (incident) => isIncidentIndexable(incident, now),
+  );
+  const newsPaths = indexableIncidents.map((incident) => ({
+    url: `${BASE_URL}/news/${incident.slug}`,
+    lastModified: getIncidentLastModified(incident),
     changeFrequency: "daily" as const,
-    priority: 0.7,
+    priority: 0.5,
   }));
+  const newsIndexLastModified = newsPaths.reduce<Date>(
+    (latest, p) => (p.lastModified > latest ? p.lastModified : latest),
+    latestDataDate,
+  );
 
   const postcodePaths = await Promise.all(
     scoredDistricts.map(async (district) => {
@@ -304,7 +316,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     {
       url: `${BASE_URL}/news`,
-      lastModified: new Date(),
+      lastModified: newsIndexLastModified,
       changeFrequency: "hourly" as const,
       priority: 0.9,
     },
