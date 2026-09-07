@@ -1,5 +1,6 @@
 import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
+import { PFAS_RUN_SOURCE, PFAS_SOURCE, describePfasHealth } from "@/lib/pfas-ingest";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,6 +39,14 @@ export interface SoftenerLeadBacklog {
   oldestAgeDays: number | null;
 }
 
+export interface PfasPipelineSummary {
+  /** Rows in `pfas_detections`. */
+  tableRows: number;
+  lastRunAt: string | null;
+  lastRunRowsFetched: number | null;
+  lastRunError: string | null;
+}
+
 export interface HealthReport {
   generatedAt: string;
   pageData: {
@@ -56,6 +65,7 @@ export interface HealthReport {
   };
   supplierCoverage: SupplierCoverage[];
   softenerLeads: SoftenerLeadBacklog;
+  pfas: PfasPipelineSummary;
   issues: string[];
 }
 
@@ -109,6 +119,8 @@ export async function getHealthReport(): Promise<HealthReport> {
     sourceChecksData,
     supplierData,
     newLeadsData,
+    pfasRowsData,
+    pfasRunData,
   ] = await Promise.all([
     // All page_data rows with data_source for breakdown
     db.from("page_data").select("data_source"),
@@ -138,10 +150,13 @@ export async function getHealthReport(): Promise<HealthReport> {
       .order("started_at", { ascending: false })
       .limit(1),
 
-    // Latest source_check per source_name
+    // Latest source_check per incident-feed source_name. The PFAS ingest logs
+    // to the same table under its own sources; those are reported separately.
     db
       .from("source_checks")
       .select("source_name, error, checked_at")
+      .neq("source", PFAS_SOURCE)
+      .neq("source", PFAS_RUN_SOURCE)
       .order("checked_at", { ascending: false })
       .limit(100),
 
@@ -157,7 +172,27 @@ export async function getHealthReport(): Promise<HealthReport> {
       .eq("status", "new")
       .order("created_at", { ascending: true })
       .limit(1),
+
+    // PFAS: rows behind the /pfas pages, and the ingest's latest run summary
+    db
+      .from("pfas_detections")
+      .select("id", { count: "exact", head: true }),
+
+    db
+      .from("source_checks")
+      .select("checked_at, items_found, error")
+      .eq("source", PFAS_RUN_SOURCE)
+      .order("checked_at", { ascending: false })
+      .limit(1),
   ]);
+
+  const pfasRun = pfasRunData.data?.[0] ?? null;
+  const pfas: PfasPipelineSummary = {
+    tableRows: pfasRowsData.count ?? 0,
+    lastRunAt: pfasRun?.checked_at ?? null,
+    lastRunRowsFetched: pfasRun?.items_found ?? null,
+    lastRunError: pfasRun?.error ?? null,
+  };
 
   const softenerLeads = summariseSoftenerLeadBacklog(
     newLeadsData.count ?? 0,
@@ -255,6 +290,15 @@ export async function getHealthReport(): Promise<HealthReport> {
   const leadIssue = describeSoftenerLeadBacklog(softenerLeads);
   if (leadIssue) issues.push(leadIssue);
 
+  issues.push(
+    ...describePfasHealth({
+      tableRows: pfas.tableRows,
+      lastRun: pfasRun
+        ? { checked_at: pfasRun.checked_at, items_found: pfasRun.items_found ?? 0, error: pfasRun.error ?? null }
+        : null,
+    }),
+  );
+
   return {
     generatedAt: new Date().toISOString(),
     pageData: {
@@ -268,6 +312,7 @@ export async function getHealthReport(): Promise<HealthReport> {
     incidentSources: { checks, failingCount },
     supplierCoverage,
     softenerLeads,
+    pfas,
     issues,
   };
 }
@@ -309,6 +354,13 @@ ${issueList}
     report.softenerLeads.oldestAgeDays !== null
       ? `, oldest ${report.softenerLeads.oldestAgeDays} day(s)`
       : ""
+  }.</p>
+<p><strong>PFAS:</strong> ${report.pfas.tableRows} detections in pfas_detections; last ingest ${
+    report.pfas.lastRunAt
+      ? `${report.pfas.lastRunAt} fetched ${report.pfas.lastRunRowsFetched ?? 0}${
+          report.pfas.lastRunError ? `, error: ${report.pfas.lastRunError}` : ""
+        }`
+      : "never recorded"
   }.</p>
 `.trim();
 
