@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { SoftenerLeadForm } from "@/components/softener-lead-form"
+import { SoftenerGuidesNav } from "@/components/softener-guides-nav"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
 import { OG_IMAGE } from "@/lib/og";
 
@@ -325,6 +326,10 @@ export default function WaterHardnessCheckerPage() {
             source="hardness_page"
           />
         </div>
+
+        {/* Softener cluster links: kept as its own block beside the form so the
+            solutions cards above can change independently. */}
+        <SoftenerGuidesNav variant="compact" heading="Thinking about a softener? Read first" className="mt-6" />
 
         {/* Hardness by region */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Water hardness by region</h2>
