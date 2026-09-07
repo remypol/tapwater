@@ -42,7 +42,37 @@ export const GUIDES_REGISTRY: Record<string, GuideMeta> = {
   "best-water-softener-uk": {
     slug: "best-water-softener-uk",
     title: "Best Water Softener UK",
-    description: "The proven fix for limescale: softeners compared with real costs",
+    description: "Harvey, Kinetico, BWT, Monarch and Water2Buy compared, with real costs",
+  },
+  "do-i-need-a-water-softener": {
+    slug: "do-i-need-a-water-softener",
+    title: "Do I Need a Water Softener?",
+    description: "The hardness bands, the symptoms, and a postcode check",
+  },
+  "water-softener-cost-uk": {
+    slug: "water-softener-cost-uk",
+    title: "Water Softener Cost UK",
+    description: "Unit, installation and salt, and how the payback works",
+  },
+  "water-softener-installation-uk": {
+    slug: "water-softener-installation-uk",
+    title: "Water Softener Installation UK",
+    description: "Where it goes, the bypass, the drain, DIY or plumber",
+  },
+  "harvey-vs-kinetico-water-softener": {
+    slug: "harvey-vs-kinetico-water-softener",
+    title: "Harvey vs Kinetico",
+    description: "The two premium twin-cylinder softeners, side by side",
+  },
+  "water-softener-salt-guide": {
+    slug: "water-softener-salt-guide",
+    title: "Water Softener Salt Guide",
+    description: "Tablet, block or granular, and how much you get through",
+  },
+  "salt-free-water-softener-uk": {
+    slug: "salt-free-water-softener-uk",
+    title: "Salt-Free Water Softeners UK",
+    description: "Conditioners and electronic descalers, honestly assessed",
   },
   "best-water-filters-uk": {
     slug: "best-water-filters-uk",
@@ -189,6 +219,7 @@ export function pickRelatedGuides(signals: RelatedGuideSignals): GuideMeta[] {
   }
   if (signals.isHardWater) {
     add("best-water-softener-uk");
+    add("do-i-need-a-water-softener");
     add("water-hardness-map");
   }
   if (signals.hasContaminantsFlagged) {

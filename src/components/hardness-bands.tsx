@@ -47,14 +47,21 @@ export function HardnessBands({
                 className={`${shade} flex items-center justify-center overflow-hidden`}
                 title={`${band.label}: ${band.from}–${band.to} mg/L`}
               >
-                <span className="text-xs font-medium px-1 truncate">{band.label}</span>
+                <span
+                  className={`text-xs font-medium px-1 truncate ${
+                    // The 180–200 band is a sliver; its label only fits on wide screens.
+                    band.to - band.from < 40 ? "hidden lg:inline" : ""
+                  }`}
+                >
+                  {band.label}
+                </span>
               </li>
             );
           })}
         </ol>
 
         <ol className="relative mt-1.5 h-5 font-mono text-[11px] text-muted" aria-hidden="true">
-          {HARDNESS_BANDS.map((band) => (
+          {HARDNESS_BANDS.filter((band) => band.from !== 180).map((band) => (
             <li
               key={band.from}
               className="absolute -translate-x-1/2"

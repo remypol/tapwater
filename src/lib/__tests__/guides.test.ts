@@ -24,7 +24,7 @@ describe("guides registry", () => {
   it("covers all guides published in the sitemap plus water-problems", () => {
     // Guards against a new guide landing in the sitemap but never becoming
     // internally linkable. Keep in sync with GUIDE_SLUGS in src/app/sitemap.ts.
-    expect(Object.keys(GUIDES_REGISTRY).length).toBeGreaterThanOrEqual(25);
+    expect(Object.keys(GUIDES_REGISTRY).length).toBeGreaterThanOrEqual(31);
   });
 
   it("getGuide throws on unknown slugs", () => {
