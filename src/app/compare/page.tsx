@@ -10,6 +10,7 @@ import {
 import { PostcodeSearch } from "@/components/postcode-search";
 import { CompareSearch } from "@/components/compare-search";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { FixPicks } from "@/components/fix-picks";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import { CITY_COMPARISON_PAIRS, cityLabel } from "@/lib/city-comparisons";
@@ -387,6 +388,25 @@ export default async function ComparePage() {
             </div>
           </section>
         </ScrollReveal>
+
+        <hr className="border-rule mt-14" />
+
+        {/* Closing commercial step. Readers arrive here to see where their area
+            ranks; the natural next question is "so what do I do about it". */}
+        <FixPicks
+          className="mt-8"
+          pageType="compare"
+          placement="compare-picks"
+          title="Whatever your water scored, this is what fixes it"
+          intro={
+            <>
+              A low score does not mean unsafe water, and a high one does not mean
+              nothing to improve. These are the three fixes readers click most
+              across every ranking on this page. For a recommendation matched to
+              your own readings, open your postcode report above.
+            </>
+          }
+        />
 
         {/* Methodology footer */}
         <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
