@@ -22,6 +22,7 @@ import type { HardnessReading } from "@/lib/data";
 import { getActiveIncidentsForSupplier } from "@/lib/incidents";
 import { getScoreColor } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
+import { HardWaterCta } from "@/components/hard-water-cta";
 
 // Incidents and the Supabase-first supplier source change at runtime.
 export const revalidate = 86400;
@@ -434,6 +435,14 @@ export default async function SupplierPage({ params }: Props) {
                 </Link>{" "}
                 if scale is a daily battle in your home.
               </p>
+              {hardPct !== null && hardPct >= 50 && (
+                <HardWaterCta
+                  placeName={`${supplier.name}'s`}
+                  hardness={avgHardness}
+                  hardnessClass={avgHardness !== null && avgHardness >= 250 ? "very hard" : "hard"}
+                  className="mt-6"
+                />
+              )}
             </section>
           )}
 
