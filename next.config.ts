@@ -4,6 +4,11 @@ import { withSentryConfig } from "@sentry/nextjs";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  images: {
+    // Softener salt products have no local artwork; their cards use Amazon's own
+    // product images.
+    remotePatterns: [{ protocol: "https", hostname: "m.media-amazon.com" }],
+  },
   // NOTE: no redirects() here. Config redirects match case-INsensitively, so a
   // "/Guides" -> "/guides" rule also matches "/guides" itself and loops the
   // guides index forever (broke production on 19 Aug). The case fix lives in

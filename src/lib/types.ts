@@ -47,6 +47,7 @@ export type ProductCategory =
   | "testing_kit"
   | "countertop"
   | "water_softener"
+  | "softener_salt"
   | "filter_tap";
 
 export type PriceTier = "budget" | "mid" | "premium";

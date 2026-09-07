@@ -119,11 +119,22 @@ describe("commission data", () => {
     }
   });
 
-  it("returns null rather than a guess when the rate is unconfirmed", () => {
+  it("returns null rather than a guess when the rate or the price is unconfirmed", () => {
     for (const p of PRODUCTS) {
       const earnings = estimatedEarningsGbp(p);
-      if (p.commission) expect(earnings).toBeGreaterThan(0);
+      const priceKnown = p.priceGbp > 0 || p.commission?.type === "fixed";
+      if (p.commission && priceKnown) expect(earnings).toBeGreaterThan(0);
       else expect(earnings).toBeNull();
+    }
+  });
+
+  it("every softener consumable is an Amazon product with a check-price placeholder", () => {
+    const salt = getProductsByCategory("softener_salt");
+    expect(salt.length).toBe(7);
+    for (const p of salt) {
+      expect(p.affiliateProgram).toBe("amazon");
+      expect(p.priceGbp).toBe(0);
+      expect(p.imageUrl).toMatch(/^https:\/\/m\.media-amazon\.com\//);
     }
   });
 
