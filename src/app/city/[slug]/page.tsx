@@ -16,7 +16,7 @@ import { GeoCitation } from "@/components/geo-citation";
 import { RelatedGuides } from "@/components/related-guides";
 import { EmbedCta } from "@/components/embed-cta";
 import { HardWaterCta } from "@/components/hard-water-cta";
-import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore } from "@/lib/data";
+import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { CITIES, getCityBySlug } from "@/lib/cities";
@@ -226,12 +226,13 @@ export default async function CityPage({ params }: Props) {
   // Drinking-water readings only. River and groundwater samples say nothing
   // about what comes out of the tap: Manchester's rivers run hard while its
   // mains water is soft, and mixing the two called the city hard.
-  const allCityReadings = scored.flatMap(p => p.readings);
-  const hardnessReadings = allCityReadings.filter(r =>
-    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
-  );
-  const avgHardness = hardnessReadings.length > 0
-    ? hardnessReadings.reduce((s, r) => s + r.value, 0) / hardnessReadings.length
+  // Same source as the postcode pages (getHardness reads the raw
+  // drinking_water_readings table); measured districts only, no area estimates.
+  const cityHardnessValues = (await Promise.all(scored.map(p => getHardness(p.district))))
+    .filter((h): h is NonNullable<typeof h> => h != null && !h.estimated)
+    .map(h => h.value);
+  const avgHardness = cityHardnessValues.length > 0
+    ? cityHardnessValues.reduce((s, v) => s + v, 0) / cityHardnessValues.length
     : null;
   const hardnessClass = avgHardness != null
     ? avgHardness < 60 ? "soft" : avgHardness < 120 ? "moderately soft" : avgHardness < 180 ? "moderately hard" : avgHardness < 250 ? "hard" : "very hard"

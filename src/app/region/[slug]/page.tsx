@@ -9,7 +9,7 @@ import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { REGIONS, getRegionBySlug } from "@/lib/regions";
 import { getCityBySlug, CITIES } from "@/lib/cities";
-import { getPostcodesByCity } from "@/lib/data";
+import { getPostcodesByCity, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
@@ -157,12 +157,11 @@ export default async function RegionPage({ params }: Props) {
   const scoreLabel = avgScore >= 7 ? "safe" : avgScore >= 4 ? "moderate" : "below average";
 
   // Drinking-water readings only; environmental samples do not describe tap water.
-  const allRegionReadings = allPostcodes.flatMap(p => p.readings);
-  const hardnessReadings = allRegionReadings.filter(r =>
-    /hardness/i.test(r.name) || (/CaCO3/i.test(r.name) && !/alkalinity/i.test(r.name))
-  );
-  const avgHardness = hardnessReadings.length > 0
-    ? hardnessReadings.reduce((s, r) => s + r.value, 0) / hardnessReadings.length
+  const regionHardnessValues = (await Promise.all(allPostcodes.map(p => getHardness(p.district))))
+    .filter((h): h is NonNullable<typeof h> => h != null && !h.estimated)
+    .map(h => h.value);
+  const avgHardness = regionHardnessValues.length > 0
+    ? regionHardnessValues.reduce((s, v) => s + v, 0) / regionHardnessValues.length
     : null;
   const hardnessClass = avgHardness != null
     ? avgHardness < 60 ? "soft" : avgHardness < 120 ? "moderately soft" : avgHardness < 180 ? "moderately hard" : avgHardness < 250 ? "hard" : "very hard"
