@@ -16,6 +16,9 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   testing_kit: "Testing Kit",
   water_softener: "Water Softener",
   filter_tap: "Filter Tap",
+  // ── Hard-water appliances ──
+  kettle: "Kettle",
+  boiling_tap: "Boiling Water Tap",
 };
 
 /**
