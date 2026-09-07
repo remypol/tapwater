@@ -180,6 +180,17 @@ export const GUIDES_REGISTRY: Record<string, GuideMeta> = {
     title: "Best Boiling Water Tap UK",
     description: "Quooker, Qettle, Fohen, Franke and Hanstrom compared, and what hard water does to them",
   },
+  // ── Boiling-tap head-to-heads (appended block) ─────────────────────
+  "qettle-vs-quooker": {
+    slug: "qettle-vs-quooker",
+    title: "Qettle vs Quooker",
+    description: "Both store 100°C water; one costs half as much. Filters, warranty and hard water compared",
+  },
+  "fohen-vs-quooker": {
+    slug: "fohen-vs-quooker",
+    title: "Fohen vs Quooker",
+    description: "The £289 tap against the £1,050 benchmark: temperature, tank, filter and hard water",
+  },
 };
 
 export function getGuide(slug: string): GuideMeta {

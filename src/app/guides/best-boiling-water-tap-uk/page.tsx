@@ -405,6 +405,30 @@ export default function BestBoilingWaterTapGuide() {
           ))}
         </div>
 
+        {/* ── Head-to-heads (appended block) ───────────────────────── */}
+        <div className="mt-10 border-y border-rule py-5">
+          <p className="text-sm font-medium text-ink">Head-to-head</p>
+          <p className="text-sm text-body mt-1 leading-relaxed">
+            Narrowed it to two? We have compared the pairs people search for
+            most, using only what each maker publishes.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+            {[
+              { href: "/guides/qettle-vs-quooker", label: "Qettle vs Quooker" },
+              { href: "/guides/fohen-vs-quooker", label: "Fohen vs Quooker" },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline"
+              >
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* ── Amazon alternative ───────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-2">
           The Amazon-available alternative
