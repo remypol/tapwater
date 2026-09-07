@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { PostcodeSearch } from "@/components/postcode-search"
 import { FAQSchema, ArticleSchema } from "@/components/json-ld"
+import { ProductCard } from "@/components/product-card"
+import { AffiliateNote } from "@/components/commerce"
+import { getProductBySlug } from "@/lib/products"
 import { OG_IMAGE } from "@/lib/og";
 
 export function generateMetadata(): Metadata {
@@ -22,6 +26,13 @@ export function generateMetadata(): Metadata {
 }
 
 export default function WaterHardnessMapPage() {
+  const showerFilter = getProductBySlug("jolie-filtered-showerhead")
+  const countertopRo = getProductBySlug("osmio-zero")
+  const solutionPicks = [
+    { product: showerFilter, highlight: "For dry skin and hair after a shower" },
+    { product: countertopRo, highlight: "Reverse osmosis without a plumber" },
+  ].filter((pick): pick is { product: NonNullable<typeof showerFilter>; highlight: string } => Boolean(pick.product))
+
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-14">
       <FAQSchema
@@ -274,6 +285,47 @@ export default function WaterHardnessMapPage() {
           wash results significantly. Descaling products applied regularly to showers, taps,
           and kettles are inexpensive and effective at removing existing scale.
         </p>
+
+        {/* The two fixes that do not need an installer, then the route to the one that does. */}
+        <div className="mt-8 mb-10">
+          <p className="text-base text-body leading-relaxed">
+            If you want something you can buy today rather than have fitted, these are the
+            two we point hard-water readers to most. Neither reduces hardness itself: one
+            deals with the chlorine that makes hard water rough on skin and hair, the other
+            gives you soft, mineral-free drinking water from a unit that plugs in.
+          </p>
+          <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {solutionPicks.map(({ product, highlight }) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                highlight={highlight}
+                pageType="guide"
+                placement="guide-solutions"
+                recommendationReason="hard-water"
+              />
+            ))}
+          </div>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+              <Link
+                href="/hardness#softener-quotes"
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-accent transition-colors"
+              >
+                Get softener quotes for your postcode
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </Link>
+              <Link
+                href="/guides/best-water-softener-uk"
+                className="inline-flex items-center gap-1 font-medium text-ink hover:text-accent transition-colors"
+              >
+                Best water softeners compared
+                <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+            <AffiliateNote withFundingLink />
+          </div>
+        </div>
 
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Check your water hardness</h2>
         <p className="text-base text-body leading-relaxed mb-6">
