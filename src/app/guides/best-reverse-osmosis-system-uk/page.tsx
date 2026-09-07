@@ -218,6 +218,12 @@ export default function BestReverseOsmosisGuide() {
   const fusion3 = roProducts.find((p) => p.id === "osmio-fusion-3")!;
   const zero = roProducts.find((p) => p.id === "osmio-zero")!;
 
+  // Reading order. The two Osmio units come first: the Zero is the only system
+  // here that needs no plumbing, and the Fusion 2.0 is the one that puts minerals
+  // back, which are the two questions readers arrive with most often. The
+  // Waterdrop remains the under-sink system we recommend; see the verdict.
+  const reviewOrder = [zero, fusion2, waterdrop, frizzlife, fusion3];
+
   const comparisonContaminants = [
     "PFAS (total)",
     "Lead",
@@ -329,6 +335,34 @@ export default function BestReverseOsmosisGuide() {
           <div className="space-y-3">
             <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
               <div>
+                <p className="text-xs text-accent font-medium uppercase tracking-wider">No-plumbing pick</p>
+                <p className="font-display text-base italic text-ink mt-0.5">
+                  {zero.brand} {zero.model}
+                </p>
+                <p className="text-sm text-muted mt-0.5">
+                  Stands on the worktop and plugs in, so renters can use it. No NSF or WRAS certification stated
+                </p>
+              </div>
+              <span className="font-data text-lg font-bold text-ink shrink-0">
+                &pound;{zero.priceGbp}
+              </span>
+            </div>
+            <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
+              <div>
+                <p className="text-xs text-accent font-medium uppercase tracking-wider">Remineralised pick</p>
+                <p className="font-display text-base italic text-ink mt-0.5">
+                  {fusion2.brand} {fusion2.model}
+                </p>
+                <p className="text-sm text-muted mt-0.5">
+                  Puts minerals back after RO, UK supplier with UK spares. No NSF or WRAS certification stated
+                </p>
+              </div>
+              <span className="font-data text-lg font-bold text-ink shrink-0">
+                &pound;{fusion2.priceGbp}
+              </span>
+            </div>
+            <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
+              <div>
                 <p className="text-xs text-accent font-medium uppercase tracking-wider">Top pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
                   {waterdrop.brand} {waterdrop.model}
@@ -341,7 +375,7 @@ export default function BestReverseOsmosisGuide() {
                 &pound;{waterdrop.priceGbp}
               </span>
             </div>
-            <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs text-accent font-medium uppercase tracking-wider">Value pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
@@ -353,20 +387,6 @@ export default function BestReverseOsmosisGuide() {
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
                 &pound;{frizzlife.priceGbp}
-              </span>
-            </div>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs text-accent font-medium uppercase tracking-wider">Premium pick</p>
-                <p className="font-display text-base italic text-ink mt-0.5">
-                  {fusion3.brand} {fusion3.model}
-                </p>
-                <p className="text-sm text-muted mt-0.5">
-                  Tankless, hydrogen generator and chilled water, UK supplier with UK spares
-                </p>
-              </div>
-              <span className="font-data text-lg font-bold text-ink shrink-0">
-                &pound;{fusion3.priceGbp}
               </span>
             </div>
           </div>
@@ -498,7 +518,7 @@ export default function BestReverseOsmosisGuide() {
 
         {/* Product cards at a glance */}
         <div className="space-y-4 mb-8">
-          {roProducts.map((product) => (
+          {reviewOrder.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
@@ -519,6 +539,43 @@ export default function BestReverseOsmosisGuide() {
 
         {/* Detailed reviews */}
         <div className="space-y-8">
+          <ProductReview
+            product={zero}
+            heading="Osmio Zero 2.0 — No-plumbing pick"
+            verdict="RO water without a plumber, if you can spare the worktop space."
+            review="Every other system here has to be plumbed into your cold feed, which rules them out if you rent or do not fancy drilling the worktop. The Osmio Zero 2.0 is the exception: it stands on the counter, plugs into a socket, and you pour water into a 5-litre tank at the top. It produces up to 190 litres a day and dispenses anywhere from cold through to near-boiling, so it doubles as the kettle. It is also the most water-efficient system on this page, wasting one litre for every five it produces, where a typical under-sink RO wastes closer to one in three. The trade-offs are real. Osmio state no NSF or WRAS certification for it, and they do not publish a filter replacement interval, so unlike the others you cannot work out the yearly running cost before you buy. It is 38cm tall and 7kg, which is a genuine chunk of worktop. And at £413 you pay a premium over an under-sink system with comparable filtration. Buy it because it needs no plumbing, not because it filters better."
+            pros={[
+              "Plugs into a socket — the only system here needing no plumbing at all",
+              "Wastes 1 litre per 5 produced, roughly half the waste of a typical under-sink RO",
+              "Dispenses up to near-boiling, so it replaces the kettle as well",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated",
+              "No published filter replacement interval, so yearly cost is unknown",
+              "38cm tall and 7kg — it takes real worktop space",
+              "Costs more than an under-sink system with similar filtration",
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
+          <ProductReview
+            product={fusion2}
+            heading="Osmio Fusion 2.0 — Remineralised pick"
+            verdict="Puts minerals back after RO, from a UK supplier with UK spares."
+            review="Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that remineralises the water and lifts the pH back up, which is the main reason to choose it over the Waterdrop. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while certified alternatives exist for less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £495 it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install."
+            pros={[
+              "Bioceramic stage remineralises and raises pH, which most RO systems do not",
+              "Widest contaminant list here, covering fluoride and nitrates as well as lead",
+              "UK company, so spares and support do not ship from overseas",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated for this system",
+              "£62.90 filter set every 6 months, roughly £126/year",
+              "Needs plumbing into the cold feed — not a realistic DIY job",
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
           <ProductReview
             product={waterdrop}
             heading="Waterdrop G3P600 \u2014 Top pick"
@@ -559,24 +616,6 @@ export default function BestReverseOsmosisGuide() {
           />
 
           <ProductReview
-            product={fusion2}
-            heading="Osmio Fusion 2.0 — Remineralised pick"
-            verdict="Puts minerals back after RO, from a UK supplier with UK spares."
-            review="Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that remineralises the water and lifts the pH back up, which is the main reason to choose it over the Waterdrop. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while certified alternatives exist for less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £495 it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install."
-            pros={[
-              "Bioceramic stage remineralises and raises pH, which most RO systems do not",
-              "Widest contaminant list here, covering fluoride and nitrates as well as lead",
-              "UK company, so spares and support do not ship from overseas",
-            ]}
-            cons={[
-              "No NSF or WRAS certification stated for this system",
-              "£62.90 filter set every 6 months, roughly £126/year",
-              "Needs plumbing into the cold feed — not a realistic DIY job",
-            ]}
-            ctaLabel="View on Osmio"
-          />
-
-          <ProductReview
             product={fusion3}
             heading="Osmio Fusion 3.0 — Tankless pick"
             verdict="No storage tank and chilled water, but thinner paperwork than the price suggests."
@@ -594,25 +633,6 @@ export default function BestReverseOsmosisGuide() {
             ]}
             ctaLabel="View on Osmio"
           />
-
-          <ProductReview
-            product={zero}
-            heading="Osmio Zero 2.0 — No-plumbing pick"
-            verdict="RO water without a plumber, if you can spare the worktop space."
-            review="Every other system here has to be plumbed into your cold feed, which rules them out if you rent or do not fancy drilling the worktop. The Osmio Zero 2.0 is the exception: it stands on the counter, plugs into a socket, and you pour water into a 5-litre tank at the top. It produces up to 190 litres a day and dispenses anywhere from cold through to near-boiling, so it doubles as the kettle. It is also the most water-efficient system on this page, wasting one litre for every five it produces, where a typical under-sink RO wastes closer to one in three. The trade-offs are real. Osmio state no NSF or WRAS certification for it, and they do not publish a filter replacement interval, so unlike the others you cannot work out the yearly running cost before you buy. It is 38cm tall and 7kg, which is a genuine chunk of worktop. And at £413 you pay a premium over an under-sink system with comparable filtration. Buy it because it needs no plumbing, not because it filters better."
-            pros={[
-              "Plugs into a socket — the only system here needing no plumbing at all",
-              "Wastes 1 litre per 5 produced, roughly half the waste of a typical under-sink RO",
-              "Dispenses up to near-boiling, so it replaces the kettle as well",
-            ]}
-            cons={[
-              "No NSF or WRAS certification stated",
-              "No published filter replacement interval, so yearly cost is unknown",
-              "38cm tall and 7kg — it takes real worktop space",
-              "Costs more than an under-sink system with similar filtration",
-            ]}
-            ctaLabel="View on Osmio"
-          />
         </div>
 
         {/* ── Comparison table ─────────────────────────────────────── */}
@@ -627,7 +647,7 @@ export default function BestReverseOsmosisGuide() {
           <ProductComparisonTable
             pageType="best-reverse-osmosis-guide"
             campaign="best-reverse-osmosis-guide"
-            products={roProducts}
+            products={reviewOrder}
             contaminants={comparisonContaminants}
           />
         </div>
@@ -638,7 +658,7 @@ export default function BestReverseOsmosisGuide() {
 
         <RunningCostComparison
 
-          products={roProducts}
+          products={reviewOrder}
 
           pageType="best-reverse-osmosis-guide"
 
@@ -654,6 +674,22 @@ export default function BestReverseOsmosisGuide() {
         </h2>
         <div className="prose-section">
           <p className="text-base text-body leading-relaxed">
+            If you rent, or simply do not want anything plumbed in, the{" "}
+            <strong className="text-ink">Osmio Zero 2.0</strong> is the one to
+            look at first: it stands on the worktop, plugs into a socket, and
+            wastes far less water than an under-sink system. Go in knowing that
+            Osmio state no NSF or WRAS certification and publish no filter
+            replacement interval, so you cannot work out the yearly running cost
+            before you buy.
+          </p>
+          <p className="text-base text-body leading-relaxed mt-4">
+            If flat-tasting RO water is what has put you off, the{" "}
+            <strong className="text-ink">Osmio Fusion 2.0</strong> puts minerals
+            back after filtering, from a UK supplier that stocks UK spares. It
+            needs plumbing in, carries no stated NSF or WRAS certification, and
+            runs at roughly &pound;126 a year in filters.
+          </p>
+          <p className="text-base text-body leading-relaxed mt-4">
             The <strong className="text-ink">Waterdrop G3P600</strong> is the RO
             system we recommend. Dual NSF 58/372 certification, the best waste
             ratio in its class, a smart TDS panel that lets you verify it is
@@ -676,7 +712,33 @@ export default function BestReverseOsmosisGuide() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-8">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mt-8">
+          <AffiliateLink
+            href={zero.affiliateUrl}
+            pageType="best-reverse-osmosis-guide"
+            recommendationReason="verdict"
+            productCategory={zero.category}
+            productSlug={zero.slug}
+            placement="guide-verdict"
+            campaign="best-reverse-osmosis-guide"
+            className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
+          >
+            Get the Osmio Zero 2.0 (no plumbing)
+            <ArrowRight className="w-4 h-4" />
+          </AffiliateLink>
+          <AffiliateLink
+            href={fusion2.affiliateUrl}
+            pageType="best-reverse-osmosis-guide"
+            recommendationReason="verdict"
+            productCategory={fusion2.category}
+            productSlug={fusion2.slug}
+            placement="guide-verdict"
+            campaign="best-reverse-osmosis-guide"
+            className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
+          >
+            Get the Osmio Fusion 2.0 (remineralised)
+            <ArrowRight className="w-4 h-4" />
+          </AffiliateLink>
           <AffiliateLink
             href={waterdrop.affiliateUrl}
             pageType="best-reverse-osmosis-guide"
@@ -685,22 +747,9 @@ export default function BestReverseOsmosisGuide() {
             productSlug={waterdrop.slug}
             placement="guide-verdict"
             campaign="best-reverse-osmosis-guide"
-            className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
-          >
-            Get the Waterdrop G3P600
-            <ArrowRight className="w-4 h-4" />
-          </AffiliateLink>
-          <AffiliateLink
-            href={frizzlife.affiliateUrl}
-            pageType="best-reverse-osmosis-guide"
-            recommendationReason="verdict"
-            productCategory={frizzlife.category}
-            productSlug={frizzlife.slug}
-            placement="guide-verdict"
-            campaign="best-reverse-osmosis-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
-            Get the Frizzlife PD600 (value pick)
+            Get the Waterdrop G3P600 (top pick)
             <ArrowRight className="w-4 h-4" />
           </AffiliateLink>
         </div>
