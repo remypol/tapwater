@@ -274,6 +274,11 @@ export default function WaterHardnessMapPage() {
           wash results significantly. Descaling products applied regularly to showers, taps,
           and kettles are inexpensive and effective at removing existing scale.
         </p>
+        <p className="text-sm text-muted mb-4">
+          Related: <Link href="/guides/best-kettle-for-hard-water-uk" className="underline hover:text-ink transition-colors">best kettle for hard water</Link>
+          {" "}and{" "}
+          <Link href="/guides/best-boiling-water-tap-uk" className="underline hover:text-ink transition-colors">best boiling water tap</Link>.
+        </p>
 
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Check your water hardness</h2>
         <p className="text-base text-body leading-relaxed mb-6">

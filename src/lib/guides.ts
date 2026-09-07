@@ -139,6 +139,17 @@ export const GUIDES_REGISTRY: Record<string, GuideMeta> = {
     title: "What Is Smart Water, Actually?",
     description: "The chemistry behind the brand, compared with UK tap water",
   },
+  // ── Hard-water appliances (appended block) ─────────────────────────
+  "best-kettle-for-hard-water-uk": {
+    slug: "best-kettle-for-hard-water-uk",
+    title: "Best Kettle for Hard Water UK",
+    description: "Why kettles fur up, what a limescale filter really does, seven kettles compared",
+  },
+  "best-boiling-water-tap-uk": {
+    slug: "best-boiling-water-tap-uk",
+    title: "Best Boiling Water Tap UK",
+    description: "Quooker, Qettle, Fohen, Franke and Hanstrom compared, and what hard water does to them",
+  },
 };
 
 export function getGuide(slug: string): GuideMeta {

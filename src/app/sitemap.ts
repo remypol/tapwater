@@ -47,6 +47,9 @@ const GUIDE_SLUGS = [
   "how-long-does-bottled-water-last",
   "can-you-drink-rainwater-uk",
   "what-is-smart-water",
+  // Hard-water appliances (appended block)
+  "best-kettle-for-hard-water-uk",
+  "best-boiling-water-tap-uk",
 ];
 
 /**

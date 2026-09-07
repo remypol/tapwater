@@ -291,6 +291,17 @@ export default function WaterHardnessCheckerPage() {
               does nothing to reduce scale formation in your boiler or pipes, but covers
               most day-to-day inconveniences.
             </p>
+            <p className="text-sm text-muted mt-2">
+              Kettle furring up? See{" "}
+              <Link href="/guides/best-kettle-for-hard-water-uk" className="underline hover:text-ink transition-colors">
+                the best kettles for hard water
+              </Link>
+              {" "}and, before buying a boiling tap,{" "}
+              <Link href="/guides/best-boiling-water-tap-uk" className="underline hover:text-ink transition-colors">
+                what hard water does to boiling water taps
+              </Link>
+              .
+            </p>
           </div>
 
           <div className="card p-5">
