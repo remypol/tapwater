@@ -1,3 +1,4 @@
+import type { SourceCheckOutcome } from "@/lib/incident-staleness";
 import type { RawIncident, IncidentSeverity } from "@/lib/incidents-types";
 import { generateSourceHash } from "@/lib/incidents";
 import { extractPostcodeDistricts, mapPostcodesToCities } from "./postcode-matcher";
@@ -157,10 +158,15 @@ export async function parseEAIncidents(): Promise<{
   }
 }
 
-export async function isEAIncidentStillActive(
+/**
+ * Re-check a flood warning against the EA API. "active" when the area still
+ * has a warning, "gone" when the API answered and it has none, "unknown"
+ * when we could not ask (no area id, HTTP or network error).
+ */
+export async function checkEAIncidentAtSource(
   floodAreaID: string,
-): Promise<boolean> {
-  if (!floodAreaID) return false;
+): Promise<SourceCheckOutcome> {
+  if (!floodAreaID) return "unknown";
 
   const url = `${EA_FLOODS_API}?floodAreaID=${encodeURIComponent(floodAreaID)}`;
   const controller = new AbortController();
@@ -173,12 +179,11 @@ export async function isEAIncidentStillActive(
     });
     clearTimeout(timeout);
 
-    if (!res.ok) return false;
+    if (!res.ok) return "unknown";
     const json = (await res.json()) as EAApiResponse;
-    return Array.isArray(json.items) && json.items.length > 0;
+    return Array.isArray(json.items) && json.items.length > 0 ? "active" : "gone";
   } catch {
     clearTimeout(timeout);
-    // Network error — assume still active to avoid false resolution
-    return true;
+    return "unknown";
   }
 }

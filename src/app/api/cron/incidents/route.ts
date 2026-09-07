@@ -12,8 +12,9 @@ import {
   getStaleActiveIncidents,
   logIncidentAction,
 } from "@/lib/incidents";
-import { isIncidentStillActive } from "@/lib/incident-parsers/water-companies";
-import { isEAIncidentStillActive } from "@/lib/incident-parsers/environment-agency";
+import { checkIncidentAtSource } from "@/lib/incident-parsers/water-companies";
+import { checkEAIncidentAtSource } from "@/lib/incident-parsers/environment-agency";
+import { partitionStale, type SourceCheckOutcome } from "@/lib/incident-staleness";
 import type { Incident } from "@/lib/incidents-types";
 
 // ── Config ──────────────────────────────────────────────────────────────────
@@ -166,26 +167,33 @@ export async function GET(request: NextRequest) {
   const active = (activeIncidents ?? []) as Incident[];
   log.push(`${active.length} active incident(s) to re-check`);
 
+  let unverifiable = 0;
+
   for (const incident of active) {
     try {
-      let stillActive: boolean;
+      let outcome: SourceCheckOutcome;
 
       if (incident.source === "environment_agency") {
         const floodAreaID = String(
           incident.source_data?.floodAreaID ?? "",
         );
-        stillActive = await isEAIncidentStillActive(floodAreaID);
+        outcome = await checkEAIncidentAtSource(floodAreaID);
       } else {
-        // For water company incidents the function returns false when the
-        // source is unreachable *and* no ID is present, and true on network
-        // errors — so it already implements the "don't resolve on error" rule.
-        stillActive = await isIncidentStillActive(
+        outcome = await checkIncidentAtSource(
           incident.source_url ?? "",
           incident.source_data ?? {},
         );
       }
 
-      if (!stillActive) {
+      // "unknown" must not touch last_checked. Stamping it on every failed
+      // or impossible check is what kept 300+ Severn Trent incidents
+      // "fresh" for months and defeated the 7-day auto-resolve below.
+      if (outcome === "unknown") {
+        unverifiable++;
+        continue;
+      }
+
+      if (outcome === "gone") {
         const ok = await resolveIncident(incident.id);
         if (ok) {
           await logIncidentAction(incident.id, "resolved", {
@@ -226,14 +234,24 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  if (unverifiable > 0) {
+    log.push(
+      `${unverifiable} active incident(s) could not be verified at source; left for the ${AUTO_RESOLVE_HOURS / 24}-day stale rule`,
+    );
+  }
+
   // ── 4. Stale incident handling ────────────────────────────────────────────
 
   log.push("Checking for stale incidents...");
 
-  const staleForAlert = await getStaleActiveIncidents(STALE_HOURS);
-  const staleForAutoResolve = await getStaleActiveIncidents(AUTO_RESOLVE_HOURS);
+  // One query for everything unseen for 48h+, then a pure split into
+  // "resolve" (7d+) and "alert" (48h-7d) so the two can never overlap.
+  const { toResolve: staleForAutoResolve, toAlert: needsAlert } = partitionStale(
+    await getStaleActiveIncidents(STALE_HOURS),
+    { alertHours: STALE_HOURS, autoResolveHours: AUTO_RESOLVE_HOURS },
+  );
 
-  // Auto-resolve anything older than 7 days
+  // Auto-resolve anything not seen at its source for 7 days
   for (const incident of staleForAutoResolve) {
     try {
       const ok = await resolveIncident(incident.id);
@@ -243,20 +261,26 @@ export async function GET(request: NextRequest) {
         });
         resolvedIncidents++;
         log.push(`[${incident.slug}] Auto-resolved after 7 days with no update`);
+        revalidatePath(`/news/${incident.slug}`);
+        revalidatedPaths.add(`/news/${incident.slug}`);
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       errors.push(`Auto-resolve error for ${incident.slug}: ${msg}`);
     }
   }
+  if (staleForAutoResolve.length > 0) {
+    revalidatePath("/news");
+    revalidatedPaths.add("/news");
+  }
 
-  // Send stale alert for 48h+ incidents (excluding those already auto-resolved)
-  const autoResolvedIds = new Set(staleForAutoResolve.map((i) => i.id));
-  const needsAlert = staleForAlert.filter((i) => !autoResolvedIds.has(i.id));
-
+  // Send ONE digest for 48h+ incidents not yet old enough to resolve. Now
+  // that unverifiable checks no longer refresh last_checked, a whole
+  // supplier's backlog can cross the 48h line in the same run; one email
+  // per incident would be hundreds of emails at once.
+  const unalerted: Incident[] = [];
   for (const incident of needsAlert) {
     try {
-      // Check if we already sent a stale_alert for this incident
       const { data: existingLogs } = await supabase
         .from("incident_logs")
         .select("action")
@@ -264,24 +288,38 @@ export async function GET(request: NextRequest) {
         .eq("action", "stale_alert")
         .limit(1);
 
-      if (existingLogs && hasStaleAlert(existingLogs)) {
-        continue; // Already alerted
+      if (!(existingLogs && hasStaleAlert(existingLogs))) {
+        unalerted.push(incident);
       }
-
-      if (process.env.RESEND_API_KEY) {
-        await sendAdminEmail(
-          resend,
-          `[TapWater] Stale incident: ${incident.title}`,
-          `<p>The incident <strong>${incident.title}</strong> (slug: <code>${incident.slug}</code>) has been active for over ${STALE_HOURS} hours with no update.</p><p>Source: ${incident.source_url ?? "unknown"}</p><p>Detected: ${incident.detected_at}</p>`,
-        );
-      }
-
-      await logIncidentAction(incident.id, "stale_alert");
-      staleIncidents++;
-      log.push(`[${incident.slug}] Stale alert sent`);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`Stale alert error for ${incident.slug}: ${msg}`);
+      errors.push(`Stale alert lookup error for ${incident.slug}: ${msg}`);
+    }
+  }
+
+  if (unalerted.length > 0) {
+    if (process.env.RESEND_API_KEY) {
+      const rows = unalerted
+        .map(
+          (i) =>
+            `<li><strong>${i.title}</strong> (<code>${i.slug}</code>) — detected ${i.detected_at}, source ${i.source_url ?? "unknown"}</li>`,
+        )
+        .join("");
+      await sendAdminEmail(
+        resend,
+        `[TapWater] ${unalerted.length} stale incident(s) with no update for ${STALE_HOURS}h+`,
+        `<p>These incidents have not been seen at their source for over ${STALE_HOURS} hours. They will auto-resolve at ${AUTO_RESOLVE_HOURS / 24} days if still unseen.</p><ul>${rows}</ul>`,
+      );
+    }
+    for (const incident of unalerted) {
+      try {
+        await logIncidentAction(incident.id, "stale_alert");
+        staleIncidents++;
+        log.push(`[${incident.slug}] Included in stale digest`);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`Stale alert log error for ${incident.slug}: ${msg}`);
+      }
     }
   }
 
