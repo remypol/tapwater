@@ -16,6 +16,7 @@ import { FilterRecommendations } from "@/components/filter-cards";
 import { HardWaterBudgetNote } from "@/components/hard-water-budget-note";
 import { SoftenerLeadBanner } from "@/components/softener-lead-banner";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
+import { SoftenerGuidesNav } from "@/components/softener-guides-nav";
 import { RelatedGuides } from "@/components/related-guides";
 import { EmbedCta } from "@/components/embed-cta";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -506,6 +507,11 @@ export default async function PostcodePage({ params }: Props) {
                   hardnessValue={hardnessValue}
                   hardnessLabel={hardnessLabel!}
                   source="postcode_page"
+                />
+                <SoftenerGuidesNav
+                  variant="compact"
+                  heading={`Softener guides for ${data.district}`}
+                  className="mt-5"
                 />
               </div>
             )}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves, Coffee, Flame } from "lucide-react";
+import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves, Coffee, Flame, HelpCircle, PoundSterling, Wrench, GitCompare, Package, Zap } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
@@ -163,10 +163,58 @@ const GUIDES = [
   {
     slug: "best-water-softener-uk",
     title: "Best Water Softener UK",
-    subtitle: "Compare water softeners, installation costs, and which UK areas need one most",
+    subtitle: "Harvey, Kinetico, BWT, Monarch and Water2Buy compared, with real costs",
     icon: Waves,
     iconColor: "text-blue-600",
     iconBg: "bg-blue-50",
+  },
+  {
+    slug: "do-i-need-a-water-softener",
+    title: "Do I Need a Water Softener?",
+    subtitle: "The hardness bands, the symptoms, and a postcode check",
+    icon: HelpCircle,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "water-softener-cost-uk",
+    title: "Water Softener Cost UK",
+    subtitle: "Unit, installation and salt, and how the payback works",
+    icon: PoundSterling,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "water-softener-installation-uk",
+    title: "Water Softener Installation UK",
+    subtitle: "Where it goes, the bypass, the drain, DIY or plumber",
+    icon: Wrench,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "harvey-vs-kinetico-water-softener",
+    title: "Harvey vs Kinetico",
+    subtitle: "The two premium twin-cylinder softeners, side by side",
+    icon: GitCompare,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "water-softener-salt-guide",
+    title: "Water Softener Salt Guide",
+    subtitle: "Tablet, block or granular, and how much you get through",
+    icon: Package,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
+    slug: "salt-free-water-softener-uk",
+    title: "Salt-Free Water Softeners UK",
+    subtitle: "Conditioners and electronic descalers, honestly assessed",
+    icon: Zap,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
   },
   {
     slug: "best-water-filter-tap-uk",

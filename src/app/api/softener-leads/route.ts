@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
 import { subscribeLimiter, isMemoryRateLimited } from "@/lib/rate-limit";
+import { isSoftenerLeadSource } from "@/lib/softener-lead-source";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UK_PHONE_RE = /^(?:0|\+?44)\d{9,10}$/;
@@ -39,7 +40,12 @@ export async function POST(request: NextRequest) {
   const postcode = body.postcode?.trim().toUpperCase();
   const hardnessValue = body.hardnessValue ?? null;
   const hardnessLabel = body.hardnessLabel ?? null;
+  // Unknown sources are kept out of the lead table rather than silently
+  // renamed, so a typo in a new entry point shows up as a 400 in testing.
   const source = body.source ?? "postcode_page";
+  if (!isSoftenerLeadSource(source)) {
+    return NextResponse.json({ error: "Invalid source" }, { status: 400 });
+  }
 
   if (!name || name.length > 100) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });

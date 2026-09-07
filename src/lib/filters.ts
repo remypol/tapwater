@@ -15,6 +15,7 @@ export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   shower: "Shower Filter",
   testing_kit: "Testing Kit",
   water_softener: "Water Softener",
+  softener_salt: "Softener Salt & Supplies",
   filter_tap: "Filter Tap",
   // ── Hard-water appliances ──
   kettle: "Kettle",
@@ -85,7 +86,11 @@ export function recommendFilters(
   context: RecommendationContext = {},
 ): (FilterProduct & { matchedCount: number; matchedContaminants: string[] })[] {
   const drinkingFilters = PRODUCTS.filter(
-    (f) => f.category !== "testing_kit" && f.category !== "shower" && f.category !== "water_softener",
+    (f) =>
+      f.category !== "testing_kit" &&
+      f.category !== "shower" &&
+      f.category !== "water_softener" &&
+      f.category !== "softener_salt",
   );
 
   const hardWater =

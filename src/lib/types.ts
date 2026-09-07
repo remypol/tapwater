@@ -47,6 +47,7 @@ export type ProductCategory =
   | "testing_kit"
   | "countertop"
   | "water_softener"
+  | "softener_salt"
   | "filter_tap"
   // ── Hard-water appliances (kettles / boiling taps cluster) ──────────
   | "kettle"

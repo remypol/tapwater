@@ -70,6 +70,10 @@ const CATEGORY_GUIDE: Partial<
     title: "Best Boiling Water Tap UK",
     href: "/guides/best-boiling-water-tap-uk/",
   },
+  softener_salt: {
+    title: "Water Softener Salt Guide: tablet, block or granular",
+    href: "/guides/water-softener-salt-guide/",
+  },
 };
 
 /* ── optional per-category long intro (rendered when present) ─────────── */
@@ -287,7 +291,9 @@ export default async function CategoryPage({
   const guide = CATEGORY_GUIDE[category];
   const intro = CATEGORY_INTRO[category] ?? [];
   const faqs = CATEGORY_FAQS[category] ?? [];
-  const showComparison = category !== "testing_kit";
+  // Salt and test tablets remove nothing, so a contaminant-removal table would be
+  // a grid of crosses.
+  const showComparison = category !== "testing_kit" && category !== "softener_salt";
 
   return (
     <>

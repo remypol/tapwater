@@ -132,6 +132,16 @@ describe("commission data", () => {
     }
   });
 
+  it("every softener consumable is an Amazon product with a check-price placeholder", () => {
+    const salt = getProductsByCategory("softener_salt");
+    expect(salt.length).toBe(7);
+    for (const p of salt) {
+      expect(p.affiliateProgram).toBe("amazon");
+      expect(p.priceGbp).toBe(0);
+      expect(p.imageUrl).toMatch(/^https:\/\/m\.media-amazon\.com\//);
+    }
+  });
+
   it("values a fixed bounty far above an Amazon percentage, which is the point", () => {
     const osmio = PRODUCTS.find((p) => p.id === "osmio-zero")!;
     const jug = PRODUCTS.find((p) => p.id === "brita-maxtra-pro")!;

@@ -2,8 +2,10 @@ import type { FilterProduct, ProductCategory } from "./types";
 
 /**
  * Canonical product catalogue — single source of truth for all filter products.
- * 23 products across 8 populated categories (water_softener is defined but empty:
- * Osmio pays no bounty on softeners, so that segment waits on a lead partner).
+ * Filters, hard-water appliances and softener consumables (water_softener is
+ * defined but empty: softener units are sold through installers, so that
+ * segment is served by the quote form; softener_salt carries the Amazon
+ * consumables for the cluster).
  *
  * Every entry must carry our own affiliate tracking. `every product carries our
  * affiliate tracking` in products.test.ts enforces it: an untracked link renders
@@ -1092,6 +1094,207 @@ export const PRODUCTS: FilterProduct[] = [
     bestFor: "Instant hot water for tea and cooking where a Quooker-style 3-in-1 is out of budget",
     filterLife: "No cartridge supplied",
   },
+  // ─── SOFTENER SALT & LIMESCALE SUPPLIES ───────────────────────────────
+  // Softener units themselves are not credibly sold on Amazon UK, so the
+  // consumables are the Amazon earner for the softener cluster. Prices are
+  // deliberately 0 (renders "Check price"): bulk salt swings with delivery.
+  {
+    id: "hydrosalt-tablets-25kg",
+    brand: "Hydrosalt",
+    model: "Salt Tablets 25kg",
+    slug: "hydrosalt-salt-tablets-25kg",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B008JY990G?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61WRiHpEdAL._AC_UL320_.jpg",
+    rating: 4.7,
+    badge: "best-match",
+    pros: [
+      "Tablet salt, which is what most metered single-cylinder softeners take",
+      "25kg bag suits a household that tops up monthly rather than weekly",
+      "Highest-rated softener salt on Amazon UK, 4.7 stars across more than 2,000 reviews",
+    ],
+    cons: [
+      "Does not fit block-salt softeners such as Harvey or Kinetico UK models",
+      "A 25kg bag is heavy to carry to an under-stairs or loft cupboard",
+    ],
+    bestFor: "Tablet-salt softeners with a monthly top-up routine",
+  },
+  {
+    id: "aquasol-tablets-3x25kg",
+    brand: "AQUASOL",
+    model: "Salt Tablets 3 × 25kg",
+    slug: "aquasol-salt-tablets-75kg",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B00NGH4LWM?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61S6xHn2p6L._AC_UL320_.jpg",
+    rating: 4.6,
+    badge: "best-value",
+    pros: [
+      "Three 25kg bags in one delivery, so fewer orders across the year",
+      "Tablet format for metered single-cylinder softeners",
+      "Rated 4.6 stars across more than 200 reviews",
+    ],
+    cons: [
+      "Does not fit block-salt softeners",
+      "75kg needs dry storage space; damp bags cake into a solid lump",
+    ],
+    bestFor: "Larger households in very hard water areas buying in bulk",
+  },
+  {
+    id: "bwt-block-salt-8kg",
+    brand: "BWT",
+    model: "Block Salt 8kg (2 × 4kg)",
+    slug: "bwt-block-salt-8kg",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0781ZJ1VR?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61BYn93bAWL._AC_UL320_.jpg",
+    rating: 4.4,
+    badge: "premium",
+    pros: [
+      "Two 4kg blocks, the format twin-cylinder softeners from Harvey, Kinetico and BWT take",
+      "Blocks drop straight into the cabinet with no scooping or spillage",
+      "Rated 4.4 stars across more than 800 reviews",
+    ],
+    cons: [
+      "Does not fit tablet-salt softeners",
+      "Costs more per kilogram than tablets from the same shop",
+    ],
+    bestFor: "Block-salt softeners where convenience matters more than price per kilo",
+  },
+  {
+    id: "monarch-ultimate-tablets-10kg",
+    brand: "Monarch",
+    model: "Ultimate Salt Tablets 10kg",
+    slug: "monarch-ultimate-salt-tablets-10kg",
+    category: "softener_salt",
+    removes: [],
+    certifications: ["BS EN 973 Class A"],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B09NQ357LR?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/51cKhVP+gaL._AC_UL320_.jpg",
+    rating: 4.4,
+    badge: "best-match",
+    pros: [
+      "Meets BS EN 973 Class A, the standard for salt used to regenerate softeners",
+      "10kg bag is light enough to lift into a tight cupboard",
+      "From the same brand as Monarch softeners, so a safe match for one",
+    ],
+    cons: [
+      "Does not fit block-salt softeners",
+      "Smaller bag means more frequent reordering than 25kg sacks",
+    ],
+    bestFor: "Tablet-salt softeners where a lighter bag matters",
+  },
+  {
+    id: "hydrosoft-granular-10kg",
+    brand: "Hydrosoft",
+    model: "Granular Salt 10kg",
+    slug: "hydrosoft-granular-salt-10kg",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0176IX5W8?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/71CIqIbFThL._AC_UL320_.jpg",
+    rating: 4.6,
+    badge: "budget",
+    pros: [
+      "Granular salt for the softeners and dishwashers that specify it",
+      "Dissolves faster than tablets, so it suits units with small brine tanks",
+      "Rated 4.6 stars across more than 280 reviews",
+    ],
+    cons: [
+      "Does not suit most modern softeners, which specify tablets or blocks; check your manual first",
+      "Fine grains can bridge and cake in a damp brine tank",
+    ],
+    bestFor: "Softeners and dishwashers whose manual specifies granular salt",
+  },
+  {
+    id: "simplexhealth-hardness-tablets",
+    brand: "SimplexHealth",
+    model: "Total Hardness Yes/No Test Tablets (pack of 2)",
+    slug: "simplexhealth-hardness-test-tablets",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "budget",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0H3LG1XSH?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61+qagyc56L._AC_UL320_.jpg",
+    rating: 4.2,
+    badge: "budget",
+    pros: [
+      "A quick yes/no check that your softener is actually producing soft water",
+      "Two tablets: test the softened tap and the unsoftened kitchen tap side by side",
+      "Cheaper than a plumber's call-out when you suspect the resin is spent",
+    ],
+    cons: [
+      "Does not treat the water: it is a test, not a fix",
+      "Does not give a number in mg/L, only a soft-or-hard answer",
+    ],
+    bestFor: "Checking a softener is working after a salt run-out or service",
+  },
+  {
+    id: "eddy-electronic-descaler",
+    brand: "Eddy",
+    model: "Electronic Water Descaler (UK model)",
+    slug: "eddy-electronic-water-descaler",
+    category: "softener_salt",
+    removes: [],
+    certifications: [],
+    priceGbp: 0,
+    priceTier: "mid",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B005FWYX9C?tag=tapwater2107-21",
+    affiliateProgram: "amazon",
+    commission: { type: "percent", rate: 0.03 },
+    affiliateTag: "tapwater2107-21",
+    imageUrl: "https://m.media-amazon.com/images/I/61C1EMDXyhL._AC_UL320_.jpg",
+    rating: 4.1,
+    badge: "budget",
+    pros: [
+      "Wraps around the incoming pipe: no plumbing, no drain, no salt",
+      "Keeps the minerals in the water, so no sodium and no separate drinking tap",
+      "A low-cost trial for renters or flats where a softener cannot be fitted",
+    ],
+    cons: [
+      "Does not remove hardness: the water tests exactly as hard afterwards",
+      "Not certified by any independent body, and the evidence for electronic descalers is weak, so treat claimed results with caution",
+    ],
+    bestFor: "A low-commitment experiment where a real softener is not an option",
+  },
+
 ];
 
 /**
@@ -1197,6 +1400,14 @@ export const CATEGORY_META: Record<
     bestFor: "Kitchens that want to retire the kettle, in any area where hardness has been checked first",
     priceRange: "£250–£400",
   },
+  softener_salt: {
+    title: "Softener Salt & Limescale Supplies",
+    slug: "water-softener-salt",
+    description:
+      "Tablet, block and granular salt to keep a softener regenerating, plus hardness test tablets and a plug-in descaler for homes where a softener is not an option.",
+    bestFor: "Anyone already running a softener, or checking whether theirs still works",
+    priceRange: "Check price",
+  },
 };
 
 /**
@@ -1215,6 +1426,7 @@ export const CATEGORY_ORDER: ProductCategory[] = [
   // Hard-water appliances (appended block)
   "kettle",
   "boiling_tap",
+  "softener_salt",
 ];
 
 /**
