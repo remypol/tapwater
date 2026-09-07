@@ -25,6 +25,8 @@ import { CITIES } from "@/lib/cities";
 import { IncidentAlerts } from "@/components/incident-alert";
 import { getActiveIncidentsForPostcode } from "@/lib/incidents";
 import { WaterReportTracker } from "@/components/conversion-tracker";
+import { PfasNearby } from "@/components/pfas-nearby";
+import { getPfasNearDistrict } from "@/lib/pfas-data";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -184,6 +186,10 @@ export default async function PostcodePage({ params }: Props) {
   const filterRecs = recommendFilters(recommendationSignals, 3, {
     hardnessValue,
   });
+
+  // PFAS measured in rivers and groundwater within 10 km. Not tap water, and not
+  // the lead of this page: it feeds the module below the tap-water data.
+  const pfasNearby = hasData ? await getPfasNearDistrict(data.district) : null;
 
   // Build FAQ schema for rich results
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
@@ -482,6 +488,15 @@ export default async function PostcodePage({ params }: Props) {
                 <ContaminantTable readings={data.readings} />
               </section>
             </ScrollReveal>
+
+            {/* PFAS measured near you. Below the tap-water data by design: it is
+                Environment Agency river and groundwater monitoring, clearly labelled
+                as such, and it renders nothing when no sample lies within 10 km. */}
+            {pfasNearby && (
+              <ScrollReveal delay={0}>
+                <PfasNearby district={data.district} summary={pfasNearby} />
+              </ScrollReveal>
+            )}
 
             {/* Keep optional affiliate content below the unique water data for SEO trust. */}
             {filterRecs.length > 0 && data.contaminantsFlagged === 0 && (
