@@ -5,12 +5,15 @@ import Link from "next/link";
 import { Droplets, ShieldCheck, ExternalLink } from "lucide-react";
 import { events } from "@/lib/analytics";
 import { SOFTENER_PARTNER_URL, SOFTENER_PARTNER_NAME } from "@/lib/softener-partner";
+import type { SoftenerLeadSource } from "@/lib/softener-lead-source";
 
 interface SoftenerPartnerCtaProps {
   postcode?: string;
   hardnessValue: number;
   hardnessLabel: string;
-  source: "postcode_page" | "hardness_page";
+  source: SoftenerLeadSource;
+  heading?: string;
+  intro?: string;
 }
 
 /**
@@ -22,6 +25,8 @@ export function SoftenerPartnerCta({
   hardnessValue,
   hardnessLabel,
   source,
+  heading,
+  intro,
 }: SoftenerPartnerCtaProps) {
   const tracked = useRef(false);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -55,16 +60,20 @@ export function SoftenerPartnerCta({
         </div>
         <div>
           <h2 className="text-lg font-semibold text-ink">
-            Hard water is costing your home money
+            {heading ?? "Hard water is costing your home money"}
           </h2>
-          <p className="text-sm text-body mt-1 leading-relaxed">
-            Limescale reduces boiler efficiency and shortens appliance life. Based
-            on your water hardness{" "}
-            <strong className="text-ink">
-              ({Math.round(hardnessValue)} mg/L — {hardnessLabel})
-            </strong>
-            , a softener could save you £200+/year.
-          </p>
+          {intro ? (
+            <p className="text-sm text-body mt-1 leading-relaxed">{intro}</p>
+          ) : (
+            <p className="text-sm text-body mt-1 leading-relaxed">
+              Limescale reduces boiler efficiency and shortens appliance life. Based
+              on your water hardness{" "}
+              <strong className="text-ink">
+                ({Math.round(hardnessValue)} mg/L — {hardnessLabel})
+              </strong>
+              , a softener could save you £200+/year.
+            </p>
+          )}
           <p className="text-xs text-muted mt-1">
             Compare free, no-obligation quotes from vetted installers covering{" "}
             {postcode ? (

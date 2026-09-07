@@ -5,13 +5,17 @@ import Link from "next/link";
 import { Droplets, ShieldCheck, Check, AlertCircle, MapPin } from "lucide-react";
 import { events } from "@/lib/analytics";
 import { softenerPartnerEnabled } from "@/lib/softener-partner";
+import type { SoftenerLeadSource } from "@/lib/softener-lead-source";
 import { SoftenerPartnerCta } from "./softener-partner-cta";
 
 interface SoftenerLeadFormProps {
   postcode?: string;
   hardnessValue: number;
   hardnessLabel: string;
-  source: "postcode_page" | "hardness_page";
+  source: SoftenerLeadSource;
+  /** Override the default "Hard water is costing your home money" framing. */
+  heading?: string;
+  intro?: string;
 }
 
 /**
@@ -31,6 +35,8 @@ function SoftenerLeadFormFallback({
   hardnessValue,
   hardnessLabel,
   source,
+  heading,
+  intro,
 }: SoftenerLeadFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -120,16 +126,20 @@ function SoftenerLeadFormFallback({
             </div>
             <div>
               <h2 className="text-lg font-semibold text-ink">
-                Hard water is costing your home money
+                {heading ?? "Hard water is costing your home money"}
               </h2>
-              <p className="text-sm text-body mt-1 leading-relaxed">
-                Limescale reduces boiler efficiency and shortens appliance life.
-                Based on your water hardness{" "}
-                <strong className="text-ink">
-                  ({Math.round(hardnessValue)} mg/L — {hardnessLabel})
-                </strong>
-                , a softener could save you £200+/year.
-              </p>
+              {intro ? (
+                <p className="text-sm text-body mt-1 leading-relaxed">{intro}</p>
+              ) : (
+                <p className="text-sm text-body mt-1 leading-relaxed">
+                  Limescale reduces boiler efficiency and shortens appliance life.
+                  Based on your water hardness{" "}
+                  <strong className="text-ink">
+                    ({Math.round(hardnessValue)} mg/L — {hardnessLabel})
+                  </strong>
+                  , a softener could save you £200+/year.
+                </p>
+              )}
               <p className="text-xs text-muted mt-1">
                 Request a free assessment and we&apos;ll come back to you with local installer options for your area.
               </p>
