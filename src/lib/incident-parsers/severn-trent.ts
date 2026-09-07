@@ -130,7 +130,11 @@ export async function parseSevernTrentIncidents(): Promise<{
       const postcodes = extractPostcodeDistricts(combined);
       const cities = mapPostcodesToCities(postcodes);
       const { type, severity } = classifyIncident(card.title, card.description);
-      const sourceHash = generateSourceHash("water_company", type, postcodes, today);
+      // Key the identity on the card's location/title, not on today's date:
+      // an incident that stays on Severn Trent's page for a week must stay one
+      // article that gets re-checked, not be minted again every morning.
+      const identityKey = card.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim() || today;
+      const sourceHash = generateSourceHash("water_company", type, postcodes, identityKey);
 
       const actionRequired =
         /boil|do not (use|drink)|avoid/.test(combined.toLowerCase())
