@@ -84,6 +84,10 @@ const CATEGORY_INTRO: Partial<Record<ProductCategory, string[]>> = {
     "In the UK the case for an RO system is specific rather than general. Tap water here meets strict legal standards, but PFAS currently has no statutory limit in England and Wales, fluoride passes every other filter type, and most of the country lives with hard water. Reverse osmosis is the one home technology that answers all three at once, which is why it anchors the top of our removal comparison.",
     "The practical trade-offs: RO wastes some water (modern tankless systems run around 3:1 pure-to-drain), strips beneficial minerals along with the bad (remineralisation stages exist for that), and filters drinking water at one tap rather than the whole house. Check your postcode below to see whether your water actually carries the contaminants an RO system is built for.",
   ],
+  whole_house: [
+    "A whole house water filter, also sold as a mains water filter or point-of-entry filter, sits on the pipe where water enters your home and treats everything downstream: kitchen tap, showers, bath, washing machine and boiler. Depending on the stages inside, it removes chlorine taste and smell, grit and rust from old mains, and on multi-stage systems bacteria, lead, nitrates and other metals.",
+    "It is not a water softener. A filter takes chlorine and particles out but leaves the calcium and magnesium that cause limescale, so if furred-up kettles and scaled shower screens are your problem you need a softener, not one of the systems below. Our full guide explains who in the UK benefits, how to size one by flow rate, what fitting and cartridges cost, and why neither system here is certified for PFAS.",
+  ],
 };
 
 /* ── per-category FAQs ────────────────────────────────────────────────── */
@@ -156,14 +160,19 @@ const CATEGORY_FAQS: Partial<
   ],
   whole_house: [
     {
+      question: "Is a whole house water filter the same as a water softener?",
+      answer:
+        "No. A whole house filter removes chlorine, sediment and, on multi-stage systems, metals and bacteria from all the water entering your home, but it does not reduce hardness or stop limescale. A water softener does the opposite. If limescale is your problem, check the hardness at your postcode and read the softener guides instead.",
+    },
+    {
       question: "Do whole house filters reduce water pressure?",
       answer:
-        "Quality whole house filters are designed to maintain flow rates of 15-56 L/min, which is enough for most UK homes. Pressure drops are minimal with properly sized systems.",
+        "Not noticeably when sized correctly. Compare the rated flow in litres per minute with your household's peak draw: a one or two bathroom home is usually covered by 25 L/min, which is what the BWT E1 is rated at. Larger 20-inch housings lose less pressure than 10-inch ones.",
     },
     {
       question: "Can I install a whole house filter myself?",
       answer:
-        "Whole house filters are installed at the mains inlet and require professional plumbing. This is not a DIY job unless you are a qualified plumber.",
+        "It is a cut-and-fit job on the incoming main, with isolation valves either side and a bypass loop, so most people use a plumber. Expect £150 to £300 for a straightforward fitting on top of the unit price.",
     },
   ],
   shower: [
