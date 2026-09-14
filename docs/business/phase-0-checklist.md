@@ -28,16 +28,18 @@ The click log says ~450 clicks a month. Nobody has checked what they earned. Put
 
 Claude reconciles these against `affiliate_clicks` and writes the true July and August revenue into the plan.
 
-## 4. Bark link (waiting on Hugo)
+## 4. Bark link — APPLIED 14 September, pending
 
-When Awin shows the Bark UK programme as approved on Hugo's account:
+Remy applied to the Bark UK programme from a new Awin publisher account in his own name (not Hugo's 2996923), promotional type Content, sectors Lead Gen + Utilities (+ Home & Garden), with a message describing the hard-water quote funnel. Bark typically answers within 3 to 7 working days.
+
+When approved:
 
 1. In Awin → Links & Tools → Link Builder → advertiser Bark UK → destination URL `https://www.bark.com/en/gb/water-treatment-system-install/` → generate.
 2. Send Claude the generated `awin1.com` link.
 
 Claude then sets `NEXT_PUBLIC_SOFTENER_PARTNER_URL` and `NEXT_PUBLIC_SOFTENER_PARTNER_NAME=Bark` on Vercel, redeploys, runs `npm run leads:recover -- --send` to email the 12 waiting leads, and starts reporting leads and Bark commission in the Monday numbers.
 
-If Hugo's application was rejected or never actioned: apply again from Awin → Advertisers → search "Bark" → Join programme. Approval usually takes a few days.
+If refused again: ask Awin support for the reason (they forward the advertiser's note), fix that one thing, and reapply. The fallback is a direct approach to KindWater or a regional Kinetico dealer at £40 to £60 a lead, which skips Awin entirely.
 
 ## Optional, not blocking
 
