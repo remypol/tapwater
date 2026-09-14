@@ -282,39 +282,50 @@ function hardnessFact(data: PostcodeData, hardness: HardnessReading | null): Hig
     ? `across the ${hardness.estimatedFrom} postcode area`
     : `in ${data.district}`;
   const link = { href: "/hardness", label: "How hardness is measured" };
-  if (v > 250) {
+  // Same bands as hardnessLabelFor in data.ts, so this block never disagrees
+  // with the hardness card above it: very hard from 250, hard from 180.
+  if (v >= 300) {
     return {
       kind: "hardness",
       weight: 70,
       lead: `Among the hardest water in the country at ${v} mg/L`,
-      detail: `Anything over 180 mg/L counts as very hard. At this level kettles scale up within weeks and a softener is a normal purchase ${where}.`,
+      detail: `Very hard starts at 250 mg/L. At this level kettles scale up within weeks and a softener is a normal purchase ${where}.`,
       link,
     };
   }
-  if (v > 180) {
+  if (v >= 250) {
+    return {
+      kind: "hardness",
+      weight: 60,
+      lead: `Very hard water at ${v} mg/L`,
+      detail: `The threshold for very hard is 250 mg/L. Expect visible limescale on taps and in kettles ${where}.`,
+      link,
+    };
+  }
+  if (v >= 180) {
     return {
       kind: "hardness",
       weight: 55,
-      lead: `Very hard water at ${v} mg/L`,
-      detail: `The threshold for very hard is 180 mg/L. Expect visible limescale on taps and in kettles ${where}.`,
-      link,
-    };
-  }
-  if (v > 120) {
-    return {
-      kind: "hardness",
-      weight: 35,
       lead: `Hard water at ${v} mg/L`,
-      detail: `Limescale will build up ${where}, but more slowly than in the very hard areas of the south and east.`,
+      detail: `Hard starts at 180 mg/L, the point where a softener begins to pay for itself. Limescale will build up ${where}.`,
       link,
     };
   }
-  if (v > 60) {
+  if (v >= 120) {
     return {
       kind: "hardness",
       weight: 30,
       lead: `Moderately hard water at ${v} mg/L`,
       detail: `Some scale over time ${where}, but not enough to justify a softener for most homes.`,
+      link,
+    };
+  }
+  if (v >= 60) {
+    return {
+      kind: "hardness",
+      weight: 30,
+      lead: `Moderately soft water at ${v} mg/L`,
+      detail: `Little limescale to speak of ${where}. A softener would be money wasted.`,
       link,
     };
   }

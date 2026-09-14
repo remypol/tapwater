@@ -215,10 +215,10 @@ describe("districtHighlights", () => {
 
   it("describes hardness with the district or area it was measured in", () => {
     const measured = districtHighlights(
-      input({ hardness: { value: 289, label: "very hard", estimated: false } }),
+      input({ hardness: { value: 312, label: "very hard", estimated: false } }),
       10,
     ).find((h) => h.kind === "hardness");
-    expect(measured?.lead).toBe("Among the hardest water in the country at 289 mg/L");
+    expect(measured?.lead).toBe("Among the hardest water in the country at 312 mg/L");
     expect(measured?.detail).toContain("in LU5");
 
     const estimated = districtHighlights(
@@ -258,7 +258,7 @@ describe("districtHighlights", () => {
 
   it("gives two different districts different leading facts", () => {
     const hard = districtHighlights(
-      input({ hardness: { value: 310, label: "very hard", estimated: false } }),
+      input({ hardness: { value: 320, label: "very hard", estimated: false } }),
     );
     const failing = districtHighlights(
       input({
@@ -277,10 +277,10 @@ describe("districtHighlights", () => {
 
 describe("highlightDescription", () => {
   it("carries the top fact and stays under 155 characters", () => {
-    const hs = districtHighlights(input({ hardness: { value: 289, label: "very hard", estimated: false } }));
+    const hs = districtHighlights(input({ hardness: { value: 312, label: "very hard", estimated: false } }));
     const desc = highlightDescription(district(), hs, 2026);
     expect(desc).toBe(
-      "LU5 tap water (Dunstable). Among the hardest water in the country at 289 mg/L. Free 2026 report.",
+      "LU5 tap water (Dunstable). Among the hardest water in the country at 312 mg/L. Free 2026 report.",
     );
     expect(desc.length).toBeLessThanOrEqual(155);
   });
@@ -296,5 +296,16 @@ describe("highlightDescription", () => {
     expect(highlightDescription(district(), [], 2026)).toBe(
       "LU5 tap water (Dunstable): 12 substances tested, scored 7.4/10. Free 2026 report.",
     );
+  });
+});
+
+describe("hardness bands match the site's labels", () => {
+  it("calls 193 mg/L hard, not very hard", () => {
+    const h = districtHighlights(input({ hardness: { value: 193, label: "hard", estimated: false } }), 10).find((x) => x.kind === "hardness");
+    expect(h?.lead).toBe("Hard water at 193 mg/L");
+  });
+  it("calls 260 mg/L very hard", () => {
+    const h = districtHighlights(input({ hardness: { value: 260, label: "very hard", estimated: false } }), 10).find((x) => x.kind === "hardness");
+    expect(h?.lead).toBe("Very hard water at 260 mg/L");
   });
 });
