@@ -417,6 +417,83 @@ function hardnessLabelFor(value: number): string {
     : "very hard";
 }
 
+export interface HardnessMapDistrict {
+  district: string;
+  areaName: string;
+  lat: number;
+  lng: number;
+  value: number;
+  /** False when the value is the postcode-area median rather than a reading here. */
+  measured: boolean;
+}
+
+export interface HardnessMapArea {
+  area: string;
+  median: number;
+  label: string;
+  /** Districts in the area with a reading of their own. */
+  measured: number;
+  min: number;
+  max: number;
+  /** The measured district closest to the median, for a link that lands on a real reading. */
+  exampleDistrict: string;
+}
+
+/**
+ * Everything the national hardness map needs: one dot per district we hold
+ * coordinates for, and one row per postcode area with its median. Districts
+ * without a reading of their own take their area's median and are flagged so
+ * the map can draw them fainter.
+ */
+export async function getHardnessMap(): Promise<{ districts: HardnessMapDistrict[]; areas: HardnessMapArea[] }> {
+  if (!supabase) return { districts: [], areas: [] };
+  hardnessCache ??= loadHardness();
+  const [{ byDistrict, byArea }, cache] = await Promise.all([hardnessCache, loadData()]);
+
+  const districts: HardnessMapDistrict[] = [];
+  const perArea = new Map<string, { district: string; value: number }[]>();
+  for (const d of cache.values()) {
+    if (!Number.isFinite(d.latitude) || !Number.isFinite(d.longitude)) continue;
+    const key = d.district.toUpperCase();
+    const measured = byDistrict.get(key);
+    const area = postcodeArea(key);
+    const value = measured ?? byArea.get(area);
+    if (value == null) continue;
+    districts.push({
+      district: d.district,
+      areaName: d.areaName,
+      lat: d.latitude,
+      lng: d.longitude,
+      value,
+      measured: measured != null,
+    });
+    if (measured != null) {
+      const list = perArea.get(area) ?? [];
+      list.push({ district: d.district, value: measured });
+      perArea.set(area, list);
+    }
+  }
+
+  const areas: HardnessMapArea[] = [];
+  for (const [area, list] of perArea) {
+    const median = byArea.get(area);
+    if (median == null) continue;
+    const values = list.map((x) => x.value);
+    const example = [...list].sort((a, b) => Math.abs(a.value - median) - Math.abs(b.value - median))[0];
+    areas.push({
+      area,
+      median,
+      label: hardnessLabelFor(median),
+      measured: list.length,
+      min: Math.min(...values),
+      max: Math.max(...values),
+      exampleDistrict: example.district,
+    });
+  }
+  areas.sort((a, b) => b.median - a.median);
+  return { districts, areas };
+}
+
 export async function getHardness(
   district: string,
 ): Promise<HardnessReading | null> {

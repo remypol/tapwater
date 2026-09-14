@@ -7,25 +7,43 @@ import { ProductCard } from "@/components/product-card"
 import { AffiliateNote } from "@/components/commerce"
 import { getProductBySlug } from "@/lib/products"
 import { OG_IMAGE } from "@/lib/og";
+import { getHardnessMap } from "@/lib/data"
+import { HardnessMap, HardnessAreaTable } from "@/components/hardness-map"
+import { HardnessBands } from "@/components/hardness-bands"
+import { postcodeAreaName } from "@/lib/postcode-areas"
+
+export const revalidate = 86400
+
+const DESCRIPTION =
+  "Interactive UK water hardness map by postcode: over 2,000 districts coloured from measured water company tests, the hardest and softest areas ranked, and what to do about limescale."
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear()
   return {
-    title: `UK Water Hardness Map (${year})`,
-    description:
-      "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
+    title: `UK Water Hardness Map (${year}): Hard and Soft Water Areas by Postcode`,
+    description: DESCRIPTION,
     openGraph: {
       images: OG_IMAGE,
-      title: `UK Water Hardness Map (${year})`,
-      description:
-        "Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener.",
+      title: `UK Water Hardness Map (${year}): Hard and Soft Water Areas by Postcode`,
+      description: DESCRIPTION,
       url: "https://www.tapwater.uk/guides/water-hardness-map",
       type: "article",
     },
   }
 }
 
-export default function WaterHardnessMapPage() {
+export default async function WaterHardnessMapPage() {
+  const { districts, areas } = await getHardnessMap()
+  // Three measured districts before an area gets ranked: two readings in the
+  // same town is not a median. Softest only lists genuinely soft areas.
+  const ranked = areas.filter((a) => a.measured >= 3)
+  const hardest = ranked.filter((a) => a.median >= 250).slice(0, 10)
+  const softest = [...ranked].reverse().filter((a) => a.median < 120).slice(0, 10)
+  const veryHardShare = districts.length
+    ? Math.round((districts.filter((d) => d.value >= 180).length / districts.length) * 100)
+    : 0
+  const listAreas = (rows: typeof ranked) =>
+    rows.slice(0, 5).map((a) => `${postcodeAreaName(a.area)} (${a.median} mg/L)`).join(", ")
   const showerFilter = getProductBySlug("jolie-filtered-showerhead")
   const countertopRo = getProductBySlug("osmio-zero")
   const solutionPicks = [
@@ -39,8 +57,16 @@ export default function WaterHardnessMapPage() {
         faqs={[
           {
             question: "Is my water hard or soft?",
-            answer: "Enter your postcode on TapWater.uk to check. Generally, London and the South East have the hardest water (250-350 mg/L CaCO\u2083), while Scotland, Wales, and the North West have softer water (under 100 mg/L).",
+            answer: `Enter your postcode on TapWater.uk to check. ${veryHardShare}% of the ${districts.length.toLocaleString("en-GB")} postcode districts on our map have hard or very hard water (180 mg/L and above). London and the South East have the hardest water, Scotland, Wales and the North West the softest.`,
           },
+          ...(hardest.length > 0 ? [{
+            question: "Which areas of the UK have the hardest water?",
+            answer: `By median measured hardness, the hardest postcode areas are ${listAreas(hardest)}. All sit on chalk and limestone in the south and east of England.`,
+          }] : []),
+          ...(softest.length > 0 ? [{
+            question: "Which areas of the UK have soft water?",
+            answer: `The softest postcode areas we measure are ${listAreas(softest)}. Soft water comes from upland reservoirs over granite and other hard rock, so Scotland, Wales, the Lake District and the Pennines dominate.`,
+          }] : []),
           {
             question: "Is hard water bad for you?",
             answer: "Hard water is not harmful to health \u2014 calcium and magnesium in hard water may actually be beneficial. However, it causes limescale buildup in pipes and appliances, reducing their efficiency and lifespan.",
@@ -63,8 +89,8 @@ export default function WaterHardnessMapPage() {
         </nav>
 
         <ArticleSchema
-          headline={`UK Water Hardness Map: Is Your Water Hard or Soft? (${new Date().getFullYear()})`}
-          description="Find out if your water is hard or soft by postcode. Understand what causes hard water, how it affects your home, and whether you need a water softener."
+          headline={`UK Water Hardness Map: Hard and Soft Water Areas by Postcode (${new Date().getFullYear()})`}
+          description={DESCRIPTION}
           url="https://www.tapwater.uk/guides/water-hardness-map"
           datePublished="2026-04-01"
           dateModified={new Date().toISOString().split("T")[0]}
@@ -73,7 +99,7 @@ export default function WaterHardnessMapPage() {
         />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          UK Water Hardness Map: Is Your Water Hard or Soft? ({new Date().getFullYear()})
+          UK Water Hardness Map: Hard and Soft Water Areas by Postcode ({new Date().getFullYear()})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>
@@ -99,6 +125,39 @@ export default function WaterHardnessMapPage() {
           required to monitor it as a regulated parameter. The results reveal a stark geographical
           divide that maps almost exactly onto the underlying geology of the British Isles.
         </p>
+
+        <h2 id="am-i-in-a-hard-water-area" className="font-display text-xl italic mt-10 mb-4 text-ink">Am I in a hard water area?</h2>
+        <p className="text-base text-body leading-relaxed mb-5">
+          Enter the first part of your postcode. You get the hardness reading for your district from
+          your water company&rsquo;s own tests, on the scale below, plus the rest of your water report.
+        </p>
+        <PostcodeSearch size="sm" />
+        <HardnessBands />
+
+        <h2 id="map" className="font-display text-xl italic mt-10 mb-4 text-ink">The map: every district we measure</h2>
+        <p className="text-base text-body leading-relaxed mb-2">
+          This is not a drawing of regions. Each dot is a postcode district placed at its real
+          coordinates and coloured by the hardness its water company reported, so the chalk of the
+          south-east and the granite of the north and west show up as the country&rsquo;s own shape.
+          {veryHardShare > 0 && (
+            <> Across the map, <strong className="text-ink">{veryHardShare}% of districts</strong> are hard or very hard.</>
+          )}
+        </p>
+        <HardnessMap districts={districts} />
+
+        {hardest.length > 0 && (
+          <>
+            <h2 id="hardest-and-softest" className="font-display text-xl italic mt-10 mb-4 text-ink">The hardest and softest water areas</h2>
+            <p className="text-base text-body leading-relaxed mb-5">
+              Ranked by the median of the measured districts in each postcode area. The range shows
+              how much hardness varies inside the area, which is why a postcode check beats any map.
+            </p>
+            <div className="grid gap-8 md:grid-cols-2 mb-6">
+              <HardnessAreaTable title="Hardest water" areas={hardest} />
+              <HardnessAreaTable title="Softest water" areas={softest} />
+            </div>
+          </>
+        )}
 
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">What makes water hard?</h2>
         <p className="text-base text-body leading-relaxed mb-4">
@@ -335,7 +394,7 @@ export default function WaterHardnessMapPage() {
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Check your water hardness</h2>
         <p className="text-base text-body leading-relaxed mb-6">
           Enter your postcode to see the hardness reading and other quality data for your supply
-          zone, sourced from your water company's published compliance data.
+          zone, sourced from your water company&rsquo;s published compliance data.
         </p>
         <PostcodeSearch size="sm" />
 
