@@ -9,7 +9,16 @@ import { PfasBanner } from "@/components/pfas-banner";
 import { ContaminantTable } from "@/components/contaminant-table";
 import { EmailCapture } from "@/components/email-capture";
 import { StickyScore, ScoreSentinel } from "@/components/sticky-score";
-import { getPostcodeData, getAllPostcodeDistricts, getHardness } from "@/lib/data";
+import {
+  getPostcodeData,
+  getAllPostcodeDistricts,
+  getHardness,
+  getPostcodesByCity,
+  getNationalAverageScore,
+} from "@/lib/data";
+import type { PostcodeData } from "@/lib/types";
+import { districtHighlights, highlightDescription } from "@/lib/district-highlights";
+import { DistrictHighlights } from "@/components/district-highlights";
 import { getScoreColor } from "@/lib/types";
 import { recommendFilters, HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { FilterRecommendations } from "@/components/filter-cards";
@@ -29,6 +38,50 @@ import { PfasNearby } from "@/components/pfas-nearby";
 import { getPfasNearDistrict } from "@/lib/pfas-data";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
+
+/** The city page this district belongs to, for breadcrumbs and city-wide comparisons. */
+function resolveCity(data: PostcodeData): { name: string; slug: string; hasPage: boolean } {
+  const match = CITIES.find((c) =>
+    c.matches.some((m) => m.toLowerCase() === data.city.toLowerCase()) ||
+    c.name.toLowerCase() === data.city.toLowerCase(),
+  );
+  return {
+    name: match?.name ?? data.city,
+    slug: match?.slug ?? data.city.toLowerCase().replace(/\s+/g, "-"),
+    hasPage: match !== undefined,
+  };
+}
+
+/**
+ * Everything the "what stands out" facts need, gathered once. Both the page
+ * body and generateMetadata call this, so the meta description and the block
+ * on the page are guaranteed to lead with the same fact. All reads hit the
+ * process-level caches in data.ts and pfas-data.ts, so the second call is free.
+ */
+async function loadHighlights(data: PostcodeData) {
+  if (data.safetyScore < 0) return [];
+  const city = resolveCity(data);
+  const [cityPeers, nationalAverage, hardness, pfasNearby, nearby] = await Promise.all([
+    getPostcodesByCity(data.city),
+    getNationalAverageScore(),
+    getHardness(data.district),
+    getPfasNearDistrict(data.district),
+    Promise.all(data.nearbyPostcodes.map((pc) => getPostcodeData(pc))),
+  ]);
+  const neighbours = nearby
+    .filter((n): n is PostcodeData => n !== null && n.safetyScore >= 0)
+    .map((n) => ({ district: n.district, score: n.safetyScore }));
+  return districtHighlights({
+    data,
+    cityPeers,
+    neighbours,
+    nationalAverage,
+    hardness,
+    pfasNearby,
+    cityName: city.name,
+    citySlug: city.hasPage ? city.slug : null,
+  });
+}
 
 /**
  * Only the districts we actually hold exist at this route.
@@ -77,13 +130,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : null;
   const pageTitle = shortArea ? `${baseTitle} | ${shortArea}` : baseTitle;
 
-  // Keep description under 155 chars — different copy for thin vs rich pages
+  // The description leads with this district's most notable fact, so no two
+  // districts share one. Thin pages keep the honest "not yet available" line.
   const description = hasData
-    ? (() => {
-        const descBase = `Check tap water quality in ${data.district}. ${data.contaminantsTested} contaminants tested. PFAS, lead, nitrate & more.`;
-        const descSuffix = ` Free ${year} report for ${data.areaName}.`;
-        return (descBase + descSuffix).length <= 155 ? descBase + descSuffix : descBase;
-      })()
+    ? highlightDescription(data, await loadHighlights(data), year)
     : `Water quality data for ${data.district} (${data.areaName}) is not yet available. Check back soon for test results.`;
 
   return {
@@ -164,11 +214,8 @@ export default async function PostcodePage({ params }: Props) {
   const lowConfidence = data.safetyScore >= 0 && scoredCount > 0 && scoredCount < 3;
 
   // Find city page for breadcrumb linking
-  const cityMatch = CITIES.find((c) =>
-    c.matches.some((m) => m.toLowerCase() === data.city.toLowerCase()) ||
-    c.name.toLowerCase() === data.city.toLowerCase(),
-  );
-  const citySlug = cityMatch?.slug ?? data.city.toLowerCase().replace(/\s+/g, "-");
+  const { slug: citySlug, hasPage: cityMatch } = resolveCity(data);
+  const highlights = await loadHighlights(data);
 
   // Water hardness — queried from raw drinking_water_readings (not in scored page_data)
   const hardnessData = await getHardness(data.district);
@@ -454,6 +501,8 @@ export default async function PostcodePage({ params }: Props) {
                   : "the Environment Agency Water Quality Archive"}.
               </p>
             </div>
+
+            <DistrictHighlights district={data.district} highlights={highlights} />
 
             {/* Data provenance — clean, two-row layout */}
             <div className="mt-6 space-y-2">
