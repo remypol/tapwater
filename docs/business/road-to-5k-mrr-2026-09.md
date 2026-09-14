@@ -55,11 +55,20 @@ None of the engines pays without visitors. The recovery plan covers it: disavow,
 - Apply to Osmio, Waterdrop, ZeroWater and Jolie direct programmes; put bounty products first on every rail. (Remy applies.)
 - B2B: address-level API endpoint, one-page pitch with pricing, three free pilots signed. (Claude builds, Remy pitches.)
 
+### Standing item from Phase 1 on: the data must actually be current
+Found 14 September: the pipeline ran daily but read stale datasets, so the North West showed 2022 water and most of England 2024. Fixed the same day. From now on:
+- The weekly health check flags any water company whose newest sample is over 15 months old (measured on sample date, not pipeline run date).
+- `npx tsx scripts/check-stream-sources.ts` runs monthly to catch datasets the portal publishes under new names.
+- Every page shows the real sample date, never the day we last looked.
+- Hardness only exists in the open data for Yorkshire, Thames and Northern Ireland. Coverage for the rest means scraping each company's own postcode hardness checker: a Phase 2 data job with a large payoff for the map and the softener funnel.
+
 ### Phase 2: direct deals (January to March 2027). Exit at £1,500 a month.
 - Direct installer contract at £50 to £75 a lead, negotiated with three months of Bark volume as evidence. Candidates: KindWater, Harvey direct sales, two regional Kinetico dealers. (Remy)
 - Two B2B pilots converted to paying customers. (Remy)
 - One sponsorship pitch to a filter brand for the shower or under-sink guide. (Claude drafts, Remy sends.)
 - New content: hard water by town for the 100 hardest towns, "is the water safe to drink in {city}" hubs. (Claude)
+- Design refresh, not a redesign: the site reads as generated (italic serif on every heading, a card around everything, tracked uppercase labels, fade-in on every section, the same teal on every site of this kind). Phase 2 replaces that with one visual idea the data earns: the numbers and the map are the design. Five templates in order of traffic: home, postcode, hardness map, compare, guide. Same URLs, same content, no SEO risk. (Claude builds, Remy signs off each template.)
+- Hardness coverage: scrape the postcode hardness checkers of Severn Trent, United Utilities, Anglian, Affinity, Southern, South West, Welsh and Scottish Water so the map and the softener funnel cover the whole country. (Claude)
 
 ### Phase 3: scale (April to September 2027). Exit at £3,000 a month.
 - 40 to 60 leads a month, 6 to 8 B2B customers, 2 sponsors, DR 20 or more.

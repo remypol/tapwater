@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import {
   summariseSoftenerLeadBacklog,
   describeSoftenerLeadBacklog,
+  describeSupplierFreshness,
+  monthsSince,
 } from "../pipeline-health";
 
 const NOW = new Date("2026-09-07T12:00:00Z");
@@ -66,5 +68,24 @@ describe("describeSoftenerLeadBacklog", () => {
     expect(describeSoftenerLeadBacklog({ newCount: 2, oldestAgeDays: null })).toBe(
       "2 softener quote requests waiting to be forwarded, age unknown",
     );
+  });
+});
+
+describe("describeSupplierFreshness", () => {
+  it("flags companies whose newest sample is older than 15 months", () => {
+    const rows = [
+      { supplierId: "united-utilities", districts: 273, newestSample: "2022-12-31", ageMonths: 44 },
+      { supplierId: "yorkshire-water", districts: 191, newestSample: "2026-09-09", ageMonths: 0 },
+      { supplierId: "ni-water", districts: 75, newestSample: null, ageMonths: null },
+    ];
+    const issues = describeSupplierFreshness(rows);
+    expect(issues).toHaveLength(2);
+    expect(issues[0]).toContain("united-utilities: newest sample is 2022-12-31, 44 months old across 273 districts");
+    expect(issues[1]).toContain("ni-water: no sample dates at all");
+  });
+
+  it("counts months since a date", () => {
+    expect(monthsSince("2025-09-14", new Date("2026-09-14T00:00:00Z"))).toBe(11);
+    expect(monthsSince(null)).toBeNull();
   });
 });

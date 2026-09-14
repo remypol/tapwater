@@ -64,9 +64,39 @@ export interface HealthReport {
     failingCount: number;
   };
   supplierCoverage: SupplierCoverage[];
+  /** Newest sample date we hold per water company. The stale-data check that
+   *  last_data_update cannot do, because the pipeline refreshes that daily
+   *  whether or not the company has published anything new. */
+  supplierFreshness: SupplierFreshness[];
   softenerLeads: SoftenerLeadBacklog;
   pfas: PfasPipelineSummary;
   issues: string[];
+}
+
+export interface SupplierFreshness {
+  supplierId: string;
+  districts: number;
+  newestSample: string | null;
+  ageMonths: number | null;
+}
+
+/** Months between an ISO date and now, rounded down. Null for a missing date. */
+export function monthsSince(iso: string | null, now = new Date()): number | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return Math.floor((now.getTime() - d.getTime()) / (30.44 * 24 * 3600 * 1000));
+}
+
+/** One issue line per company whose newest sample is older than `maxMonths`. */
+export function describeSupplierFreshness(rows: SupplierFreshness[], maxMonths = 15): string[] {
+  return rows
+    .filter((r) => r.ageMonths === null || r.ageMonths > maxMonths)
+    .map((r) =>
+      r.newestSample
+        ? `${r.supplierId}: newest sample is ${r.newestSample}, ${r.ageMonths} months old across ${r.districts} districts. Run scripts/check-stream-sources.ts.`
+        : `${r.supplierId}: no sample dates at all across ${r.districts} districts.`,
+    );
 }
 
 // ── Softener lead backlog ────────────────────────────────────────────────────
@@ -255,8 +285,31 @@ export async function getHealthReport(): Promise<HealthReport> {
     };
   }
 
+  // Newest sample per supplier, from date_range_to rather than last_data_update.
+  const { data: freshnessRows } = await db
+    .from("page_data")
+    .select("date_range_to, postcode_districts!inner(supplier_id)")
+    .gte("safety_score", 0)
+    .limit(5000);
+  const newestBySupplier = new Map<string, { newest: string | null; districts: number }>();
+  type FreshnessRow = { date_range_to: string | null; postcode_districts: { supplier_id: string | null } | { supplier_id: string | null }[] };
+  for (const row of (freshnessRows ?? []) as unknown as FreshnessRow[]) {
+    // PostgREST types an inner join as an array; at runtime it is one object.
+    const pd = Array.isArray(row.postcode_districts) ? row.postcode_districts[0] : row.postcode_districts;
+    const id = pd?.supplier_id ?? "unknown";
+    const cur = newestBySupplier.get(id) ?? { newest: null, districts: 0 };
+    cur.districts++;
+    const d = row.date_range_to?.split("T")[0] ?? null;
+    if (d && (!cur.newest || d > cur.newest)) cur.newest = d;
+    newestBySupplier.set(id, cur);
+  }
+  const supplierFreshness: SupplierFreshness[] = [...newestBySupplier.entries()]
+    .map(([supplierId, v]) => ({ supplierId, districts: v.districts, newestSample: v.newest, ageMonths: monthsSince(v.newest) }))
+    .sort((a, b) => (b.ageMonths ?? 999) - (a.ageMonths ?? 999));
+
   // Collect issues
   const issues: string[] = [];
+  issues.push(...describeSupplierFreshness(supplierFreshness));
 
   if (latestRun) {
     if (latestRun.status === "failed") {
@@ -311,6 +364,7 @@ export async function getHealthReport(): Promise<HealthReport> {
     pipeline: { latestRun },
     incidentSources: { checks, failingCount },
     supplierCoverage,
+    supplierFreshness,
     softenerLeads,
     pfas,
     issues,
