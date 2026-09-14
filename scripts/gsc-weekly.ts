@@ -1,12 +1,19 @@
 /**
  * Pull Search Console numbers for the Monday report.
  *
- * Needs a Google service account that has been added to the Search Console
- * property as a user (Restricted is enough). No Google SDK: the JWT is signed
- * with node's crypto and exchanged for an access token directly.
+ * Two ways to authenticate, no Google SDK either way:
  *
- * Env (in .env.local):
- *   GSC_SERVICE_ACCOUNT_JSON  base64 of the downloaded service-account key file
+ *   GSC_OAUTH_JSON            base64 of a gcloud application-default credentials
+ *                             file (client_id, client_secret, refresh_token). Made
+ *                             with `gcloud auth application-default login
+ *                             --scopes=.../webmasters.readonly`. Reads Search
+ *                             Console as that person. Used because the
+ *                             cc-community.com organisation forbids service
+ *                             account keys.
+ *   GSC_SERVICE_ACCOUNT_JSON  base64 of a service-account key file, for a Google
+ *                             account without that restriction. The account must
+ *                             be added to the property as a Restricted user.
+ *
  *   GSC_SITE_URL              "sc-domain:tapwater.uk" (or "https://www.tapwater.uk/")
  *
  * Usage:
@@ -43,15 +50,53 @@ interface ServiceAccount {
   token_uri?: string;
 }
 
-function loadServiceAccount(): ServiceAccount {
-  const raw = process.env.GSC_SERVICE_ACCOUNT_JSON;
-  if (!raw) {
-    throw new Error(
-      "GSC_SERVICE_ACCOUNT_JSON is not set. See the Phase 0 checklist for how to create the key.",
-    );
-  }
+interface OAuthCredentials {
+  client_id: string;
+  client_secret: string;
+  refresh_token: string;
+  /** gcloud writes this; personal credentials must name a project to bill quota to. */
+  quota_project_id?: string;
+}
+
+/** Sent as x-goog-user-project; required with personal credentials, harmless otherwise. */
+let quotaProject: string | undefined = process.env.GSC_QUOTA_PROJECT;
+
+function decodeJson<T>(raw: string): T {
   const json = raw.trim().startsWith("{") ? raw : Buffer.from(raw, "base64").toString("utf8");
-  return JSON.parse(json) as ServiceAccount;
+  return JSON.parse(json) as T;
+}
+
+/** True when either credential is configured. Lets the Monday report skip cleanly. */
+export function gscConfigured(): boolean {
+  return Boolean(process.env.GSC_OAUTH_JSON || process.env.GSC_SERVICE_ACCOUNT_JSON);
+}
+
+async function refreshTokenAccess(creds: OAuthCredentials): Promise<string> {
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      client_id: creds.client_id,
+      client_secret: creds.client_secret,
+      refresh_token: creds.refresh_token,
+    }),
+  });
+  if (!res.ok) throw new Error(`Token refresh failed: ${res.status} ${await res.text()}`);
+  const body = (await res.json()) as { access_token: string };
+  return body.access_token;
+}
+
+async function getAccessToken(): Promise<string> {
+  if (process.env.GSC_OAUTH_JSON) {
+    const creds = decodeJson<OAuthCredentials>(process.env.GSC_OAUTH_JSON);
+    quotaProject ??= creds.quota_project_id;
+    return refreshTokenAccess(creds);
+  }
+  if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
+    return accessToken(decodeJson<ServiceAccount>(process.env.GSC_SERVICE_ACCOUNT_JSON));
+  }
+  throw new Error("Neither GSC_OAUTH_JSON nor GSC_SERVICE_ACCOUNT_JSON is set. See docs/business/phase-0-checklist.md.");
 }
 
 function base64url(input: Buffer | string): string {
@@ -103,7 +148,11 @@ async function query(
   const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE)}/searchAnalytics/query`;
   const res = await fetch(url, {
     method: "POST",
-    headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+      ...(quotaProject ? { "x-goog-user-project": quotaProject } : {}),
+    },
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`Search Console query failed: ${res.status} ${await res.text()}`);
@@ -149,8 +198,7 @@ export interface GscReport {
 }
 
 export async function pullGsc(): Promise<GscReport> {
-  const sa = loadServiceAccount();
-  const token = await accessToken(sa);
+  const token = await getAccessToken();
 
   const end = new Date();
   end.setUTCDate(end.getUTCDate() - 3); // GSC data lags
@@ -189,7 +237,9 @@ export async function pullGsc(): Promise<GscReport> {
     startDate: iso(start28),
     endDate: iso(end),
     dimensions: ["page"],
-    rowLimit: 500,
+    // Sorted by clicks; a watch page with impressions but no clicks sits far
+    // down the list, so pull enough rows to reach it.
+    rowLimit: 5000,
   });
   const toPage = (r: Row): PageRow => ({
     page: r.keys[0].replace(/^https?:\/\/(www\.)?tapwater\.uk/, "") || "/",

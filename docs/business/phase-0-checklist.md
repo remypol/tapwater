@@ -2,31 +2,17 @@
 
 Four things only Remy can do, in the order they unblock the most. Each one is a few minutes. Everything on Claude's side is built and waiting.
 
-## 1. Search Console access (10 minutes, unblocks all measurement)
+## 1. Search Console access — DONE 14 September
 
-Claude needs a Google service account that can read the Search Console property.
+Done differently from the original plan: the cc-community.com Google Workspace forbids service-account keys, so the script reads Search Console with Remy's own Google login instead. `gcloud auth application-default login` produced a refresh token, stored base64-encoded as `GSC_OAUTH_JSON` in `.env.local`, with `GSC_SITE_URL=sc-domain:tapwater.uk`. The Cloud project `tapwater-reporting` exists only to carry API quota.
 
-1. Go to https://console.cloud.google.com/ and pick or create a project (any name, e.g. `tapwater-reporting`).
-2. APIs & Services → Library → search "Google Search Console API" → Enable.
-3. IAM & Admin → Service Accounts → Create service account. Name it `tapwater-gsc`. No roles needed. Create.
-4. Open the new account → Keys → Add key → Create new key → JSON. A file downloads.
-5. Copy the `client_email` from that file (it looks like `tapwater-gsc@tapwater-reporting.iam.gserviceaccount.com`).
-6. Go to https://search.google.com/search-console → the tapwater.uk property → Settings → Users and permissions → Add user → paste that email → permission **Restricted** → Add.
-7. Put the key in `.env.local` as one line:
+If the token ever stops working (Google revokes it after long inactivity or a password change), re-run:
 
-   ```bash
-   echo "GSC_SERVICE_ACCOUNT_JSON=$(base64 -i ~/Downloads/tapwater-reporting-*.json | tr -d '\n')" >> .env.local
-   echo "GSC_SITE_URL=sc-domain:tapwater.uk" >> .env.local
-   ```
+```bash
+gcloud auth application-default login --scopes=https://www.googleapis.com/auth/webmasters.readonly,https://www.googleapis.com/auth/cloud-platform
+```
 
-   If the property in Search Console is shown as `https://www.tapwater.uk/` rather than `tapwater.uk`, use that as `GSC_SITE_URL` instead.
-8. Test:
-
-   ```bash
-   npm run gsc
-   ```
-
-   It prints 12 weeks of clicks and the watch-list positions. From then on `npm run numbers` includes Search Console automatically.
+then re-encode the file into `.env.local` (Claude can do this).
 
 ## 2. Disavow upload (3 minutes, starts the penalty clock)
 

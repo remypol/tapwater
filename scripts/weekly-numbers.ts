@@ -2,7 +2,7 @@
  * The Monday numbers. One command, one markdown block, saved to docs/numbers.
  *
  * Reads the first-party tables (affiliate clicks, softener leads, subscribers,
- * incidents, PFAS rows) and, when GSC_SERVICE_ACCOUNT_JSON is set, Search
+ * incidents, PFAS rows) and, when a Search Console credential is set, Search
  * Console clicks and the watch-list positions. Every number is per ISO week so
  * this week can be read against the same week last month.
  *
@@ -12,7 +12,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { writeFileSync, mkdirSync } from "node:fs";
 import { config } from "dotenv";
-import { pullGsc, type GscReport } from "./gsc-weekly";
+import { pullGsc, gscConfigured, type GscReport } from "./gsc-weekly";
 
 config({ path: ".env.local" });
 
@@ -105,14 +105,14 @@ async function main() {
 
   let gsc: GscReport | null = null;
   let gscNote = "";
-  if (process.env.GSC_SERVICE_ACCOUNT_JSON) {
+  if (gscConfigured()) {
     try {
       gsc = await pullGsc();
     } catch (err) {
       gscNote = `Search Console: ${err instanceof Error ? err.message : String(err)}`;
     }
   } else {
-    gscNote = "Search Console: not connected (GSC_SERVICE_ACCOUNT_JSON unset).";
+    gscNote = "Search Console: not connected (no GSC credential in .env.local).";
   }
   const gscByWeek = new Map(gsc?.weeks.map((w) => [w.week, w]) ?? []);
 
