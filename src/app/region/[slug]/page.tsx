@@ -157,8 +157,12 @@ export default async function RegionPage({ params }: Props) {
   const scoreLabel = avgScore >= 7 ? "safe" : avgScore >= 4 ? "moderate" : "below average";
 
   // Drinking-water readings only; environmental samples do not describe tap water.
-  const regionHardnessValues = (await Promise.all(allPostcodes.map(p => getHardness(p.district))))
-    .filter((h): h is NonNullable<typeof h> => h != null && !h.estimated)
+  // Measured districts first, postcode-area estimates when there are none, so
+  // a hard-water region never loses the quote route for want of a reading.
+  const regionHardnessAll = (await Promise.all(allPostcodes.map(p => getHardness(p.district))))
+    .filter((h): h is NonNullable<typeof h> => h != null);
+  const regionHardnessMeasured = regionHardnessAll.filter((h) => !h.estimated);
+  const regionHardnessValues = (regionHardnessMeasured.length > 0 ? regionHardnessMeasured : regionHardnessAll)
     .map(h => h.value);
   const avgHardness = regionHardnessValues.length > 0
     ? regionHardnessValues.reduce((s, v) => s + v, 0) / regionHardnessValues.length

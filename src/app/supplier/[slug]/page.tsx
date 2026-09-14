@@ -435,7 +435,9 @@ export default async function SupplierPage({ params }: Props) {
                 </Link>{" "}
                 if scale is a daily battle in your home.
               </p>
-              {hardPct !== null && hardPct >= 50 && (
+              {/* HardWaterCta gates itself on the 180 mg/L average; a share-of-districts
+                  rule on top of that hid the button from suppliers averaging 200. */}
+              {avgHardness !== null && (
                 <HardWaterCta
                   placeName={`${supplier.name}'s`}
                   hardness={avgHardness}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { SoftenerGuidesNav } from "@/components/softener-guides-nav";
+import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
 import {
@@ -306,6 +307,16 @@ export default function WaterSoftenerSaltGuide() {
         </p>
 
         <GuideFaq faqs={FAQ_DATA} />
+
+        <div className="mt-10">
+          <SoftenerLeadForm
+            hardnessValue={220}
+            hardnessLabel="hard"
+            source="softener_guide"
+            heading="Buying salt because you have no softener yet?"
+            intro="If you are reading this before you own one, get the unit priced first. Free quotes from installers covering your postcode, and the salt question answers itself."
+          />
+        </div>
 
         <SoftenerGuidesNav current={SLUG} className="mt-14" />
 

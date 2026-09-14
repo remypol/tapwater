@@ -11,6 +11,7 @@ import { getHardnessMap } from "@/lib/data"
 import { HardnessMap, HardnessAreaTable } from "@/components/hardness-map"
 import { HardnessBands } from "@/components/hardness-bands"
 import { postcodeAreaName } from "@/lib/postcode-areas"
+import { SoftenerLeadForm } from "@/components/softener-lead-form"
 
 export const revalidate = 86400
 
@@ -389,6 +390,16 @@ export default async function WaterHardnessMapPage() {
             </div>
             <AffiliateNote withFundingLink />
           </div>
+        </div>
+
+        <div className="mt-10">
+          <SoftenerLeadForm
+            hardnessValue={220}
+            hardnessLabel="hard"
+            source="hardness_map"
+            heading="In the amber on the map?"
+            intro="Anything over 180 mg/L is softener territory. Get free quotes from installers covering your postcode and compare at least two before you buy."
+          />
         </div>
 
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Check your water hardness</h2>

@@ -228,8 +228,14 @@ export default async function CityPage({ params }: Props) {
   // mains water is soft, and mixing the two called the city hard.
   // Same source as the postcode pages (getHardness reads the raw
   // drinking_water_readings table); measured districts only, no area estimates.
-  const cityHardnessValues = (await Promise.all(scored.map(p => getHardness(p.district))))
-    .filter((h): h is NonNullable<typeof h> => h != null && !h.estimated)
+  // Measured districts first. When none of the city's districts has a reading
+  // of its own, the postcode-area medians stand in, so a hard-water city still
+  // gets the quote route: an estimate that says "hard" is a better answer than
+  // no answer, and the postcode page shows the estimate label either way.
+  const cityHardnessAll = (await Promise.all(scored.map(p => getHardness(p.district))))
+    .filter((h): h is NonNullable<typeof h> => h != null);
+  const cityHardnessMeasured = cityHardnessAll.filter((h) => !h.estimated);
+  const cityHardnessValues = (cityHardnessMeasured.length > 0 ? cityHardnessMeasured : cityHardnessAll)
     .map(h => h.value);
   const avgHardness = cityHardnessValues.length > 0
     ? cityHardnessValues.reduce((s, v) => s + v, 0) / cityHardnessValues.length
