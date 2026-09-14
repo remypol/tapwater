@@ -192,6 +192,8 @@ export const MOCK_SUPPLIERS: SupplierData[] = [
   { id: "south-staffs-water", name: "South Staffs Water", region: "South Staffordshire and Cambridge", customersM: 1.6, complianceRate: 99.95, website: "https://www.south-staffs-water.co.uk", postcodeAreas: ["CB3", "CB4"] },
   { id: "wessex-water", name: "Wessex Water", region: "South West", customersM: 2.8, complianceRate: 99.96, website: "https://www.wessexwater.co.uk", postcodeAreas: ["BA1", "BA2"] },
   { id: "affinity-water", name: "Affinity Water", region: "South East England", customersM: 3.6, complianceRate: 99.92, website: "https://www.affinitywater.co.uk", postcodeAreas: ["N11", "N12", "NW9"] },
+  { id: "essex-suffolk-water", name: "Essex & Suffolk Water", region: "Essex and Suffolk", customersM: 1.8, complianceRate: 99.96, website: "https://www.eswater.co.uk", postcodeAreas: ["CM1", "CM2", "CM3", "IP17", "IP18", "IG1", "RM8"] },
+  { id: "cambridge-water", name: "Cambridge Water", region: "Cambridge", customersM: 0.35, complianceRate: 99.96, website: "https://www.cambridge-water.co.uk", postcodeAreas: ["CB2", "CB3", "CB4", "CB5"] },
 ];
 
 export const MOST_CHECKED = ["SW1A", "E1", "M1", "B1", "LS1", "BS1", "EH1", "CF10", "NE1", "OX1"];
