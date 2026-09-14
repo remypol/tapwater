@@ -26,8 +26,17 @@ Angle: positive local pride story; pairs with the worst list for contrast. Metho
 Targets: Wrexham Leader, Northumberland Gazette, Chronicle Live, Kent Online (Ashford), Birmingham Mail (Solihull), Metro "best/worst" lists.
 Pages to link: /compare, /rankings/best-water, /about/methodology.
 
-## Story 4 (hold until pipeline fixed) — PFAS detections by city
-`most-pfas` CSV is currently EMPTY: the `pfas_detections` table has 0 rows (the weekly PFAS cron has never produced data). Do not pitch until fixed.
+## Story 4 — "Forever chemicals found at 12,000 monitoring points: the cities with the most PFAS in their rivers" (READY, 14 Sept)
+Data: `most-pfas` CSV, now live: 12,101 Environment Agency detections at 530 river and groundwater sites in 43 of 50 cities.
+Top by detections: London (2,108 detections, 26 compounds), Oxford (948), Warrington (774), Reading (704), Ipswich (487), Lincoln (411), Nottingham (379).
+Highest single reading: Warrington 0.25 µg/L, two and a half times the 0.1 µg/L guideline the Drinking Water Inspectorate uses for one PFAS compound in tap water.
+Angle: these are environmental samples, not tap water, and say so in the first paragraph. The story is "what is in the rivers that supply us, and why nobody publishes tap-water PFAS by area": link our EIR refusal from the DWI (/pfas/data-request). Local hook: "{city}'s rivers show {N} PFAS detections, {compounds} different compounds".
+Targets: Warrington Guardian, Oxford Mail, Reading Chronicle, Ipswich Star, Lincolnshire Live, Nottingham Post, MyLondon; nationals: Guardian environment, i news, ENDS Report, New Scientist (data desk).
+Pages to link: /pfas, /pfas/{city}, /pfas/data-request, /guides/pfas-uk-explained.
+
+## Asset for every pitch (new 14 Sept): the hardness map
+/guides/water-hardness-map now carries a real map: 983 postcode districts as dots coloured by measured hardness over a coastline, plus the ten hardest and softest postcode areas. Offer it as an embeddable graphic (screenshot with credit, or the /widget). Journalists take a map when they will not take a table.
+Hardest areas by median: Hull 302, Salisbury 302, Enfield 302, Hemel Hempstead 299, Reading 295. Softest: Belfast 42, Halifax 44, Huddersfield 50, Harrogate 61, Bradford 73.
 
 ## Email template (regional desk)
 Subject: {City} has {N} of the UK's {10} hardest-water postcodes — new analysis of official test data
