@@ -803,6 +803,22 @@ export async function getMapPostcodes(): Promise<MapPostcode[]> {
 }
 
 /**
+ * How many scored districts carry a PFAS detection, and how many are scored at
+ * all. Feeds the PFAS guide so it never quotes a hardcoded "14 of 220" again.
+ */
+export async function getPfasDistrictCounts(): Promise<{ withPfas: number; scored: number }> {
+  const cache = await loadData();
+  let withPfas = 0;
+  let scored = 0;
+  for (const data of cache.values()) {
+    if (data.safetyScore < 0) continue;
+    scored++;
+    if (data.pfasDetected) withPfas++;
+  }
+  return { withPfas, scored };
+}
+
+/**
  * Computes the national average safety score across all scored postcode districts.
  */
 export async function getNationalAverageScore(): Promise<number> {

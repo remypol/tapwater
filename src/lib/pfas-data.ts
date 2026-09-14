@@ -94,21 +94,41 @@ function cityRegion(name: string): string {
 
 // --- Functions ---
 
-export async function getPfasNationalSummary(): Promise<PfasNationalSummary | null> {
+/**
+ * Every PFAS row, optionally for one city, fetched in pages.
+ *
+ * PostgREST caps a single request at 1,000 rows. An unpaged select silently
+ * returned the first thousand of 12,000 detections, so the tracker reported
+ * exactly "1,000 detections" and London (2,100 rows) lost half its data.
+ * Ordering by id keeps the pages stable between requests.
+ *
+ * Throws on a query error: a failed query must not become "no PFAS detected",
+ * which is a factual claim the page would then be making on our behalf.
+ */
+async function fetchPfasRows(city?: string): Promise<PfasRow[]> {
   const supabase = getSupabase();
-
-  const { data, error } = await supabase
-    .from("pfas_detections")
-    .select("*")
-    .order("sample_date", { ascending: false });
-
-  if (error) {
-    console.error("Error fetching PFAS national data:", error);
-    return null;
+  const PAGE_SIZE = 1000;
+  const rows: PfasRow[] = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    let query = supabase
+      .from("pfas_detections")
+      .select("*")
+      .order("id", { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
+    if (city) query = query.eq("city", city);
+    const { data, error } = await query;
+    if (error) {
+      throw new Error(`PFAS query failed${city ? ` for ${city}` : ""}: ${error.message}`);
+    }
+    rows.push(...((data ?? []) as PfasRow[]));
+    if (!data || data.length < PAGE_SIZE) break;
   }
+  return rows;
+}
 
-  const rows = data as PfasRow[];
-  if (!rows || rows.length === 0) return null;
+export async function getPfasNationalSummary(): Promise<PfasNationalSummary | null> {
+  const rows = (await fetchPfasRows()).sort((a, b) => b.sample_date.localeCompare(a.sample_date));
+  if (rows.length === 0) return null;
 
   // Aggregate by city
   const cityMap = new Map<
@@ -222,21 +242,8 @@ export async function getPfasCityData(citySlug: string): Promise<PfasCityData> {
 
   if (!cityName) return emptyResult;
 
-  const supabase = getSupabase();
-
-  const { data, error } = await supabase
-    .from("pfas_detections")
-    .select("*")
-    .eq("city", cityName)
-    .order("sample_date", { ascending: true });
-
-  if (error) {
-    console.error(`Error fetching PFAS data for ${cityName}:`, error);
-    return emptyResult;
-  }
-
-  const rows = data as PfasRow[];
-  if (!rows || rows.length === 0) return emptyResult;
+  const rows = (await fetchPfasRows(cityName)).sort((a, b) => a.sample_date.localeCompare(b.sample_date));
+  if (rows.length === 0) return emptyResult;
 
   // Detection points aggregated by sampling point
   const pointMap = new Map<

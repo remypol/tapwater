@@ -4,6 +4,16 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { AlertTriangle, FlaskConical, ShieldAlert, BookOpen } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
+import { getPfasNationalSummary } from "@/lib/pfas-data";
+import { getPfasDistrictCounts } from "@/lib/data";
+
+export const revalidate = 86400;
+
+function monthYear(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+}
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -29,18 +39,25 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function PFASGuide() {
+export default async function PFASGuide() {
+  const [summary, districts] = await Promise.all([getPfasNationalSummary(), getPfasDistrictCounts()]);
+  const topCities = summary
+    ? [...summary.detectionsByCity].sort((a, b) => b.detectionCount - a.detectionCount).slice(0, 4)
+    : [];
+  const whereFound = summary
+    ? `Environment Agency monitoring has recorded ${summary.totalDetections.toLocaleString("en-GB")} PFAS detections at ${summary.totalSamplingPoints.toLocaleString("en-GB")} river and groundwater sampling points in ${summary.citiesWithDetections} of the ${summary.citiesMonitored} cities we track, most recently in ${monthYear(summary.latestDetectionDate)}.`
+    : "Environment Agency monitoring data for PFAS is not currently available to us.";
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
       <FAQSchema
         faqs={[
           {
             question: "What are PFAS forever chemicals?",
-            answer: "PFAS (per- and polyfluoroalkyl substances) are a family of over 4,700 synthetic compounds with extremely strong carbon-fluorine bonds. They do not biodegrade in soil, water, or the human body, earning the label 'forever chemicals.'",
+            answer: "PFAS (per- and polyfluoroalkyl substances) are a family of more than 10,000 synthetic compounds with extremely strong carbon-fluorine bonds. They do not biodegrade in soil, water, or the human body, earning the label 'forever chemicals.'",
           },
           {
             question: "Is there PFAS in UK tap water?",
-            answer: "PFAS compounds have been detected in environmental monitoring in 14 of the 220 postcode areas we track, clustered near military airbases, airports, and industrial sites. Whether contamination reaches your tap depends on your water company's treatment processes.",
+            answer: `${whereFound} Detections cluster near military airbases, airports and industrial sites. Whether contamination reaches your tap depends on your water company's treatment processes.`,
           },
           {
             question: "What is the UK legal limit for PFAS in drinking water?",
@@ -106,7 +123,7 @@ export default function PFASGuide() {
           What are PFAS?
         </h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          PFAS stands for per- and polyfluoroalkyl substances — a family of more than 4,700 synthetic chemical compounds that share one defining characteristic: an exceptionally strong carbon-fluorine bond. That bond is among the strongest in organic chemistry, which is precisely why these compounds were so commercially attractive. Since the 1940s they have been used to make cookware non-stick, packaging grease-resistant, clothing water-repellent, and firefighting foam capable of smothering jet fuel fires in seconds.
+          PFAS stands for per- and polyfluoroalkyl substances — a family of more than 10,000 synthetic chemical compounds that share one defining characteristic: an exceptionally strong carbon-fluorine bond. That bond is among the strongest in organic chemistry, which is precisely why these compounds were so commercially attractive. Since the 1940s they have been used to make cookware non-stick, packaging grease-resistant, clothing water-repellent, and firefighting foam capable of smothering jet fuel fires in seconds.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
           The same stability that made them useful makes them almost impossible to destroy. PFAS do not biodegrade in soil, in water, or in the human body — hence the informal label "forever chemicals." They accumulate in tissues over time, and because they are water-soluble, they migrate readily through the environment: from industrial sites into groundwater, from groundwater into rivers, and from rivers into the treatment works that supply your tap.
@@ -124,7 +141,7 @@ export default function PFASGuide() {
           PFAS contamination in the UK is not distributed randomly. It clusters around specific sources: military airbases where aqueous film-forming foam (AFFF) was used in training exercises, airports and industrial sites where the same foam was deployed, and rivers downstream of manufacturing facilities that produced or used PFAS-based products.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          The Environment Agency has been collecting environmental monitoring data on PFAS-related determinands — identified in the monitoring dataset under reference codes 2942 to 3037 — across rivers, groundwater, and source waters. According to our analysis of this Environment Agency data, we detected PFAS compounds in <strong className="text-ink">14 of the 220 postcode areas</strong> we currently monitor. Affected areas include locations in the south of England near former military airfields, in the West Midlands near legacy manufacturing zones, and in parts of East Anglia where agricultural use of PFAS-treated sludge has been documented.
+          The Environment Agency has been collecting environmental monitoring data on PFAS-related determinands — identified in the monitoring dataset under reference codes 2942 to 3037 — across rivers, groundwater, and source waters. {whereFound} Of the {districts.scored.toLocaleString("en-GB")} postcode districts with drinking-water test results, <strong className="text-ink">{districts.withPfas}</strong> carry a PFAS reading in their own data. Affected areas include locations in the south of England near former military airfields, in the West Midlands near legacy manufacturing zones, and in parts of East Anglia where agricultural use of PFAS-treated sludge has been documented.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
           It is important to distinguish between environmental monitoring — which measures PFAS in rivers and groundwater — and drinking water monitoring at the tap. Environmental detections indicate that contamination exists in source waters. Whether it reaches your tap at significant concentrations depends on the treatment processes your water company uses, many of which were not designed with PFAS removal in mind.
@@ -133,14 +150,21 @@ export default function PFASGuide() {
           You can check whether PFAS compounds have been detected in environmental monitoring near your postcode using the tool at the bottom of this page, or by visiting our dedicated{" "}
           <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2 font-medium">PFAS contaminant page</Link>.
         </p>
-        <p className="text-base text-body leading-relaxed mt-4">
-          Areas where PFAS has been detected in nearby water monitoring include{" "}
-          <Link href="/postcode/LS1" className="text-accent hover:underline">LS1 (Leeds)</Link>,{" "}
-          <Link href="/postcode/B1" className="text-accent hover:underline">B1 (Birmingham)</Link>,{" "}
-          <Link href="/postcode/M1" className="text-accent hover:underline">M1 (Manchester)</Link>, and{" "}
-          <Link href="/postcode/BS1" className="text-accent hover:underline">BS1 (Bristol)</Link>.{" "}
-          <Link href="/compare" className="text-accent hover:underline">See the full UK rankings</Link>.
-        </p>
+        {topCities.length > 0 && (
+          <p className="text-base text-body leading-relaxed mt-4">
+            The cities with the most PFAS detections in nearby monitoring are{" "}
+            {topCities.map((c, i) => (
+              <span key={c.slug}>
+                <Link href={`/pfas/${c.slug}`} className="text-accent hover:underline">
+                  {c.city} ({c.detectionCount.toLocaleString("en-GB")})
+                </Link>
+                {i < topCities.length - 2 ? ", " : i === topCities.length - 2 ? " and " : ""}
+              </span>
+            ))}
+            .{" "}
+            <Link href="/pfas" className="text-accent hover:underline">See the full PFAS tracker</Link>.
+          </p>
+        )}
 
         {/* UK vs EU regulation */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink flex items-center gap-2">
@@ -290,7 +314,7 @@ export default function PFASGuide() {
         <div className="card p-5">
           <PostcodeSearch size="sm" />
           <p className="text-xs text-faint mt-3">
-            We monitor 220 postcode areas for PFAS and other contaminants.{" "}
+            We hold drinking-water results for {districts.scored.toLocaleString("en-GB")} postcode districts.{" "}
             <Link href="/contaminant/pfas" className="text-accent hover:underline underline-offset-2">View the full PFAS dataset</Link>.
           </p>
         </div>
