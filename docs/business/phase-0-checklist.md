@@ -14,13 +14,9 @@ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/w
 
 then re-encode the file into `.env.local` (Claude can do this).
 
-## 2. Disavow upload (3 minutes, starts the penalty clock)
+## 2. Disavow upload — DONE 14 September
 
-1. Go to https://search.google.com/search-console/disavow-links
-2. Select the tapwater.uk property.
-3. Upload `docs/seo/disavow-2026-09-07.txt` (255 spam domains).
-
-Google re-evaluates over weeks, not days. It has to be in before any ranking recovery can be attributed.
+Uploaded to the URL-prefix property `https://www.tapwater.uk/` (the disavow tool does not accept domain properties, so that property was added alongside the domain one). File: `docs/seo/disavow-2026-09-07.txt`, 255 domains. Re-export from Ahrefs monthly and append; re-upload replaces the list, so always upload the full file.
 
 ## 3. Earnings exports for July and August (10 minutes, gives the real baseline)
 
