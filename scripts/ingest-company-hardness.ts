@@ -151,7 +151,20 @@ ADAPTERS["scottish-water"] = async (postcode) => {
   const m = html?.replace(/<[^>]+>/g, " ").match(/Site Name:\s*([A-Za-z0-9 &'()/.-]+?)\s{2,}/);
   const zone = m?.[1]?.trim();
   if (!zone) return null;
-  const v = table.get(zone.toLowerCase()) ?? table.get(zone.toLowerCase().replace(/\s+wtw$/, ""));
+  // The lookup says "Bradan Milngavie Gorbals Zone RSZ"; the PDF says "Amlaird
+  // Milngavie Gorbals". Normalise, then fall back to the longest shared prefix
+  // of two or more words, which is the works name the zones are grouped under.
+  const norm = (z: string) => z.toLowerCase().replace(/\b(zone|rsz|wtw|bh)\b/g, " ").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+  const key = norm(zone);
+  let v = table.get(zone.toLowerCase()) ?? [...table.entries()].find(([k]) => norm(k) === key)?.[1];
+  if (v == null) {
+    const words = key.split(" ");
+    for (let n = words.length - 1; n >= 2 && v == null; n--) {
+      const prefix = words.slice(0, n).join(" ");
+      const hits = [...table.entries()].filter(([k]) => norm(k).startsWith(prefix));
+      if (hits.length > 0) v = Math.round(hits.reduce((sum, [, x]) => sum + x, 0) / hits.length);
+    }
+  }
   if (v == null) { console.log(`     zone "${zone}" not in hardness table`); return null; }
   return { mgCaCO3: v, zone };
 };
