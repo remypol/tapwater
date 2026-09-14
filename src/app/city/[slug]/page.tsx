@@ -232,8 +232,10 @@ export default async function CityPage({ params }: Props) {
   // of its own, the postcode-area medians stand in, so a hard-water city still
   // gets the quote route: an estimate that says "hard" is a better answer than
   // no answer, and the postcode page shows the estimate label either way.
-  const cityHardnessAll = (await Promise.all(scored.map(p => getHardness(p.district))))
-    .filter((h): h is NonNullable<typeof h> => h != null);
+  const cityHardnessByDistrict = (await Promise.all(scored.map(async (p) => ({ district: p.district, areaName: p.areaName, h: await getHardness(p.district) }))))
+    .filter((r): r is { district: string; areaName: string; h: NonNullable<typeof r.h> } => r.h != null)
+    .sort((a, b) => b.h.value - a.h.value);
+  const cityHardnessAll = cityHardnessByDistrict.map((r) => r.h);
   const cityHardnessMeasured = cityHardnessAll.filter((h) => !h.estimated);
   const cityHardnessValues = (cityHardnessMeasured.length > 0 ? cityHardnessMeasured : cityHardnessAll)
     .map(h => h.value);
@@ -244,8 +246,13 @@ export default async function CityPage({ params }: Props) {
     ? avgHardness < 60 ? "soft" : avgHardness < 120 ? "moderately soft" : avgHardness < 180 ? "moderately hard" : avgHardness < 250 ? "hard" : "very hard"
     : null;
 
+  const hardestRow = cityHardnessByDistrict[0];
+  const softestRow = cityHardnessByDistrict[cityHardnessByDistrict.length - 1];
+  const hardnessSpread = hardestRow && softestRow && hardestRow.district !== softestRow.district
+    ? ` It ranges from ${softestRow.h.value} mg/L in ${softestRow.district} to ${hardestRow.h.value} mg/L in ${hardestRow.district}.`
+    : "";
   const hardnessAnswer = avgHardness != null
-    ? `Water in ${city.name} has an average hardness of ${Math.round(avgHardness)} mg/L CaCO₃, which is classified as ${hardnessClass}. ${avgHardness >= 180 ? "Hard water causes limescale buildup in kettles and appliances. A water softener or filter may help." : avgHardness < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`
+    ? `Water in ${city.name} has an average hardness of ${Math.round(avgHardness)} mg/L CaCO₃, which is classified as ${hardnessClass}.${hardnessSpread} ${avgHardness >= 180 ? "Hard water causes limescale buildup in kettles and appliances. A water softener or filter may help." : avgHardness < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`
     : `Hardness data is not yet available for ${city.name}. Enter your postcode for detailed water quality data.`;
 
   const bestAreas = [...scored].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3);
@@ -581,6 +588,50 @@ export default async function CityPage({ params }: Props) {
               hardnessClass={hardnessClass}
               className="mt-6"
             />
+
+            {/* Hardness by district: the answer to "is {city} hard water" is
+                rarely one number. Same source as the postcode pages. */}
+            {cityHardnessByDistrict.length >= 2 && (
+              <section id="hardness" className="mt-10 scroll-mt-24" aria-labelledby="city-hardness-heading">
+                <h2 id="city-hardness-heading" className="font-display text-2xl text-ink italic">
+                  Water hardness across {city.name}
+                </h2>
+                <p className="text-sm text-body mt-2 max-w-2xl leading-relaxed">
+                  {hardnessSpread
+                    ? `From ${softestRow.h.value} mg/L in ${softestRow.district} to ${hardestRow.h.value} mg/L in ${hardestRow.district}. Hard starts at 180, very hard at 250.`
+                    : `Hard starts at 180 mg/L, very hard at 250.`}
+                  {cityHardnessMeasured.length < cityHardnessAll.length &&
+                    ` Districts marked with an asterisk take their postcode area's median rather than a reading of their own.`}
+                </p>
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-xs text-muted border-b border-rule-strong">
+                        <th className="py-2 pr-3 font-medium">District</th>
+                        <th className="py-2 pr-3 font-medium hidden sm:table-cell">Area</th>
+                        <th className="py-2 pr-3 font-medium text-right">mg/L</th>
+                        <th className="py-2 font-medium">Hardness</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cityHardnessByDistrict.map((r) => (
+                        <tr key={r.district} className="border-b border-rule">
+                          <td className="py-2 pr-3">
+                            <Link href={`/postcode/${r.district}`} className="font-medium text-ink hover:text-accent transition-colors">
+                              {r.district}
+                            </Link>
+                            {r.h.estimated && <span className="text-muted" title="Postcode-area estimate">*</span>}
+                          </td>
+                          <td className="py-2 pr-3 text-muted hidden sm:table-cell">{r.areaName}</td>
+                          <td className="py-2 pr-3 text-right font-data text-ink">{r.h.value}</td>
+                          <td className="py-2 capitalize">{r.h.label}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )}
 
             {/* Supplier card */}
             <div className="mt-4">
