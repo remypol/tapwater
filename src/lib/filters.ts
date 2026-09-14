@@ -1,5 +1,5 @@
 import type { FilterProduct, ProductCategory } from "./types";
-import { PRODUCTS } from "./products";
+import { PRODUCTS, railScore } from "./products";
 
 // Re-export for backwards compatibility
 export const FILTERS = PRODUCTS;
@@ -145,7 +145,8 @@ export function recommendFilters(
     .filter((f) => f.matchedCount > 0)
     .sort((a, b) => {
       if (b.matchedCount !== a.matchedCount) return b.matchedCount - a.matchedCount;
-      return b.rating - a.rating;
+      // Same fit for the reader's water: rating first, bounty as the tiebreaker.
+      return railScore(b) - railScore(a);
     });
 
   const seen = new Set<string>();

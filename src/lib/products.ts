@@ -1432,10 +1432,32 @@ export const CATEGORY_ORDER: ProductCategory[] = [
 /**
  * Look up products by category.
  */
+/**
+ * Order products for a rail: best-rated first, with what a sale earns us as the
+ * tiebreaker.
+ *
+ * Source order put a £25 Amazon jug at the top of every category page, earning
+ * 75p a sale, above a system on a fixed £65 bounty with a rating a tenth lower.
+ * The rating still leads: the boost is capped at 0.8 of a star, and reaches that
+ * only for products paying £20 or more per sale. Amazon's 3% never moves a
+ * product more than a few hundredths. Two genuinely comparable products end up
+ * with the one that funds the site first; a clearly worse product still loses.
+ */
+export function railScore(product: FilterProduct): number {
+  const earnings = estimatedEarningsGbp(product) ?? 0;
+  return product.rating + Math.min(0.8, earnings / 25);
+}
+
+export function rankForRail<T extends FilterProduct>(products: T[]): T[] {
+  return [...products].sort((a, b) => railScore(b) - railScore(a));
+}
+
 export function getProductsByCategory(
   category: ProductCategory,
 ): FilterProduct[] {
-  return PRODUCTS.filter((p) => p.category === category && p.availableInUk !== false);
+  return rankForRail(
+    PRODUCTS.filter((p) => p.category === category && p.availableInUk !== false),
+  );
 }
 
 /**
