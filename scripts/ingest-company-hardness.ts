@@ -106,13 +106,16 @@ const ADAPTERS: Record<string, Adapter> = {
   },
 
   "anglian-water": async (_postcode, lat, lng) => {
-    const z = await getJson<{ shortName?: string; name?: string }>(
+    const z = await getJson<{ shortName?: string; name?: string; awOwned?: string }>(
       `https://waterquality.anglianwater.com/DDProxy.ashx?app=wq&lon=${lng}&lat=${lat}&version=18`,
       { headers: { referer: "https://waterquality.anglianwater.com/map.aspx" } },
     );
-    if (!z?.shortName) return null;
+    // Centroids inside Cambridge Water or Essex & Suffolk come back with the
+    // other company's name and awOwned "False"; there is no zone panel for those.
+    if (!z?.shortName || z.awOwned === "False") return null;
     const html = await getText(`https://waterquality.anglianwater.com/ZoneInfoPanel.aspx?pwsz=${encodeURIComponent(z.shortName)}&version=2026`);
-    const m = html?.match(/(\d+(?:\.\d+)?)\s*mg\/l\s*Calcium Carbonate/i);
+    // The panel puts the value before its label: `227.03</span>&nbsp;mg/l</td><td>:Calcium Carbonate</td>`
+    const m = html?.match(/(\d+(?:\.\d+)?)<\/span>(?:&nbsp;|\s)*mg\/l[\s\S]{0,80}?Calcium Carbonate/i);
     const v = num(m?.[1]);
     if (!Number.isFinite(v)) return null;
     return { mgCaCO3: v, zone: `${z.shortName} ${z.name ?? ""}`.trim() };
