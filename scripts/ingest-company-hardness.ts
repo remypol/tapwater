@@ -15,6 +15,7 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { config } from "dotenv";
+import { PDFParse } from "pdf-parse";
 
 config({ path: ".env.local" });
 
@@ -113,6 +114,74 @@ const ADAPTERS: Record<string, Adapter> = {
     if (!Number.isFinite(v)) return null;
     return { mgCaCO3: v, zone: `${z.shortName} ${z.name ?? ""}`.trim() };
   },
+};
+
+// ── Scottish Water: zone name from the lookup, hardness from the annual PDF ──
+//
+// The postcode lookup returns the regulatory supply zone ("Glencorse B") but no
+// hardness. Scottish Water publishes hardness per zone once a year as a PDF
+// table (name, Ca, Mg, CaCO3, Clark, French, German, level). Parse it once.
+const SCOTTISH_HARDNESS_PDF =
+  "https://www.scottishwater.co.uk/-/media/scottishwater/document-hub/key-publications/water-quality/130225waterhardnessdata24.pdf";
+let scottishTable: Promise<Map<string, number>> | null = null;
+
+async function loadScottishTable(): Promise<Map<string, number>> {
+  const res = await fetch(SCOTTISH_HARDNESS_PDF, { headers: { "user-agent": UA } });
+  if (!res.ok) throw new Error(`Scottish hardness PDF: HTTP ${res.status}`);
+  const parser = new PDFParse({ data: Buffer.from(await res.arrayBuffer()) });
+  const { text } = await parser.getText();
+  const table = new Map<string, number>();
+  for (const line of text.split("\n")) {
+    // "Glencorse B \t10.36 \t1.36 \t31.44 \t2.21 \t3.14 \t1.76 \tSoft"
+    const m = line.trim().match(/^(.+?)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+[\d.]+\s+[\d.]+\s+[\d.]+\s+[A-Za-z ]+$/);
+    if (!m) continue;
+    table.set(m[1].trim().toLowerCase(), parseFloat(m[4]));
+  }
+  if (table.size < 100) throw new Error(`Scottish hardness PDF parsed to only ${table.size} zones`);
+  return table;
+}
+
+ADAPTERS["scottish-water"] = async (postcode) => {
+  scottishTable ??= loadScottishTable();
+  const table = await scottishTable;
+  const html = await getText(`https://www.scottishwater.co.uk/api/feature/WaterQuality/Results?q=${encodeURIComponent(postcode)}&t=t`);
+  const m = html?.replace(/<[^>]+>/g, " ").match(/Site Name:\s*([A-Za-z0-9 &'()/.-]+?)\s{2,}/);
+  const zone = m?.[1]?.trim();
+  if (!zone) return null;
+  const v = table.get(zone.toLowerCase()) ?? table.get(zone.toLowerCase().replace(/\s+wtw$/, ""));
+  if (v == null) { console.log(`     zone "${zone}" not in hardness table`); return null; }
+  return { mgCaCO3: v, zone };
+};
+
+// ── Northumbrian Water (and Essex & Suffolk): token-protected JSON, mg/L Ca ──
+let nwlSession: Promise<{ cookie: string; token: string }> | null = null;
+async function loadNwlSession(): Promise<{ cookie: string; token: string }> {
+  const res = await fetch("https://www.nwl.co.uk/check-your-area/", { headers: { "user-agent": UA } });
+  const html = await res.text();
+  const token = html.match(/id="VerificationToken"[^>]*value="([^"]+)"/)?.[1];
+  const cookie = (res.headers.getSetCookie?.() ?? []).map((c) => c.split(";")[0]).join("; ");
+  if (!token) throw new Error("Northumbrian: no verification token on the page");
+  return { cookie, token };
+}
+
+ADAPTERS["northumbrian-water"] = async (postcode, lat, lng) => {
+  nwlSession ??= loadNwlSession();
+  const { cookie, token } = await nwlSession;
+  for (const area of ["N", "S"]) {
+    const d = await getJson<{ WaterQualityZones?: { WaterQuality?: { zone: string; quality: string }[] }[] }>(
+      "https://www.nwl.co.uk/api/ActivityManagement/GetIYASummary",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json", cookie, RequestVerificationToken: token, referer: "https://www.nwl.co.uk/check-your-area/" },
+        body: JSON.stringify({ area, postcode, lat, lng, radius: 5, recLimit: 10 }),
+      },
+    );
+    const wq = d?.WaterQualityZones?.[0]?.WaterQuality?.[0];
+    const ca = num(wq?.quality);
+    // The site multiplies mg/L calcium by 2.5 to show calcium carbonate.
+    if (Number.isFinite(ca) && ca > 0) return { mgCaCO3: Math.round(ca * 2.5 * 10) / 10, zone: wq?.zone ?? null };
+  }
+  return null;
 };
 
 async function nearestPostcode(lat: number, lng: number): Promise<string | null> {
