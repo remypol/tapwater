@@ -183,10 +183,10 @@ async function loadNwlSession(): Promise<{ cookie: string; token: string }> {
   return { cookie, token };
 }
 
-ADAPTERS["northumbrian-water"] = async (postcode, lat, lng) => {
+const nwlLookup = (areas: string[]): Adapter => async (postcode, lat, lng) => {
   nwlSession ??= loadNwlSession();
   const { cookie, token } = await nwlSession;
-  for (const area of ["N", "S"]) {
+  for (const area of areas) {
     const d = await getJson<{ WaterQualityZones?: { WaterQuality?: { zone: string; quality: string }[] }[] }>(
       "https://www.nwl.co.uk/api/ActivityManagement/GetIYASummary",
       {
@@ -202,6 +202,9 @@ ADAPTERS["northumbrian-water"] = async (postcode, lat, lng) => {
   }
   return null;
 };
+ADAPTERS["northumbrian-water"] = nwlLookup(["N", "S"]);
+// Essex & Suffolk Water is the same group and the same lookup, area "S".
+ADAPTERS["essex-suffolk-water"] = nwlLookup(["S"]);
 
 async function nearestPostcode(lat: number, lng: number): Promise<string | null> {
   const d = await getJson<{ result?: { postcode: string }[] | null }>(

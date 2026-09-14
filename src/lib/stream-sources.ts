@@ -125,6 +125,17 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "camel",
     dateFormat: "string",
   },
+  // Essex & Suffolk Water is part of the Northumbrian group and publishes in
+  // the same service; the LSOA filter keeps each district to its own rows.
+  "essex-suffolk-water": {
+    orgId: STREAM_ORG,
+    services: [
+      { year: 2024, serviceName: "Northumbrian_Water_Domestic_Water_Quality" },
+    ],
+    geoField: "LSOA",
+    fieldCase: "camel",
+    dateFormat: "string",
+  },
   // ── Companies added from Stream portal discovery ──
   "affinity-water": {
     orgId: STREAM_ORG,
