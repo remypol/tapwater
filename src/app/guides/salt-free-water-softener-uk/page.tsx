@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, X, Minus } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { ProductCard } from "@/components/product-card";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { SoftenerGuidesNav } from "@/components/softener-guides-nav";

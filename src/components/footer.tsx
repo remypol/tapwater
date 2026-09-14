@@ -12,6 +12,7 @@ const navigateLinks = [
   { label: "Data Sources", href: "/about/data-sources" },
   { label: "Press", href: "/press" },
   { label: "Embed our widget", href: "/widget" },
+  { label: "Data for business", href: "/for-business" },
 ];
 
 const legalLinks = [
