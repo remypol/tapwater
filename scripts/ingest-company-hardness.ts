@@ -33,7 +33,10 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function getJson<T>(url: string, init: RequestInit = {}): Promise<T | null> {
   const res = await fetch(url, { ...init, headers: { "user-agent": UA, accept: "application/json, text/html;q=0.9", ...(init.headers ?? {}) } });
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.log(`     HTTP ${res.status} from ${new URL(url).host}`);
+    return null;
+  }
   return (await res.json()) as T;
 }
 
