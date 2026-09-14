@@ -10,7 +10,7 @@
  * up with no other change. One request a second, browser-like headers, and only
  * companies whose robots.txt allows the endpoint.
  *
- *   npx tsx scripts/ingest-company-hardness.ts united-utilities [--limit 5] [--dry]
+ *   npx tsx scripts/ingest-company-hardness.ts united-utilities [--limit 5] [--dry] [--delay 3000] [--only EX17,EX2]
  *   npx tsx scripts/ingest-company-hardness.ts all
  */
 import { createClient } from "@supabase/supabase-js";
@@ -127,6 +127,10 @@ async function main() {
   const dry = flags.includes("--dry");
   const limitIdx = flags.indexOf("--limit");
   const limit = limitIdx >= 0 ? Number(flags[limitIdx + 1]) : Infinity;
+  const delayIdx = flags.indexOf("--delay");
+  const delayMs = delayIdx >= 0 ? Number(flags[delayIdx + 1]) : 1000;
+  const onlyIdx = flags.indexOf("--only");
+  const only = onlyIdx >= 0 ? new Set(flags[onlyIdx + 1].split(",").map((d) => d.trim().toUpperCase())) : null;
   const suppliers = target === "all" ? Object.keys(ADAPTERS) : [target];
   if (!target || suppliers.some((s) => !ADAPTERS[s])) {
     console.error(`Usage: ingest-company-hardness.ts <${Object.keys(ADAPTERS).join("|")}|all> [--limit N] [--dry]`);
@@ -143,7 +147,7 @@ async function main() {
       .eq("supplier_id", supplier)
       .order("id");
     if (error) throw error;
-    const rows = (districts ?? []).slice(0, limit);
+    const rows = (districts ?? []).filter((d) => !only || only.has(String(d.id).toUpperCase())).slice(0, limit);
     console.log(`\n${supplier}: ${rows.length} districts${dry ? " (dry run)" : ""}`);
     let ok = 0, miss = 0;
     for (const d of rows) {
@@ -175,7 +179,7 @@ async function main() {
         miss++;
         console.log(`  ${district.padEnd(5)} error: ${err instanceof Error ? err.message : String(err)}`);
       }
-      await sleep(1000);
+      await sleep(delayMs);
     }
     console.log(`${supplier}: ${ok} stored, ${miss} without a reading`);
   }
