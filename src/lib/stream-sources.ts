@@ -39,6 +39,9 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "severn-trent": {
     orgId: STREAM_ORG,
     services: [
+      // 2025 is published under a generic "Combined_Final" name that the
+      // discovery filter never matches. Found by listing the org on 14 Sept 2026.
+      { year: 2025, serviceName: "Combined_Final_Water_Quality_extract_2025_STW_Stream_formatted_1" },
       { year: 2024, serviceName: "Severn_Trent_Water_Domestic_Water_Quality_2024" },
       { year: 2023, serviceName: "Severn_Trent_Water_Domestic_Water_Quality_2023" },
     ],
@@ -49,6 +52,10 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "southern-water": {
     orgId: STREAM_ORG,
     services: [
+      // Two parts of one 2022-2026 extract, samples through April 2026. Both
+      // carry the same year so fetchStreamData merges them.
+      { year: 2026, serviceName: "Southern_Water_Drinking_Water_Quality_2022_2026_part1" },
+      { year: 2026, serviceName: "Southern_Water_Drinking_Water_Quality_2022_2026_part2" },
       { year: 2025, serviceName: "Southern_Water_Domestic_Drinking_Water_Quality_2025" },
       { year: 2024, serviceName: "Southern_Water_Domestic_Drinking_Water_Quality_2024" },
     ],
@@ -59,8 +66,11 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "united-utilities": {
     orgId: STREAM_ORG,
     services: [
-      { year: 2025, serviceName: "United_Utilities_Domestic_Water_Quality" },
-      { year: 2023, serviceName: "United_Utilities_Domestic_Drinking_Water_Quality_2023" },
+      // Despite its name the "_2023" service holds samples to 31 Dec 2024, and
+      // the undated one stops at 31 Dec 2022. Labelled 2025 it was tried first
+      // and the site showed 2022 water for the whole North West.
+      { year: 2024, serviceName: "United_Utilities_Domestic_Drinking_Water_Quality_2023" },
+      { year: 2022, serviceName: "United_Utilities_Domestic_Water_Quality" },
     ],
     geoField: "LSOA",
     fieldCase: "camel",
@@ -69,8 +79,9 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "anglian-water": {
     orgId: STREAM_ORG,
     services: [
-      { year: 2025, serviceName: "Anglian_Water_Domestic_Water_Quality" },
       { year: 2024, serviceName: "Anglian_Water_Domestic_Water_Quality_2024" },
+      // Undated service: samples stop at October 2022.
+      { year: 2022, serviceName: "Anglian_Water_Domestic_Water_Quality" },
     ],
     geoField: "LSOA21CD",
     fieldCase: "camel",
@@ -79,6 +90,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "south-west-water": {
     orgId: STREAM_ORG,
     services: [
+      { year: 2025, serviceName: "South_West_Water_(SWB)_Drinking_Water_Quality_2025" },
       { year: 2024, serviceName: "South_West_Water_(SWB)_Drinking_Water_Quality_2024" },
       { year: 2023, serviceName: "South_West_Water_(SWB)_Drinking_Water_Quality_2023" },
     ],
@@ -117,7 +129,10 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "affinity-water": {
     orgId: STREAM_ORG,
     services: [
-      { year: 2024, serviceName: "Affinity_Water_Domestic_Water_Quality" },
+      // Affinity prefixes the year: "2025_Affinity_...". Samples through Sept 2025.
+      { year: 2025, serviceName: "2025_Affinity_Water_Domestic_Water_Quality" },
+      { year: 2024, serviceName: "2024_Affinity_Water_Domestic_Water_Quality" },
+      { year: 2023, serviceName: "Affinity_Water_Domestic_Water_Quality" },
     ],
     geoField: "LSOA",
     fieldCase: "camel",
@@ -154,6 +169,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "hafren-dyfrdwy": {
     orgId: STREAM_ORG,
     services: [
+      { year: 2025, serviceName: "Combined_Final_Water_Quality_extract_2025_HD_Stream_formatted_1" },
       { year: 2024, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality_2024" },
       { year: 2023, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality_2023" },
       { year: 2022, serviceName: "Hafren_Dyfrdwy_Domestic_Water_Quality" },

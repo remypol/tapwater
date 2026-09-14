@@ -177,7 +177,11 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
       const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
         .map((r) => ({ ...r, source: "drinking" as const }));
       const envReadings = (row.all_readings ?? []) as ContaminantReading[];
+      // "Last updated" is when our pipeline ran; the newest sample can be a year
+      // older when a company has not published since. The page must show the
+      // sample date, so lastSampleDate takes date_range_to when it exists.
       const lastDate = row.last_data_update?.split("T")[0] ?? "2024-01-01";
+      const lastSample = row.date_range_to?.split("T")[0] ?? lastDate;
 
       cache.set(row.postcode_district.toUpperCase(), {
         district: row.postcode_district,
@@ -197,7 +201,7 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         pfasLevel: row.pfas_level,
         pfasSource: row.pfas_source as PostcodeData["pfasSource"],
         lastUpdated: lastDate,
-        lastSampleDate: lastDate,
+        lastSampleDate: lastSample,
         readings: drinkingReadings.length > 0 ? drinkingReadings : envReadings,
         nearbyPostcodes: row.nearby_postcodes ?? [],
         dataSource: (row.data_source ?? "ea-only") as PostcodeData["dataSource"],
@@ -817,7 +821,11 @@ export async function getRankedPostcodes(): Promise<{
           const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
             .map((r) => ({ ...r, source: "drinking" as const }));
           const envReadings = (row.all_readings ?? []) as ContaminantReading[];
-          const lastDate = row.last_data_update?.split("T")[0] ?? "2024-01-01";
+          // "Last updated" is when our pipeline ran; the newest sample can be a year
+      // older when a company has not published since. The page must show the
+      // sample date, so lastSampleDate takes date_range_to when it exists.
+      const lastDate = row.last_data_update?.split("T")[0] ?? "2024-01-01";
+      const lastSample = row.date_range_to?.split("T")[0] ?? lastDate;
 
           return {
             district: row.postcode_district,
@@ -837,7 +845,7 @@ export async function getRankedPostcodes(): Promise<{
             pfasLevel: row.pfas_level,
             pfasSource: row.pfas_source as PostcodeData["pfasSource"],
             lastUpdated: lastDate,
-            lastSampleDate: lastDate,
+            lastSampleDate: lastSample,
             readings: drinkingReadings.length > 0 ? drinkingReadings : envReadings,
             nearbyPostcodes: row.nearby_postcodes ?? [],
             dataSource: (row.data_source ?? "ea-only") as PostcodeData["dataSource"],

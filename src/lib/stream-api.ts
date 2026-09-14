@@ -191,11 +191,9 @@ async function discoverServices(orgId: string): Promise<string[]> {
       .map((s) => s.name)
       .filter((name) => {
         const lower = name.toLowerCase();
-        return (
-          (lower.includes("drinking") || lower.includes("domestic")) &&
-          lower.includes("water") &&
-          lower.includes("quality")
-        );
+        // "Combined_Final_Water_Quality_extract_2025_STW" is Severn Trent's 2025
+        // dataset; requiring "drinking" or "domestic" hid it.
+        return lower.includes("water") && lower.includes("quality") && !lower.includes("consumption");
       })
       // Sort by year descending (extract year from name)
       .sort((a, b) => {
@@ -215,8 +213,9 @@ async function discoverServices(orgId: string): Promise<string[]> {
  * are assumed to contain the latest data.
  */
 function extractServiceYear(serviceName: string): number {
-  const match = serviceName.match(/\d{4}/);
-  return match ? parseInt(match[0], 10) : new Date().getFullYear();
+  // The newest year in the name: "..._2022_2026_part1" is a 2026 dataset.
+  const years = (serviceName.match(/\b(20\d{2})\b/g) ?? []).map((y) => parseInt(y, 10));
+  return years.length ? Math.max(...years) : new Date().getFullYear();
 }
 
 /**
@@ -237,16 +236,17 @@ export async function fetchStreamData(
   const sortedServices = [...source.services].sort((a, b) => b.year - a.year);
   const newestHardcodedYear = sortedServices[0]?.year ?? 0;
 
-  // Try hardcoded services newest-first
+  // Try hardcoded services newest-first. Several services can share a year
+  // (Southern publishes one extract in two parts); all of them are merged.
   let bestRecords: StreamRecord[] = [];
   let bestYear = 0;
 
   for (const service of sortedServices) {
+    if (bestYear && service.year < bestYear) break; // fast path: newest available worked
     const records = await queryStreamService(source, service.serviceName, lsoaCodes);
     if (records.length > 0) {
-      bestRecords = records;
+      bestRecords = bestRecords.concat(records);
       bestYear = service.year;
-      break; // fast path: newest available worked
     }
   }
 
