@@ -7,6 +7,7 @@ export const SOFTENER_LEAD_SOURCES = [
   "postcode_page",
   "hardness_page",
   "hardness_map",
+  "hardness_area",
   "softener_guide",
 ] as const;
 

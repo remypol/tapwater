@@ -6,6 +6,9 @@ import { SoftenerLeadForm } from "@/components/softener-lead-form"
 import { ProductCard } from "@/components/product-card"
 import { AffiliateNote } from "@/components/commerce"
 import { getProductBySlug } from "@/lib/products"
+import { getHardnessMap } from "@/lib/data"
+import { postcodeAreaName } from "@/lib/postcode-areas"
+import { hardnessColour } from "@/components/hardness-map"
 import { SoftenerGuidesNav } from "@/components/softener-guides-nav"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
 import { OG_IMAGE } from "@/lib/og";
@@ -33,7 +36,12 @@ export function generateMetadata(): Metadata {
   }
 }
 
-export default function WaterHardnessCheckerPage() {
+export default async function WaterHardnessCheckerPage() {
+  const { areas } = await getHardnessMap()
+  const browseAreas = areas
+    .filter((a) => a.measured >= 2)
+    .map((a) => ({ ...a, town: postcodeAreaName(a.area) }))
+    .sort((a, b) => a.town.localeCompare(b.town))
   const year = new Date().getFullYear()
   const dateModified = new Date().toISOString().split("T")[0]
   const showerFilter = getProductBySlug("jolie-filtered-showerhead")
@@ -387,6 +395,25 @@ export default function WaterHardnessCheckerPage() {
             UK Water Hardness Map &mdash; which areas have the hardest water?
           </Link>
         </p>
+
+        {browseAreas.length > 0 && (
+          <section className="mt-12" aria-labelledby="browse-areas-heading">
+            <h2 id="browse-areas-heading" className="font-display text-xl italic mb-2 text-ink">Hardness by postcode area</h2>
+            <p className="text-sm text-body mb-4 max-w-2xl leading-relaxed">
+              Every area with measured readings, from water company tests and their own postcode checkers. The number is the median across the area&rsquo;s districts.
+            </p>
+            <ul className="flex flex-wrap gap-2">
+              {browseAreas.map((a) => (
+                <li key={a.area}>
+                  <Link href={`/hardness/${a.area.toLowerCase()}`} className="pill">
+                    <span className="inline-block w-2 h-2 rounded-full mr-1.5" style={{ background: hardnessColour(a.median) }} aria-hidden="true" />
+                    {a.town} <span className="text-muted ml-1 font-data text-xs">{a.median}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <div className="mt-10">
           <SoftenerLeadForm

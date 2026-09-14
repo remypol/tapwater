@@ -137,7 +137,7 @@ export function HardnessAreaTable({ title, areas, note }: AreaTableProps) {
               <tr key={a.area} className="border-b border-rule">
                 <td className="py-2 pr-3">
                   <span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ background: hardnessColour(a.median) }} aria-hidden="true" />
-                  <Link href={`/postcode/${a.exampleDistrict}`} className="text-ink hover:text-accent transition-colors">
+                  <Link href={`/hardness/${a.area.toLowerCase()}`} className="text-ink hover:text-accent transition-colors">
                     {postcodeAreaName(a.area)}
                   </Link>
                   <span className="text-muted ml-1.5 font-data text-xs">{a.area}</span>

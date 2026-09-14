@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList } from "@/lib/data";
+import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList, getHardnessAreaCodes } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
@@ -79,6 +79,7 @@ async function getLatestDataDate(): Promise<Date> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
+  const hardnessAreas = await getHardnessAreaCodes();
   // Only include scored postcodes in sitemap — thin pages (no data) are
   // noindexed and should not waste crawl budget or dilute quality signals.
   const scoredDistricts = await getScoredPostcodeDistricts();
@@ -214,6 +215,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    ...hardnessAreas.map((area) => ({
+      url: `${BASE_URL}/hardness/${area.toLowerCase()}`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     {
       url: `${BASE_URL}/pfas`,
       lastModified: latestDataDate,

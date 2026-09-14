@@ -498,6 +498,56 @@ export async function getHardnessMap(): Promise<{ districts: HardnessMapDistrict
   return { districts, areas };
 }
 
+export interface HardnessAreaPage {
+  area: string;
+  summary: HardnessMapArea;
+  districts: HardnessMapDistrict[];
+  /** Nearest other areas by centroid, for the "nearby" links. */
+  nearby: { area: string; median: number; label: string }[];
+}
+
+/**
+ * Everything /hardness/[area] needs for one postcode area. Null when the area
+ * has fewer than two measured districts, which is too thin to call a page.
+ */
+export async function getHardnessArea(areaCode: string): Promise<HardnessAreaPage | null> {
+  const code = areaCode.toUpperCase();
+  const { districts, areas } = await getHardnessMap();
+  const summary = areas.find((a) => a.area === code);
+  if (!summary || summary.measured < 2) return null;
+  const mine = districts
+    .filter((d) => postcodeArea(d.district) === code)
+    .sort((a, b) => b.value - a.value);
+  const centroid = (list: HardnessMapDistrict[]) => ({
+    lat: list.reduce((s, d) => s + d.lat, 0) / list.length,
+    lng: list.reduce((s, d) => s + d.lng, 0) / list.length,
+  });
+  const me = centroid(mine);
+  const byArea = new Map<string, HardnessMapDistrict[]>();
+  for (const d of districts) {
+    const a = postcodeArea(d.district);
+    if (a === code) continue;
+    byArea.set(a, [...(byArea.get(a) ?? []), d]);
+  }
+  const nearby = [...byArea.entries()]
+    .map(([area, list]) => {
+      const c = centroid(list);
+      const s = areas.find((x) => x.area === area);
+      return { area, median: s?.median ?? 0, label: s?.label ?? "", dist: Math.hypot((c.lat - me.lat) * 111, (c.lng - me.lng) * 68) };
+    })
+    .filter((n) => n.median > 0)
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, 6)
+    .map(({ area, median, label }) => ({ area, median, label }));
+  return { area: code, summary, districts: mine, nearby };
+}
+
+/** Area codes with enough measured districts for a /hardness/[area] page. */
+export async function getHardnessAreaCodes(): Promise<string[]> {
+  const { areas } = await getHardnessMap();
+  return areas.filter((a) => a.measured >= 2).map((a) => a.area).sort();
+}
+
 export async function getHardness(
   district: string,
 ): Promise<HardnessReading | null> {
