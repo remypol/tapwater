@@ -16,6 +16,8 @@ import { GeoCitation } from "@/components/geo-citation";
 import { RelatedGuides } from "@/components/related-guides";
 import { EmbedCta } from "@/components/embed-cta";
 import { HardWaterCta } from "@/components/hard-water-cta";
+import { AreaRiversSection } from "@/components/river-status";
+import { getRiversForDistricts } from "@/lib/river-status-data";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore, getHardness } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -134,6 +136,7 @@ export default async function CityPage({ params }: Props) {
     getNationalAverageScore(),
   ]);
   const scored = allPostcodes.filter((p) => p.safetyScore >= 0);
+  const areaRivers = await getRiversForDistricts(allPostcodes.map((p) => p.district));
 
   // Aggregate stats
   const avgScore =
@@ -697,6 +700,8 @@ export default async function CityPage({ params }: Props) {
             )}
           </>
         )}
+
+        <AreaRiversSection placeName={city.name} data={areaRivers} />
 
         {/* Best & worst areas */}
         {scored.length >= 2 && (

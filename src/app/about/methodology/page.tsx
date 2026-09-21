@@ -96,6 +96,17 @@ export default function MethodologyPage() {
           not reflect the output of the treatment process.
         </p>
 
+        <p className="text-base text-body leading-relaxed mb-4">
+          Environmental readings are compared with drinking water limits so they can sit on the same
+          scale as the tap water tests. Rivers themselves are held to much stricter environmental
+          standards. On those, the Environment Agency&apos;s 2025 assessment failed every river in England
+          for chemicals, mainly because of mercury, PFOS and old flame retardants. So a river reading
+          that passes on our pages does not mean the river is healthy. Postcode, city and region pages
+          in England show the agency&apos;s own health rating for the local river alongside our data, and{" "}
+          <Link href="/rivers" className="text-accent hover:underline underline-offset-2">the river health page</Link>{" "}
+          has the national picture. River ratings do not feed into the tap water score.
+        </p>
+
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Scoring Formula</h2>
         <p className="text-base text-body leading-relaxed mb-4">
           For each measured parameter, we calculate a parameter score based on how close the

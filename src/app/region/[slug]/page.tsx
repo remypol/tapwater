@@ -5,6 +5,8 @@ import { ChevronRight, MapPin, Building2, AlertTriangle, ShieldCheck } from "luc
 import { PostcodeSearch } from "@/components/postcode-search";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { HardWaterCta } from "@/components/hard-water-cta";
+import { AreaRiversSection } from "@/components/river-status";
+import { getRiversForDistricts } from "@/lib/river-status-data";
 import { GeoCitation } from "@/components/geo-citation";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { REGIONS, getRegionBySlug } from "@/lib/regions";
@@ -98,6 +100,9 @@ export default async function RegionPage({ params }: Props) {
   }
 
   const allPostcodes = cityData.flatMap((c) => c.postcodes);
+  const areaRivers = await getRiversForDistricts(
+    cityData.flatMap((c) => [...c.postcodes, ...c.unscoredPostcodes]).map((p) => p.district),
+  );
   const allUnscoredPostcodes = cityData.flatMap((c) => c.unscoredPostcodes);
   const totalPostcodes = allPostcodes.length;
 
@@ -274,6 +279,8 @@ export default async function RegionPage({ params }: Props) {
         hardnessClass={hardnessClass}
         className="mt-10"
       />
+
+      <AreaRiversSection placeName={region.name} data={areaRivers} />
 
       {/* Cities in this region */}
       <ScrollReveal delay={0}>

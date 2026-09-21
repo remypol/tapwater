@@ -7,6 +7,8 @@ import { useState } from "react"
 
 type Props = {
   size?: "lg" | "sm"
+  /** Section of the postcode page to land on, e.g. "river-health". */
+  hash?: string
 }
 
 const DISTRICT_RE = /^[A-Z]{1,2}[0-9][0-9A-Z]?$/
@@ -18,7 +20,7 @@ function extractDistrict(input: string): string | null {
   return DISTRICT_RE.test(district) ? district : null
 }
 
-export function PostcodeSearch({ size = "lg" }: Props) {
+export function PostcodeSearch({ size = "lg", hash }: Props) {
   const router = useRouter()
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
@@ -37,7 +39,7 @@ export function PostcodeSearch({ size = "lg" }: Props) {
     }
 
     events.postcodeSearch(district)
-    router.push(`/postcode/${district}/`)
+    router.push(`/postcode/${district}/${hash ? `#${hash}` : ""}`)
   }
 
   return (

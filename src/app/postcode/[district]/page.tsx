@@ -36,6 +36,9 @@ import { getActiveIncidentsForPostcode } from "@/lib/incidents";
 import { WaterReportTracker } from "@/components/conversion-tracker";
 import { PfasNearby } from "@/components/pfas-nearby";
 import { getPfasNearDistrict } from "@/lib/pfas-data";
+import { RiverStatusPanel } from "@/components/river-status";
+import { getNationalRivers, getRiverForDistrict } from "@/lib/river-status-data";
+import { describeRiverStatus, waterBodyNoun } from "@/lib/river-status";
 
 export const revalidate = 86400; // Revalidate daily (matches pipeline cron)
 
@@ -239,6 +242,11 @@ export default async function PostcodePage({ params }: Props) {
   // stands in for the page_data PFAS fields when those are empty so the FAQ and
   // the banner up top never say "none detected" above a module listing detections.
   const pfasNearby = hasData ? await getPfasNearDistrict(data.district) : null;
+  // The Environment Agency's rating of the river this district drains into. England only.
+  const [localRiver, nationalRivers] = await Promise.all([
+    getRiverForDistrict(data.district),
+    getNationalRivers(),
+  ]);
   const pfasOnPage = data.pfasDetected && data.pfasLevel != null;
   const pfasAnywhere = pfasOnPage || pfasNearby !== null;
   const pfasNearbySentence = pfasNearby
@@ -278,6 +286,10 @@ export default async function PostcodePage({ params }: Props) {
         : pfasNearby
           ? `The tap-water tests we hold for ${data.district} do not include a PFAS result. ${pfasNearbySentence} The UK currently has no legal limit for PFAS in drinking water; the Drinking Water Inspectorate uses a 0.1 µg/L guideline for individual compounds. Reverse osmosis filters can reduce PFAS levels.`
           : `No PFAS (forever chemicals) result is attached to the tap-water tests for ${data.district}, and the Environment Agency has no PFAS detections in rivers or groundwater within 10 km of it. That reflects where sampling has happened as much as the water itself.`,
+    }] : []),
+    ...(localRiver ? [{
+      question: `How clean is the ${waterBodyNoun(localRiver.river.type)} near ${data.district}?`,
+      answer: `${describeRiverStatus(localRiver.river)} This is a rating of the ${waterBodyNoun(localRiver.river.type)}, not of tap water in ${data.district}, which is treated before it reaches homes.`,
     }] : []),
   ] : [];
 
@@ -577,6 +589,14 @@ export default async function PostcodePage({ params }: Props) {
               </ScrollReveal>
             )}
 
+            {localRiver && (
+              <RiverStatusPanel
+                district={data.district}
+                data={localRiver}
+                england={nationalRivers?.all ?? null}
+              />
+            )}
+
             {/* Keep optional affiliate content below the unique water data for SEO trust. */}
             {filterRecs.length > 0 && data.contaminantsFlagged === 0 && (
               <ScrollReveal delay={100}>
@@ -662,6 +682,21 @@ export default async function PostcodePage({ params }: Props) {
                       environmental monitoring — not your tap water.
                     </p>
                     <ContaminantTable readings={data.environmentalReadings} />
+                    <p className="text-xs text-muted mt-3 max-w-2xl leading-relaxed">
+                      For scale, these readings are compared with drinking water limits. Rivers are
+                      judged against much stricter environmental standards, and on those the
+                      Environment Agency fails every river in England for chemicals, mainly mercury,
+                      PFOS and old flame retardants. A &quot;pass&quot; here does not mean the river is
+                      healthy.{localRiver ? (
+                        <>
+                          {" "}
+                          <a href="#river-health" className="text-accent hover:underline underline-offset-2">
+                            See how the agency rates the {localRiver.river.name}
+                          </a>
+                          .
+                        </>
+                      ) : null}
+                    </p>
                   </section>
                 </ScrollReveal>
               </>

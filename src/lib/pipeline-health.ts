@@ -1,6 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
 import { PFAS_RUN_SOURCE, PFAS_SOURCE, describePfasHealth } from "@/lib/pfas-ingest";
+import { RIVER_STATUS_SOURCE, describeRiverStatusHealth } from "@/lib/river-status";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -187,6 +188,7 @@ export async function getHealthReport(): Promise<HealthReport> {
       .select("source_name, error, checked_at")
       .neq("source", PFAS_SOURCE)
       .neq("source", PFAS_RUN_SOURCE)
+      .neq("source", RIVER_STATUS_SOURCE)
       .order("checked_at", { ascending: false })
       .limit(100),
 
@@ -339,6 +341,14 @@ export async function getHealthReport(): Promise<HealthReport> {
   if (failingCount > 5) {
     issues.push(`${failingCount} incident feed sources are failing`);
   }
+
+  const riverRun = await db
+    .from("source_checks")
+    .select("checked_at, error")
+    .eq("source", RIVER_STATUS_SOURCE)
+    .order("checked_at", { ascending: false })
+    .limit(1);
+  issues.push(...describeRiverStatusHealth(riverRun.data?.[0] ?? null));
 
   const leadIssue = describeSoftenerLeadBacklog(softenerLeads);
   if (leadIssue) issues.push(leadIssue);

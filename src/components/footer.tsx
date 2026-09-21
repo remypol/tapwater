@@ -7,6 +7,7 @@ const navigateLinks = [
   // the index would itself have no incoming links, and the districts it exists to
   // reach would stay orphaned.
   { label: "All postcodes", href: "/postcode" },
+  { label: "River health", href: "/rivers" },
   { label: "About", href: "/about" },
   { label: "Methodology", href: "/about/methodology" },
   { label: "Data Sources", href: "/about/data-sources" },

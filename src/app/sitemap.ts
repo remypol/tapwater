@@ -210,6 +210,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     ]),
     {
+      url: `${BASE_URL}/rivers`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/hardness`,
       lastModified: latestDataDate,
       changeFrequency: "weekly",
