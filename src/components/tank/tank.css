@@ -301,6 +301,7 @@
 .wt-band--foam { background: var(--wt-foam); }
 .wt-band h2 + .wt-sub { color: var(--wt-mute); }
 .wt-card small { position: relative; font-size: 0.8rem; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wt-home .wt-band--foam .wt-cards { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 .wt-twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 56px; }
 .wt-twocol .wt-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 .wt-twocol .wt-card { height: 168px; }

@@ -40,9 +40,14 @@ export function hardnessColour(value: number): string {
 
 interface HardnessMapProps {
   districts: HardnessMapDistrict[];
+  /**
+   * Plain dots, no link or tooltip per district. For pages where the map is an
+   * illustration: 2,100 links and titles on the homepage would swamp the forty that matter.
+   */
+  decorative?: boolean;
 }
 
-export function HardnessMap({ districts }: HardnessMapProps) {
+export function HardnessMap({ districts, decorative = false }: HardnessMapProps) {
   // Draw estimated dots first so measured ones sit on top where they overlap.
   const ordered = [...districts].sort((a, b) => Number(a.measured) - Number(b.measured));
   const measuredCount = districts.filter((d) => d.measured).length;
@@ -69,6 +74,11 @@ export function HardnessMap({ districts }: HardnessMapProps) {
             const [x, y] = project(d.lat, d.lng);
             const colour = hardnessColour(d.value);
             const title = `${d.district} · ${d.areaName} · ${d.value} mg/L${d.measured ? "" : " (area estimate)"}`;
+            if (decorative) {
+              return (
+                <circle key={d.district} cx={x} cy={y} r={d.measured ? 3.1 : 2.2} fill={colour} fillOpacity={d.measured ? 0.95 : 0.45} />
+              );
+            }
             return (
               <a key={d.district} href={`/postcode/${d.district}`}>
                 <circle

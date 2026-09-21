@@ -1,18 +1,13 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { PostcodeSearch } from "@/components/postcode-search";
 import { MOST_CHECKED } from "@/lib/mock-data";
-import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes, getRecentlyUpdatedPostcodes } from "@/lib/data";
-import { HomepageMap } from "@/components/homepage-map";
-import { getScoreColor } from "@/lib/types";
+import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes, getRecentlyUpdatedPostcodes, getHardnessMap, getNationalAverageScore } from "@/lib/data";
+import { HardnessMap } from "@/components/hardness-map";
+import { TankCanvas } from "@/components/tank/tank-canvas";
+import { TankSearch } from "@/components/tank/tank-search";
+import { tankFonts } from "@/components/tank/fonts";
+import "@/components/tank/tank.css";
 import type { PostcodeData } from "@/lib/types";
-import {
-  ChevronRight,
-  AlertTriangle,
-  ShieldCheck,
-  Building2,
-} from "lucide-react";
-import { WaterSurface } from "@/components/water-surface";
 import { FixPicks } from "@/components/fix-picks";
 import { FAQSchema } from "@/components/json-ld";
 import { REGIONS } from "@/lib/regions";
@@ -43,23 +38,9 @@ function monthYear(iso: string | null): string | null {
   return d.toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
 }
 
-function scoreBadgeClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "badge badge-safe";
-  if (c === "warning") return "badge badge-warning";
-  return "badge badge-danger";
-}
-
-function scoreTextClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "text-safe";
-  if (c === "warning") return "text-warning";
-  return "text-danger";
-}
-
 export default async function HomePage() {
   // All queries run in parallel — no N+1 loading
-  const [{ worst, best }, suppliers, TRUST_METRICS, popularSearches, recentlyUpdated] =
+  const [{ worst, best }, suppliers, TRUST_METRICS, popularSearches, recentlyUpdated, hardnessMap, nationalAverage] =
     await Promise.all([
       getRankedPostcodes(),
       getSuppliersList(),
@@ -78,6 +59,8 @@ export default async function HomePage() {
           .slice(0, 6),
       ),
       getRecentlyUpdatedPostcodes(24),
+      getHardnessMap(),
+      getNationalAverageScore(),
     ]);
 
   // Live numbers for the hero strip and FAQ. Nothing here is typed by hand:
@@ -136,403 +119,174 @@ export default async function HomePage() {
     },
   ];
 
+  const level = Math.max(0.5, Math.min(0.84, nationalAverage / 10));
+  const tankCard = (d: PostcodeData) => (
+    <Link key={d.district} href={`/postcode/${d.district}`} className="wt-card">
+      <i style={{ height: `${Math.max(12, Math.min(92, d.safetyScore * 10))}%` }} />
+      <b>{d.district}</b>
+      <small>{d.areaName}</small>
+      <span>{d.safetyScore.toFixed(1)} out of 10</span>
+    </Link>
+  );
+
   return (
-    <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
-
-      {/* Hero */}
-      <section className="bg-hero noise-overlay pt-12 pb-10 lg:pt-16 lg:pb-12 -mx-5 sm:-mx-6 lg:-mx-8 px-5 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="animate-fade-up delay-1 font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic">
-            Check the water quality in your area
-          </h1>
-
-          <p className="animate-fade-up delay-2 text-lg text-muted mt-4 max-w-lg mx-auto leading-relaxed">
-            A free report for your postcode, built from real drinking-water tests.
-          </p>
-
-          <div className="animate-fade-up delay-3 max-w-xl mx-auto mt-8">
-            <PostcodeSearch size="lg" />
+    <div className={`${tankFonts}`}>
+      <FAQSchema faqs={faqs} />
+      <div className="wt wt-home">
+        {/* ── The tank: one job, enter a postcode ── */}
+        <section className="wt-tank" id="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
+          <TankCanvas level={level} hardness={120} />
+          <div className="wt-inner">
+            <div>
+              <h1>Check the water quality in your area</h1>
+              <p className="wt-basis">A free report for your postcode, built from real drinking-water tests.</p>
+              <TankSearch />
+              <p className="wt-homefacts wt-nums">
+                {whatYouSee.map(({ value, label }, i) => (
+                  <span key={label}>{i > 0 ? ", " : ""}{value} {label}</span>
+                ))}
+                {whatYouSee.length > 0 ? ". " : ""}
+                {topArea && bottomArea ? (
+                  <>
+                    Right now the gap runs from{" "}
+                    <Link href={`/postcode/${bottomArea.district}`}>{bottomArea.district} ({bottomArea.areaName})</Link> at{" "}
+                    {bottomArea.safetyScore.toFixed(1)}/10 to{" "}
+                    <Link href={`/postcode/${topArea.district}`}>{topArea.district} ({topArea.areaName})</Link> at{" "}
+                    {topArea.safetyScore.toFixed(1)}/10. Your report shows where your postcode sits, and which readings put it there.
+                  </>
+                ) : null}
+              </p>
+            </div>
           </div>
+        </section>
 
-          {/* What you'll see: three live numbers, read as one line of copy */}
-          {whatYouSee.length > 0 && (
-            <ul className="animate-fade-up delay-4 mt-8 flex flex-col sm:flex-row sm:justify-center sm:divide-x divide-rule text-left sm:text-center">
-              {whatYouSee.map(({ value, label }) => (
-                <li
-                  key={label}
-                  className="flex items-baseline gap-2 sm:block py-1.5 sm:py-0 sm:px-6 lg:px-8 sm:max-w-[13rem]"
-                >
-                  <span className="font-data text-xl lg:text-2xl text-ink leading-none">
-                    {value}
-                  </span>
-                  <span className="block text-xs text-muted leading-snug sm:mt-1.5">
-                    {label}
-                  </span>
+        {/* ── What a report looks like: real districts, each filled to its score ── */}
+        <section className="wt-band wt-band--foam" aria-labelledby="home-checked-h">
+          <div className="wt-inner">
+            <h2 className="wt-h2" id="home-checked-h">Popular searches</h2>
+            <p className="wt-sub">Every tank is a real district, filled to its score out of 10. Tap one to see what is in the water.</p>
+            <div className="wt-cards wt-nums">{popularSearches.map(({ data }) => tankCard(data))}</div>
+          </div>
+        </section>
+
+        <section className="wt-band wt-band--white" aria-label="Highest and lowest scoring areas">
+          <div className="wt-inner wt-twocol">
+            <div>
+              <h2 className="wt-h2">Areas to watch</h2>
+              <p className="wt-sub">The lowest scores in recent tap-water tests. A low score is a reason to look closer, not a sign the water is unsafe.</p>
+              <div className="wt-cards wt-nums">{worst.map(tankCard)}</div>
+            </div>
+            <div>
+              <h2 className="wt-h2">Cleanest water</h2>
+              <p className="wt-sub">The highest scores in the country right now.</p>
+              <div className="wt-cards wt-nums">{best.map(tankCard)}</div>
+            </div>
+          </div>
+          <div className="wt-inner">
+            <p className="wt-pills" style={{ marginTop: 40 }}>
+              <Link href="/rankings/">UK water quality rankings</Link>
+              <Link href="/compare">Compare two areas</Link>
+              <Link href="/postcode">Every postcode district</Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ── Hard water: the question most people arrive with ── */}
+        <section className="wt-chalk" aria-labelledby="home-hard-h">
+          <div className="wt-inner">
+            <h2 className="wt-h2" id="home-hard-h">Is your water hard or soft?</h2>
+            <p className="wt-sub">
+              Hard water is safe to drink and rough on kettles, boilers and showers. Each dot is a postcode district, coloured by how much limescale mineral is in the water.
+            </p>
+            <HardnessMap districts={hardnessMap.districts} decorative />
+            <p className="wt-pills">
+              <Link href="/hardness/">Water hardness checker</Link>
+              <Link href="/guides/water-hardness-map">The full hardness map</Link>
+              <Link href="/guides/do-i-need-a-water-softener">Do I need a water softener?</Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ── The homepage's only commercial step ── */}
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <FixPicks
+              pageType="home"
+              placement="home-picks"
+              title="The fixes people actually buy"
+              intro={
+                <>
+                  Of everything we link to, these three are what readers click most: a jug for drinking water, a shower filter for chlorine, and a reverse osmosis
+                  unit that needs no plumbing. They are starting points, not a prescription. Check your postcode above and the report tells you what your own water
+                  needs.
+                </>
+              }
+            />
+          </div>
+        </section>
+
+        {/* ── Browse ── */}
+        <section className="wt-band wt-band--foam" aria-labelledby="home-browse-h">
+          <div className="wt-inner">
+            <h2 className="wt-h2" id="home-browse-h">Explore</h2>
+            <ul className="wt-guides">
+              {[
+                { href: "/rankings/", title: "UK Water Quality Rankings", desc: "Every scored district, best to worst" },
+                { href: "/hardness/", title: "Water Hardness Checker", desc: "Hard or soft, and what it means at home" },
+                { href: "/guides/is-uk-tap-water-safe/", title: "Is UK Tap Water Safe?", desc: "What the tests say, in plain English" },
+                { href: "/guides/water-problems/", title: "Water Problems?", desc: "Taste, smell, colour and limescale, and what fixes each" },
+                { href: "/rivers", title: "River Health in England", desc: "How the Environment Agency rates your local river" },
+                { href: "/pfas", title: "PFAS Tracker", desc: "Forever chemicals measured in rivers and groundwater" },
+              ].map(({ href, title, desc }) => (
+                <li key={href}>
+                  <Link href={href}><strong>{title}</strong><span>{desc}</span></Link>
                 </li>
               ))}
             </ul>
-          )}
 
-          {/* One specific, live sentence for crawlers and answer engines */}
-          {topArea && bottomArea && (
-            <p className="text-sm text-muted mt-6 max-w-lg mx-auto leading-relaxed">
-              Right now the gap runs from{" "}
-              <Link href={`/postcode/${bottomArea.district}`} className="text-ink hover:text-accent transition-colors">
-                {bottomArea.district} ({bottomArea.areaName})
-              </Link>{" "}
-              at <span className="font-data">{bottomArea.safetyScore.toFixed(1)}/10</span> to{" "}
-              <Link href={`/postcode/${topArea.district}`} className="text-ink hover:text-accent transition-colors">
-                {topArea.district} ({topArea.areaName})
-              </Link>{" "}
-              at <span className="font-data">{topArea.safetyScore.toFixed(1)}/10</span>. Your report shows
-              where your postcode sits, and which readings put it there.
+            <h3 className="wt-grouph">By city</h3>
+            <p className="wt-pills">
+              {[["London", "london"], ["Manchester", "manchester"], ["Birmingham", "birmingham"], ["Leeds", "leeds"], ["Glasgow", "glasgow"], ["Edinburgh", "edinburgh"]].map(([name, slug]) => (
+                <Link key={slug} href={`/city/${slug}/`}>{name}</Link>
+              ))}
             </p>
-          )}
-        </div>
-      </section>
+            <h3 className="wt-grouph">By region</h3>
+            <p className="wt-pills">
+              {REGIONS.map((region) => <Link key={region.slug} href={`/region/${region.slug}`}>{region.name}</Link>)}
+            </p>
+            <h3 className="wt-grouph">By water company</h3>
+            <p className="wt-pills">
+              {suppliers.slice(0, 6).map((supplier) => <Link key={supplier.id} href={`/supplier/${supplier.id}`}>{supplier.name}</Link>)}
+              <Link href="/supplier">All water companies</Link>
+            </p>
+            {recentlyUpdated.length > 0 ? (
+              <>
+                <h3 className="wt-grouph">Recently updated reports</h3>
+                <p className="wt-pills wt-nums">
+                  {recentlyUpdated.map((pc) => <Link key={pc.district} href={`/postcode/${pc.district}`}>{pc.district} {pc.areaName}</Link>)}
+                </p>
+              </>
+            ) : null}
+          </div>
+        </section>
 
-      {/* Water surface — flowing transition from hero */}
-      <div className="-mx-5 sm:-mx-6 lg:-mx-8">
-        <WaterSurface />
+        {/* ── Questions ── */}
+        <section className="wt-faq" aria-labelledby="home-faq-heading">
+          <div className="wt-inner">
+            <h2 className="wt-h2" id="home-faq-heading">Water quality questions</h2>
+            {faqs.map((f, i) => (
+              <details key={f.question} open={i === 0}>
+                <summary>{f.question}</summary>
+                <p>{f.answer}</p>
+              </details>
+            ))}
+            <p className="wt-fine" style={{ marginTop: 32 }}>
+              Data from UK water companies, the Environment Agency and the Drinking Water Inspectorate.{" "}
+              <Link href="/about">About TapWater.uk</Link> · <Link href="/about/methodology">How we score</Link> · <Link href="/about/data-sources">Where the data comes from</Link>
+            </p>
+          </div>
+        </section>
       </div>
-
-      {/* Interactive Map */}
-      <section className="mt-10">
-        <div className="text-center mb-4">
-          <h2 className="font-display text-2xl text-ink italic">
-            Water quality across the UK
-          </h2>
-          <p className="text-sm text-muted mt-1">
-            Tap a region to explore water quality data for that area.
-          </p>
-        </div>
-        <HomepageMap />
-      </section>
-
-      {/* Areas to watch + Cleanest water — side by side on desktop */}
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-        {/* Areas to watch */}
-        <section>
-          <div className="flex items-center gap-2 mb-1">
-            <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
-            <h2 className="font-display text-2xl text-ink italic">
-              Areas to watch
-            </h2>
-          </div>
-          <p className="text-sm text-muted mt-1 mb-5">
-            These areas had the most issues in recent water tests.
-          </p>
-
-          <div className="flex flex-col gap-3">
-            {worst.map((item) => {
-              const flagged = item.readings.find((r) => r.status !== "pass");
-              return (
-                <Link
-                  key={item.district}
-                  href={`/postcode/${item.district}`}
-                  className="card p-4 group block"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-data font-bold text-sm text-ink">
-                          {item.district}
-                        </span>
-                        <span className="text-sm text-muted truncate">
-                          {item.areaName}
-                        </span>
-                      </div>
-                      {flagged && (
-                        <p className="text-xs text-muted mt-1.5 truncate">
-                          <span className="text-danger font-medium">{flagged.name}</span>
-                          {" "}detected at{" "}
-                          <span className="font-data">
-                            {flagged.value} {flagged.unit}
-                          </span>
-                        </p>
-                      )}
-                      {!flagged && item.contaminantsFlagged === 0 && (
-                        <p className="text-xs text-muted mt-1.5">
-                          Low score based on multiple readings
-                        </p>
-                      )}
-                    </div>
-                    <div className="shrink-0 flex flex-col items-end gap-1">
-                      <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
-                        {item.safetyScore.toFixed(1)}
-                      </span>
-                      <span className="text-xs text-faint uppercase tracking-wider">/10</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">
-                    <span className="text-xs text-faint">{item.city}</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Cleanest water */}
-        <section>
-          <div className="flex items-center gap-2 mb-1">
-            <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
-            <h2 className="font-display text-2xl text-ink italic">
-              Cleanest water
-            </h2>
-          </div>
-          <p className="text-sm text-muted mt-1 mb-5">
-            These areas scored highest in our checks.
-          </p>
-
-          <div className="flex flex-col gap-3">
-            {best.map((item) => (
-              <Link
-                key={item.district}
-                href={`/postcode/${item.district}`}
-                className="card p-4 group block"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="flex items-baseline gap-2">
-                      <span className="font-data font-bold text-sm text-ink">
-                        {item.district}
-                      </span>
-                      <span className="text-sm text-muted truncate">
-                        {item.areaName}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted mt-1.5">
-                      {item.contaminantsFlagged === 0
-                        ? "No contaminants flagged"
-                        : `${item.contaminantsFlagged} contaminant${item.contaminantsFlagged !== 1 ? "s" : ""} flagged`}
-                      {" — "}
-                      {item.contaminantsTested} tested
-                    </p>
-                  </div>
-                  <div className="shrink-0 flex flex-col items-end gap-1">
-                    <span className={`font-data text-lg font-bold leading-none ${scoreTextClass(item.safetyScore)}`}>
-                      {item.safetyScore.toFixed(1)}
-                    </span>
-                    <span className="text-xs text-faint uppercase tracking-wider">/10</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-rule">
-                  <span className="text-xs text-faint">{item.city}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-      </div>
-
-      {/* The fixes people actually buy — the homepage's only commercial step.
-          Fixed three picks: the rail claims to be "most clicked", so it must not
-          reshuffle with whatever the click log says this week. */}
-      <FixPicks
-        className="mt-14"
-        pageType="home"
-        placement="home-picks"
-        title="The fixes people actually buy"
-        intro={
-          <>
-            Of everything we link to, these three are what readers click most: a jug
-            for drinking water, a shower filter for chlorine, and a reverse osmosis
-            unit that needs no plumbing. They are starting points, not a prescription.
-            Check your postcode above and the report tells you what your own water
-            actually needs.
-          </>
-        }
-      />
-
-      {/* Popular searches */}
-      <section className="mt-12">
-        <h2 className="font-display text-xl text-ink italic mb-4">
-          Popular searches
-        </h2>
-
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
-          {popularSearches.map(({ district, data }) => (
-              <Link
-                key={district}
-                href={`/postcode/${district}`}
-                className="card px-4 py-3 group flex items-center gap-3"
-              >
-                <span className="font-data font-bold text-sm text-ink w-12 shrink-0">
-                  {district}
-                </span>
-                <span className="text-xs sm:text-sm text-muted flex-1 truncate">
-                  {data.areaName}
-                </span>
-                <span className={`${scoreBadgeClass(data.safetyScore)} font-data shrink-0`}>
-                  {data.safetyScore.toFixed(1)}
-                </span>
-                <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-              </Link>
-            ))}
-        </div>
-      </section>
-
-      {/* Explore */}
-      <section className="mt-12">
-        <h2 className="font-display text-xl text-ink italic mb-1">Explore</h2>
-        <p className="text-sm text-muted mb-5">Dig deeper into UK water quality</p>
-
-        {/* Feature pages — 2×2 on mobile, 4-col on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {[
-            {
-              href: "/rankings/",
-              title: "UK Water Quality Rankings",
-              desc: "See which cities have the best and worst tap water",
-            },
-            {
-              href: "/hardness/",
-              title: "Water Hardness Checker",
-              desc: "Find out if you have hard or soft water",
-            },
-            {
-              href: "/guides/is-uk-tap-water-safe/",
-              title: "Is UK Tap Water Safe?",
-              desc: "Everything you need to know about tap water safety",
-            },
-            {
-              href: "/guides/water-problems/",
-              title: "Water Problems?",
-              desc: "Troubleshoot taste, colour, and smell issues",
-            },
-          ].map(({ href, title, desc }) => (
-            <Link
-              key={href}
-              href={href}
-              className="card p-4 group block"
-            >
-              <p className="font-medium text-sm text-ink leading-snug group-hover:text-accent transition-colors">
-                {title}
-              </p>
-              <p className="text-xs text-muted mt-1.5 leading-relaxed">
-                {desc}
-              </p>
-              <div className="mt-3 flex items-center gap-1 text-accent">
-                <span className="text-xs font-medium">Read more</span>
-                <ChevronRight className="w-3 h-3" />
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Cities */}
-        <div className="mt-5 flex flex-wrap gap-2">
-          {[
-            { name: "London", slug: "london" },
-            { name: "Manchester", slug: "manchester" },
-            { name: "Birmingham", slug: "birmingham" },
-            { name: "Leeds", slug: "leeds" },
-            { name: "Glasgow", slug: "glasgow" },
-            { name: "Edinburgh", slug: "edinburgh" },
-          ].map(({ name, slug }) => (
-            <Link key={slug} href={`/city/${slug}/`} className="pill">
-              {name}
-            </Link>
-          ))}
-        </div>
-
-        {/* Regions */}
-        <p className="text-xs uppercase tracking-[0.15em] text-muted font-semibold mt-5 mb-2">By region</p>
-        <div className="flex flex-wrap gap-2">
-          {REGIONS.map((region) => (
-            <Link key={region.slug} href={`/region/${region.slug}`} className="pill">
-              {region.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Recently updated — direct crawl paths into the postcode network */}
-      {recentlyUpdated.length > 0 && (
-        <section className="mt-12">
-          <h2 className="font-display text-xl text-ink italic mb-1">
-            Recently updated areas
-          </h2>
-          <p className="text-sm text-muted mb-4">
-            Latest water quality reports from across the UK
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {recentlyUpdated.map((pc) => (
-              <Link
-                key={pc.district}
-                href={`/postcode/${pc.district}`}
-                className="pill group"
-              >
-                <span className="font-data font-bold text-xs">{pc.district}</span>
-                <span className="text-faint mx-1">&middot;</span>
-                <span className="text-xs">{pc.areaName}</span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Water companies */}
-      <section className="mt-12">
-        <h2 className="font-display text-xl text-ink italic">
-          Water companies
-        </h2>
-        <p className="text-sm text-muted mt-1 mb-4">
-          We track data from all major UK water companies
-        </p>
-
-        <div className="card divide-y divide-rule">
-          {suppliers.slice(0, 6).map((supplier) => (
-            <Link
-              key={supplier.id}
-              href={`/supplier/${supplier.id}`}
-              className="flex items-center gap-3 px-4 py-3 group hover:bg-wash transition-colors first:rounded-t-xl"
-            >
-              <Building2 className="w-4 h-4 text-faint shrink-0" />
-              <span className="font-medium text-sm text-ink group-hover:text-accent transition flex-1">
-                {supplier.name}
-              </span>
-              <span className="text-xs text-faint hidden sm:block">
-                {supplier.region}
-              </span>
-              <span className="text-xs text-faint font-data ml-3 shrink-0">
-                {supplier.customersM}M customers
-              </span>
-              <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-3 text-right">
-          <Link href="/about" className="text-sm text-accent hover:underline">
-            View all companies →
-          </Link>
-        </div>
-      </section>
-
-      {/* Common questions — the plain-English answers people search for */}
-      <section className="mt-12 mb-14" aria-labelledby="home-faq-heading">
-        <FAQSchema faqs={faqs} />
-        <h2 id="home-faq-heading" className="font-display text-xl text-ink italic">
-          Common questions
-        </h2>
-        <dl className="mt-4 max-w-3xl divide-y divide-rule border-y border-rule">
-          {faqs.map(({ question, answer }) => (
-            <div key={question} className="py-5 grid gap-2 sm:grid-cols-[minmax(0,15rem)_1fr] sm:gap-8">
-              <dt className="font-display text-lg text-ink italic leading-snug">
-                {question}
-              </dt>
-              <dd className="text-sm text-body leading-relaxed">{answer}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
     </div>
   );
 }

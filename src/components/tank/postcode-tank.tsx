@@ -160,7 +160,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             {/* The place line is part of the h1: the district and town are what people
                 search for, and the old h1 ("Your water in OX1") carried them. */}
             <h1 className={longHeadline ? "wt-long" : undefined}>
-              <span className="wt-where">Tap water in {place}</span>
+              <span className="wt-where">{`Tap water in ${place}`}</span>
               <span>{plan.headline[0]}</span>
               {plan.headline[1] ? <span className="wt-hardline">{plan.headline[1]}</span> : null}
             </h1>
@@ -576,7 +576,7 @@ export function PostcodeTankEmpty({ page }: { page: PostcodePageLoad }) {
         <div className="wt-inner" style={{ color: "var(--wt-deep)", alignItems: "start" }}>
           <div>
             <h1 className="wt-long">
-              <span className="wt-where">Tap water in {district}, {data.areaName}</span>
+              <span className="wt-where">{`Tap water in ${district}, ${data.areaName}`}</span>
               <span>Not enough test results yet.</span>
             </h1>
             <p className="wt-basis">
