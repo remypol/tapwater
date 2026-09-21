@@ -1,25 +1,24 @@
 import Link from "next/link";
 import { NavLinks } from "@/components/nav-links";
-import { Logo } from "@/components/logo";
+import "@/components/tank/chrome.css";
 
+// Ordered by what visitors come for, not by how the database is laid out. Rankings,
+// contaminants, suppliers and news keep a site-wide link in the footer.
 const navLinks = [
-  { label: "News", href: "/news" },
-  { label: "Rankings", href: "/compare" },
-  { href: "/filters", label: "Filters" },
-  { label: "Contaminants", href: "/contaminant" },
-  { label: "Suppliers", href: "/supplier" },
+  { label: "Postcodes", href: "/postcode" },
+  { label: "Hardness", href: "/hardness" },
+  { label: "Filters", href: "/filters" },
   { label: "Guides", href: "/guides" },
-  { label: "About", href: "/about" },
+  { label: "About the data", href: "/about" },
 ];
 
 export function Header() {
   return (
-    <header className="w-full bg-[var(--color-surface)]/90 backdrop-blur-sm shadow-[0_1px_3px_rgba(0,0,0,0.04)] sticky top-0 z-50">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center">
-          <Logo size="sm" />
+    <header className="tc-header">
+      <div className="tc-header-in">
+        <Link href="/" className="tc-mark" aria-label="TapWater.uk home">
+          tap<span>water</span>
         </Link>
-
         {/* Desktop nav — hidden below sm, bottom bar handles mobile */}
         <NavLinks links={navLinks} />
       </div>

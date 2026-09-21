@@ -4,7 +4,6 @@ import { getAllPostcodeDistricts } from "@/lib/data";
 import { highlightDescription } from "@/lib/district-highlights";
 import { loadPostcodePage } from "@/lib/postcode-page-load";
 import { PostcodeTank, PostcodeTankEmpty } from "@/components/tank/postcode-tank";
-import { tankFonts } from "@/components/tank/fonts";
 import { PostcodeDatasetSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { WaterReportTracker } from "@/components/conversion-tracker";
 
@@ -103,7 +102,7 @@ export default async function PostcodePage({ params }: Props) {
   const { data, city, faqs, pfasNearby, hasData } = page;
 
   return (
-    <div className={tankFonts}>
+    <div>
       <PostcodeDatasetSchema
         district={data.district}
         areaName={data.areaName}

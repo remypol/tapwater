@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { tankFonts } from "@/components/tank/fonts";
 import { NavProgress } from "@/components/nav-progress";
 import { OrganizationSchema, WebSiteSchema } from "@/components/json-ld";
 import "./globals.css";
@@ -77,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${instrumentSerif.variable} ${spaceMono.variable}`}
+      className={`${dmSans.variable} ${instrumentSerif.variable} ${spaceMono.variable} ${tankFonts}`}
     >
       <head>
         <link

@@ -5,7 +5,6 @@ import { getPostcodeData, getSuppliersList, getTrustMetrics, getRankedPostcodes,
 import { HardnessMap } from "@/components/hardness-map";
 import { TankCanvas } from "@/components/tank/tank-canvas";
 import { TankSearch } from "@/components/tank/tank-search";
-import { tankFonts } from "@/components/tank/fonts";
 import "@/components/tank/tank.css";
 import type { PostcodeData } from "@/lib/types";
 import { FixPicks } from "@/components/fix-picks";
@@ -130,7 +129,7 @@ export default async function HomePage() {
   );
 
   return (
-    <div className={`${tankFonts}`}>
+    <div>
       <FAQSchema faqs={faqs} />
       <div className="wt wt-home">
         {/* ── The tank: one job, enter a postcode ── */}
