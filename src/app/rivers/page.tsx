@@ -85,7 +85,6 @@ function RiverTable({ rows }: { rows: { river: RiverStatus; districts: string[] 
 
 export default async function RiversPage() {
   const data = await getNationalRivers();
-  const dateModified = new Date().toISOString().split("T")[0];
 
   if (!data) {
     return (
@@ -99,6 +98,8 @@ export default async function RiversPage() {
   }
 
   const { all, riversOnly, withDistricts } = data;
+  // The day the ratings last changed, not the day this page was rendered.
+  const dateModified = data.lastChanged ?? "2026-09-21";
   const year = all.classificationYear;
   const worst = withDistricts.filter((r) => r.river.ecologicalClass === "Bad").slice(0, 40);
   const best = withDistricts
@@ -163,6 +164,14 @@ export default async function RiversPage() {
         </h1>
 
         {/* The whole country as one bar: each segment is a rating, sized by how many waters hold it. */}
+        <p className="mt-4 text-sm text-muted">
+          Environment Agency {all.classificationYear} assessment. Ratings last changed{" "}
+          <time dateTime={dateModified}>
+            {new Date(`${dateModified}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}
+          </time>
+          ; we check for a new release every month.
+        </p>
+
         <figure className="mt-10">
           <div className="flex h-10 sm:h-12 overflow-hidden rounded-[3px]" role="img"
             aria-label={WORST_FIRST.map((c) => `${c}: ${all.byEcologicalClass[c]}`).join(", ")}>

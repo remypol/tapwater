@@ -123,6 +123,20 @@ export interface RiverIngestResult {
   districtsUnmatched: number;
 }
 
+/** The parts of a rating a reader would notice changing. */
+export function ratingFingerprint(
+  year: number,
+  ecological: string | null,
+  chemical: string | null,
+  elements: unknown,
+): string {
+  const list = Array.isArray(elements) ? elements : [];
+  const parts = list
+    .map((e) => `${(e as { key?: string }).key}=${(e as { status?: string }).status}`)
+    .sort();
+  return [year, ecological ?? "", chemical ?? "", ...parts].join("|");
+}
+
 function chunk<T>(items: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
@@ -172,6 +186,32 @@ export async function runRiverStatusIngest({ db }: { db: SupabaseClient }): Prom
     const rivers = Array.from(byId.values());
 
     const now = new Date().toISOString();
+
+    // `updated_at` is the date a rating last changed, not the date we last looked: pages
+    // and the sitemap publish it as their modified date, and a date that moves every
+    // month while the content stands still teaches search engines to ignore it.
+    const existing = new Map<string, { fingerprint: string; updatedAt: string }>();
+    for (let offset = 0; ; offset += 1000) {
+      const { data, error: readError } = await db
+        .from("river_status")
+        .select("water_body_id, classification_year, ecological_class, chemical_class, elements, updated_at")
+        .order("water_body_id", { ascending: true })
+        .range(offset, offset + 999);
+      if (readError) throw new Error(`river_status read failed: ${readError.message}`);
+      for (const r of data ?? []) {
+        existing.set(r.water_body_id, {
+          fingerprint: ratingFingerprint(r.classification_year, r.ecological_class, r.chemical_class, r.elements),
+          updatedAt: r.updated_at,
+        });
+      }
+      if (!data || data.length < 1000) break;
+    }
+    const updatedAtFor = (r: RiverStatus): string => {
+      const prev = existing.get(r.waterBodyId);
+      const fp = ratingFingerprint(r.classificationYear || year, r.ecologicalClass, r.chemicalClass, r.elements);
+      return prev && prev.fingerprint === fp ? prev.updatedAt : now;
+    };
+
     for (const batch of chunk(rivers, 500)) {
       const { error: upsertError } = await db.from("river_status").upsert(
         batch.map((r) => ({
@@ -189,7 +229,7 @@ export async function runRiverStatusIngest({ db }: { db: SupabaseClient }): Prom
           ecological_change: r.ecologicalChange,
           drinking_water_protected_area: r.drinkingWaterProtectedArea,
           elements: r.elements,
-          updated_at: now,
+          updated_at: updatedAtFor(r),
         })),
         { onConflict: "water_body_id" },
       );

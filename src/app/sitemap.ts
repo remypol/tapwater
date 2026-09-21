@@ -5,6 +5,7 @@ import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
+import { getNationalRivers } from "@/lib/river-status-data";
 import { getSitemapIncidentCandidates } from "@/lib/incidents";
 import { getIncidentLastModified, isIncidentIndexable } from "@/lib/incident-indexing";
 import { BRAND_COMPARISON_PAIRS } from "@/lib/brand-comparisons";
@@ -79,6 +80,7 @@ async function getLatestDataDate(): Promise<Date> {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
+  const riversChanged = (await getNationalRivers())?.lastChanged ?? null;
   const hardnessAreas = await getHardnessAreaCodes();
   // Only include scored postcodes in sitemap — thin pages (no data) are
   // noindexed and should not waste crawl budget or dilute quality signals.
@@ -211,7 +213,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]),
     {
       url: `${BASE_URL}/rivers`,
-      lastModified: latestDataDate,
+      lastModified: riversChanged ? new Date(riversChanged) : latestDataDate,
       changeFrequency: "monthly",
       priority: 0.8,
     },

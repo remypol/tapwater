@@ -65,6 +65,7 @@ TapWater.uk aggregates water quality data from the Environment Agency Water Qual
 ## PFAS tracker
 
 - [PFAS Live Tracker](https://www.tapwater.uk/pfas): National PFAS detection map and city rankings
+- [River Health in England](https://www.tapwater.uk/rivers): Environment Agency 2025 ecological and chemical ratings for every river, estuary and coastal water in England, with the rating for the river each postcode district drains into (shown on /postcode/{district}#river-health). Refreshed monthly from the Defra Data Services Platform. River ratings are not tap water results.
 - City-level PFAS pages: https://www.tapwater.uk/pfas/{city-slug} (e.g. london, manchester, birmingham)
 - Data source: Environment Agency Water Quality Archive, PFAS determinands 2942-3037
 - Updated weekly with 3 years of historical data

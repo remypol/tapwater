@@ -181,3 +181,14 @@ describe("describeRiverStatusHealth", () => {
     expect(describeRiverStatusHealth({ checked_at: "2026-08-01T04:30:00Z", error: null }, now)[0]).toContain("79 days");
   });
 });
+
+describe("ratingFingerprint", () => {
+  it("ignores element order and changes when a rating changes", async () => {
+    const { ratingFingerprint } = await import("../river-status-ingest");
+    const a = ratingFingerprint(2025, "Poor", "Fail", [{ key: "fish_class", status: "Poor" }, { key: "ph_class", status: "High" }]);
+    const b = ratingFingerprint(2025, "Poor", "Fail", [{ key: "ph_class", status: "High" }, { key: "fish_class", status: "Poor" }]);
+    const c = ratingFingerprint(2025, "Moderate", "Fail", [{ key: "fish_class", status: "Moderate" }, { key: "ph_class", status: "High" }]);
+    expect(a).toBe(b);
+    expect(a).not.toBe(c);
+  });
+});

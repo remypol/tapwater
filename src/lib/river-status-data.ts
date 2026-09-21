@@ -35,10 +35,13 @@ interface RiverRow {
   ecological_change: string | null;
   drinking_water_protected_area: string | null;
   elements: RiverElement[] | null;
+  updated_at: string;
 }
 
 interface RiverStore {
   rivers: Map<string, RiverStatus>;
+  /** ISO date a rating last changed; null before the first ingest. */
+  lastChanged: string | null;
   byDistrict: Map<string, { waterBodyId: string; matchType: "within" | "nearest"; distanceKm: number | null }>;
 }
 
@@ -85,7 +88,7 @@ async function loadPaged<T>(table: string, columns: string, orderBy: string): Pr
 let storeCache: Promise<RiverStore> | null = null;
 
 async function loadStore(): Promise<RiverStore> {
-  const store: RiverStore = { rivers: new Map(), byDistrict: new Map() };
+  const store: RiverStore = { rivers: new Map(), byDistrict: new Map(), lastChanged: null };
   try {
     const [rivers, districts] = await Promise.all([
       loadPaged<RiverRow>("river_status", "*", "water_body_id"),
@@ -95,7 +98,10 @@ async function loadStore(): Promise<RiverStore> {
         "postcode_district",
       ),
     ]);
-    for (const r of rivers) store.rivers.set(r.water_body_id, toRiver(r));
+    for (const r of rivers) {
+      store.rivers.set(r.water_body_id, toRiver(r));
+      if (r.updated_at && (!store.lastChanged || r.updated_at > store.lastChanged)) store.lastChanged = r.updated_at;
+    }
     for (const d of districts) {
       store.byDistrict.set(d.postcode_district, {
         waterBodyId: d.water_body_id,
@@ -164,6 +170,8 @@ export interface NationalRivers {
   riversOnly: RiverStatusSummary;
   /** Every water body that has at least one postcode district, for the index table. */
   withDistricts: { river: RiverStatus; districts: string[] }[];
+  /** YYYY-MM-DD the ratings last changed. */
+  lastChanged: string | null;
 }
 
 export async function getNationalRivers(): Promise<NationalRivers | null> {
@@ -175,5 +183,6 @@ export async function getNationalRivers(): Promise<NationalRivers | null> {
     all: summariseRivers(everything),
     riversOnly: summariseRivers(everything.filter((r) => r.type === "River")),
     withDistricts: area?.rivers ?? [],
+    lastChanged: store.lastChanged ? store.lastChanged.split("T")[0] : null,
   };
 }
