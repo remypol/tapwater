@@ -551,3 +551,53 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
     </div>
   );
 }
+
+/**
+ * A district we hold no usable results for. These pages are noindex; their job is to
+ * say so plainly and send the visitor somewhere that does have data.
+ */
+export function PostcodeTankEmpty({ page }: { page: PostcodePageLoad }) {
+  const { data, city } = page;
+  const district = data.district;
+  return (
+    <div className="wt">
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">/</span>
+            {city.hasPage ? <Link href={`/city/${city.slug}`}>{city.name}</Link> : <span>{city.name}</span>}
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{district}</span>
+          </nav>
+        </div>
+      </div>
+      <section className="wt-tank" style={{ ["--wt-surface" as string]: "70%" }}>
+        <div className="wt-inner" style={{ color: "var(--wt-deep)", alignItems: "start" }}>
+          <div>
+            <h1 className="wt-long">
+              <span className="wt-where">Tap water in {district}, {data.areaName}</span>
+              <span>Not enough test results yet.</span>
+            </h1>
+            <p className="wt-basis">
+              We do not hold enough results for {district} to say anything useful about it. That is a gap in the published data, not a sign that the water is unsafe.
+              {data.supplierId && data.supplierId !== "unknown" ? <> Your supplier is <Link className="wt-link" href={`/supplier/${data.supplierId}`}>{data.supplier}</Link>.</> : null}
+            </p>
+          </div>
+        </div>
+      </section>
+      {data.nearbyPostcodes.length > 0 ? (
+        <section className="wt-next">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Districts nearby</h2>
+            <p className="wt-pills">
+              {data.nearbyPostcodes.map((pc) => <Link key={pc} href={`/postcode/${pc}`}>{pc}</Link>)}
+              {city.hasPage ? <Link href={`/city/${city.slug}`}>All of {city.name}</Link> : null}
+              <Link href="/postcode">Every postcode district</Link>
+            </p>
+          </div>
+        </section>
+      ) : null}
+    </div>
+  );
+}
