@@ -1,21 +1,11 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import { CONTAMINANT_SLUG_MAP } from '@/lib/contaminant-slugs';
 import Link from 'next/link';
 import { ContaminantReading, getPercentOfLimit } from '@/lib/types';
 import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 
-// Map contaminant display names → slug for cross-linking to /contaminant/[slug]
-const CONTAMINANT_SLUG_MAP: Record<string, string> = {
-  "PFAS": "pfas", "Lead": "lead", "Nitrate": "nitrate", "Copper": "copper",
-  "Chlorine": "chlorine", "Fluoride": "fluoride", "Trihalomethanes": "trihalomethanes",
-  "E. coli": "ecoli", "Arsenic": "arsenic", "Manganese": "manganese",
-  "Iron": "iron", "Mercury": "mercury", "Microplastics": "microplastics",
-  "Nitrite": "nitrite", "Turbidity": "turbidity", "Aluminium": "aluminium",
-  "Coliform Bacteria": "coliform", "Cadmium": "cadmium", "Chromium": "chromium",
-  "Pesticides": "pesticides", "Total Coliforms": "coliform",
-  "Coliform bacteria": "coliform",
-};
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 

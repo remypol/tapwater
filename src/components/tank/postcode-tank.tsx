@@ -8,6 +8,7 @@ import { SoftenerButton, StickyAction } from "./tank-actions";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { EmailCapture } from "@/components/email-capture";
+import { CONTAMINANT_SLUG_MAP } from "@/lib/contaminant-slugs";
 import { softenerPartnerEnabled, SOFTENER_PARTNER_NAME } from "@/lib/softener-partner";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { SOFTENER_GUIDES, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
@@ -250,7 +251,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                     const share = r.ukLimit != null && r.ukLimit > 0 ? r.value / r.ukLimit : null;
                     return (
                       <tr key={r.name}>
-                        <td>{r.name}</td>
+                        <td>{CONTAMINANT_SLUG_MAP[r.name] ? <Link className="wt-link" href={`/contaminant/${CONTAMINANT_SLUG_MAP[r.name]}`}>{r.name}</Link> : r.name}</td>
                         <td>{formatReading(r.value)} {r.unit}</td>
                         <td>{r.ukLimit == null ? "No legal limit" : r.ukLimit === 0 ? "Must be zero" : `${formatReading(r.ukLimit)} ${r.unit}`}</td>
                         <td>
@@ -365,7 +366,12 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   These are river and borehole samples, not tests of your tap water.
                 </p>
                 <p style={{ fontSize: "0.9rem" }}>
+                  {pfasNearby.nearestCitySlug && pfasNearby.nearestCityName ? (
+                    <><Link className="wt-link" href={`/pfas/${pfasNearby.nearestCitySlug}`}>Every PFAS sample around {pfasNearby.nearestCityName}</Link>{" · "}</>
+                  ) : null}
                   <Link className="wt-link" href="/guides/best-water-filter-pfas">Which filters remove PFAS</Link>
+                  {" · "}
+                  <Link className="wt-link" href="/guides/pfas-uk-explained">PFAS explained</Link>
                 </p>
               </div>
             ) : null}
@@ -461,7 +467,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
               </li>
             ))}
             {isHard
-              ? SOFTENER_GUIDES.slice(0, 4).map((g) => (
+              ? SOFTENER_GUIDES.map((g) => (
                   <li key={g.slug}>
                     <Link href={`/guides/${g.slug}/`}>
                       <strong>{g.label}</strong>
@@ -483,6 +489,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             {city.hasPage ? <Link href={`/city/${city.slug}`}>All of {city.name}</Link> : null}
             <Link href="/compare">UK water rankings</Link>
             <Link href="/hardness">Water hardness checker</Link>
+            <Link href="/guides/water-hardness-map">Water hardness map</Link>
           </p>
           {riverReadings.length > 0 ? (
             <details className="wt-env">
@@ -497,7 +504,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   <tbody>
                     {riverReadings.map((r) => (
                       <tr key={r.name}>
-                        <td>{r.name}</td>
+                        <td>{CONTAMINANT_SLUG_MAP[r.name] ? <Link href={`/contaminant/${CONTAMINANT_SLUG_MAP[r.name]}`}>{r.name}</Link> : r.name}</td>
                         <td>{formatReading(r.value)} {r.unit}</td>
                         <td>{r.ukLimit == null ? "None" : `${formatReading(r.ukLimit)} ${r.unit}`}</td>
                       </tr>
