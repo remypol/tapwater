@@ -273,3 +273,40 @@
   .wt-b { animation: none; }
   .wt-btn, .wt-card, .wt-sticky { transition: none; }
 }
+
+/* ── Postcode search ── */
+.wt-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wt-search { width: 100%; max-width: 620px; }
+.wt-search-row { display: flex; align-items: center; gap: 8px; background: #fff; border-radius: 999px; padding: 8px 8px 8px 24px; box-shadow: 0 12px 40px rgba(3, 19, 73, 0.28); }
+.wt-search-row > svg { width: 22px; height: 22px; color: var(--wt-mute); flex: none; }
+.wt-search-row input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 1.15rem; font-weight: 500; color: var(--wt-ink); padding: 12px 8px; text-transform: uppercase; }
+.wt-search-row input::placeholder { text-transform: none; color: #7b89a8; font-weight: 400; }
+.wt-search-row:focus-within { box-shadow: 0 0 0 4px var(--wt-sun), 0 12px 40px rgba(3, 19, 73, 0.28); }
+.wt-search-error { margin-top: 12px; font-weight: 600; font-size: 0.95rem; color: #fff; background: rgba(217, 44, 32, 0.92); border-radius: 14px; padding: 10px 16px; display: inline-block; }
+@media (max-width: 560px) {
+  .wt-search-row { flex-wrap: wrap; border-radius: 28px; padding: 8px; }
+  .wt-search-row > svg { margin-left: 14px; }
+  .wt-search-row input { flex-basis: 60%; }
+  .wt-search-row .wt-btn { width: 100%; }
+}
+
+/* ── Home ── */
+.wt-home .wt-tank .wt-inner { grid-template-columns: minmax(0, 1fr); min-height: clamp(560px, 80vh, 740px); align-items: end; }
+.wt-home .wt-tank h1 { font-size: clamp(2.7rem, 7.4vw, 6rem); max-width: 14ch; }
+.wt-home .wt-basis { margin-bottom: 32px; }
+.wt-homefacts { margin-top: 28px; font-size: 0.98rem; opacity: 0.92; max-width: 62ch; }
+.wt-homefacts a { color: inherit; font-weight: 600; }
+.wt-band { padding-block: var(--wt-pad); }
+.wt-band--white { background: #fff; }
+.wt-band--foam { background: var(--wt-foam); }
+.wt-band h2 + .wt-sub { color: var(--wt-mute); }
+.wt-card small { position: relative; font-size: 0.8rem; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wt-twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 56px; }
+.wt-twocol .wt-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.wt-twocol .wt-card { height: 168px; }
+.wt-grouph { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.05rem; margin-top: 40px; }
+.wt-grouph + .wt-pills { margin-top: 14px; }
+
+/* Legacy blocks that still live inside a tank page take the tank's type and corners. */
+.wt .font-display { font-family: var(--font-rhd), system-ui, sans-serif; font-style: normal; font-weight: 900; letter-spacing: -0.025em; }
+.wt .card { border-radius: 24px; }
