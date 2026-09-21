@@ -65,7 +65,7 @@ export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
                   animationDelay: `${-i * 0.37}s`,
                 }}
               >
-                <em>{size >= 58 ? <>{b.name}<br />{pct}%</> : null}</em>
+                <em>{size >= 72 ? <>{b.name}<br />{pct}%</> : null}</em>
               </button>
             );
           })}

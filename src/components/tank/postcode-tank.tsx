@@ -56,7 +56,7 @@ function ProductAction({ action, district, lead }: { action: Extract<TankAction,
           href={p.affiliateUrl}
           pageType="postcode"
           postcodeArea={district}
-          recommendationReason={p.matchedCount > 0 ? "flagged-contaminant" : "general-pick"}
+          recommendationReason={p.matchedContaminants.length > 0 ? "flagged-contaminant" : "general-pick"}
           productCategory={p.category}
           productSlug={p.slug}
           placement={lead ? "tank-primary" : "tank-secondary"}
@@ -71,11 +71,22 @@ function ProductAction({ action, district, lead }: { action: Extract<TankAction,
   );
 }
 
-function SoftenerAction({ action, district, lead }: { action: Extract<TankAction, { kind: "softener" }>; district: string; lead: boolean }) {
+function SoftenerAction({ action, district, lead, hardness }: { action: Extract<TankAction, { kind: "softener" }>; district: string; lead: boolean; hardness: number | null }) {
   return (
     <>
+      {lead && hardness != null ? (
+        <p className="wt-gauge wt-nums" aria-hidden="true">
+          {Math.round(hardness)}
+          <small>mg/L</small>
+        </p>
+      ) : null}
       <h3>{lead ? "Hard water: compare softener quotes" : "Stop the limescale"}</h3>
       <p>{action.reason}</p>
+      {lead ? (
+        <p>
+          It pays for itself in most homes at this hardness, through a boiler that stays efficient and appliances that last.
+        </p>
+      ) : null}
       {lead && softenerPartnerEnabled ? (
         <ul className="wt-assure">
           <li>Free quotes</li>
@@ -183,7 +194,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             <div className="wt-do-grid">
               <div className="wt-primary">
                 {primary.kind === "softener" ? (
-                  <SoftenerAction action={primary} district={district} lead />
+                  <SoftenerAction action={primary} district={district} lead hardness={hardValue} />
                 ) : (
                   <ProductAction action={primary} district={district} lead />
                 )}
@@ -192,7 +203,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                 {plan.secondary.map((a) => (
                   <div className="wt-second" key={a.kind === "product" ? a.product.slug : "softener"}>
                     {a.kind === "softener" ? (
-                      <SoftenerAction action={a} district={district} lead={false} />
+                      <SoftenerAction action={a} district={district} lead={false} hardness={hardValue} />
                     ) : (
                       <ProductAction action={a} district={district} lead={false} />
                     )}

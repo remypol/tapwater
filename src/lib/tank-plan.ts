@@ -147,9 +147,11 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
     kind: "product",
     product: p,
     title: `${p.brand} ${p.model}`,
+    // matchedCount carries ranking boosts (PFAS, hard water) as well as real matches,
+    // so the sentence is built from the names, never from the count.
     reason:
-      p.matchedCount > 0
-        ? `Removes ${joinNames(p.matchedContaminants.slice(0, 3)).toLowerCase()}, the ${p.matchedCount === 1 ? "result" : "results"} that stood out in ${district}.`
+      p.matchedContaminants.length > 0
+        ? `Removes ${joinNames(p.matchedContaminants.slice(0, 3)).toLowerCase()}, the ${p.matchedContaminants.length === 1 ? "result" : "results"} that stood out in ${district}.`
         : p.bestFor,
   });
 
@@ -158,7 +160,7 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   // A result that is merely close is worth a mention, not worth displacing the one
   // problem a hard-water household will pay to solve.
   const flaggedFix =
-    recommendations.length > 0 && recommendations[0].matchedCount > 0 && (over.length > 0 || !isHard);
+    recommendations.length > 0 && recommendations[0].matchedContaminants.length > 0 && (over.length > 0 || !isHard);
 
   let ordered: TankAction[];
   if (flaggedFix) ordered = [products[0], ...(isHard ? [softener] : []), ...products.slice(1)];

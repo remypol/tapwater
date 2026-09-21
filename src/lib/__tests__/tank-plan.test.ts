@@ -114,6 +114,13 @@ describe("buildTankPlan funnel", () => {
     expect([p.primary, ...p.secondary].some((a) => a?.kind === "softener")).toBe(false);
   });
 
+  it("never writes 'Removes ,' when a product ranks on a boost rather than a match", () => {
+    const boosted = { ...product("RO"), matchedCount: 50 } as RecommendedProduct;
+    const p = buildTankPlan({ ...base, recommendations: [boosted] });
+    const action = [p.primary, ...p.secondary].find((a) => a?.kind === "product");
+    expect(action?.reason).toBe("Better tasting water");
+  });
+
   it("caps the page at one primary and two secondary actions", () => {
     const p = buildTankPlan({ ...base, recommendations: [product("A"), product("B"), product("C")] });
     expect(p.secondary).toHaveLength(2);
