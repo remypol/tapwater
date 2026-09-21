@@ -52,27 +52,30 @@ export function StickyAction({ title, note, children }: { title: string; note: s
 
   useEffect(() => {
     const hero = document.getElementById("wt-tank");
-    const target = document.getElementById("softener-quotes") ?? document.getElementById("wt-fix");
+    // Step aside wherever the same button is already on screen.
+    const targets = [document.getElementById("wt-fix"), document.getElementById("softener-quotes")].filter(
+      (el): el is HTMLElement => el !== null,
+    );
     if (!hero) return;
     let pastHero = false;
-    let atTarget = false;
-    const update = () => setShow(pastHero && !atTarget);
+    const onScreen = new Set<Element>();
+    const update = () => setShow(pastHero && onScreen.size === 0);
     const heroIo = new IntersectionObserver(([e]) => {
       pastHero = !e.isIntersecting;
       update();
     });
     heroIo.observe(hero);
-    let targetIo: IntersectionObserver | null = null;
-    if (target) {
-      targetIo = new IntersectionObserver(([e]) => {
-        atTarget = e.isIntersecting;
-        update();
-      });
-      targetIo.observe(target);
-    }
+    const targetIo = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) onScreen.add(e.target);
+        else onScreen.delete(e.target);
+      }
+      update();
+    });
+    targets.forEach((t) => targetIo.observe(t));
     return () => {
       heroIo.disconnect();
-      targetIo?.disconnect();
+      targetIo.disconnect();
     };
   }, []);
 
