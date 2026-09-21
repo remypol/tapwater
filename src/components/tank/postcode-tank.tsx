@@ -10,7 +10,8 @@ import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { EmailCapture } from "@/components/email-capture";
 import { softenerPartnerEnabled, SOFTENER_PARTNER_NAME } from "@/lib/softener-partner";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
-import { SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
+import { SOFTENER_GUIDES, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
+import { pickRelatedGuides } from "@/lib/guides";
 import { formatReading, formatSampleDate, hardnessBandLabel, type TankAction } from "@/lib/tank-plan";
 import { catchmentExplorerUrl, chemicalFails, describeRiverStatus, failingElements, waterBodyNoun, ECOLOGICAL_CLASSES } from "@/lib/river-status";
 import { formatMicrograms, formatSampleMonth, humaniseSiteLabel } from "@/components/pfas-nearby";
@@ -100,6 +101,18 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
   const place = [district, data.areaName !== data.city ? data.areaName : null, data.city].filter(Boolean).join(", ");
   const primary = plan.primary;
   const usesProduct = [primary, ...plan.secondary].some((a) => a?.kind === "product");
+  const flaggedNames = data.readings.filter((r) => r.status !== "pass").map((r) => r.name);
+  const pfasAnywhere = (data.pfasDetected && data.pfasLevel != null) || pfasNearby !== null;
+  const guides = pickRelatedGuides({
+    pfasDetected: pfasAnywhere,
+    hasLeadFlagged: data.readings.some((r) => /lead/i.test(r.name) && r.status !== "pass"),
+    isHardWater: (hardValue ?? 0) >= HARD_WATER_THRESHOLD,
+    hasContaminantsFlagged: data.contaminantsFlagged > 0,
+  });
+  const scoredNeighbours = new Set(neighbours.map((n) => n.district));
+  const otherNearby = data.nearbyPostcodes.filter((pc) => !scoredNeighbours.has(pc));
+  // Only worth a second table when the tap results above are not these same samples.
+  const riverReadings = data.drinkingWaterReadings.length > 0 ? data.environmentalReadings : [];
 
   return (
     <div className="wt">
@@ -396,6 +409,14 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                 </Link>
               ))}
             </div>
+            {otherNearby.length > 0 ? (
+              <p className="wt-more">
+                Also nearby:{" "}
+                {otherNearby.map((pc, i) => (
+                  <span key={pc}>{i > 0 ? ", " : ""}<Link href={`/postcode/${pc}`}>{pc}</Link></span>
+                ))}
+              </p>
+            ) : null}
           </div>
         </section>
       ) : null}
@@ -414,6 +435,69 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
           </div>
         </section>
       ) : null}
+
+      {/* ── 9. Keep reading: every internal link the old page carried ── */}
+      <section className="wt-read" aria-labelledby="wt-read-h">
+        <div className="wt-inner">
+          <h2 className="wt-h2" id="wt-read-h">Keep reading</h2>
+          <ul className="wt-guides">
+            {guides.map((g) => (
+              <li key={g.slug}>
+                <Link href={`/guides/${g.slug}/`}>
+                  <strong>{g.title}</strong>
+                  <span>{g.description}</span>
+                </Link>
+              </li>
+            ))}
+            {isHard
+              ? SOFTENER_GUIDES.slice(0, 4).map((g) => (
+                  <li key={g.slug}>
+                    <Link href={`/guides/${g.slug}/`}>
+                      <strong>{g.label}</strong>
+                      <span>{g.blurb}</span>
+                    </Link>
+                  </li>
+                ))
+              : null}
+          </ul>
+          <p className="wt-pills">
+            {pfasAnywhere ? <Link href="/contaminant/pfas">PFAS explained</Link> : null}
+            {flaggedNames.some((n) => /lead/i.test(n)) ? <Link href="/contaminant/lead">Lead in water</Link> : null}
+            {flaggedNames.some((n) => /nitrate|nitrite/i.test(n)) ? <Link href="/contaminant/nitrate">Nitrate levels</Link> : null}
+            {flaggedNames.some((n) => /chlorine/i.test(n)) ? <Link href="/contaminant/chlorine">Chlorine</Link> : null}
+            <Link href="/guides/how-to-test-your-water">How to test your water</Link>
+            <Link href="/guides/best-water-filters-uk">Best water filters</Link>
+            <Link href="/guides/best-shower-filter-uk">Filter shower heads</Link>
+            <Link href="/filters/water-testing-kits">Water testing kits</Link>
+            {city.hasPage ? <Link href={`/city/${city.slug}`}>All of {city.name}</Link> : null}
+            <Link href="/compare">UK water rankings</Link>
+            <Link href="/hardness">Water hardness checker</Link>
+          </p>
+          {riverReadings.length > 0 ? (
+            <details className="wt-env">
+              <summary>River and groundwater readings near {district}</summary>
+              <p>
+                Environment Agency samples from rivers, groundwater and reservoirs nearby. Not your tap water. For scale they are shown against drinking water
+                limits; rivers are judged against much stricter environmental standards, and on those every river in England fails for chemicals.
+              </p>
+              <div className="wt-tablewrap">
+                <table className="wt-table wt-table--light wt-nums">
+                  <thead><tr><th scope="col">Substance</th><th scope="col">Reading</th><th scope="col">Drinking water limit</th></tr></thead>
+                  <tbody>
+                    {riverReadings.map((r) => (
+                      <tr key={r.name}>
+                        <td>{r.name}</td>
+                        <td>{formatReading(r.value)} {r.unit}</td>
+                        <td>{r.ukLimit == null ? "None" : `${formatReading(r.ukLimit)} ${r.unit}`}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          ) : null}
+        </div>
+      </section>
 
       <section className="wt-next" style={{ paddingBlock: "56px" }}>
         <div className="wt-inner">

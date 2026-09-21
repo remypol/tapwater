@@ -20,8 +20,8 @@ interface Speck {
 /**
  * The water in the tank. Three layered swells for the surface, and a drift of pale
  * specks whose number follows the hardness reading, so a soft district is visibly
- * clear and a hard one visibly mineral. Specks stay out of the left-hand text column
- * on wide screens and are fainter on phones, where text and water share the space.
+ * clear and a hard one visibly mineral. Specks stay out of the text column and the
+ * score block on wide screens and are fainter on phones, where text and water share the space.
  *
  * Still frame under prefers-reduced-motion. The CSS behind the canvas paints the same
  * water level, so nothing jumps when this mounts.
@@ -100,7 +100,9 @@ export function TankCanvas({ level, hardness }: TankCanvasProps) {
           if (s.y > 1) s.y = 0;
         }
         // Keep the headline readable: fade specks out across the text column.
-        const clear = wide ? Math.min(1, Math.max(0, (x / width - 0.5) / 0.18)) : 0.35;
+        let clear = wide ? Math.min(1, Math.max(0, (x / width - 0.5) / 0.18)) : 0.35;
+        // …and out of the score and its caption, bottom right.
+        if (wide && x > width * 0.7 && y > height * 0.56) clear *= 0.12;
         if (clear <= 0.02) continue;
         ctx.fillStyle = `rgba(243,239,230,${(0.3 + s.r / 7) * clear})`;
         ctx.beginPath();
