@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       // Default: allow everything
-      { userAgent: "*", allow: "/" },
+      { userAgent: "*", allow: "/", disallow: "/preview/" },
       // Explicitly welcome AI crawlers that cite sources
       { userAgent: "GPTBot", allow: "/" },
       { userAgent: "ChatGPT-User", allow: "/" },

@@ -258,10 +258,26 @@ async function loadSuppliersBatch(
 
 // ── Unified loader: Supabase first, JSON fallback ──
 
-async function loadData(): Promise<Map<string, PostcodeData>> {
-  const fromDb = await loadFromSupabase();
-  if (fromDb && fromDb.size > 0) return fromDb;
-  return loadJsonFallback();
+/**
+ * The promise is cached, not just the result. Pages render concurrently, and with only
+ * a result cache every request that arrived before the first load finished started its
+ * own full load of every district: ten requests, ten loads, and a dev server that took
+ * minutes to answer. A load that fails falls back to the bundled seed file for the
+ * callers already waiting, but is not remembered, so the next request tries Supabase
+ * again instead of serving the seed (and 404s for districts it lacks) until a restart.
+ */
+let loadDataPromise: Promise<Map<string, PostcodeData>> | null = null;
+
+function loadData(): Promise<Map<string, PostcodeData>> {
+  if (!loadDataPromise) {
+    loadDataPromise = (async () => {
+      const fromDb = await loadFromSupabase();
+      if (fromDb && fromDb.size > 0) return fromDb;
+      loadDataPromise = null;
+      return loadJsonFallback();
+    })();
+  }
+  return loadDataPromise;
 }
 
 // ── Seed entry type (for JSON fallback) ──
