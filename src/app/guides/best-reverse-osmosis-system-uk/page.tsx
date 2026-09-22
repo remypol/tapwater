@@ -585,7 +585,7 @@ export default function BestReverseOsmosisGuide() {
 
           <ProductReview
             product={waterdrop}
-            heading="Waterdrop G3P600 \u2014 Top pick"
+            heading="Waterdrop G3P600 — Top pick"
             verdict="Our top pick. Best balance of performance, certifications, and usability."
             review={`The Waterdrop G3P600 is the RO system we recommend to most people. It removes 12 contaminant categories we track, including PFAS, fluoride, arsenic, nitrate, and trihalomethanes. NSF/ANSI 58 and 372 certified \u2014 the 372 certification covers lead-free materials, which is a detail most competitors skip. The tankless design means it takes up about as much space as a loaf of bread under your sink. The smart TDS monitoring panel on the tap shows you real-time water quality before and after filtration, so you can see the system working. Filter changes are straightforward twist-and-pull, no tools needed. At £${waterdrop.priceGbp} it is not cheap, but the annual running cost of £${waterdrop.annualCost} is lower than most jug filters when you account for cartridge frequency.`}
             pros={[
@@ -605,7 +605,7 @@ export default function BestReverseOsmosisGuide() {
 
           <ProductReview
             product={frizzlife}
-            heading="Frizzlife PD600 \u2014 Value pick"
+            heading="Frizzlife PD600 — Value pick"
             verdict={`Same core performance as the Waterdrop for £${frizzlifeSaving} less.`}
             review={`The Frizzlife PD600 is the smart buy if you want RO performance without paying top price. It carries the same NSF/ANSI 58 certification as the Waterdrop, removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate, and matches the 600 GPD flow rate. What you give up for £${frizzlifeSaving} less: there is no TDS monitoring panel (you will need a separate \u00a310 TDS meter if you want to check), the pump is slightly noisier during filtration, and it carries fewer certifications overall. The twist-and-lock filter replacement system is genuinely tool-free and takes about 30 seconds. For most UK households, the Frizzlife does everything the Waterdrop does at a lower price.`}
             pros={[

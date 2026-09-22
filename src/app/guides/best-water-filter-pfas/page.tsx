@@ -545,7 +545,7 @@ export default function BestWaterFilterPfasGuide() {
         <div className="space-y-8">
           <ProductReview
             product={waterdropRO}
-            heading="Waterdrop G3P600 \u2014 Most reliable PFAS removal"
+            heading="Waterdrop G3P600 — Most reliable PFAS removal"
             verdict="NSF 58 certified. The most dependable way to remove PFAS from your drinking water."
             review={`If PFAS are your primary concern, this is the filter to buy. The Waterdrop G3P600 is a tankless reverse osmosis system certified to NSF/ANSI 58 — the international standard that verifies 90–99% PFAS removal. It also removes fluoride, arsenic, nitrate, lead, and 8 other contaminant categories. The smart TDS monitoring panel shows you real-time filtration performance so you can see it working. At £${waterdropRO.priceGbp} plus £${waterdropRO.annualCost}/year in running costs, it is a significant investment. But it is the only technology that reliably removes PFAS regardless of which specific PFAS compounds are present in your water.`}
             pros={[
@@ -564,7 +564,7 @@ export default function BestWaterFilterPfasGuide() {
 
           <ProductReview
             product={frizzlife}
-            heading="Frizzlife PD600 \u2014 Value RO pick"
+            heading="Frizzlife PD600 — Value RO pick"
             verdict={`Same NSF 58 PFAS removal standard for £${frizzlifeSaving} less than the Waterdrop.`}
             review={`The Frizzlife PD600 carries the same NSF/ANSI 58 certification as the Waterdrop, which means identical PFAS removal verification. It removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate. What you give up for £${frizzlifeSaving} less: no TDS monitoring panel, slightly noisier operation, and fewer certifications overall. But the core PFAS removal performance is equivalent. If you want RO-level PFAS protection and price matters, the Frizzlife is the smarter buy.`}
             pros={[
@@ -583,7 +583,7 @@ export default function BestWaterFilterPfasGuide() {
 
           <ProductReview
             product={zerowater}
-            heading="ZeroWater 12-Cup \u2014 Budget PFAS removal"
+            heading="ZeroWater 12-Cup — Budget PFAS removal"
             verdict="The cheapest way to remove PFAS. NSF 53 and 401 certified in a simple jug."
             review={`If you cannot install an under-sink system — or you want PFAS removal for £${zerowater.priceGbp} instead of £${frizzlife.priceGbp} — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £120/year in replacement filters, the annual running cost is higher than the RO systems. But as a starting point for PFAS removal, nothing else comes close at this price.`}
             pros={[
@@ -602,7 +602,7 @@ export default function BestWaterFilterPfasGuide() {
 
           <ProductReview
             product={tappWater}
-            heading="TAPP Water EcoPro \u2014 No-install PFAS option"
+            heading="TAPP Water EcoPro — No-install PFAS option"
             verdict="Clips onto your tap. Removes PFAS and microplastics without plumbing."
             review="The TAPP Water EcoPro is a tap-mounted filter that clips onto most standard UK kitchen taps. It removes PFAS, microplastics, chlorine, and lead — rare for a filter at this price point and form factor. The biodegradable filter cartridges are an eco-friendly touch. The caveat: it is SGS tested rather than NSF certified, which means the testing was done by a reputable lab but did not go through the full NSF certification process. For renters or anyone who cannot modify their plumbing, it is the most practical PFAS-reducing option available. At £60 upfront and £80/year, the total cost of ownership is moderate."
             pros={[
