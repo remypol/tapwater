@@ -39,42 +39,18 @@ export function CompareSearch() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="card p-5">
-      <div className="flex items-center gap-2">
-        <p className="text-sm font-medium text-ink shrink-0">
-          <ArrowLeftRight className="w-4 h-4 inline mr-1.5 text-accent" />
-          Compare two areas
-        </p>
-      </div>
-      <div className="mt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-        <input
-          type="text"
-          value={pc1}
-          onChange={(e) => setPc1(e.target.value)}
-          placeholder="e.g. SW1A"
-          aria-label="First postcode"
-          className="flex-1 border border-rule rounded-lg px-4 py-2.5 text-sm bg-transparent text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent/20"
-        />
-        <span className="text-xs text-faint text-center shrink-0">vs</span>
-        <input
-          type="text"
-          value={pc2}
-          onChange={(e) => setPc2(e.target.value)}
-          placeholder="e.g. M1"
-          aria-label="Second postcode"
-          className="flex-1 border border-rule rounded-lg px-4 py-2.5 text-sm bg-transparent text-ink placeholder:text-faint focus:outline-none focus:ring-2 focus:ring-accent/20"
-        />
-        <button
-          type="submit"
-          className="bg-btn text-white rounded-lg py-2.5 px-5 text-sm font-medium flex items-center justify-center gap-1.5 hover:bg-btn-hover transition-colors shrink-0"
-        >
+    <form onSubmit={handleSubmit} noValidate className="wt-search wt-compare" role="search">
+      <div className="wt-search-row">
+        <ArrowLeftRight aria-hidden="true" />
+        <input type="text" value={pc1} onChange={(e) => setPc1(e.target.value)} placeholder="First postcode" aria-label="First postcode" autoCapitalize="characters" />
+        <span className="wt-vs">vs</span>
+        <input type="text" value={pc2} onChange={(e) => setPc2(e.target.value)} placeholder="Second postcode" aria-label="Second postcode" autoCapitalize="characters" />
+        <button type="submit" className="wt-btn wt-btn--sun">
           Compare
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight aria-hidden="true" />
         </button>
       </div>
-      {error && (
-        <p className="text-xs text-danger mt-2">{error}</p>
-      )}
+      {error ? <p className="wt-search-error" role="alert">{error}</p> : null}
     </form>
   );
 }

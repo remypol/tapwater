@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ArrowRight } from "lucide-react";
 import { getPostcodeData } from "@/lib/data";
-import { getScoreColor } from "@/lib/types";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
-import { PostcodeSearch } from "@/components/postcode-search";
+import { TankSearch } from "@/components/tank/tank-search";
+import { formatReading } from "@/lib/tank-plan";
+import "@/components/tank/tank.css";
 import { OG_IMAGE } from "@/lib/og";
 
 interface Props {
@@ -34,20 +34,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
     },
   };
-}
-
-function scoreTextClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "text-safe";
-  if (c === "warning") return "text-warning";
-  return "text-danger";
-}
-
-function scoreBgClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "bg-safe-light";
-  if (c === "warning") return "bg-warning-light";
-  return "bg-danger-light";
 }
 
 export default async function ComparePage({ params }: Props) {
@@ -103,7 +89,7 @@ export default async function ComparePage({ params }: Props) {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div className="wt">
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
@@ -112,123 +98,81 @@ export default async function ComparePage({ params }: Props) {
         ]}
       />
       {faqs.length > 0 && <FAQSchema faqs={faqs} />}
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/compare">Compare</Link><span aria-hidden="true">/</span><span aria-current="page">{d1} vs {d2}</span>
+          </nav>
+        </div>
+      </div>
 
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
-        <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-        <ChevronRight className="w-3 h-3" />
-        <Link href="/compare" className="hover:text-accent transition-colors">Compare</Link>
-        <ChevronRight className="w-3 h-3" />
-        <span className="text-ink font-medium">{d1} vs {d2}</span>
-      </nav>
-
-      {/* Header */}
-      <header className="mt-6 text-center">
-        <h1 className="font-display text-3xl sm:text-4xl text-ink tracking-tight italic">
-          {d1} vs {d2}
-        </h1>
-        <p className="text-muted mt-2">Water quality comparison</p>
-      </header>
-
-      {/* Score comparison cards */}
-      {hasScores && (
-        <div className="mt-8 grid grid-cols-2 gap-4 max-w-2xl mx-auto">
-          {sides.map(({ district, data }) => (
-            <Link key={district} href={`/postcode/${district}`} className="card p-6 text-center group">
-              <p className="text-xs text-faint uppercase tracking-wider">{data.areaName}</p>
-              <p className="font-data text-lg font-bold text-ink mt-1">{district}</p>
-              <p className={`font-data text-4xl font-bold mt-3 ${scoreTextClass(data.safetyScore)}`}>
-                {data.safetyScore.toFixed(1)}
-              </p>
-              <p className="text-xs text-faint mt-1">/10</p>
-              <div className={`mt-3 inline-block px-3 py-1 rounded-full text-xs font-medium ${scoreBgClass(data.safetyScore)} ${scoreTextClass(data.safetyScore)}`}>
-                {data.contaminantsFlagged} flagged · {data.contaminantsTested} tested
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>{d1} vs {d2}</h1>
+          <p className="wt-sub">Water quality comparison</p>
+          {hasScores ? (
+            <>
+              <div className="wt-vs-grid wt-nums" style={{ marginTop: 32 }}>
+                {sides.map(({ district, data }) => (
+                  <Link key={district} href={`/postcode/${district}`} className={`wt-card${winner === district ? " wt-win" : ""}`}>
+                    <i style={{ height: `${Math.max(12, Math.min(92, data.safetyScore * 10))}%` }} />
+                    <b>{district}</b>
+                    <small>{data.areaName} · {data.supplier}</small>
+                    <span>{data.safetyScore.toFixed(1)} out of 10 · {data.contaminantsFlagged} flagged of {data.contaminantsTested} tested</span>
+                  </Link>
+                ))}
               </div>
-              <p className="text-xs text-muted mt-3">{data.supplier}</p>
-            </Link>
-          ))}
+              <p className="wt-verdict">{winner ? `${winner} has the better water quality.` : "Both areas score the same."}</p>
+            </>
+          ) : null}
         </div>
-      )}
+      </section>
 
-      {/* Verdict */}
-      {hasScores && (
-        <div className="mt-6 text-center">
-          <p className="text-base text-body font-medium">
-            {winner ? (
-              <>
-                <span className={scoreTextClass(winnerData!.safetyScore)}>{winner}</span> has better water quality
-              </>
-            ) : (
-              "Both areas have equal water quality scores"
-            )}
-          </p>
-        </div>
-      )}
-
-      {/* Contaminant comparison table */}
-      {comparisonRows.length > 0 && (
-        <section className="mt-10 max-w-3xl mx-auto">
-          <h2 className="font-display text-xl text-ink italic mb-4 text-center">Contaminant comparison</h2>
-          <div className="card overflow-hidden">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-rule text-xs text-faint uppercase tracking-wider">
-                  <th className="text-left px-4 py-3">Contaminant</th>
-                  <th className="text-right px-4 py-3">{d1}</th>
-                  <th className="text-right px-4 py-3">{d2}</th>
-                  <th className="text-right px-4 py-3 hidden sm:table-cell">Safe level</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row, i) => {
-                  const better = row.v1! < row.v2! ? "left" : row.v2! < row.v1! ? "right" : "tie";
-                  return (
-                    <tr key={row.name} className={i % 2 === 0 ? "bg-wash/30" : ""}>
-                      <td className="px-4 py-2.5 text-ink font-medium">{row.name}</td>
-                      <td className={`px-4 py-2.5 text-right font-data ${better === "left" ? "text-safe font-bold" : ""}`}>
-                        {row.v1!.toPrecision(3)} {row.unit}
-                      </td>
-                      <td className={`px-4 py-2.5 text-right font-data ${better === "right" ? "text-safe font-bold" : ""}`}>
-                        {row.v2!.toPrecision(3)} {row.unit}
-                      </td>
-                      <td className="px-4 py-2.5 text-right text-faint font-data hidden sm:table-cell">
-                        {row.limit != null ? `${row.limit} ${row.unit}` : "—"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+      {comparisonRows.length > 0 ? (
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Contaminant comparison</h2>
+            <p className="wt-sub">The lower reading is marked. Both are inside the legal limit unless the result says otherwise.</p>
+            <div className="wt-tablewrap" style={{ marginTop: 24 }}>
+              <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 560, maxWidth: 820 }}>
+                <thead><tr><th scope="col">Contaminant</th><th scope="col" style={{ textAlign: "right" }}>{d1}</th><th scope="col" style={{ textAlign: "right" }}>{d2}</th><th scope="col" style={{ textAlign: "right" }}>Legal limit</th></tr></thead>
+                <tbody>
+                  {comparisonRows.map((row) => {
+                    const better = row.v1! < row.v2! ? "left" : row.v2! < row.v1! ? "right" : "tie";
+                    return (
+                      <tr key={row.name}>
+                        <td>{row.name}</td>
+                        <td style={{ textAlign: "right" }} className={better === "left" ? "wt-better" : undefined}>{formatReading(row.v1!)} {row.unit}</td>
+                        <td style={{ textAlign: "right" }} className={better === "right" ? "wt-better" : undefined}>{formatReading(row.v2!)} {row.unit}</td>
+                        <td style={{ textAlign: "right", opacity: 0.7 }}>{row.limit != null ? `${formatReading(row.limit)} ${row.unit}` : "–"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </section>
-      )}
+      ) : null}
 
-      {/* AI-citable summary */}
-      <div className="mt-8 max-w-3xl mx-auto">
-        <p className="text-sm text-body leading-relaxed">
-          {d1} ({data1.areaName}, {data1.city}) scored {data1.safetyScore.toFixed(1)}/10 with {data1.contaminantsFlagged} contaminants
-          exceeding safe levels out of {data1.contaminantsTested} tested. {d2} ({data2.areaName}, {data2.city}) scored{" "}
-          {data2.safetyScore.toFixed(1)}/10 with {data2.contaminantsFlagged} flagged out of {data2.contaminantsTested} tested. {verdictText}
-        </p>
-      </div>
-
-      {/* CTA */}
-      <div className="mt-10 text-center">
-        <p className="text-sm text-muted mb-3">Check your own postcode</p>
-        <div className="max-w-md mx-auto">
-          <PostcodeSearch size="lg" />
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <p className="wt-prose wt-nums">
+            {d1} ({data1.areaName}, {data1.city}) scored {data1.safetyScore.toFixed(1)}/10 with {data1.contaminantsFlagged} contaminants exceeding safe levels out of {data1.contaminantsTested} tested. {d2} ({data2.areaName}, {data2.city}) scored{" "}
+            {data2.safetyScore.toFixed(1)}/10 with {data2.contaminantsFlagged} flagged out of {data2.contaminantsTested} tested. {verdictText}
+          </p>
+          <p className="wt-pills" style={{ marginTop: 28 }}>
+            <Link href={`/postcode/${d1}`}>Full {d1} report</Link>
+            <Link href={`/postcode/${d2}`}>Full {d2} report</Link>
+            <Link href="/compare">All rankings</Link>
+          </p>
+          <div className="wt-check" style={{ marginTop: 48 }}>
+            <h2 className="wt-h2">Check your own postcode</h2>
+            <p className="wt-sub">Every substance, the hardness and what to do about it, for your district.</p>
+            <TankSearch />
+          </div>
         </div>
-      </div>
-
-      {/* Links to individual pages */}
-      <div className="mt-8 flex justify-center gap-4">
-        <Link href={`/postcode/${d1}`} className="pill">
-          Full {d1} report <ArrowRight className="w-3 h-3 ml-1" />
-        </Link>
-        <Link href={`/postcode/${d2}`} className="pill">
-          Full {d2} report <ArrowRight className="w-3 h-3 ml-1" />
-        </Link>
-      </div>
+      </section>
     </div>
   );
 }

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, ArrowRight, Trophy, Droplets, ShieldCheck } from "lucide-react";
-import { PostcodeSearch } from "@/components/postcode-search";
-import { ScrollReveal } from "@/components/scroll-reveal";
+import { TankSearch } from "@/components/tank/tank-search";
+import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
-import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { getCityBySlug } from "@/lib/cities";
 import { CITY_COMPARISON_PAIRS, canonicalCityPair } from "@/lib/city-comparisons";
@@ -19,20 +17,6 @@ interface Props {
 }
 
 // ── Helpers ──
-
-function scoreTextClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "text-[var(--color-safe)]";
-  if (c === "warning") return "text-[var(--color-warning)]";
-  return "text-[var(--color-danger)]";
-}
-
-function scoreBgClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "bg-safe-light";
-  if (c === "warning") return "bg-warning-light";
-  return "bg-danger-light";
-}
 
 interface CityStats {
   name: string;
@@ -282,317 +266,119 @@ export default async function CityComparisonPage({ params }: Props) {
   const sides = [stats1, stats2];
 
   return (
-    <div className="bg-score-safe">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <BreadcrumbSchema
-          items={[
-            { name: "Home", url: "https://www.tapwater.uk" },
-            { name: "Compare", url: "https://www.tapwater.uk/compare" },
-            {
-              name: `${stats1.name} vs ${stats2.name}`,
-              url: `https://www.tapwater.uk/compare/city/${stats1.slug}/vs/${stats2.slug}`,
-            },
-          ]}
-        />
-        {faqs.length > 0 && <FAQSchema faqs={faqs} />}
-
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1.5 text-sm text-faint"
-        >
-          <Link href="/" className="hover:text-accent transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/compare" className="hover:text-accent transition-colors">
-            Compare
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-ink font-medium">
-            {stats1.name} vs {stats2.name}
-          </span>
-        </nav>
-
-        {/* Header */}
-        <header className="mt-6 text-center">
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight italic">
-            {stats1.name} vs {stats2.name}
-          </h1>
-          <p className="text-muted mt-2">Water quality comparison</p>
-        </header>
-
-        {/* GEO summary for AI citation */}
-        {hasScores && (
-          <div className="card p-5 border-l-4 border-l-accent mb-8 mt-6 max-w-3xl mx-auto">
-            <p className="text-base text-body leading-relaxed">
-              <strong className="text-ink">
-                According to TapWater.uk, {stats1.name} scores{" "}
-                {stats1.avgScore.toFixed(1)}/10 and {stats2.name} scores{" "}
-                {stats2.avgScore.toFixed(1)}/10 for drinking water quality.
-              </strong>{" "}
-              {winner
-                ? `${winner.name} has the better water.`
-                : "Both cities have similar water quality."}
-            </p>
-          </div>
-        )}
-
-        {/* Side-by-side stat cards */}
-        {hasScores && (
-          <ScrollReveal delay={0}>
-            <div className="mt-8 grid grid-cols-2 gap-4 max-w-3xl mx-auto">
-              {sides.map((stats) => {
-                const isWinner = winner === stats;
-                return (
-                  <Link
-                    key={stats.slug}
-                    href={`/city/${stats.slug}`}
-                    className="card p-6 text-center group relative"
-                  >
-                    {isWinner && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full bg-accent text-white text-xs font-semibold">
-                        <Trophy className="w-3 h-3" />
-                        Better water
-                      </div>
-                    )}
-                    <p className="text-sm font-semibold text-ink mt-1 group-hover:text-accent transition-colors">
-                      {stats.name}
-                    </p>
-                    <p
-                      className={`font-data text-4xl sm:text-5xl font-bold mt-3 ${scoreTextClass(stats.avgScore)}`}
-                    >
-                      {stats.avgScore.toFixed(1)}
-                    </p>
-                    <p className="text-xs text-faint mt-1">/10</p>
-
-                    <div className="mt-4 space-y-2 text-sm text-left">
-                      <div className="flex justify-between">
-                        <span className="text-muted">Areas tested</span>
-                        <span className="font-data font-bold text-ink">
-                          {stats.totalPostcodes}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted">Issues flagged</span>
-                        <span className="font-data font-bold text-ink">
-                          {stats.totalFlagged}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted">Supplier</span>
-                        <span className="text-ink text-right truncate ml-2">
-                          {stats.primarySupplier}
-                        </span>
-                      </div>
-                      {stats.hardnessClass && (
-                        <div className="flex justify-between">
-                          <span className="text-muted">Hardness</span>
-                          <span className="text-ink capitalize">
-                            {stats.hardnessClass}
-                          </span>
-                        </div>
-                      )}
-                      {stats.pfasCount > 0 && (
-                        <div className="flex justify-between">
-                          <span className="text-muted">PFAS detected</span>
-                          <span className="text-ink">
-                            {stats.pfasCount} area{stats.pfasCount !== 1 ? "s" : ""}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div
-                      className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${scoreBgClass(stats.avgScore)} ${scoreTextClass(stats.avgScore)}`}
-                    >
-                      {stats.totalFlagged} flagged across {stats.totalPostcodes} areas
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </ScrollReveal>
-        )}
-
-        {/* Verdict */}
-        {hasScores && (
-          <div className="mt-6 text-center">
-            <p className="text-base text-body font-medium">
-              {winner ? (
-                <>
-                  <span className={scoreTextClass(winner.avgScore)}>
-                    {winner.name}
-                  </span>{" "}
-                  has better water quality
-                  {scoreDiff >= 0.5 && (
-                    <span className="text-muted">
-                      {" "}
-                      by {scoreDiff.toFixed(1)} points
-                    </span>
-                  )}
-                </>
-              ) : (
-                "Both cities have equal water quality scores"
-              )}
-            </p>
-          </div>
-        )}
-
-        {/* Key differences */}
-        {differences.length > 0 && (
-          <>
-            <hr className="border-rule mt-10" />
-            <ScrollReveal delay={100}>
-              <section className="mt-8 max-w-3xl mx-auto">
-                <h2 className="font-display text-2xl text-ink italic mb-5 text-center">
-                  Key differences
-                </h2>
-                <div className="space-y-3">
-                  {differences.map((diff) => (
-                    <div key={diff.label} className="card p-4">
-                      <p className="text-xs text-muted uppercase tracking-wider mb-1">
-                        {diff.label}
-                      </p>
-                      <p className="text-sm text-body">{diff.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </ScrollReveal>
-          </>
-        )}
-
-        {/* Top concerns side by side */}
-        {hasScores &&
-          (stats1.topConcerns.length > 0 || stats2.topConcerns.length > 0) && (
-            <>
-              <hr className="border-rule mt-10" />
-              <ScrollReveal delay={0}>
-                <section className="mt-8 max-w-3xl mx-auto">
-                  <h2 className="font-display text-2xl text-ink italic mb-5 text-center">
-                    Top concerns by city
-                  </h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    {sides.map((stats) => (
-                      <div key={stats.slug}>
-                        <p className="text-sm font-semibold text-ink mb-3">
-                          {stats.name}
-                        </p>
-                        {stats.topConcerns.length > 0 ? (
-                          <div className="space-y-2">
-                            {stats.topConcerns.slice(0, 4).map(([name, count]) => (
-                              <div
-                                key={name}
-                                className="card p-3 flex items-center justify-between"
-                              >
-                                <span className="text-sm text-ink">{name}</span>
-                                <span className="text-xs text-muted">
-                                  {count} area{count > 1 ? "s" : ""}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-sm text-muted">
-                            No contaminants flagged
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              </ScrollReveal>
-            </>
-          )}
-
-        <hr className="border-rule mt-10" />
-
-        {/* Links to city pages */}
-        <ScrollReveal delay={0}>
-          <section className="mt-8 text-center">
-            <h2 className="font-display text-2xl text-ink italic mb-5">
-              Full city reports
-            </h2>
-            <div className="flex justify-center gap-4 flex-wrap">
-              <Link href={`/city/${stats1.slug}`} className="pill">
-                {stats1.name} water report{" "}
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Link>
-              <Link href={`/city/${stats2.slug}`} className="pill">
-                {stats2.name} water report{" "}
-                <ArrowRight className="w-3 h-3 ml-1" />
-              </Link>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        <hr className="border-rule mt-10" />
-
-        {/* Postcode CTA */}
-        <ScrollReveal delay={0}>
-          <section className="mt-8 mb-4">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
-              <h2 className="font-display text-2xl text-ink italic">
-                Check your postcode
-              </h2>
-            </div>
-            <p className="text-sm text-muted mt-1 mb-5 text-center">
-              Get a detailed water quality report for your exact area.
-            </p>
-            <div className="max-w-xl mx-auto">
-              <PostcodeSearch size="sm" />
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* More comparisons */}
-        {otherPairs.length > 0 && (
-          <>
-            <hr className="border-rule mt-10" />
-            <ScrollReveal delay={0}>
-              <section className="mt-8">
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <Droplets className="w-4 h-4 text-accent shrink-0" />
-                  <h2 className="font-display text-2xl text-ink italic">
-                    More comparisons
-                  </h2>
-                </div>
-                <div className="flex flex-wrap justify-center gap-2 mt-4">
-                  {otherPairs.map(([a, b]) => {
-                    const ca = getCityBySlug(a);
-                    const cb = getCityBySlug(b);
-                    if (!ca || !cb) return null;
-                    return (
-                      <Link
-                        key={`${a}-${b}`}
-                        href={`/compare/city/${a}/vs/${b}`}
-                        className="pill"
-                      >
-                        {ca.name} vs {cb.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </section>
-            </ScrollReveal>
-          </>
-        )}
-
-        {/* Methodology footer */}
-        <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed text-center">
-          Based on water quality data from {stats1.totalPostcodes + stats2.totalPostcodes} postcode
-          districts across {stats1.name} and {stats2.name}. See our{" "}
-          <Link
-            href="/about/methodology"
-            className="underline underline-offset-2 hover:text-muted transition-colors"
-          >
-            methodology
-          </Link>{" "}
-          for how scores are calculated.
-        </footer>
+    <div className="wt">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Compare", url: "https://www.tapwater.uk/compare" },
+          { name: `${stats1.name} vs ${stats2.name}`, url: `https://www.tapwater.uk/compare/city/${stats1.slug}/vs/${stats2.slug}` },
+        ]}
+      />
+      {faqs.length > 0 && <FAQSchema faqs={faqs} />}
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/compare">Compare</Link><span aria-hidden="true">/</span><span aria-current="page">{stats1.name} vs {stats2.name}</span>
+          </nav>
+        </div>
       </div>
+
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>{stats1.name} vs {stats2.name}</h1>
+          <p className="wt-sub">Water quality comparison</p>
+          {hasScores ? (
+            <>
+              <p className="wt-prose wt-nums" style={{ marginTop: 24 }}>
+                <strong>According to TapWater.uk, {stats1.name} scores {stats1.avgScore.toFixed(1)}/10 and {stats2.name} scores {stats2.avgScore.toFixed(1)}/10 for drinking water quality.</strong>{" "}
+                {winner ? `${winner.name} has the better water.` : "Both cities have similar water quality."}
+              </p>
+              <div className="wt-vs-grid wt-nums" style={{ marginTop: 32 }}>
+                {sides.map((stats) => (
+                  <Link key={stats.slug} href={`/city/${stats.slug}`} className={`wt-card${winner === stats ? " wt-win" : ""}`}>
+                    <i style={{ height: `${Math.max(12, Math.min(92, stats.avgScore * 10))}%` }} />
+                    <b>{stats.name}</b>
+                    <small>{stats.primarySupplier}{stats.hardnessClass ? ` · ${stats.hardnessClass} water` : ""}</small>
+                    <span>{stats.avgScore.toFixed(1)} out of 10 · {stats.totalFlagged} flagged across {stats.totalPostcodes} areas{stats.pfasCount > 0 ? ` · PFAS in ${stats.pfasCount}` : ""}</span>
+                  </Link>
+                ))}
+              </div>
+              <p className="wt-verdict">
+                {winner ? `${winner.name} has better water quality${scoreDiff >= 0.5 ? `, by ${scoreDiff.toFixed(1)} points.` : "."}` : "Both cities have equal water quality scores."}
+              </p>
+            </>
+          ) : null}
+        </div>
+      </section>
+
+      {differences.length > 0 ? (
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Key differences</h2>
+            <ul className="wt-facts" style={{ maxWidth: 720, marginTop: 24 }}>
+              {differences.map((diff) => (
+                <li key={diff.label}><strong>{diff.label}</strong><span>{diff.detail}</span></li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {hasScores && (stats1.topConcerns.length > 0 || stats2.topConcerns.length > 0) ? (
+        <section className="wt-band wt-band--foam">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Top concerns by city</h2>
+            <div className="wt-twocol" style={{ marginTop: 24 }}>
+              {sides.map((stats) => (
+                <div key={stats.slug}>
+                  <h3 className="wt-h3">{stats.name}</h3>
+                  {stats.topConcerns.length > 0 ? (
+                    <ul className="wt-ledger wt-nums" style={{ borderTopColor: "var(--wt-ink)" }}>
+                      {stats.topConcerns.slice(0, 4).map(([name, count]) => (
+                        <li key={name}><strong>{name}</strong><b>{count} area{count > 1 ? "s" : ""}</b></li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="wt-sub">No contaminants flagged</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Full city reports</h2>
+          <p className="wt-pills" style={{ marginTop: 20 }}>
+            <Link href={`/city/${stats1.slug}`}>{stats1.name} water report</Link>
+            <Link href={`/city/${stats2.slug}`}>{stats2.name} water report</Link>
+          </p>
+          <div className="wt-check" style={{ marginTop: 48 }}>
+            <h2 className="wt-h2">Check your postcode</h2>
+            <p className="wt-sub">Get a detailed water quality report for your exact area.</p>
+            <TankSearch />
+          </div>
+          {otherPairs.length > 0 ? (
+            <>
+              <h2 className="wt-h2" style={{ marginTop: 56 }}>More comparisons</h2>
+              <p className="wt-pills" style={{ marginTop: 20 }}>
+                {otherPairs.map(([a, b]) => {
+                  const ca = getCityBySlug(a);
+                  const cb = getCityBySlug(b);
+                  if (!ca || !cb) return null;
+                  return <Link key={`${a}-${b}`} href={`/compare/city/${a}/vs/${b}`}>{ca.name} vs {cb.name}</Link>;
+                })}
+              </p>
+            </>
+          ) : null}
+          <p className="wt-fine" style={{ marginTop: 40 }}>
+            Based on water quality data from {stats1.totalPostcodes + stats2.totalPostcodes} postcode districts across {stats1.name} and {stats2.name}. See our{" "}
+            <Link href="/about/methodology">methodology</Link> for how scores are calculated.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

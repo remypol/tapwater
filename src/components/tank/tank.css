@@ -367,3 +367,14 @@
 .wt-glass-list i { display: block; height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); position: relative; overflow: hidden; }
 .wt-glass-list i b { position: absolute; inset: 0 auto 0 0; border-radius: 999px; min-width: 4px; }
 @media (max-width: 640px) { .wt-glass-svg { display: none; } .wt-glass-list { display: block; } }
+
+/* ── Compare ── */
+.wt-compare .wt-search-row input { flex: 1 1 120px; text-align: center; padding-inline: 4px; }
+.wt-vs { font-weight: 700; color: var(--wt-mute); flex: none; }
+.wt-vs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 720px; }
+.wt-vs-grid .wt-card { height: 220px; }
+.wt-vs-grid .wt-card b { font-size: 2.6rem; }
+.wt-vs-grid .wt-card.wt-win { outline: 4px solid var(--wt-sun); outline-offset: -4px; }
+.wt-verdict { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: clamp(1.6rem, 3.4vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.05; max-width: 22ch; margin-top: 28px; }
+.wt-table .wt-better { color: #2f8a45; font-weight: 700; }
+.wt-table .wt-better::after { content: " ✓"; }

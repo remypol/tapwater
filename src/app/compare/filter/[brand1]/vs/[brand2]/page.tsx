@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Check, Minus, ShieldCheck, ArrowRight } from "lucide-react";
-import { PostcodeSearch } from "@/components/postcode-search";
-import { ScrollReveal } from "@/components/scroll-reveal";
+import { TankSearch } from "@/components/tank/tank-search";
+import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { ProductCard } from "@/components/product-card";
 import { PRODUCTS } from "@/lib/products";
@@ -144,420 +143,126 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
       ),
   );
 
+  const specs: [string, string, string][] = [
+    ["Price", `£${displayProduct1.priceGbp}`, `£${displayProduct2.priceGbp}`],
+    ["Annual filter cost", displayProduct1.annualCost != null ? `~£${displayProduct1.annualCost}/yr` : "–", displayProduct2.annualCost != null ? `~£${displayProduct2.annualCost}/yr` : "–"],
+    ["Rating", `${displayProduct1.rating}/5`, `${displayProduct2.rating}/5`],
+    ["Type", displayProduct1.category.replace("_", " "), displayProduct2.category.replace("_", " ")],
+    ...(displayProduct1.filterLife || displayProduct2.filterLife ? [["Filter life", displayProduct1.filterLife ?? "–", displayProduct2.filterLife ?? "–"] as [string, string, string]] : []),
+    ...(displayProduct1.flowRate || displayProduct2.flowRate ? [["Flow rate", displayProduct1.flowRate ?? "–", displayProduct2.flowRate ?? "–"] as [string, string, string]] : []),
+    ["Certifications", displayProduct1.certifications.length > 0 ? displayProduct1.certifications.join(", ") : "None listed", displayProduct2.certifications.length > 0 ? displayProduct2.certifications.join(", ") : "None listed"],
+    ["What it removes", displayProduct1.removes.join(", "), displayProduct2.removes.join(", ")],
+  ];
+
   return (
-    <div className="bg-hero min-h-screen">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <BreadcrumbSchema items={breadcrumbItems} />
-        <FAQSchema faqs={displayComparison.faqs} />
+    <div className="wt">
+      <BreadcrumbSchema items={breadcrumbItems} />
+      <FAQSchema faqs={displayComparison.faqs} />
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/compare">Compare</Link><span aria-hidden="true">/</span><span aria-current="page">{displayComparison.brand1Label} vs {displayComparison.brand2Label}</span>
+          </nav>
+        </div>
+      </div>
 
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
-          <Link href="/" className="hover:text-accent transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/compare" className="hover:text-accent transition-colors">
-            Compare
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-ink font-medium">
-            {displayComparison.brand1Label} vs {displayComparison.brand2Label}
-          </span>
-        </nav>
-
-        {/* ── Hero ── */}
-        <header className="mt-8 max-w-3xl">
-          <p className="text-xs font-medium text-accent uppercase tracking-widest mb-3">
-            {displayComparison.category} Comparison
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <p className="wt-tag" style={{ background: "var(--wt-sky)", color: "var(--wt-deep)" }}>{displayComparison.category} comparison</p>
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>{displayComparison.brand1Label} vs {displayComparison.brand2Label}</h1>
+          <p className="wt-sub">
+            An honest, data-driven comparison of two popular UK water filters: what they remove, what they cost to run, and which one belongs in your kitchen.
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight italic leading-tight">
-            {displayComparison.brand1Label}{" "}
-            <span className="text-faint not-italic text-3xl sm:text-4xl lg:text-5xl">vs</span>{" "}
-            {displayComparison.brand2Label}
-          </h1>
-          <p className="text-base sm:text-lg text-muted mt-4 max-w-2xl leading-relaxed">
-            An honest, data-driven comparison of two popular UK water filters — what they remove,
-            what they cost to run, and which one belongs in your kitchen.
-          </p>
-        </header>
-
-        {/* ── Quick verdict card ── */}
-        <ScrollReveal delay={0}>
-          <div className="mt-8 card border-l-4 border-l-accent p-6 lg:p-8 max-w-3xl">
-            <p className="text-xs text-accent font-semibold uppercase tracking-widest mb-3">
-              Our verdict
-            </p>
-            <p className="text-base text-body leading-relaxed">
-              <strong className="text-ink">Key difference: </strong>
-              {displayComparison.keyDifference}
-            </p>
-            <p className="text-base text-body leading-relaxed mt-3">
-              {displayComparison.verdict}
-            </p>
-            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-wash rounded-lg p-4">
-                <p className="text-xs text-faint uppercase tracking-wider mb-1">
-                  {displayComparison.brand1Label} is best for
-                </p>
-                <p className="text-sm font-medium text-ink">
-                  {displayComparison.brand1BestFor}
-                </p>
-              </div>
-              <div className="bg-wash rounded-lg p-4">
-                <p className="text-xs text-faint uppercase tracking-wider mb-1">
-                  {displayComparison.brand2Label} is best for
-                </p>
-                <p className="text-sm font-medium text-ink">
-                  {displayComparison.brand2BestFor}
-                </p>
-              </div>
+          <div className="wt-do-grid" style={{ marginTop: 40 }}>
+            <div className="wt-primary">
+              <h3>Our verdict</h3>
+              <p><strong>Key difference:</strong> {displayComparison.keyDifference}</p>
+              <p>{displayComparison.verdict}</p>
+            </div>
+            <div className="wt-side">
+              <div className="wt-second"><h3>{displayComparison.brand1Label} is best for</h3><p>{displayComparison.brand1BestFor}</p></div>
+              <div className="wt-second"><h3>{displayComparison.brand2Label} is best for</h3><p>{displayComparison.brand2BestFor}</p></div>
             </div>
           </div>
-        </ScrollReveal>
+        </div>
+      </section>
 
-        {/* ── Side-by-side specs table ── */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8">
-            <h2 className="font-display text-2xl sm:text-3xl text-ink italic mb-6">
-              Specs at a glance
-            </h2>
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Specs at a glance</h2>
+          <div className="wt-tablewrap" style={{ marginTop: 24 }}>
+            <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 560, maxWidth: 900 }}>
+              <thead><tr><th scope="col"></th><th scope="col">{displayComparison.brand1Label} <small>{displayProduct1.model}</small></th><th scope="col">{displayComparison.brand2Label} <small>{displayProduct2.model}</small></th></tr></thead>
+              <tbody>
+                {specs.map(([label, v1, v2]) => (
+                  <tr key={label}><td style={{ opacity: 0.7, fontWeight: 500 }}>{label}</td><td>{v1}</td><td>{v2}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-            <div className="card overflow-hidden">
-              {/* Column headers */}
-              <div className="grid grid-cols-[1fr_1fr_1fr] border-b border-rule">
-                <div className="p-4 border-r border-rule" />
-                <div className="p-4 border-r border-rule text-center">
-                  <p className="text-xs text-faint uppercase tracking-wider mb-0.5">Filter 1</p>
-                  <p className="font-semibold text-ink text-sm">
-                    {displayComparison.brand1Label}
-                  </p>
-                  <p className="text-xs text-muted">{displayProduct1.model}</p>
-                </div>
-                <div className="p-4 text-center">
-                  <p className="text-xs text-faint uppercase tracking-wider mb-0.5">Filter 2</p>
-                  <p className="font-semibold text-ink text-sm">
-                    {displayComparison.brand2Label}
-                  </p>
-                  <p className="text-xs text-muted">{displayProduct2.model}</p>
-                </div>
-              </div>
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Head-to-head breakdown</h2>
+          <ul className="wt-facts" style={{ marginTop: 24, maxWidth: 900 }}>
+            {displayComparison.comparisonPoints.map((pt) => (
+              <li key={pt.category}>
+                <strong>
+                  {pt.category}
+                  {pt.winner !== null ? <em style={{ fontStyle: "normal", fontWeight: 600, color: "var(--wt-pool)", marginLeft: 12 }}>{pt.winner === 1 ? displayComparison.brand1Label : displayComparison.brand2Label} wins</em> : null}
+                </strong>
+                <span><b>{displayComparison.brand1Label}:</b> {pt.brand1}</span>
+                <span><b>{displayComparison.brand2Label}:</b> {pt.brand2}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-              {/* Price */}
-              <SpecRow
-                label="Price"
-                val1={`£${displayProduct1.priceGbp}`}
-                val2={`£${displayProduct2.priceGbp}`}
-                mono
-              />
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Buy either filter</h2>
+          <div className="wt-picks">
+            <ProductCard product={displayProduct1} highlight={displayComparison.brand1BestFor} pageType="brand-compare" />
+            <ProductCard product={displayProduct2} highlight={displayComparison.brand2BestFor} pageType="brand-compare" />
+          </div>
+        </div>
+      </section>
 
-              {/* Annual cost */}
-              <SpecRow
-                label="Annual filter cost"
-                val1={
-                  displayProduct1.annualCost != null
-                    ? `~£${displayProduct1.annualCost}/yr`
-                    : "—"
-                }
-                val2={
-                  displayProduct2.annualCost != null
-                    ? `~£${displayProduct2.annualCost}/yr`
-                    : "—"
-                }
-                mono
-              />
+      <section className="wt-faq">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Common questions</h2>
+          {displayComparison.faqs.map((faq, i) => (
+            <details key={faq.question} open={i === 0}><summary>{faq.question}</summary><p>{faq.answer}</p></details>
+          ))}
+        </div>
+      </section>
 
-              {/* Rating */}
-              <SpecRow
-                label="Rating"
-                val1={`${displayProduct1.rating}/5`}
-                val2={`${displayProduct2.rating}/5`}
-                mono
-              />
-
-              {/* Category */}
-              <SpecRow
-                label="Type"
-                val1={displayProduct1.category.replace("_", " ")}
-                val2={displayProduct2.category.replace("_", " ")}
-              />
-
-              {/* Filter life */}
-              {(displayProduct1.filterLife || displayProduct2.filterLife) && (
-                <SpecRow
-                  label="Filter life"
-                  val1={displayProduct1.filterLife ?? "—"}
-                  val2={displayProduct2.filterLife ?? "—"}
-                />
-              )}
-
-              {/* Flow rate */}
-              {(displayProduct1.flowRate || displayProduct2.flowRate) && (
-                <SpecRow
-                  label="Flow rate"
-                  val1={displayProduct1.flowRate ?? "—"}
-                  val2={displayProduct2.flowRate ?? "—"}
-                  mono
-                />
-              )}
-
-              {/* Certifications */}
-              <SpecRow
-                label="Certifications"
-                val1={
-                  displayProduct1.certifications.length > 0
-                    ? displayProduct1.certifications.join(", ")
-                    : "None listed"
-                }
-                val2={
-                  displayProduct2.certifications.length > 0
-                    ? displayProduct2.certifications.join(", ")
-                    : "None listed"
-                }
-              />
-
-              {/* Removes */}
-              <div className="grid grid-cols-[1fr_1fr_1fr] border-t border-rule">
-                <div className="p-4 border-r border-rule">
-                  <p className="text-xs text-muted">What it removes</p>
-                </div>
-                <div className="p-4 border-r border-rule">
-                  <div className="flex flex-wrap gap-1">
-                    {displayProduct1.removes.map((r) => (
-                      <span
-                        key={r}
-                        className="inline-flex items-center gap-0.5 text-xs bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
-                      >
-                        <Check className="w-2.5 h-2.5 shrink-0" />
-                        {r}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="p-4">
-                  <div className="flex flex-wrap gap-1">
-                    {displayProduct2.removes.map((r) => (
-                      <span
-                        key={r}
-                        className="inline-flex items-center gap-0.5 text-xs bg-emerald-50 text-emerald-700 rounded px-1.5 py-0.5"
-                      >
-                        <Check className="w-2.5 h-2.5 shrink-0" />
-                        {r}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── Comparison points ── */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8">
-            <h2 className="font-display text-2xl sm:text-3xl text-ink italic mb-6">
-              Head-to-head breakdown
-            </h2>
-
-            <div className="space-y-3">
-              {displayComparison.comparisonPoints.map((pt) => (
-                <div key={pt.category} className="card p-5">
-                  <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-                    <p className="text-xs font-semibold text-ink uppercase tracking-wider">
-                      {pt.category}
-                    </p>
-                    {pt.winner !== null && (
-                      <span className="text-xs font-semibold text-accent bg-accent/8 rounded-full px-2.5 py-1">
-                        {pt.winner === 1
-                          ? `${displayComparison.brand1Label} wins`
-                          : `${displayComparison.brand2Label} wins`}
-                      </span>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <ComparisonCell
-                      label={displayComparison.brand1Label}
-                      text={pt.brand1}
-                      isWinner={pt.winner === 1}
-                    />
-                    <ComparisonCell
-                      label={displayComparison.brand2Label}
-                      text={pt.brand2}
-                      isWinner={pt.winner === 2}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── Product cards side by side ── */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8">
-            <h2 className="font-display text-2xl sm:text-3xl text-ink italic mb-6">
-              Buy either filter
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <ProductCard
-                product={displayProduct1}
-                highlight={displayComparison.brand1BestFor}
-                pageType="brand-compare"
-              />
-              <ProductCard
-                product={displayProduct2}
-                highlight={displayComparison.brand2BestFor}
-                pageType="brand-compare"
-              />
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── FAQ ── */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8 max-w-3xl">
-            <h2 className="font-display text-2xl sm:text-3xl text-ink italic mb-6">
-              Common questions
-            </h2>
-            <div className="space-y-4">
-              {displayComparison.faqs.map((faq) => (
-                <div key={faq.question} className="card p-5 lg:p-6">
-                  <h3 className="font-semibold text-ink text-sm leading-snug mb-2">
-                    {faq.question}
-                  </h3>
-                  <p className="text-sm text-body leading-relaxed">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── Postcode CTA ── */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8 mb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
-              <h2 className="font-display text-2xl text-ink italic">
-                See what is in your water
-              </h2>
-            </div>
-            <p className="text-sm text-muted mt-1 mb-5 max-w-xl">
-              Enter your postcode to get a detailed water quality report for your area — so you
-              know exactly which contaminants you need to target.
-            </p>
-            <div className="max-w-xl">
-              <PostcodeSearch size="sm" />
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* ── Other comparisons ── */}
-        {otherComparisons.length > 0 && (
-          <>
-            <hr className="border-rule mt-10" />
-            <ScrollReveal delay={0}>
-              <section className="mt-8">
-                <h2 className="font-display text-xl text-ink italic mb-4">
-                  More filter comparisons
-                </h2>
-                <div className="flex flex-wrap gap-2">
-                  {otherComparisons.map((c) => (
-                    <Link
-                      key={`${c.brand1Slug}-${c.brand2Slug}`}
-                      href={`/compare/filter/${c.brand1Slug}/vs/${c.brand2Slug}`}
-                      className="pill"
-                    >
-                      {c.brand1Label} vs {c.brand2Label}
-                      <ArrowRight className="w-3 h-3 ml-1" />
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            </ScrollReveal>
-          </>
-        )}
-
-        {/* Footer */}
-        <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
-          Product specifications and pricing are based on manufacturer data and independent testing.
-          Annual cost estimates reflect average UK household usage. See our{" "}
-          <Link
-            href="/about/methodology"
-            className="underline underline-offset-2 hover:text-muted transition-colors"
-          >
-            methodology
-          </Link>{" "}
-          for how we evaluate filters.
-        </footer>
-      </div>
-    </div>
-  );
-}
-
-// ── Sub-components ──
-
-function SpecRow({
-  label,
-  val1,
-  val2,
-  mono = false,
-}: {
-  label: string;
-  val1: string;
-  val2: string;
-  mono?: boolean;
-}) {
-  return (
-    <div className="grid grid-cols-[1fr_1fr_1fr] border-t border-rule">
-      <div className="p-4 border-r border-rule">
-        <p className="text-xs text-muted">{label}</p>
-      </div>
-      <div className="p-4 border-r border-rule">
-        <p className={`text-sm text-ink ${mono ? "font-data font-semibold" : ""}`}>{val1}</p>
-      </div>
-      <div className="p-4">
-        <p className={`text-sm text-ink ${mono ? "font-data font-semibold" : ""}`}>{val2}</p>
-      </div>
-    </div>
-  );
-}
-
-function ComparisonCell({
-  label,
-  text,
-  isWinner,
-}: {
-  label: string;
-  text: string;
-  isWinner: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-lg p-3.5 ${
-        isWinner
-          ? "bg-emerald-50 border border-emerald-200/60"
-          : "bg-wash border border-transparent"
-      }`}
-    >
-      <div className="flex items-center gap-1.5 mb-1.5">
-        {isWinner ? (
-          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-        ) : (
-          <Minus className="w-3.5 h-3.5 text-faint shrink-0" />
-        )}
-        <p
-          className={`text-xs font-semibold uppercase tracking-wider ${
-            isWinner ? "text-emerald-700" : "text-faint"
-          }`}
-        >
-          {label}
-        </p>
-      </div>
-      <p className="text-xs text-body leading-relaxed">{text}</p>
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <div className="wt-check">
+            <h2 className="wt-h2">See what is in your water</h2>
+            <p className="wt-sub">Enter your postcode to get a detailed water quality report for your area, so you know exactly which contaminants you need to target.</p>
+            <TankSearch />
+          </div>
+          {otherComparisons.length > 0 ? (
+            <>
+              <h2 className="wt-h2" style={{ marginTop: 56 }}>More filter comparisons</h2>
+              <p className="wt-pills" style={{ marginTop: 20 }}>
+                {otherComparisons.map((c) => (
+                  <Link key={`${c.brand1Slug}-${c.brand2Slug}`} href={`/compare/filter/${c.brand1Slug}/vs/${c.brand2Slug}`}>{c.brand1Label} vs {c.brand2Label}</Link>
+                ))}
+              </p>
+            </>
+          ) : null}
+          <p className="wt-fine" style={{ marginTop: 40 }}>
+            Product specifications and pricing are based on manufacturer data and independent testing. Annual cost estimates reflect average UK household usage. See our{" "}
+            <Link href="/about/methodology">methodology</Link> for how we evaluate filters.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
