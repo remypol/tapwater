@@ -10,11 +10,11 @@ import { formatReading } from "@/lib/tank-plan";
  */
 
 const W = 1000;
-const H = 460;
+const H = 500;
 const PAD_L = 72; // room for the y-axis
 const PAD_R = 24;
 const LIMIT_Y = 70; // where a result at 100% of its limit sits
-const FLOOR_Y = 404;
+const FLOOR_Y = 420;
 const SPAN = FLOOR_Y - LIMIT_Y;
 
 function pct(share: number): string {
@@ -51,7 +51,7 @@ export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
 
   const placed = bubbles.map((b, i) => {
     const x = PAD_L + (slots[i] + 0.5) * colW;
-    const r = 14 + Math.min(b.share, 1) * 30;
+    const r = 13 + Math.min(b.share, 1) * 30;
     const y = FLOOR_Y - Math.min(b.share, 1.1) * SPAN;
     return { b, x, y, r, i };
   });
@@ -59,7 +59,7 @@ export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
   // Labels: alternate above/below the bubble by slot parity so neighbours never collide.
   const label = (p: (typeof placed)[number]) => {
     const above = slots[p.i] % 2 === 0;
-    const ly = above ? p.y - p.r - 14 : p.y + p.r + 22;
+    const ly = above ? p.y - p.r - 16 : p.y + p.r + 24;
     return { ly, above };
   };
 
