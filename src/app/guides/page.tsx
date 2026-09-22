@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FileText, ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves, Coffee, Flame, HelpCircle, PoundSterling, Wrench, GitCompare, Package, Zap } from "lucide-react";
+import { ChevronRight, AlertTriangle, Droplets, FlaskConical, Building2, TestTube, Microscope, Scale, ShieldCheck, Sparkles, Home, ShieldAlert, GlassWater, Waves, Coffee, Flame, HelpCircle, PoundSterling, Wrench, GitCompare, Package, Zap } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
 
 export const metadata: Metadata = {
@@ -264,10 +264,6 @@ export default function GuidesPage() {
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-12 lg:py-16">
       <div className="max-w-3xl">
-        <p className="text-xs uppercase tracking-[0.15em] text-accent font-semibold flex items-center gap-1.5">
-          <FileText className="w-3 h-3" />
-          Research &amp; Guides
-        </p>
         <h1 className="font-display text-3xl lg:text-4xl text-ink tracking-tight italic mt-2">
           Water quality guides
         </h1>
@@ -278,7 +274,7 @@ export default function GuidesPage() {
         </p>
       </div>
 
-      <div className="mt-10 space-y-3">
+      <div className="mt-10 wt-guide-index">
         {GUIDES.map((guide) => {
           const Icon = guide.icon;
           return (

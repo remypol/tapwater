@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
 
 /**
  * The repeated furniture of a guide page: breadcrumb, byline, affiliate
@@ -8,45 +7,28 @@ import { ShieldCheck } from "lucide-react";
 
 export function GuideBreadcrumb({ title }: { title: string }) {
   return (
-    <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
-      <ol className="flex items-center gap-1.5 flex-wrap">
-        <li>
-          <Link href="/" className="hover:text-accent transition-colors">
-            Home
-          </Link>
-        </li>
-        <li aria-hidden="true">/</li>
-        <li>
-          <Link href="/guides" className="hover:text-accent transition-colors">
-            Guides
-          </Link>
-        </li>
-        <li aria-hidden="true">/</li>
-        <li className="font-medium text-ink" aria-current="page">
-          {title}
-        </li>
-      </ol>
+    <nav className="wt-crumbs" style={{ paddingBlock: 0, marginBottom: 32 }} aria-label="Breadcrumb">
+      <Link href="/">Home</Link>
+      <span aria-hidden="true">/</span>
+      <Link href="/guides">Guides</Link>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
     </nav>
   );
 }
 
 export function GuideByline({ updated }: { updated: string }) {
   return (
-    <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-      <span>
-        By <span className="text-ink font-medium">TapWater.uk Research</span>
-      </span>
-      <span aria-hidden="true">&middot;</span>
-      <span>Updated {updated}</span>
-    </div>
+    <p className="wt-byline" style={{ marginBottom: 40 }}>
+      By <strong>TapWater.uk Research</strong> · Updated {updated} · Independent research
+    </p>
   );
 }
 
 export function GuideDisclosure({ quotes = false }: { quotes?: boolean }) {
   return (
-    <div className="bg-wash border border-rule rounded-xl p-4 mt-6 mb-8 flex items-start gap-3">
-      <ShieldCheck className="w-5 h-5 text-accent shrink-0 mt-0.5" aria-hidden="true" />
-      <p className="text-sm text-body">
+    <div className="wt-fine" style={{ margin: "24px 0 40px", opacity: 1, color: "var(--color-muted)" }}>
+      <p>
         {quotes ? (
           <>
             This guide contains affiliate links to salt and test products, and a
@@ -100,17 +82,15 @@ export function GuideFooter({
 export function GuideFaq({ faqs }: { faqs: { question: string; answer: string }[] }) {
   return (
     <>
-      <h2 className="font-display text-2xl italic text-ink mt-14 mb-6">
-        Frequently asked questions
-      </h2>
-      <div className="space-y-6">
-        {faqs.map((faq) => (
-          <div key={faq.question}>
-            <h3 className="font-semibold text-ink text-base">{faq.question}</h3>
-            <p className="text-sm text-body leading-relaxed mt-2">{faq.answer}</p>
-          </div>
+      <section className="wt-faq" style={{ paddingBlock: "56px 0" }}>
+        <h2 className="wt-h2">Frequently asked questions</h2>
+        {faqs.map((faq, i) => (
+          <details key={faq.question} open={i === 0}>
+            <summary>{faq.question}</summary>
+            <p>{faq.answer}</p>
+          </details>
         ))}
-      </div>
+      </section>
     </>
   );
 }
