@@ -332,8 +332,8 @@ export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { q
             <div className="wt-do-grid" style={{ marginTop: 32 }}>
               <SoftenerPanel
                 hardness={summary.median}
-                heading={`Softener quotes for ${town}`}
-                intro={`At ${summary.median} mg/L most ${data.area} homes get their money back on a softener within a few years. Free quotes from installers covering your postcode.`}
+                heading="Hard water: compare softener quotes"
+                intro={`At ${summary.median} mg/L most ${data.area} homes get their money back on a softener within a few years. A filter will not touch limescale; only a softener does.`}
               />
               <div className="wt-side">
                 <div className="wt-second">
