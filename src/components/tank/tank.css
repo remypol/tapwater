@@ -311,3 +311,45 @@
 /* Legacy blocks that still live inside a tank page take the tank's type and corners. */
 .wt .font-display { font-family: var(--font-rhd), system-ui, sans-serif; font-style: normal; font-weight: 900; letter-spacing: -0.025em; }
 .wt .card { border-radius: 24px; }
+
+/* ── Hardness pages ── */
+.wt-scale { margin: 40px 0 0; }
+.wt-scale .wt-crust { margin-top: 36px; }
+.wt-scale-bands { display: flex; margin-top: 10px; }
+.wt-scale-bands li { font-size: 0.8rem; font-weight: 600; opacity: 0.8; overflow: hidden; white-space: nowrap; }
+.wt-scale-bands li span { display: block; }
+.wt-scale-bands li small { display: block; font-weight: 500; opacity: 0.7; }
+.wt-scale figcaption { margin-top: 14px; font-size: 0.85rem; opacity: 0.75; }
+.wt-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+.wt-pills b { font-weight: 700; margin-left: 4px; }
+.wt-h3 { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.015em; margin-bottom: 12px; }
+.wt-table td small { opacity: 0.6; margin-left: 6px; font-size: 0.85em; }
+.wt-check { border-radius: 28px; background: var(--wt-abyss); color: #fff; padding: clamp(28px, 4vw, 44px); }
+.wt-check .wt-sub { color: #cfe0ff; margin-bottom: 24px; }
+.wt-arrow { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.wt-arrow svg { width: 16px; height: 16px; }
+.wt-prose { max-width: 66ch; font-size: 1.06rem; line-height: 1.65; }
+.wt-prose p + p { margin-top: 18px; }
+.wt-prose a { color: inherit; font-weight: 600; }
+.wt-prose strong { font-weight: 700; }
+.wt-prose h3 { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: -0.02em; margin-top: 40px; }
+.wt-prose h3 + p { margin-top: 10px; }
+.wt-prose .wt-note { font-size: 0.92rem; opacity: 0.75; margin-top: 10px; }
+.wt-article { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.wt-byline { font-size: 0.9rem; opacity: 0.8; margin-top: 16px; }
+.wt-ledger { list-style: none; margin: 0; padding: 0; border-top: 2px solid currentColor; }
+.wt-ledger li { display: flex; justify-content: space-between; gap: 24px; padding-block: 14px; border-bottom: 1px solid rgba(0,0,0,0.12); font-size: 1rem; }
+.wt-ledger li strong { font-weight: 700; }
+.wt-ledger li em { font-style: normal; opacity: 0.7; margin-left: 8px; }
+.wt-ledger li b { font-weight: 600; white-space: nowrap; }
+.wt-bands { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 12px; }
+.wt-bands li { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 16px; align-items: start; }
+.wt-bands li i { width: 14px; height: 14px; border-radius: 50%; margin-top: 6px; }
+.wt-bands strong { display: block; font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.08rem; }
+.wt-bands p { font-size: 0.98rem; margin-top: 4px; opacity: 0.85; max-width: 60ch; }
+.wt-picks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 24px; }
+.wt-picks .card { border-radius: 24px; }
+.wt-sources { font-size: 0.9rem; opacity: 0.8; max-width: 70ch; }
+.wt-sources li + li { margin-top: 8px; }
+.wt-chalk .wt-do-grid { margin-top: 0; }
+@media (max-width: 640px) { .wt-scale-bands li span { font-size: 0.7rem; } }
