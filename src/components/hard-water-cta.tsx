@@ -2,7 +2,9 @@ import Link from "next/link";
 import { ArrowRight, Droplets } from "lucide-react";
 import { Kicker } from "@/components/commerce";
 import { SoftenerGuidesNav } from "@/components/softener-guides-nav";
+import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
+import type { SoftenerLeadSource } from "@/lib/softener-lead-source";
 
 interface HardWaterCtaProps {
   /** "Leeds", "the South East" — used in the headline. */
@@ -10,6 +12,10 @@ interface HardWaterCtaProps {
   /** Average hardness in mg/L CaCO3. Renders nothing below the hard-water threshold. */
   hardness: number | null;
   hardnessClass: string | null;
+  /** Which page type the quote request came from, for the lead table. */
+  source: Extract<SoftenerLeadSource, "city_page" | "region_page" | "supplier_page">;
+  /** Where the quotes are for, when placeName does not read as a place ("Thames Water's"). */
+  quoteArea?: string;
   className?: string;
 }
 
@@ -18,13 +24,19 @@ interface HardWaterCtaProps {
  * the "is X water hard or soft" searches, and until now they answered the
  * question and stopped. This turns the answer into the next step: quotes for
  * a softener, and the guides that explain the decision.
+ *
+ * The quote form sits right under the answer. It used to be a link to
+ * /hardness#softener-quotes, and across ~430 Search Console clicks a month on
+ * city pages that link produced no quote requests: one extra page is enough to
+ * lose people.
  */
-export function HardWaterCta({ placeName, hardness, hardnessClass, className = "" }: HardWaterCtaProps) {
+export function HardWaterCta({ placeName, hardness, hardnessClass, source, quoteArea, className = "" }: HardWaterCtaProps) {
   if (hardness == null || hardness < HARD_WATER_THRESHOLD) return null;
   const rounded = Math.round(hardness);
   const veryHard = hardness >= 250;
 
   return (
+    <>
     <aside
       aria-labelledby="hard-water-cta-heading"
       className={`card-warm p-6 lg:p-7 border-l-[3px] border-amber-500 ${className}`}
@@ -40,7 +52,7 @@ export function HardWaterCta({ placeName, hardness, hardnessClass, className = "
       </p>
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <Link
-          href="/hardness#softener-quotes"
+          href="#softener-quotes"
           className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-5 py-3 text-sm font-medium hover:bg-btn-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <Droplets className="w-4 h-4" aria-hidden="true" />
@@ -72,5 +84,15 @@ export function HardWaterCta({ placeName, hardness, hardnessClass, className = "
         deal with the two places you notice it most.
       </p>
     </aside>
+    <div className="wt-form">
+      <SoftenerLeadForm
+        hardnessValue={rounded}
+        hardnessLabel={hardnessClass ?? "hard"}
+        source={source}
+        heading={`Softener quotes in ${quoteArea ?? placeName}`}
+        intro={`At ${rounded} mg/L a softener protects the boiler, kettle and taps. Tell us your postcode and we will pass your request to installers who cover it. Free, no obligation.`}
+      />
+    </div>
+    </>
   );
 }

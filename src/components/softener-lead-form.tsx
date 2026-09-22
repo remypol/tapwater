@@ -83,6 +83,7 @@ function SoftenerLeadFormFallback({
           hardnessValue,
           hardnessLabel,
           source,
+          consent,
         }),
       });
 

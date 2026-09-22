@@ -419,7 +419,7 @@ export default async function CityPage({ params }: Props) {
                 </div>
                 {avgHardness >= 180 ? (
                   <div className="wt-do-grid" style={{ marginTop: 48 }}>
-                    <HardWaterCta placeName={city.name} hardness={avgHardness} hardnessClass={hardnessClass} />
+                    <HardWaterCta placeName={city.name} hardness={avgHardness} hardnessClass={hardnessClass} source="city_page" />
                   </div>
                 ) : null}
                 {cityHardnessByDistrict.length >= 2 ? (

@@ -265,7 +265,7 @@ export default async function RegionPage({ params }: Props) {
                 <p style={{ marginTop: 12 }}><Link className="wt-link" href="/hardness/">How hardness works, and what to do about it</Link></p>
               </div>
             </div>
-            {avgHardness >= 180 ? <div className="wt-do-grid" style={{ marginTop: 48 }}><HardWaterCta placeName={region.name} hardness={avgHardness} hardnessClass={hardnessClass} /></div> : null}
+            {avgHardness >= 180 ? <div className="wt-do-grid" style={{ marginTop: 48 }}><HardWaterCta placeName={region.name} hardness={avgHardness} hardnessClass={hardnessClass} source="region_page" /></div> : null}
           </div>
         </section>
       ) : null}

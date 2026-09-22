@@ -392,6 +392,8 @@ export default async function SupplierPage({ params }: Props) {
                   placeName={`${supplier.name}'s`}
                   hardness={avgHardness}
                   hardnessClass={avgHardness !== null && avgHardness >= 250 ? "very hard" : "hard"}
+                  source="supplier_page"
+                  quoteArea={`the ${supplier.name} area`}
                   className="mt-6"
                 />
               )}

@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
     hardnessValue?: number;
     hardnessLabel?: string;
     source?: string;
+    consent?: boolean;
   };
   try {
     body = await request.json();
@@ -59,6 +60,15 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
+  // The form will not submit without the box ticked. Until 22 Sept 2026 the tick
+  // never reached this route, so every lead was stored as "no consent" and could
+  // not lawfully be passed to an installer. A request without it is refused.
+  if (body.consent !== true) {
+    return NextResponse.json(
+      { error: "Please tick the box so installers can contact you" },
+      { status: 400 }
+    );
+  }
   if (!postcode || !/^[A-Z]{1,2}[0-9][0-9A-Z]?$/.test(postcode)) {
     return NextResponse.json(
       { error: "Invalid postcode district" },
@@ -76,6 +86,8 @@ export async function POST(request: NextRequest) {
     hardness_value: hardnessValue,
     hardness_label: hardnessLabel,
     source,
+    consent_to_installer_sharing: true,
+    consent_recorded_at: new Date().toISOString(),
   });
 
   if (dbError) {

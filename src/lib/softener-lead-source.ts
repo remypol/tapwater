@@ -9,6 +9,9 @@ export const SOFTENER_LEAD_SOURCES = [
   "hardness_map",
   "hardness_area",
   "softener_guide",
+  "city_page",
+  "region_page",
+  "supplier_page",
 ] as const;
 
 export type SoftenerLeadSource = (typeof SOFTENER_LEAD_SOURCES)[number];
