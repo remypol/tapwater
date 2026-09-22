@@ -24,9 +24,9 @@ export function DropLensIcon({
   size?: number;
   variant?: "light" | "dark";
 }) {
-  const dropFill = variant === "dark" ? "#67b8d6" : "#0891b2";
+  const dropFill = variant === "dark" ? "#69b7ff" : "#0a5cf5";
   const lensFill = variant === "dark" ? "#a3dced" : "#22d3ee";
-  const handleStroke = variant === "dark" ? "#67b8d6" : "#0891b2";
+  const handleStroke = variant === "dark" ? "#69b7ff" : "#0a5cf5";
 
   return (
     <svg

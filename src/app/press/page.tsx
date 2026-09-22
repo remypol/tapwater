@@ -418,12 +418,14 @@ Based on Environment Agency Water Quality Archive data. ${year}.`;
                 Brand colours
               </h3>
               <div className="card p-5 space-y-5">
-                <ColourSwatch hex="#0891b2" name="Accent" usage="Links, highlights, interactive" />
-                <ColourSwatch hex="#16a34a" name="Safe" usage="Good water quality signal" />
-                <ColourSwatch hex="#d97706" name="Warning" usage="Near-limit contaminant signal" />
-                <ColourSwatch hex="#dc2626" name="Danger" usage="Over-limit contaminant signal" />
-                <ColourSwatch hex="#7c3aed" name="PFAS" usage="Forever chemicals marker" />
-                <ColourSwatch hex="#0c0f17" name="Ink" usage="Headings, body text" />
+                <ColourSwatch hex="#0a5cf5" name="Pool blue" usage="Links, water, interactive" />
+                <ColourSwatch hex="#06257a" name="Deep water" usage="Dark panels, footer" />
+                <ColourSwatch hex="#ffd23f" name="Sun" usage="The one action on a page" />
+                <ColourSwatch hex="#f3efe6" name="Chalk" usage="Hard water, limescale" />
+                <ColourSwatch hex="#2f8a45" name="Safe" usage="Good water quality signal" />
+                <ColourSwatch hex="#8a5a00" name="Warning" usage="Near-limit contaminant signal" />
+                <ColourSwatch hex="#c4362f" name="Danger" usage="Over-limit contaminant signal" />
+                <ColourSwatch hex="#08122e" name="Ink" usage="Headings, body text" />
               </div>
             </div>
 

@@ -148,7 +148,7 @@ export function UKMap({ postcodes, onRegionSelect }: UKMapProps) {
               key={`${region.id}-${i}`}
               d={pathD}
               fill={fill}
-              stroke={isSelected ? "#0891b2" : "rgba(255,255,255,0.8)"}
+              stroke={isSelected ? "#0a5cf5" : "rgba(255,255,255,0.8)"}
               strokeWidth={isSelected ? 2.5 : 1}
               style={{
                 cursor: "pointer",

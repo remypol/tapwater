@@ -15,7 +15,7 @@ interface Props {
 
 // Gradient colours per level
 const GRADIENTS = {
-  safe:    { from: '#0891b2', to: '#06b6d4' },
+  safe:    { from: '#0a5cf5', to: '#4f9bff' },
   warning: { from: '#d97706', to: '#f59e0b' },
   danger:  { from: '#dc2626', to: '#f87171' },
 }
