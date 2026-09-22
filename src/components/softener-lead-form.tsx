@@ -221,17 +221,12 @@ function SoftenerLeadFormFallback({
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={status === "submitting" || !consent}
-              className="w-full mt-4 rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {status === "submitting" ? "Sending\u2026" : "Get my free assessment \u2192"}
-            </button>
-
-            <label className="flex items-start gap-2 mt-3 cursor-pointer select-none">
+            {/* Above the button, and required rather than greying the button out: a grey
+                button with the reason printed underneath it lost people on phones. */}
+            <label className="flex items-start gap-2 mt-4 cursor-pointer select-none">
               <input
                 type="checkbox"
+                required
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
                 className="mt-0.5 rounded border-rule text-amber-500 focus:ring-amber-500/20"
@@ -245,6 +240,14 @@ function SoftenerLeadFormFallback({
                 </Link>.
               </span>
             </label>
+
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className="w-full mt-4 rounded-lg bg-amber-500 px-5 py-3 text-sm font-semibold text-white hover:bg-amber-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {status === "submitting" ? "Sending\u2026" : "Get my free assessment \u2192"}
+            </button>
 
             {status === "error" && (
               <div className="mt-3 flex items-center gap-2 text-xs text-[var(--color-danger)]">
