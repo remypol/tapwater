@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
+  Droplet,
   Zap,
-  Search,
   BarChart3,
+  Search,
   MoreVertical,
   Filter,
   FlaskConical,
@@ -18,8 +19,8 @@ import {
 import { BottomSheet } from "@/components/bottom-sheet";
 import { PostcodeSearch } from "@/components/postcode-search";
 
-const ACCENT = "#0891b2";
-const INACTIVE = "#6b7280";
+const ACCENT = "#ffd23f";
+const INACTIVE = "#b9c8ea";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -39,7 +40,7 @@ function NavItem({ icon, label, active, onClick, href }: NavItemProps) {
       <span style={{ width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center" }}>
         {icon}
       </span>
-      <span style={{ fontSize: 9, lineHeight: 1, fontFamily: "var(--font-dm-sans)", fontWeight: 500 }}>
+      <span style={{ fontSize: 9, lineHeight: 1, fontFamily: "var(--font-rht)", fontWeight: 600 }}>
         {label}
       </span>
     </span>
@@ -78,11 +79,14 @@ function NavItem({ icon, label, active, onClick, href }: NavItemProps) {
 }
 
 const sheetLinks = [
+  { href: "/postcode", label: "All postcodes", icon: Search },
+  { href: "/compare", label: "Rankings", icon: BarChart3 },
   { href: "/filters", label: "Filters", icon: Filter },
   { href: "/contaminant", label: "Contaminants", icon: FlaskConical },
-  { href: "/supplier", label: "Suppliers", icon: Building2 },
-  { href: "/guides", label: "Guides", icon: BookOpen },
-  { href: "/about", label: "About", icon: Info },
+  { href: "/supplier", label: "Water companies", icon: Building2 },
+  { href: "/rivers", label: "River health", icon: Droplet },
+  { href: "/news", label: "News", icon: Zap },
+  { href: "/about", label: "About the data", icon: Info },
 ];
 
 export function MobileBottomNav() {
@@ -116,9 +120,8 @@ export function MobileBottomNav() {
   }, []);
 
   const isHome = pathname === "/";
-  const isNews = pathname.startsWith("/news");
-  const isRankings =
-    pathname.startsWith("/compare") || pathname.startsWith("/rankings");
+  const isHardness = pathname.startsWith("/hardness");
+  const isGuides = pathname.startsWith("/guides");
 
   function handleSearch() {
     const input =
@@ -142,10 +145,10 @@ export function MobileBottomNav() {
         aria-label="Main navigation"
         className="sm:hidden fixed bottom-3 left-3 right-3 z-50 flex items-center justify-around motion-reduce:transition-none"
         style={{
-          background: "#111827",
-          border: "1px solid #1f2937",
-          borderRadius: 20,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+          background: "rgba(3, 19, 73, 0.96)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 999,
+          boxShadow: "0 8px 28px rgba(3, 19, 73, 0.35)",
           padding: "6px 6px calc(6px + env(safe-area-inset-bottom))",
           transform: visible ? "translateY(0)" : "translateY(calc(100% + 24px))",
           transition: "transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
@@ -159,10 +162,10 @@ export function MobileBottomNav() {
         />
 
         <NavItem
-          href="/news"
-          icon={<Zap size={18} />}
-          label="News"
-          active={isNews}
+          href="/hardness"
+          icon={<Droplet size={18} />}
+          label="Hardness"
+          active={isHardness}
         />
 
         {/* Search CTA — centre, distinctive style */}
@@ -172,7 +175,7 @@ export function MobileBottomNav() {
           aria-label="Search by postcode"
           style={{
             background: ACCENT,
-            borderRadius: 14,
+            borderRadius: 999,
             padding: "8px 16px",
             display: "flex",
             flexDirection: "row",
@@ -183,14 +186,14 @@ export function MobileBottomNav() {
             minHeight: 44,
           }}
         >
-          <Search size={18} color="#fff" />
+          <Search size={18} color="#08122e" />
           <span
             style={{
               fontSize: 9,
               lineHeight: 1,
-              color: "#fff",
-              fontFamily: "var(--font-dm-sans)",
-              fontWeight: 500,
+              color: "#08122e",
+              fontFamily: "var(--font-rhd)",
+              fontWeight: 700,
             }}
           >
             Search
@@ -198,10 +201,10 @@ export function MobileBottomNav() {
         </button>
 
         <NavItem
-          href="/compare"
-          icon={<BarChart3 size={18} />}
-          label="Rankings"
-          active={isRankings}
+          href="/guides"
+          icon={<BookOpen size={18} />}
+          label="Guides"
+          active={isGuides}
         />
 
         <NavItem

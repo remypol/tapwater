@@ -1,5 +1,3 @@
-import "@/components/tank/tank.css";
-import "@/components/tank/guide.css";
 
 /**
  * Every guide renders inside the tank system. The guides keep their own bodies,

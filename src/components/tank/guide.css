@@ -1,12 +1,13 @@
 /*
- * Guides in the tank system without touching their bodies. Everything the old guide
- * template leaned on is re-dressed here, scoped to .wt-guide, in specificity order
+ * Every page not yet rebuilt renders in the tank system without touching its body. Everything the old guide
+ * template leaned on is re-dressed here, scoped to 
+.wt-legacy, in specificity order
  * that beats Tailwind's single-class utilities.
  *
  * Colour tokens the utilities read (text-ink, text-accent, bg-wash, border-rule…) are
  * re-pointed for the subtree, so the teal accent becomes pool blue everywhere at once.
  */
-.wt-guide {
+.wt-legacy {
   --color-ink: #08122e;
   --color-body: #1c2a4d;
   --color-muted: #4a5a80;
@@ -23,38 +24,71 @@
 }
 
 /* Type: the italic serif becomes the display face, upright and heavy. */
-.wt-guide .font-display { font-family: var(--font-rhd), system-ui, sans-serif; font-style: normal; font-weight: 800; letter-spacing: -0.025em; }
-.wt-guide h1.font-display { font-weight: 900; font-size: clamp(2.3rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -0.035em; }
-.wt-guide h2.font-display { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.08; margin-top: 56px; }
-.wt-guide h3.font-display { font-size: 1.3rem; line-height: 1.2; }
-.wt-guide .font-data, .wt-guide .font-mono { font-family: var(--font-rht), system-ui, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: 0; }
-.wt-guide p.text-base, .wt-guide li.text-base { font-size: 1.06rem; line-height: 1.65; }
-.wt-guide .leading-relaxed { line-height: 1.65; }
+.wt-legacy .font-display { font-family: var(--font-rhd), system-ui, sans-serif; font-style: normal; font-weight: 800; letter-spacing: -0.025em; }
+.wt-legacy h1.font-display { font-weight: 900; font-size: clamp(2.3rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -0.035em; }
+.wt-legacy h2.font-display { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.08; margin-top: 56px; }
+.wt-legacy h3.font-display { font-size: 1.3rem; line-height: 1.2; }
+.wt-legacy .font-data, 
+.wt-legacy .font-mono { font-family: var(--font-rht), system-ui, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.wt-legacy p.text-base, 
+.wt-legacy li.text-base { font-size: 1.06rem; line-height: 1.65; }
+.wt-legacy .leading-relaxed { line-height: 1.65; }
 
 /* Surfaces */
-.wt-guide .card, .wt-guide .card-elevated, .wt-guide .card-warm { border-radius: 24px; background: #fff; box-shadow: inset 0 0 0 1px var(--color-rule); transition: none; }
-.wt-guide .card:hover, .wt-guide .card-elevated:hover, .wt-guide .card-warm:hover { transform: none; box-shadow: inset 0 0 0 1px var(--color-rule-strong); }
-.wt-guide .bg-hero, .wt-guide .noise-overlay { background: var(--wt-foam); }
-.wt-guide .noise-overlay::before { display: none; }
-.wt-guide .rounded-lg, .wt-guide .rounded-xl { border-radius: 18px; }
-.wt-guide .rounded-md { border-radius: 12px; }
+.wt-legacy .card, 
+.wt-legacy .card-elevated, 
+.wt-legacy .card-warm { border-radius: 24px; background: #fff; box-shadow: inset 0 0 0 1px var(--color-rule); transition: none; }
+.wt-legacy .card:hover, 
+.wt-legacy .card-elevated:hover, 
+.wt-legacy .card-warm:hover { transform: none; box-shadow: inset 0 0 0 1px var(--color-rule-strong); }
+.wt-legacy .bg-hero, 
+.wt-legacy .noise-overlay { background: var(--wt-foam); }
+.wt-legacy .noise-overlay::before { display: none; }
+.wt-legacy .rounded-lg, 
+.wt-legacy .rounded-xl { border-radius: 18px; }
+.wt-legacy .rounded-md { border-radius: 12px; }
 
 /* Pills, badges, buttons */
-.wt-guide .pill { border-radius: 999px; border: 0; background: var(--wt-foam); color: var(--wt-deep); font-weight: 600; padding: 9px 16px; }
-.wt-guide .pill:hover { background: var(--wt-sky); color: var(--wt-deep); }
-.wt-guide .badge { border-radius: 999px; font-weight: 700; }
-.wt-guide .bg-btn, .wt-guide .bg-accent { background: var(--wt-ink); }
-.wt-guide .bg-btn:hover, .wt-guide .hover\:bg-btn-hover:hover { background: #000; }
-.wt-guide [class*="rounded-lg"][class*="bg-btn"], .wt-guide a[class*="bg-accent"] { border-radius: 999px; min-height: 52px; font-weight: 700; }
+.wt-legacy .pill { border-radius: 999px; border: 0; background: var(--wt-foam); color: var(--wt-deep); font-weight: 600; padding: 9px 16px; }
+.wt-legacy .pill:hover { background: var(--wt-sky); color: var(--wt-deep); }
+.wt-legacy .badge { border-radius: 999px; font-weight: 700; }
+.wt-legacy .bg-btn, 
+.wt-legacy .bg-accent { background: var(--wt-ink); }
+.wt-legacy .bg-btn:hover, 
+.wt-legacy .hover\:bg-btn-hover:hover { background: #000; }
+.wt-legacy [class*="rounded-lg"][class*="bg-btn"], 
+.wt-legacy a[class*="bg-accent"] { border-radius: 999px; min-height: 52px; font-weight: 700; }
 
 /* The eyebrow labels that shout in caps: keep the meaning, drop the shout. */
-.wt-guide .uppercase.tracking-wider, .wt-guide .uppercase.tracking-widest, .wt-guide [class*="tracking-\[0."] { text-transform: none; letter-spacing: 0; font-weight: 600; }
+.wt-legacy .uppercase.tracking-wider, 
+.wt-legacy .uppercase.tracking-widest, 
+.wt-legacy [class*="tracking-\[0."] { text-transform: none; letter-spacing: 0; font-weight: 600; }
 
 /* Reading measure */
-.wt-guide .max-w-3xl { max-width: 720px; }
-.wt-guide a.text-accent, .wt-guide .text-accent { color: var(--color-accent); }
-.wt-guide a:focus-visible { outline: 3px solid var(--wt-sun); outline-offset: 3px; border-radius: 6px; }
+.wt-legacy .max-w-3xl { max-width: 720px; }
+.wt-legacy a.text-accent, 
+.wt-legacy .text-accent { color: var(--color-accent); }
+.wt-legacy a:focus-visible { outline: 3px solid var(--wt-sun); outline-offset: 3px; border-radius: 6px; }
 
 /* Guide index cards become one ledger */
-.wt-guide .wt-guide-index a.card { border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--color-rule); padding: 18px 0; }
-.wt-guide .wt-guide-index a.card:first-child { border-top: 2px solid var(--wt-ink); }
+.wt-legacy 
+.wt-legacy-index a.card { border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--color-rule); padding: 18px 0; }
+.wt-legacy 
+.wt-legacy-index a.card:first-child { border-top: 2px solid var(--wt-ink); }
+
+/* Pages already rebuilt carry .wt themselves; they get nothing from this file. */
+.wt-legacy .wt { --color-ink: initial; }
+.wt-legacy > .wt, .wt-legacy .wt-tank, .wt-legacy .wt-chalk, .wt-legacy .wt-river, .wt-legacy .wt-bubbles { background: revert-layer; }
+/* Old ambient backgrounds go flat */
+.wt-legacy .bg-score-safe, .wt-legacy .bg-score-warning, .wt-legacy .bg-score-danger { background: #fff; }
+/* The old fade-ins: content is visible at rest */
+.wt-legacy .animate-fade-up, .wt-legacy .animate-fade-in { animation: none; opacity: 1; transform: none; }
+/* Score colours from the old palette become the tank's semantic set */
+.wt-legacy .text-safe, .wt-legacy .text-\[var\(--color-safe\)\] { color: #2f8a45; }
+.wt-legacy .text-warning, .wt-legacy .text-\[var\(--color-warning\)\] { color: #c98a06; }
+.wt-legacy .text-danger, .wt-legacy .text-\[var\(--color-danger\)\] { color: #c4362f; }
+.wt-legacy .text-pfas { color: #0a5cf5; }
+/* Old table headers in caps */
+.wt-legacy th.uppercase, .wt-legacy .uppercase.tracking-wider { text-transform: none; letter-spacing: 0; }
+.wt-legacy h1:not(.wt-h2):not([class*="wt-"]) { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-style: normal; letter-spacing: -0.035em; }
+.wt-legacy h2:not(.wt-h2):not([class*="wt-"]), .wt-legacy h3:not([class*="wt-"]) { font-family: var(--font-rhd), system-ui, sans-serif; font-style: normal; }

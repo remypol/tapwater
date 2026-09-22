@@ -24,7 +24,6 @@ export function PostcodeSearch({ size = "lg", hash }: Props) {
   const router = useRouter()
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
-  const [focused, setFocused] = useState(false)
 
   const isLg = size === "lg"
 
@@ -43,77 +42,25 @@ export function PostcodeSearch({ size = "lg", hash }: Props) {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} noValidate>
-        {isLg ? (
-          <div className="card-elevated rounded-2xl p-1.5">
-            <div className="flex items-center">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-faint pointer-events-none" />
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setFocused(false)}
-                  placeholder="Enter your postcode..."
-                  aria-label="Postcode"
-                  className={[
-                    "w-full text-lg py-4 pl-12 pr-4 bg-transparent text-ink focus:outline-none",
-                    "transition-opacity duration-300",
-                    focused ? "placeholder:opacity-40" : "placeholder:text-faint",
-                  ].join(" ")}
-                />
-                {/* Wave focus bar */}
-                <span
-                  aria-hidden="true"
-                  className="absolute bottom-0 left-0 h-[2px] bg-[#0891b2] transition-all duration-300 ease-out"
-                  style={{ width: focused ? "100%" : "0%" }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-btn text-white rounded-xl py-4 px-7 text-base font-medium flex items-center gap-2 hover:bg-btn-hover hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 shrink-0"
-              >
-                Check
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="card rounded-xl p-1">
-            <div className="flex items-center">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-faint pointer-events-none" />
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  placeholder="Enter your postcode..."
-                  aria-label="Postcode"
-                  className="w-full text-sm py-2.5 pl-9 pr-3 bg-transparent text-ink focus:outline-none placeholder:text-faint transition-[box-shadow] duration-200 ease-out focus:ring-2 focus:ring-accent/20 rounded-lg"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-btn text-white rounded-lg py-2.5 px-4 text-sm font-medium flex items-center hover:bg-btn-hover transition-colors shrink-0"
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {error && (
-          <p className="text-sm text-red-600 mt-1">{error}</p>
-        )}
-      </form>
-
-      {isLg && !error && (
-        <p className="text-xs text-faint mt-3 text-center">
-          Try your postcode — e.g. SW1A, M1, B1
-        </p>
-      )}
-    </div>
+    <form onSubmit={handleSubmit} noValidate className={`wt-search${isLg ? "" : " wt-search--sm"}`} role="search">
+      <div className="wt-search-row">
+        <Search aria-hidden="true" />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter your postcode"
+          aria-label="Postcode"
+          autoCapitalize="characters"
+          autoComplete="postal-code"
+          spellCheck={false}
+        />
+        <button type="submit" className="wt-btn wt-btn--sun">
+          {isLg ? "Check my water" : "Check"}
+          <ArrowRight aria-hidden="true" />
+        </button>
+      </div>
+      {error ? <p className="wt-search-error" role="alert">{error}</p> : null}
+    </form>
   )
 }
