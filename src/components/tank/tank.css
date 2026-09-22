@@ -220,6 +220,8 @@
 .wt-card { position: relative; overflow: hidden; border-radius: 28px; height: 200px; background: var(--wt-sky); color: #fff; padding: 20px 22px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; transition: transform 0.15s ease; }
 .wt-card:hover { transform: translateY(-3px); }
 .wt-card i { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(var(--wt-pool), var(--wt-deep)); }
+/* Text always sits on water, however low the level: a dark wash across the bottom. */
+.wt-card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 58%; background: linear-gradient(to top, rgba(6, 37, 122, 0.92), rgba(6, 37, 122, 0)); pointer-events: none; }
 .wt-card b, .wt-card span { position: relative; }
 .wt-card b { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: -0.03em; line-height: 1; }
 .wt-card span { font-size: 0.9rem; opacity: 0.92; margin-top: 6px; }
