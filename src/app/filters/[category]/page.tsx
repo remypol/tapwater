@@ -140,7 +140,7 @@ const CATEGORY_FAQS: Partial<
     {
       question: "How much does a reverse osmosis system cost in the UK?",
       answer:
-        "The systems we review run from £329 to £650 up front. Budget £60-£120 a year for replacement filters depending on the model, and factor the membrane itself every two to three years. Tankless designs cost more up front but save cupboard space and waste less water.",
+        "The systems we review run from £450 to £650 up front. Budget £60-£120 a year for replacement filters depending on the model, and factor the membrane itself every two to three years. Tankless designs cost more up front but save cupboard space and waste less water.",
     },
     {
       question: "Is reverse osmosis water safe to drink?",

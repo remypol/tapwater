@@ -223,10 +223,10 @@ export const PRODUCTS: FilterProduct[] = [
     category: "under_sink",
     removes: ["Chlorine", "Lead", "PFAS (total)"],
     certifications: ["NSF/ANSI 42"],
-    // Checked at source 25 July: waterdropfilter.co.uk lists the WD-10UA variant at
-    // £74.99. Our £59 came from an earlier reading and has since drifted; the guide
-    // and the running-cost table both quote this figure.
-    priceGbp: 75,
+    // Checked at source 22 Sept: waterdropfilter.co.uk lists the WD-10UA variant at
+    // £70.00 (it was £74.99 on 25 July). The guides, the Waterdrop vs Frizzlife
+    // comparison and the running-cost table all quote this figure.
+    priceGbp: 70,
     priceTier: "budget",
     // Waterdrop's own UK programme via Awin pays 7%, where the Amazon listing paid 3%.
     // Publisher id is 3091503 (CCC Impact BV), the account Waterdrop is joined on.
@@ -319,6 +319,7 @@ export const PRODUCTS: FilterProduct[] = [
     //
     // Price corrected at source: the old £399 matched neither store. waterdropfilter
     // .co.uk lists £549.98 and the .eu store the old link pointed at lists €549.99.
+    // Rechecked 22 Sept: still £549.98.
     priceGbp: 550,
     priceTier: "premium",
     affiliateUrl:
@@ -363,7 +364,10 @@ export const PRODUCTS: FilterProduct[] = [
       "Chromium",
     ],
     certifications: ["NSF/ANSI 58"],
-    priceGbp: 329,
+    // Checked at source 22 Sept: frizzlife.co.uk sells this as the PD600-TAM3 at
+    // £449.99, the only PD600 it stocks. The old £329 was an Amazon reading from
+    // before the link moved to Frizzlife's own shop, where visitors now land.
+    priceGbp: 450,
     priceTier: "premium",
     affiliateUrl: "https://www.awin1.com/cread.php?awinmid=117015&awinaffid=3091503&ued=https%3A%2F%2Fwww.frizzlife.co.uk%2Fproducts%2Fpd600tam3",
     affiliateProgram: "awin",
@@ -1336,7 +1340,7 @@ export const CATEGORY_META: Record<
     description:
       "Hidden under your kitchen sink, these filters provide high-capacity filtration without cluttering your counter.",
     bestFor: "Homeowners wanting set-and-forget filtration with high capacity",
-    priceRange: "£45–£120",
+    priceRange: "£70–£120",
   },
   reverse_osmosis: {
     title: "Reverse Osmosis Systems",
@@ -1344,7 +1348,7 @@ export const CATEGORY_META: Record<
     description:
       "The gold standard. RO systems push water through a semi-permeable membrane, removing virtually everything.",
     bestFor: "Households with PFAS, fluoride, or nitrate concerns",
-    priceRange: "£329–£499",
+    priceRange: "£450–£650",
   },
   whole_house: {
     title: "Whole House Filters",

@@ -304,7 +304,7 @@ export default function BestUnderSinkFilterGuide() {
 
         <GeoCitation
           headline={`According to TapWater.uk's comparison of certified under sink water filters, the Doulton HIP Ultracarb is the pick for most UK households in ${year}.`}
-          detail={`It carries NSF/ANSI 42 and 53 verification for its removal claims; the Waterdrop 10UA is the £75 budget route with the lowest running cost.`}
+          detail={`It carries NSF/ANSI 42 and 53 verification for its removal claims; the Waterdrop 10UA is the £${waterdrop.priceGbp} budget route with the lowest running cost.`}
         />
 
         {/* ── Affiliate disclosure ─────────────────────────────────── */}

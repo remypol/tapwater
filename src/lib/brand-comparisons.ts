@@ -242,7 +242,7 @@ export const BRAND_COMPARISONS: BrandComparison[] = [
     keyDifference:
       "Both are under-sink systems, but they sit in different categories: Waterdrop 10UA is a carbon-block filter that handles chlorine, lead, and PFAS at a fraction of the cost, while Frizzlife PD600 is a full reverse osmosis system that removes 12+ contaminants including fluoride, arsenic, and nitrate.",
     verdict:
-      "Frizzlife PD600 is the better choice if you want the most thorough filtration possible — reverse osmosis removes virtually everything, and at £329 it undercuts the comparable Waterdrop G3P600 by £70. Waterdrop 10UA is the smarter buy if you want high-capacity under-sink filtration without the cost or complexity of RO: it filters 11,000 gallons per cartridge and costs just £30 per year to run. The decision comes down to whether you need fluoride and nitrate removal.",
+      "Frizzlife PD600 is the better choice if you want the most thorough filtration possible — reverse osmosis removes virtually everything, and at £450 it costs £100 less than the comparable Waterdrop G3P600. Waterdrop 10UA is the smarter buy if you want high-capacity under-sink filtration without the cost or complexity of RO: it filters 11,000 gallons per cartridge and costs just £30 per year to run. The decision comes down to whether you need fluoride and nitrate removal.",
     brand1BestFor: "High-capacity under-sink filtration at the lowest annual running cost",
     brand2BestFor: "Maximum contaminant removal including fluoride, arsenic, and nitrate",
     comparisonPoints: [
@@ -254,8 +254,8 @@ export const BRAND_COMPARISONS: BrandComparison[] = [
       },
       {
         category: "Upfront cost",
-        brand1: "£45 — significantly lower barrier to entry",
-        brand2: "£329 — premium system with professional installation advised",
+        brand1: "£70 — significantly lower barrier to entry",
+        brand2: "£450 — premium system with professional installation advised",
         winner: 1,
       },
       {
@@ -286,7 +286,7 @@ export const BRAND_COMPARISONS: BrandComparison[] = [
       {
         question: "Is reverse osmosis worth it under the sink?",
         answer:
-          "If your postcode has flagged fluoride, nitrate, arsenic, or persistent PFAS, reverse osmosis is the most thorough solution available for home use. The Frizzlife PD600 at £329 is competitively priced for an RO system, and its NSF 58 certification means the performance claims are independently verified. The trade-offs are higher upfront cost, water waste during the RO process (roughly 3 parts waste for every 1 part filtered), and the need for a dedicated filtered tap.",
+          "If your postcode has flagged fluoride, nitrate, arsenic, or persistent PFAS, reverse osmosis is the most thorough solution available for home use. The Frizzlife PD600 at £450 is competitively priced for an RO system, and its NSF 58 certification means the performance claims are independently verified. The trade-offs are higher upfront cost, water waste during the RO process (roughly 3 parts waste for every 1 part filtered), and the need for a dedicated filtered tap.",
       },
       {
         question: "How hard is it to install the Waterdrop 10UA?",

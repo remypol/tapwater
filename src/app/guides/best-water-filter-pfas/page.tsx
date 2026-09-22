@@ -224,6 +224,10 @@ export default function BestWaterFilterPfasGuide() {
   const zerowater = pfasProducts.find((p) => p.id === "zerowater-12cup")!;
   const tappWater = pfasProducts.find((p) => p.id === "tapp-water-ecopro")!;
 
+  // Worked out from the catalogue so the copy follows the shops. Written by hand,
+  // the Frizzlife stayed "£70 less" long after the gap had grown to £100.
+  const frizzlifeSaving = waterdropRO.priceGbp - frizzlife.priceGbp;
+
   // Top 4 products for the comparison table and cards
   const featuredProducts = [waterdropRO, frizzlife, zerowater, tappWater];
 
@@ -359,7 +363,7 @@ export default function BestWaterFilterPfasGuide() {
                   {frizzlife.brand} {frizzlife.model}
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  NSF 58 certified, same PFAS removal for &pound;70 less
+                  NSF 58 certified, same PFAS removal for &pound;{frizzlifeSaving} less
                 </p>
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
@@ -477,7 +481,8 @@ export default function BestWaterFilterPfasGuide() {
               block PFAS molecules. NSF/ANSI 58 certified systems have been
               independently tested and verified to remove 90&ndash;99% of PFAS
               compounds. This is the most reliable option if PFAS are your
-              primary concern. The trade-off: RO systems cost &pound;329&ndash;&pound;499,
+              primary concern. The trade-off: the certified RO systems below cost
+              &pound;{frizzlife.priceGbp}&ndash;&pound;{waterdropRO.priceGbp},
               require under-sink installation, and waste some water during
               filtration.
             </p>
@@ -542,7 +547,7 @@ export default function BestWaterFilterPfasGuide() {
             product={waterdropRO}
             heading="Waterdrop G3P600 \u2014 Most reliable PFAS removal"
             verdict="NSF 58 certified. The most dependable way to remove PFAS from your drinking water."
-            review="If PFAS are your primary concern, this is the filter to buy. The Waterdrop G3P600 is a tankless reverse osmosis system certified to NSF/ANSI 58 — the international standard that verifies 90–99% PFAS removal. It also removes fluoride, arsenic, nitrate, lead, and 8 other contaminant categories. The smart TDS monitoring panel shows you real-time filtration performance so you can see it working. At £399 plus £80/year in running costs, it is a significant investment. But it is the only technology that reliably removes PFAS regardless of which specific PFAS compounds are present in your water."
+            review={`If PFAS are your primary concern, this is the filter to buy. The Waterdrop G3P600 is a tankless reverse osmosis system certified to NSF/ANSI 58 — the international standard that verifies 90–99% PFAS removal. It also removes fluoride, arsenic, nitrate, lead, and 8 other contaminant categories. The smart TDS monitoring panel shows you real-time filtration performance so you can see it working. At £${waterdropRO.priceGbp} plus £${waterdropRO.annualCost}/year in running costs, it is a significant investment. But it is the only technology that reliably removes PFAS regardless of which specific PFAS compounds are present in your water.`}
             pros={[
               "NSF/ANSI 58 certified — independently verified 90–99% PFAS removal",
               "Removes 12+ contaminant categories including fluoride and arsenic",
@@ -550,7 +555,7 @@ export default function BestWaterFilterPfasGuide() {
               "Tankless design fits under standard UK kitchen sinks",
             ]}
             cons={[
-              "£399 upfront plus £80/year — the most expensive option",
+              `£${waterdropRO.priceGbp} up front plus £${waterdropRO.annualCost}/year — the most expensive option`,
               "Requires under-sink installation with a dedicated tap",
               "Wastes some water during filtration (3:1 pure-to-waste ratio)",
             ]}
@@ -560,11 +565,11 @@ export default function BestWaterFilterPfasGuide() {
           <ProductReview
             product={frizzlife}
             heading="Frizzlife PD600 \u2014 Value RO pick"
-            verdict="Same NSF 58 PFAS removal standard at £70 less than the Waterdrop."
-            review="The Frizzlife PD600 carries the same NSF/ANSI 58 certification as the Waterdrop, which means identical PFAS removal verification. It removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate. What you give up for £70 less: no TDS monitoring panel, slightly noisier operation, and fewer certifications overall. But the core PFAS removal performance is equivalent. If you want RO-level PFAS protection and price matters, the Frizzlife is the smarter buy."
+            verdict={`Same NSF 58 PFAS removal standard for £${frizzlifeSaving} less than the Waterdrop.`}
+            review={`The Frizzlife PD600 carries the same NSF/ANSI 58 certification as the Waterdrop, which means identical PFAS removal verification. It removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate. What you give up for £${frizzlifeSaving} less: no TDS monitoring panel, slightly noisier operation, and fewer certifications overall. But the core PFAS removal performance is equivalent. If you want RO-level PFAS protection and price matters, the Frizzlife is the smarter buy.`}
             pros={[
               "NSF/ANSI 58 certified — same PFAS removal standard as the Waterdrop",
-              "£70 cheaper upfront with £70/year running costs",
+              `£${frizzlifeSaving} cheaper up front, with £${frizzlife.annualCost}/year running costs`,
               "Twist-and-lock filter replacement takes 30 seconds",
               "600 GPD flow rate — no waiting for filtered water",
             ]}
@@ -573,14 +578,14 @@ export default function BestWaterFilterPfasGuide() {
               "Slightly noisier pump during filtration",
               "Fewer certifications overall than the Waterdrop",
             ]}
-            ctaLabel="View on Amazon"
+            ctaLabel="View on Frizzlife"
           />
 
           <ProductReview
             product={zerowater}
             heading="ZeroWater 12-Cup \u2014 Budget PFAS removal"
             verdict="The cheapest way to remove PFAS. NSF 53 and 401 certified in a simple jug."
-            review="If you cannot install an under-sink system — or you want PFAS removal for £40 instead of £329 — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £120/year in replacement filters, the annual running cost is higher than the RO systems. But as a starting point for PFAS removal, nothing else comes close at this price."
+            review={`If you cannot install an under-sink system — or you want PFAS removal for £${zerowater.priceGbp} instead of £${frizzlife.priceGbp} — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £120/year in replacement filters, the annual running cost is higher than the RO systems. But as a starting point for PFAS removal, nothing else comes close at this price.`}
             pros={[
               "NSF/ANSI 53 and 401 certified for PFAS removal",
               "Just £40 upfront — the cheapest PFAS removal entry point",
@@ -641,10 +646,10 @@ export default function BestWaterFilterPfasGuide() {
             For the most reliable PFAS removal, a{" "}
             <strong className="text-ink">reverse osmosis system</strong> is the
             answer. The{" "}
-            <strong className="text-ink">Waterdrop G3P600</strong> (&pound;399)
+            <strong className="text-ink">Waterdrop G3P600</strong> (&pound;{waterdropRO.priceGbp})
             is our top pick with NSF 58 certification and real-time TDS
             monitoring. The{" "}
-            <strong className="text-ink">Frizzlife PD600</strong> (&pound;329)
+            <strong className="text-ink">Frizzlife PD600</strong> (&pound;{frizzlife.priceGbp})
             offers the same PFAS removal at a lower price.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">

@@ -85,7 +85,7 @@ const FAQ_DATA = [
   {
     question: "Are water filters worth it in the UK?",
     answer:
-      "Worth it for taste, yes, at almost any budget: a £20 to £25 jug removes chlorine for £36 to £52 a year in cartridges. Worth it for health depends on your water. If your postcode shows lead, PFAS or nitrate flagged, a certified under-sink or reverse osmosis system is a sensible purchase. If your problem is limescale, no filter is worth it, because filters do not soften water; you want a water softener or a kettle designed for hard water. Count the running cost as well as the price: over five years a £40 jug can cost more to own than a £75 under-sink filter.",
+      "Worth it for taste, yes, at almost any budget: a £20 to £25 jug removes chlorine for £36 to £52 a year in cartridges. Worth it for health depends on your water. If your postcode shows lead, PFAS or nitrate flagged, a certified under-sink or reverse osmosis system is a sensible purchase. If your problem is limescale, no filter is worth it, because filters do not soften water; you want a water softener or a kettle designed for hard water. Count the running cost as well as the price: over five years a £40 jug can cost more to own than a £70 under-sink filter.",
   },
   {
     question: "What is the best water filter for hard water in the UK?",
@@ -95,7 +95,7 @@ const FAQ_DATA = [
   {
     question: "How much does a home water filter system cost in the UK?",
     answer:
-      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £45 to £120 with £30 to £80 a year in cartridges; reverse osmosis systems £329 to £499 for the unit, with the Waterdrop G3P600 at around £550, and £70 to £130 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
+      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £120 with £30 to £80 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £70 to £130 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
   },
 ];
 
@@ -140,7 +140,7 @@ const NEEDS: NeedPick[] = [
   {
     need: "Best under sink",
     slug: "doulton-hip-ultracarb",
-    why: "British-made ceramic with NSF/ANSI 42 and 53 certification, listed for bacteria, lead, chlorine and microplastics. The Waterdrop 10UA is the £75 budget route.",
+    why: "British-made ceramic with NSF/ANSI 42 and 53 certification, listed for bacteria, lead, chlorine and microplastics. The Waterdrop 10UA is the £70 budget route.",
     guide: { href: "/guides/best-under-sink-water-filter-uk", label: "Under sink filter guide" },
   },
   {

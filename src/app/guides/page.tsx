@@ -115,7 +115,7 @@ const GUIDES = [
   {
     slug: "best-under-sink-water-filter-uk",
     title: "Best Under Sink Water Filter UK",
-    subtitle: "Certified filtration hidden in the kitchen cupboard, from £75",
+    subtitle: "Certified filtration hidden in the kitchen cupboard, from £70",
     icon: Droplets,
     iconColor: "text-teal-600",
     iconBg: "bg-teal-50",

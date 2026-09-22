@@ -13,8 +13,8 @@ interface Props {
  *
  * The sticker price is the number every reader compares on, and for this category
  * it is close to meaningless: cartridges run £30-£120 a year and dominate the total
- * within months. A £40 ZeroWater jug costs £640 over five years. A £59 under-sink
- * filter costs £209 — a third as much, for a purchase that looks twice as expensive
+ * within months. A £40 ZeroWater jug costs £640 over five years. A £70 under-sink
+ * filter costs £220 — a third as much, for a purchase that looks twice as expensive
  * on the shelf.
  *
  * That is worth showing plainly. It is also the single most useful thing we can tell

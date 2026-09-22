@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { PRODUCTS, getProductsByCategory, getProductBySlug, estimatedEarningsGbp } from "../products";
+import { PRODUCTS, CATEGORY_META, getProductsByCategory, getProductBySlug, estimatedEarningsGbp } from "../products";
+import { BRAND_COMPARISONS } from "../brand-comparisons";
 import type { ProductCategory } from "../types";
 
 describe("PRODUCTS catalogue", () => {
@@ -151,5 +152,62 @@ describe("commission data", () => {
 
     expect(estimatedEarningsGbp(osmio)).toBe(65);
     expect(estimatedEarningsGbp(jug)).toBeCloseTo(0.75, 2);
+  });
+});
+
+// The guides work out most price gaps from priceGbp, but the sentences around
+// them still say which product is cheaper ("£100 less than the Waterdrop", "only
+// the Osmio Fusion 3.0 costs more"). A price change can make those false without
+// touching a word: on 22 Sept the Frizzlife was still "£70 less" than the
+// Waterdrop although frizzlife.co.uk had it at £449.99 against £549.98.
+describe("prices the guide copy compares", () => {
+  const price = (id: string) => {
+    const p = PRODUCTS.find((x) => x.id === id);
+    if (!p) throw new Error(`No product ${id}`);
+    return p.priceGbp;
+  };
+
+  it("the Frizzlife PD600 stays cheaper than the Waterdrop G3P600", () => {
+    expect(price("frizzlife-pd600")).toBeLessThan(price("waterdrop-g3p600"));
+  });
+
+  it("the Osmio Zero and Fusion 2.0 still cost more than the Frizzlife PD600", () => {
+    expect(price("osmio-zero")).toBeGreaterThan(price("frizzlife-pd600"));
+    expect(price("osmio-fusion-2")).toBeGreaterThan(price("frizzlife-pd600"));
+  });
+
+  it("only the Osmio Fusion 3.0 costs more than the Waterdrop G3P600", () => {
+    const dearer = getProductsByCategory("reverse_osmosis")
+      .filter((p) => p.priceGbp > price("waterdrop-g3p600"))
+      .map((p) => p.id);
+    expect(dearer).toEqual(["osmio-fusion-3"]);
+  });
+
+  it("the Waterdrop G3P600 is the dearest of the PFAS guide's four picks", () => {
+    for (const id of ["frizzlife-pd600", "zerowater-12cup", "tapp-water-ecopro"]) {
+      expect(price(id)).toBeLessThan(price("waterdrop-g3p600"));
+    }
+  });
+
+  // The comparison page prints the catalogue price in its table, with this
+  // hand-written line a few rows below it.
+  it("comparison pages quote the catalogue price for upfront cost", () => {
+    for (const c of BRAND_COMPARISONS) {
+      const point = c.comparisonPoints.find((pt) => pt.category === "Upfront cost");
+      if (!point) continue;
+      expect(point.brand1).toMatch(new RegExp(`^£${price(c.brand1ProductId)}\\b`));
+      expect(point.brand2).toMatch(new RegExp(`^£${price(c.brand2ProductId)}\\b`));
+    }
+  });
+
+  it("category price ranges span the products listed in them", () => {
+    for (const [category, meta] of Object.entries(CATEGORY_META)) {
+      const prices = getProductsByCategory(category as ProductCategory).map((p) => p.priceGbp);
+      // Empty categories and "Check price" products (0) keep hand-written ranges.
+      if (prices.length === 0 || prices.some((p) => p <= 0)) continue;
+      const lo = Math.min(...prices);
+      const hi = Math.max(...prices);
+      expect(meta.priceRange, category).toBe(lo === hi ? `£${lo}` : `£${lo}–£${hi}`);
+    }
   });
 });
