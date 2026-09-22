@@ -334,7 +334,7 @@
 .wt-h3 { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.015em; margin-bottom: 12px; }
 .wt-table td small { opacity: 0.6; margin-left: 6px; font-size: 0.85em; }
 .wt-check { border-radius: 28px; background: var(--wt-abyss); color: #fff; padding: clamp(28px, 4vw, 44px); }
-.wt-check .wt-sub { color: #cfe0ff; margin-bottom: 24px; }
+.wt-check .wt-sub, .wt-check h2 + .wt-sub, .wt-band .wt-check h2 + .wt-sub { color: #cfe0ff; margin-bottom: 24px; }
 .wt-arrow { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .wt-arrow svg { width: 16px; height: 16px; }
 .wt-prose { max-width: 66ch; font-size: 1.06rem; line-height: 1.65; }
