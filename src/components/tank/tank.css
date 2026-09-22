@@ -352,4 +352,4 @@
 .wt-sources { font-size: 0.9rem; opacity: 0.8; max-width: 70ch; }
 .wt-sources li + li { margin-top: 8px; }
 .wt-chalk .wt-do-grid { margin-top: 0; }
-@media (max-width: 640px) { .wt-scale-bands li span { font-size: 0.7rem; } }
+@media (max-width: 640px) { .wt-scale-bands li span { display: none; } .wt-scale-bands li small { font-size: 0.72rem; } .wt-scale .wt-crust u { font-size: 0.72rem; } }
