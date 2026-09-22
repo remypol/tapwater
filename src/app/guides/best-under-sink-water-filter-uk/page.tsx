@@ -470,7 +470,7 @@ export default function BestUnderSinkFilterGuide() {
             review="The 10UA is the under sink filter for people who want the jug routine gone without spending three figures. It connects to the existing cold line with push-fit connectors, no separate tap needed, and the install is genuinely a half-hour DIY job. The cartridge is rated for around 11,000 gallons or a year of typical use, which makes its running cost the lowest here, and alongside the NSF/ANSI 42 chlorine certification Waterdrop publishes a total PFAS reduction claim for this cartridge. The honest limits: that PFAS claim is the manufacturer's own rather than an NSF 53 verification, bacteria are not on the menu at all, and hard water areas will shorten the cartridge's real-world life."
             pros={waterdrop.pros}
             cons={waterdrop.cons}
-            ctaLabel="View at Waterdrop"
+            ctaLabel="View on Amazon"
           />
         </div>
 
