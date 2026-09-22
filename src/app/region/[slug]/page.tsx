@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin, Building2, AlertTriangle, ShieldCheck } from "lucide-react";
-import { PostcodeSearch } from "@/components/postcode-search";
+import { TankSearch } from "@/components/tank/tank-search";
+import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { HardWaterCta } from "@/components/hard-water-cta";
 import { AreaRiversSection } from "@/components/river-status";
 import { getRiversForDistricts } from "@/lib/river-status-data";
-import { GeoCitation } from "@/components/geo-citation";
-import { ScrollReveal } from "@/components/scroll-reveal";
 import { REGIONS, getRegionBySlug } from "@/lib/regions";
 import { getCityBySlug, CITIES } from "@/lib/cities";
 import { getPostcodesByCity, getHardness } from "@/lib/data";
-import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
 
@@ -60,13 +57,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "website",
     },
   };
-}
-
-function scoreTextClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "text-safe";
-  if (c === "warning") return "text-warning";
-  return "text-danger";
 }
 
 export default async function RegionPage({ params }: Props) {
@@ -117,23 +107,19 @@ export default async function RegionPage({ params }: Props) {
   // indexable, off no measurements at all.
   if (totalPostcodes === 0) {
     return (
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
-          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-ink font-medium">{region.name}</span>
-        </nav>
-        <h1 className="font-display text-3xl sm:text-4xl text-ink tracking-tight italic mt-6">
-          Water quality in {region.name}
-        </h1>
-        <p className="text-muted mt-3 max-w-2xl">{region.description}</p>
-        <div className="mt-8 card p-8 max-w-2xl">
-          <p className="font-display text-xl text-ink italic">Data coming soon</p>
-          <p className="text-body mt-2">We&apos;re still collecting water quality data for this region. Check back soon or search for a specific postcode.</p>
-          <div className="mt-6 max-w-md">
-            <PostcodeSearch size="lg" />
+      <div className="wt">
+        <div className="wt-top"><div className="wt-inner"><nav aria-label="Breadcrumb" className="wt-crumbs"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">{region.name}</span></nav></div></div>
+        <section className="wt-band wt-band--foam">
+          <div className="wt-inner">
+            <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>Water quality in {region.name}</h1>
+            <p className="wt-sub">{region.description}</p>
+            <div className="wt-check" style={{ marginTop: 40 }}>
+              <h2 className="wt-h2">Data coming soon</h2>
+              <p className="wt-sub">We&apos;re still collecting water quality data for this region. Check back soon or search for a specific postcode.</p>
+              <TankSearch />
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     );
   }
@@ -203,8 +189,19 @@ export default async function RegionPage({ params }: Props) {
     }] : []),
   ];
 
+  const tank = (pc: PostcodeData) => (
+    <Link key={pc.district} href={`/postcode/${pc.district}`} className="wt-card">
+      <i style={{ height: `${Math.max(12, Math.min(92, pc.safetyScore * 10))}%` }} />
+      <b>{pc.district}</b>
+      <small>{pc.areaName}</small>
+      <span>{pc.safetyScore.toFixed(1)} out of 10</span>
+    </Link>
+  );
+  const level = Math.max(0.12, Math.min(0.92, avgScore / 10));
+  const year = new Date().getFullYear();
+
   return (
-    <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div className="wt">
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
@@ -212,218 +209,118 @@ export default async function RegionPage({ params }: Props) {
         ]}
       />
       <FAQSchema faqs={faqs} />
+      <div className="wt-top"><div className="wt-inner"><nav aria-label="Breadcrumb" className="wt-crumbs"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">{region.name}</span></nav></div></div>
 
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-faint">
-        <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-        <ChevronRight className="w-3 h-3" />
-        <span className="text-ink font-medium">{region.name}</span>
-      </nav>
-
-      {/* Header */}
-      <header className="mt-6">
-        <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight italic">
-          Water quality in {region.name}
-        </h1>
-        <p className="text-muted mt-3 max-w-2xl leading-relaxed">
-          {region.description}
-        </p>
-      </header>
-
-      {/* GEO: Branded summary for AI citation */}
-      <GeoCitation
-        headline={`According to TapWater.uk's analysis, ${region.name} scores ${avgScore.toFixed(1)}/10 for drinking water quality in ${new Date().getFullYear()}, based on data from ${totalPostcodes} postcode districts.`}
-      />
-
-      {/* Regional stats */}
-      <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="card p-4 text-center">
-          <span className={`font-data text-2xl font-bold ${scoreTextClass(avgScore)}`}>
-            {avgScore.toFixed(1)}
-          </span>
-          <p className="text-xs text-faint uppercase tracking-wider mt-1">Avg score /10</p>
+      <section className="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
+        <div className="wt-inner">
+          <div>
+            <h1>
+              <span className="wt-where">{`Tap water across ${region.name}`}</span>
+              <span>Water quality in {region.name}</span>
+            </h1>
+            <p className="wt-basis wt-nums">
+              <strong>According to TapWater.uk&apos;s analysis, {region.name} scores {avgScore.toFixed(1)}/10 for drinking water quality in {year}, based on data from {totalPostcodes} postcode districts.</strong>{" "}
+              {region.description}
+            </p>
+            <div className="wt-heroacts"><TankSearch /></div>
+          </div>
+          <div className="wt-level wt-nums">
+            <p className="wt-big">{avgScore.toFixed(1)}<small> / 10</small></p>
+            <p>{totalPostcodes} areas tested · {suppliers.length} supplier{suppliers.length !== 1 ? "s" : ""}{pfasCount > 0 ? ` · PFAS in ${pfasCount}` : ""}</p>
+          </div>
         </div>
-        <div className="card p-4 text-center">
-          <span className="font-data text-2xl font-bold text-ink">{totalPostcodes}</span>
-          <p className="text-xs text-faint uppercase tracking-wider mt-1">Areas tested</p>
-        </div>
-        <div className="card p-4 text-center">
-          <span className="font-data text-2xl font-bold text-ink">{suppliers.length}</span>
-          <p className="text-xs text-faint uppercase tracking-wider mt-1">Suppliers</p>
-        </div>
-        <div className="card p-4 text-center">
-          <span className="font-data text-2xl font-bold text-pfas">{pfasCount}</span>
-          <p className="text-xs text-faint uppercase tracking-wider mt-1">PFAS detections</p>
-        </div>
-      </div>
+      </section>
 
-      {/* AI-citable summary */}
-      <div className="mt-8 max-w-3xl">
-        <p className="text-base text-body leading-relaxed">
-          Tap water in {region.name} has an average safety score of {avgScore.toFixed(1)} out of 10 based on
-          testing across {totalPostcodes} postcode districts. Water is supplied by {suppliers.join(", ")}.
-          {pfasCount > 0 && ` PFAS (forever chemicals) have been detected in ${pfasCount} areas.`}
-          {" "}The {scoreLabel === "safe" ? "overall water quality is good" : scoreLabel === "moderate" ? "overall quality is acceptable but some areas have issues" : "region has below-average water quality that warrants attention"}.
-          Data is sourced from the Environment Agency and water company testing via the Stream Water Data Portal.
-        </p>
-      </div>
-
-      {/* Search CTA */}
-      <div className="mt-8 max-w-xl">
-        <PostcodeSearch size="lg" />
-      </div>
-
-      <HardWaterCta
-        placeName={region.name}
-        hardness={avgHardness}
-        hardnessClass={hardnessClass}
-        className="mt-10"
-      />
-
-      <AreaRiversSection placeName={region.name} data={areaRivers} />
-
-      {/* Cities in this region */}
-      <ScrollReveal delay={0}>
-        <section className="mt-12">
-          <h2 className="font-display text-2xl text-ink italic">
-            Cities in {region.name}
-          </h2>
-          <p className="text-sm text-muted mt-1 mb-5">
-            Average water quality score by city.
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <p className="wt-prose wt-nums">
+            Tap water in {region.name} has an average safety score of {avgScore.toFixed(1)} out of 10 based on testing across {totalPostcodes} postcode districts. Water is supplied by {suppliers.join(", ")}.
+            {pfasCount > 0 ? ` PFAS (forever chemicals) have been detected in ${pfasCount} areas.` : ""}
+            {" "}The {scoreLabel === "safe" ? "overall water quality is good" : scoreLabel === "moderate" ? "overall quality is acceptable but some areas have issues" : "region has below-average water quality that warrants attention"}.
+            Data is sourced from the Environment Agency and water company testing via the Stream Water Data Portal.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <h2 className="wt-h2" style={{ marginTop: 56 }}>Cities in {region.name}</h2>
+          <p className="wt-sub">Average water quality score by city.</p>
+          <div className="wt-cards wt-nums" style={{ marginTop: 24 }}>
             {cityAverages.map(({ city, postcodes, avgScore: cityAvg }) => (
-              <Link
-                key={city.slug}
-                href={`/city/${city.slug}`}
-                className="card p-4 group block"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="min-w-0">
-                    <p className="font-medium text-ink group-hover:text-accent transition-colors">
-                      {city.name}
-                    </p>
-                    <p className="text-xs text-muted mt-0.5">
-                      {postcodes.length} areas tested
-                    </p>
-                  </div>
-                  <span className={`font-data text-lg font-bold ${scoreTextClass(cityAvg)}`}>
-                    {cityAvg.toFixed(1)}
-                  </span>
-                </div>
+              <Link key={city.slug} href={`/city/${city.slug}`} className="wt-card">
+                <i style={{ height: `${Math.max(12, Math.min(92, cityAvg * 10))}%` }} />
+                <b>{city.name}</b>
+                <small>{postcodes.length} areas tested</small>
+                <span>{cityAvg.toFixed(1)} out of 10</span>
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {avgHardness != null && hardnessClass != null ? (
+        <section className={`wt-chalk${avgHardness >= 180 ? "" : " wt-chalk--soft"}`}>
+          <div className="wt-inner">
+            <div className="wt-chalk-grid">
+              <p className="wt-n wt-nums">{Math.round(avgHardness)}<small>mg of limescale minerals in every litre, on average across {region.name}</small></p>
+              <div>
+                <h2 className="wt-h2">{region.name} water is {hardnessClass}</h2>
+                <p style={{ marginTop: 16 }}>Hard starts at 180 mg/L, very hard at 250. Hardness varies by area; check your own postcode for the reading where you live.</p>
+                <p style={{ marginTop: 12 }}><Link className="wt-link" href="/hardness/">How hardness works, and what to do about it</Link></p>
+              </div>
+            </div>
+            {avgHardness >= 180 ? <div className="wt-do-grid" style={{ marginTop: 48 }}><HardWaterCta placeName={region.name} hardness={avgHardness} hardnessClass={hardnessClass} /></div> : null}
+          </div>
         </section>
-      </ScrollReveal>
+      ) : null}
 
-      {/* Best + Worst side by side */}
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <ScrollReveal delay={0}>
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="w-4 h-4 text-danger" />
-              <h2 className="font-display text-xl text-ink italic">Areas to watch</h2>
-            </div>
-            <div className="flex flex-col gap-2">
-              {worst.map((pc) => (
-                <Link key={pc.district} href={`/postcode/${pc.district}`} className="card px-4 py-3 flex items-center gap-3 group">
-                  <span className="font-data font-bold text-sm text-ink w-12 shrink-0">{pc.district}</span>
-                  <span className="text-sm text-muted flex-1 truncate">{pc.areaName}</span>
-                  <span className={`font-data text-sm font-bold ${scoreTextClass(pc.safetyScore)}`}>{pc.safetyScore.toFixed(1)}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-                </Link>
-              ))}
-            </div>
-          </section>
-        </ScrollReveal>
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <AreaRiversSection placeName={region.name} data={areaRivers} />
+        </div>
+      </section>
 
-        <ScrollReveal delay={100}>
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <ShieldCheck className="w-4 h-4 text-safe" />
-              <h2 className="font-display text-xl text-ink italic">Cleanest water</h2>
-            </div>
-            <div className="flex flex-col gap-2">
-              {best.map((pc) => (
-                <Link key={pc.district} href={`/postcode/${pc.district}`} className="card px-4 py-3 flex items-center gap-3 group">
-                  <span className="font-data font-bold text-sm text-ink w-12 shrink-0">{pc.district}</span>
-                  <span className="text-sm text-muted flex-1 truncate">{pc.areaName}</span>
-                  <span className={`font-data text-sm font-bold ${scoreTextClass(pc.safetyScore)}`}>{pc.safetyScore.toFixed(1)}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-                </Link>
-              ))}
-            </div>
-          </section>
-        </ScrollReveal>
-      </div>
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner wt-twocol">
+          <div><h2 className="wt-h2">Areas to watch</h2><div className="wt-cards wt-nums" style={{ marginTop: 24 }}>{worst.map(tank)}</div></div>
+          <div><h2 className="wt-h2">Cleanest water</h2><div className="wt-cards wt-nums" style={{ marginTop: 24 }}>{best.map(tank)}</div></div>
+        </div>
+      </section>
 
-      {/* Water suppliers */}
-      <ScrollReveal delay={0}>
-        <section className="mt-12">
-          <h2 className="font-display text-xl text-ink italic mb-4">Water suppliers</h2>
-          <div className="card divide-y divide-rule">
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Water suppliers</h2>
+          <ul className="wt-ledger wt-nums" style={{ maxWidth: 560, marginTop: 24 }}>
             {suppliers.map((name) => {
               const supplierPostcodes = allPostcodes.filter((p) => p.supplier === name);
               const supplierId = supplierPostcodes[0]?.supplierId;
               return (
-                <Link
-                  key={name}
-                  href={supplierId ? `/supplier/${supplierId}` : "#"}
-                  className="flex items-center gap-3 px-4 py-3 group hover:bg-wash transition-colors"
-                >
-                  <Building2 className="w-4 h-4 text-faint shrink-0" />
-                  <span className="font-medium text-sm text-ink group-hover:text-accent transition flex-1">{name}</span>
-                  <span className="text-xs text-faint font-data">{supplierPostcodes.length} areas</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-faint group-hover:text-accent transition shrink-0" />
-                </Link>
+                <li key={name}>
+                  <strong>{supplierId ? <Link href={`/supplier/${supplierId}`}>{name}</Link> : name}</strong>
+                  <b>{supplierPostcodes.length} areas</b>
+                </li>
               );
             })}
-          </div>
-        </section>
-      </ScrollReveal>
-
-      {/* All postcode areas — safety net so every postcode has at least one internal link */}
-      <ScrollReveal delay={0}>
-        <section className="mt-12">
-          <h2 className="font-display text-xl text-ink italic mb-1">
-            All postcode areas in {region.name}
-          </h2>
-          <p className="text-sm text-muted mb-4">
-            Every postcode district we monitor in this region.
+          </ul>
+          {/* All postcode areas: safety net so every postcode has at least one internal link */}
+          <h2 className="wt-h2" style={{ marginTop: 56 }}>All postcode areas in {region.name}</h2>
+          <p className="wt-sub">Every postcode district we monitor in this region.</p>
+          <p className="wt-pills wt-nums" style={{ marginTop: 20 }}>
+            {[...allPostcodes, ...allUnscoredPostcodes].sort((a, b) => a.district.localeCompare(b.district)).map((pc) => (
+              <Link key={pc.district} href={`/postcode/${pc.district}`}>{pc.district}</Link>
+            ))}
           </p>
-          <div className="flex flex-wrap gap-2">
-            {[...allPostcodes, ...allUnscoredPostcodes]
-              .sort((a, b) => a.district.localeCompare(b.district))
-              .map((pc) => (
-                <Link
-                  key={pc.district}
-                  href={`/postcode/${pc.district}`}
-                  className="pill"
-                >
-                  <MapPin className="w-3 h-3 text-faint mr-1" />
-                  {pc.district}
-                </Link>
-              ))}
-          </div>
-        </section>
-      </ScrollReveal>
+        </div>
+      </section>
 
-      {/* Methodology footer */}
-      <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
-        Data sourced from the Environment Agency Water Quality Archive and water company testing
-        via the Stream Water Data Portal. See our{" "}
-        <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
-          methodology
-        </Link>{" "}
-        for how scores are calculated.
-        <span className="block mt-2">
-          Reviewed by{" "}
-          <Link href="/about" className="underline underline-offset-2 hover:text-muted transition-colors">
-            the TapWater.uk research team
-          </Link>
-        </span>
-      </footer>
+      <section className="wt-faq">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Questions about {region.name} water</h2>
+          {faqs.map((f, i) => (
+            <details key={f.question} open={i === 0}><summary>{f.question}</summary><p>{f.answer}</p></details>
+          ))}
+          <p className="wt-fine" style={{ marginTop: 40 }}>
+            Data sourced from the Environment Agency Water Quality Archive and water company testing via the Stream Water Data Portal. See our{" "}
+            <Link href="/about/methodology">methodology</Link> for how scores are calculated. Reviewed by <Link href="/about">the TapWater.uk research team</Link>.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

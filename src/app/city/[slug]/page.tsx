@@ -1,29 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ChevronRight,
-  MapPin,
-  Building2,
-  AlertTriangle,
-  ShieldCheck,
-  Droplets,
-} from "lucide-react";
-import { PostcodeSearch } from "@/components/postcode-search";
-import { ScrollReveal } from "@/components/scroll-reveal";
+import { TankSearch } from "@/components/tank/tank-search";
+import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
-import { GeoCitation } from "@/components/geo-citation";
-import { RelatedGuides } from "@/components/related-guides";
+import { pickRelatedGuides } from "@/lib/guides";
 import { EmbedCta } from "@/components/embed-cta";
 import { HardWaterCta } from "@/components/hard-water-cta";
 import { AreaRiversSection } from "@/components/river-status";
 import { getRiversForDistricts } from "@/lib/river-status-data";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore, getHardness } from "@/lib/data";
-import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
 import { CITIES, getCityBySlug } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
-import { IncidentAlerts } from "@/components/incident-alert";
 import { getActiveIncidentsForCity } from "@/lib/incidents";
 
 export const revalidate = 86400;
@@ -47,13 +36,6 @@ interface Props {
 }
 
 // ── Helpers ──
-
-function scoreTextClass(score: number): string {
-  const c = getScoreColor(score);
-  if (c === "safe") return "text-[var(--color-safe)]";
-  if (c === "warning") return "text-[var(--color-warning)]";
-  return "text-[var(--color-danger)]";
-}
 
 async function getPostcodesForCity(
   matches: string[],
@@ -282,574 +264,260 @@ export default async function CityPage({ params }: Props) {
     { question: `Are there PFAS in ${city.name} water?`, answer: pfasAnswer },
   ];
 
+  const parentRegion = REGIONS.find((r) => r.cities.includes(city.slug));
+  const guides = pickRelatedGuides({
+    pfasDetected: pfasCount > 0,
+    hasLeadFlagged: topConcerns.some(([name]) => /lead/i.test(name)),
+    isHardWater: (avgHardness ?? 0) >= 180,
+    hasContaminantsFlagged: totalFlagged > 0,
+  });
+  const tank = (pc: PostcodeData) => (
+    <Link key={pc.district} href={`/postcode/${pc.district}`} className="wt-card">
+      <i style={{ height: `${Math.max(12, Math.min(92, pc.safetyScore * 10))}%` }} />
+      <b>{pc.district}</b>
+      <small>{pc.areaName}</small>
+      <span>{pc.safetyScore.toFixed(1)} out of 10</span>
+    </Link>
+  );
+  const level = scored.length > 0 ? Math.max(0.12, Math.min(0.92, avgScore / 10)) : 0.3;
+
   return (
-    <div className="bg-score-safe">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <BreadcrumbSchema
-          items={[
-            { name: "Home", url: "https://www.tapwater.uk" },
-            { name: "Cities", url: "https://www.tapwater.uk/city" },
-            {
-              name: city.name,
-              url: `https://www.tapwater.uk/city/${city.slug}`,
-            },
-          ]}
-        />
-        <FAQSchema faqs={cityFaqs} />
+    <div className="wt">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Cities", url: "https://www.tapwater.uk/city" },
+          { name: city.name, url: `https://www.tapwater.uk/city/${city.slug}` },
+        ]}
+      />
+      <FAQSchema faqs={cityFaqs} />
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link><span aria-hidden="true">/</span>
+            {parentRegion ? <><Link href={`/region/${parentRegion.slug}`}>{parentRegion.name}</Link><span aria-hidden="true">/</span></> : null}
+            <span aria-current="page">{city.name}</span>
+          </nav>
+        </div>
+      </div>
+      {activeIncidents.length > 0 ? (
+        <div className="wt-alert" role="status"><div className="wt-inner">Live: {activeIncidents[0].title}. <Link href={`/supplier/${primarySupplier.id}`}>See current incidents</Link></div></div>
+      ) : null}
 
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-1.5 text-sm text-faint"
-        >
-          <Link href="/" className="hover:text-accent transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-ink font-medium">{city.name}</span>
-        </nav>
-
-        <IncidentAlerts incidents={activeIncidents} />
-
-        {/* Header */}
-        <header className="mt-6">
-          {(() => {
-            const parentRegion = REGIONS.find((r) => r.cities.includes(city.slug));
-            return (
-              <p className="text-xs uppercase tracking-[0.15em] text-accent font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
-                <MapPin className="w-3 h-3" />
-                {parentRegion ? (
-                  <Link href={`/region/${parentRegion.slug}`} className="hover:underline">
-                    {parentRegion.name}
-                  </Link>
-                ) : (
-                  city.region
-                )}
-              </p>
-            );
-          })()}
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
-            Is {city.name} tap water safe to drink?
-          </h1>
-          <p className="text-muted mt-2 max-w-2xl animate-fade-up delay-3">
-            {city.description}
-          </p>
-        </header>
-
-        {/* GEO: Branded summary for AI citation */}
-        {scored.length > 0 && (
-          <GeoCitation
-            headline={`According to TapWater.uk's analysis, ${city.name} scores ${avgScore.toFixed(1)}/10 for drinking water quality in ${year}.`}
-            detail={`Water is supplied by ${primarySupplier.name} and has been tested for ${contaminantCount} contaminants across ${scored.length} postcode districts.`}
-          />
-        )}
-
-        {/* Aggregate stats */}
-        {scored.length > 0 ? (
-          <>
-            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-up delay-3">
-              <div className="card p-4 text-center">
-                <p className="text-xs text-muted uppercase tracking-wider">
-                  Average score
-                </p>
-                <p
-                  className={`font-data text-3xl font-bold mt-1 ${scoreTextClass(avgScore)}`}
-                >
-                  {avgScore.toFixed(1)}
-                  <span className="text-sm text-faint font-normal">/10</span>
-                </p>
-                {nationalAvg > 0 && (
-                  <p className="text-xs text-faint mt-1">
-                    UK avg: {nationalAvg.toFixed(1)}/10
-                  </p>
-                )}
-              </div>
-              <div className="card p-4 text-center">
-                <p className="text-xs text-muted uppercase tracking-wider">
-                  Areas tested
-                </p>
-                <p className="font-data text-3xl font-bold text-ink mt-1">
-                  {scored.length}
-                </p>
-              </div>
-              <div className="card p-4 text-center">
-                <p className="text-xs text-muted uppercase tracking-wider">
-                  Issues flagged
-                </p>
-                <p className="font-data text-3xl font-bold text-ink mt-1">
-                  {totalFlagged}
-                </p>
-              </div>
-              <div className="card p-4 text-center">
-                <p className="text-xs text-muted uppercase tracking-wider">
-                  PFAS detected
-                </p>
-                <p className="font-data text-3xl font-bold text-ink mt-1">
-                  {pfasCount > 0 ? `${pfasCount} area${pfasCount > 1 ? "s" : ""}` : "None"}
-                </p>
-              </div>
+      {/* ── The tank: the city filled to its average ── */}
+      <section className="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
+        <div className="wt-inner">
+          <div>
+            <h1>
+              <span className="wt-where">{`Tap water in ${city.name}${parentRegion ? `, ${parentRegion.name}` : ""}`}</span>
+              <span>Is {city.name} tap water safe to drink?</span>
+            </h1>
+            <p className="wt-basis wt-nums">
+              {scored.length > 0 ? (
+                <>
+                  <strong>According to TapWater.uk&apos;s analysis, {city.name} scores {avgScore.toFixed(1)}/10 for drinking water quality in {year}.</strong>{" "}
+                  Water is supplied by {primarySupplier.name} and has been tested for {contaminantCount} contaminants across {scored.length} postcode districts.
+                </>
+              ) : city.description}
+            </p>
+            <div className="wt-heroacts"><TankSearch /></div>
+          </div>
+          {scored.length > 0 ? (
+            <div className="wt-level wt-nums">
+              <p className="wt-big">{avgScore.toFixed(1)}<small> / 10</small></p>
+              <p>{scored.length} areas tested · {totalFlagged} flagged{nationalAvg > 0 ? ` · UK average ${nationalAvg.toFixed(1)}` : ""}{pfasCount > 0 ? ` · PFAS in ${pfasCount}` : ""}</p>
             </div>
+          ) : null}
+        </div>
+      </section>
 
-            {/* GEO: Direct answer summary — optimized for AI citation */}
-            <div className="mt-8 max-w-3xl">
-              <p className="text-base text-body leading-relaxed">
+      {scored.length > 0 ? (
+        <>
+          <section className="wt-band wt-band--white">
+            <div className="wt-inner">
+              <p className="wt-prose wt-nums">
                 {avgScore >= 7 ? (
                   <>
-                    <strong className="text-ink">Yes, {city.name} tap water is safe to drink.</strong>{" "}
-                    Based on {scored.length} areas tested, {city.name} has an average water quality
-                    score of <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>
-                    {nationalAvg > 0 && (
-                      <span className="text-muted text-sm"> ({scoreVsNational} the UK average of {nationalAvg.toFixed(1)}/10)</span>
-                    )}.{" "}
-                    {totalFlagged === 0
-                      ? "No contaminants were found above recommended levels."
-                      : `${totalFlagged} contaminant${totalFlagged !== 1 ? "s were" : " was"} flagged above recommended levels across all areas.`}{" "}
-                    Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
-                      {primarySupplier.name}
-                    </Link>
-                    . {city.description}
+                    <strong>Yes, {city.name} tap water is safe to drink.</strong> Based on {scored.length} areas tested, {city.name} has an average water quality score of{" "}
+                    <strong>{avgScore.toFixed(1)}/10</strong>{nationalAvg > 0 ? ` (${scoreVsNational} the UK average of ${nationalAvg.toFixed(1)}/10)` : ""}.{" "}
+                    {totalFlagged === 0 ? "No contaminants were found above recommended levels." : `${totalFlagged} contaminant${totalFlagged !== 1 ? "s were" : " was"} flagged above recommended levels across all areas.`}{" "}
+                    Water is supplied by <Link href={`/supplier/${primarySupplier.id}`}>{primarySupplier.name}</Link>. {city.description}
                   </>
                 ) : avgScore >= 5 ? (
                   <>
-                    <strong className="text-ink">{city.name} tap water is mostly safe, but some areas have concerns.</strong>{" "}
-                    The average water quality score across {scored.length} areas is{" "}
-                    <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>, with{" "}
-                    {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
-                    Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
-                      {primarySupplier.name}
-                    </Link>
-                    . {city.description}
+                    <strong>{city.name} tap water is mostly safe, but some areas have concerns.</strong> The average water quality score across {scored.length} areas is{" "}
+                    <strong>{avgScore.toFixed(1)}/10</strong>, with {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels. Water is supplied by{" "}
+                    <Link href={`/supplier/${primarySupplier.id}`}>{primarySupplier.name}</Link>. {city.description}
                   </>
                 ) : (
                   <>
-                    <strong className="text-ink">{city.name} tap water has some quality concerns.</strong>{" "}
-                    The average water quality score across {scored.length} areas is{" "}
-                    <span className="font-data font-bold">{avgScore.toFixed(1)}/10</span>, with{" "}
-                    {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels.{" "}
-                    Check your specific postcode for detailed results.{" "}
-                    Water is supplied by{" "}
-                    <Link href={`/supplier/${primarySupplier.id}`} className="text-accent hover:underline">
-                      {primarySupplier.name}
-                    </Link>
-                    . {city.description}
+                    <strong>{city.name} tap water has some quality concerns.</strong> The average water quality score across {scored.length} areas is <strong>{avgScore.toFixed(1)}/10</strong>, with{" "}
+                    {totalFlagged} contaminant{totalFlagged !== 1 ? "s" : ""} flagged above recommended levels. Check your specific postcode for detailed results. Water is supplied by{" "}
+                    <Link href={`/supplier/${primarySupplier.id}`}>{primarySupplier.name}</Link>. {city.description}
                   </>
                 )}
-                {pfasCount > 0 && (
-                  <>{" "}PFAS (forever chemicals) were detected in {pfasCount} of {scored.length} areas monitored.</>
-                )}
+                {pfasCount > 0 ? <> PFAS (forever chemicals) were detected in {pfasCount} of {scored.length} areas monitored.</> : null}
               </p>
-            </div>
-
-            <hr className="border-rule mt-10" />
-
-            {/* Top concerns */}
-            {topConcerns.length > 0 && (
-              <ScrollReveal delay={0}>
-                <section className="mt-8">
-                  <div className="flex items-center gap-2 mb-1">
-                    <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
-                    <h2 className="font-display text-2xl text-ink italic">
-                      Top concerns in {city.name}
-                    </h2>
-                  </div>
-                  <p className="text-sm text-muted mt-1 mb-5">
-                    Contaminants flagged most often across the city.
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {topConcerns.length > 0 ? (
+                <>
+                  <h2 className="wt-h2" style={{ marginTop: 56 }}>Top concerns in {city.name}</h2>
+                  <p className="wt-sub">Contaminants flagged most often across the city.</p>
+                  <ul className="wt-ledger wt-nums" style={{ maxWidth: 560, marginTop: 24 }}>
                     {topConcerns.map(([name, count]) => (
-                      <div
-                        key={name}
-                        className="card p-4 flex items-center justify-between"
-                      >
-                        <span className="text-sm font-medium text-ink">
-                          {name}
-                        </span>
-                        <span className="text-xs text-muted">
-                          {count} area{count > 1 ? "s" : ""}
-                        </span>
-                      </div>
+                      <li key={name}><strong>{name}</strong><b>{count} area{count > 1 ? "s" : ""}</b></li>
                     ))}
-                  </div>
-                </section>
-              </ScrollReveal>
-            )}
+                  </ul>
+                </>
+              ) : null}
+            </div>
+          </section>
 
-            <hr className="border-rule mt-10" />
-
-            {/* Postcode table */}
-            <ScrollReveal delay={100}>
-              <section className="mt-8">
-                <div className="flex items-center gap-2 mb-1">
-                  <Droplets className="w-4 h-4 text-accent shrink-0" />
-                  <h2 className="font-display text-2xl text-ink italic">
-                    Water quality by area
-                  </h2>
-                </div>
-                <p className="text-sm text-muted mt-1 mb-5">
-                  All postcode districts in {city.name}, ranked by water quality
-                  score.
-                </p>
-
-                <div className="card overflow-hidden">
-                  {/* Table header */}
-                  <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_80px_80px_1fr] gap-4 px-4 py-2.5 bg-wash border-b border-rule text-xs text-faint uppercase tracking-wider font-medium">
-                    <span>Postcode</span>
-                    <span>Area</span>
-                    <span className="text-right">Score</span>
-                    <span className="text-right">Flagged</span>
-                    <span>Supplier</span>
-                  </div>
-
-                  {/* Table rows */}
-                  {sortedPostcodes.map((pc) => (
-                    <Link
-                      key={pc.district}
-                      href={`/postcode/${pc.district}`}
-                      className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[1fr_1fr_80px_80px_1fr] gap-x-4 gap-y-1 px-4 py-3 border-b border-rule last:border-b-0 hover:bg-wash transition-colors group items-center"
-                    >
-                      <span className="font-data font-bold text-sm text-ink">
-                        {pc.district}
-                      </span>
-                      <span className="text-sm text-muted truncate">
-                        {pc.areaName}
-                      </span>
-                      <span
-                        className={`font-data text-sm font-bold text-right ${scoreTextClass(pc.safetyScore)}`}
-                      >
-                        {pc.safetyScore.toFixed(1)}
-                      </span>
-                      <span className="font-data text-sm text-right text-muted hidden sm:block">
-                        {pc.contaminantsFlagged}
-                      </span>
-                      <span className="text-sm text-muted truncate hidden sm:flex items-center gap-1.5">
-                        <Building2 className="w-3 h-3 text-faint shrink-0" />
-                        {pc.supplier}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            </ScrollReveal>
-
-            {/* Unscored postcodes — ensure they have at least one internal link */}
-            {unscoredPostcodes.length > 0 && (
-              <div className="mt-4">
-                <p className="text-xs text-faint mb-2">
-                  {unscoredPostcodes.length} additional area{unscoredPostcodes.length !== 1 ? "s" : ""} with limited data:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {unscoredPostcodes.map((pc) => (
-                    <Link
-                      key={pc.district}
-                      href={`/postcode/${pc.district}`}
-                      className="pill"
-                    >
-                      <MapPin className="w-3 h-3 text-faint mr-1" />
-                      {pc.district}
-                      <span className="text-faint ml-1">{pc.areaName}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <hr className="border-rule mt-10" />
-
-            {/* Hardness badge */}
-            {avgHardness != null && hardnessClass != null && (
-              <div className="mt-8">
-                <Link
-                  href="/hardness/"
-                  className="card p-4 flex items-center justify-between group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-accent-light flex items-center justify-center">
-                      <Droplets className="w-4 h-4 text-accent" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted">Water hardness</p>
-                      <p className="font-semibold text-ink group-hover:text-accent transition-colors">
-                        {city.name} water is{" "}
-                        <span className="capitalize">{hardnessClass}</span>{" "}
-                        <span className="text-muted font-normal text-sm">
-                          ({Math.round(avgHardness)} mg/L CaCO₃)
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
-                </Link>
-              </div>
-            )}
-
-            <HardWaterCta
-              placeName={city.name}
-              hardness={avgHardness}
-              hardnessClass={hardnessClass}
-              className="mt-6"
-            />
-
-            {/* Hardness by district: the answer to "is {city} hard water" is
-                rarely one number. Same source as the postcode pages. */}
-            {cityHardnessByDistrict.length >= 2 && (
-              <section id="hardness" className="mt-10 scroll-mt-24" aria-labelledby="city-hardness-heading">
-                <h2 id="city-hardness-heading" className="font-display text-2xl text-ink italic">
-                  Water hardness across {city.name}
-                </h2>
-                <p className="text-sm text-body mt-2 max-w-2xl leading-relaxed">
-                  {hardnessSpread
-                    ? `From ${softestRow.h.value} mg/L in ${softestRow.district} to ${hardestRow.h.value} mg/L in ${hardestRow.district}. Hard starts at 180, very hard at 250.`
-                    : `Hard starts at 180 mg/L, very hard at 250.`}
-                  {cityHardnessMeasured.length < cityHardnessAll.length &&
-                    ` Districts marked with an asterisk take their postcode area's median rather than a reading of their own.`}
-                </p>
-                <div className="mt-4 overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left text-xs text-muted border-b border-rule-strong">
-                        <th className="py-2 pr-3 font-medium">District</th>
-                        <th className="py-2 pr-3 font-medium hidden sm:table-cell">Area</th>
-                        <th className="py-2 pr-3 font-medium text-right">mg/L</th>
-                        <th className="py-2 font-medium">Hardness</th>
+          <section className="wt-band wt-band--foam">
+            <div className="wt-inner">
+              <h2 className="wt-h2">Water quality by area</h2>
+              <p className="wt-sub">All postcode districts in {city.name}, ranked by water quality score.</p>
+              <div className="wt-tablewrap" style={{ marginTop: 24 }}>
+                <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 560, maxWidth: 900 }}>
+                  <thead><tr><th scope="col">Postcode</th><th scope="col">Area</th><th scope="col" style={{ textAlign: "right" }}>Score</th><th scope="col" style={{ textAlign: "right" }}>Flagged</th><th scope="col">Supplier</th></tr></thead>
+                  <tbody>
+                    {sortedPostcodes.map((pc) => (
+                      <tr key={pc.district}>
+                        <td><Link href={`/postcode/${pc.district}`}>{pc.district}</Link></td>
+                        <td style={{ opacity: 0.75 }}>{pc.areaName}</td>
+                        <td style={{ textAlign: "right", fontWeight: 700 }}>{pc.safetyScore.toFixed(1)}</td>
+                        <td style={{ textAlign: "right", opacity: 0.75 }}>{pc.contaminantsFlagged}</td>
+                        <td style={{ opacity: 0.75 }}>{pc.supplier}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {cityHardnessByDistrict.map((r) => (
-                        <tr key={r.district} className="border-b border-rule">
-                          <td className="py-2 pr-3">
-                            <Link href={`/postcode/${r.district}`} className="font-medium text-ink hover:text-accent transition-colors">
-                              {r.district}
-                            </Link>
-                            {r.h.estimated && <span className="text-muted" title="Postcode-area estimate">*</span>}
-                          </td>
-                          <td className="py-2 pr-3 text-muted hidden sm:table-cell">{r.areaName}</td>
-                          <td className="py-2 pr-3 text-right font-data text-ink">{r.h.value}</td>
-                          <td className="py-2 capitalize">{r.h.label}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-            )}
-
-            {/* Supplier card */}
-            <div className="mt-4">
-              <Link
-                href={`/supplier/${primarySupplier.id}/`}
-                className="card p-4 flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-wash flex items-center justify-center">
-                    <Building2 className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted">
-                      Main water supplier
-                      {primarySupplier.count > 0 && (
-                        <span className="ml-2 text-faint">
-                          — {primarySupplier.count} postcode{primarySupplier.count !== 1 ? "s" : ""} in {city.name}
-                        </span>
-                      )}
-                    </p>
-                    <p className="font-semibold text-ink group-hover:text-accent transition-colors">
-                      {primarySupplier.name}
-                    </p>
-                  </div>
-                </div>
-                <ChevronRight className="w-4 h-4 text-faint group-hover:text-accent transition-colors" />
-              </Link>
-            </div>
-          </>
-        ) : (
-          /* No data state */
-          <>
-            <div className="mt-10 card-elevated rounded-2xl p-8 max-w-2xl">
-              <p className="font-display text-2xl text-ink italic">
-                Not enough data yet
-              </p>
-              <p className="text-base text-body leading-relaxed mt-3">
-                We don&apos;t have enough test results for {city.name} yet to
-                show aggregate scores. Try searching for a specific postcode
-                below.
-              </p>
-            </div>
-            {/* Link unscored postcodes so they aren't orphaned */}
-            {unscoredPostcodes.length > 0 && (
-              <div className="mt-6">
-                <p className="text-xs text-faint mb-2">
-                  Areas with limited data:
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {unscoredPostcodes.length > 0 ? (
+                <p className="wt-more">
+                  {unscoredPostcodes.length} additional area{unscoredPostcodes.length !== 1 ? "s" : ""} with limited data:{" "}
+                  {unscoredPostcodes.map((pc, i) => <span key={pc.district}>{i > 0 ? ", " : ""}<Link href={`/postcode/${pc.district}`}>{pc.district}</Link> {pc.areaName}</span>)}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {unscoredPostcodes.map((pc) => (
-                    <Link
-                      key={pc.district}
-                      href={`/postcode/${pc.district}`}
-                      className="pill"
-                    >
-                      <MapPin className="w-3 h-3 text-faint mr-1" />
-                      {pc.district}
-                      <span className="text-faint ml-1">{pc.areaName}</span>
-                    </Link>
-                  ))}
+              ) : null}
+            </div>
+          </section>
+
+          {avgHardness != null && hardnessClass != null ? (
+            <section className={`wt-chalk${avgHardness >= 180 ? "" : " wt-chalk--soft"}`} id="hardness">
+              <div className="wt-inner">
+                <div className="wt-chalk-grid">
+                  <p className="wt-n wt-nums">{Math.round(avgHardness)}<small>mg of limescale minerals in every litre, on average across {city.name}</small></p>
+                  <div>
+                    <h2 className="wt-h2" id="city-hardness-heading">{city.name} water is {hardnessClass}</h2>
+                    <p style={{ marginTop: 16 }}>
+                      {cityHardnessByDistrict.length >= 2 && hardnessSpread
+                        ? `From ${softestRow.h.value} mg/L in ${softestRow.district} to ${hardestRow.h.value} mg/L in ${hardestRow.district}. Hard starts at 180, very hard at 250.`
+                        : "Hard starts at 180 mg/L, very hard at 250."}
+                      {cityHardnessMeasured.length < cityHardnessAll.length ? " Districts marked with an asterisk take their postcode area's median rather than a reading of their own." : ""}
+                    </p>
+                    <p style={{ marginTop: 12 }}><Link className="wt-link" href="/hardness/">How hardness works, and what to do about it</Link></p>
+                  </div>
+                </div>
+                {avgHardness >= 180 ? (
+                  <div className="wt-do-grid" style={{ marginTop: 48 }}>
+                    <HardWaterCta placeName={city.name} hardness={avgHardness} hardnessClass={hardnessClass} />
+                  </div>
+                ) : null}
+                {cityHardnessByDistrict.length >= 2 ? (
+                  <>
+                    <h3 className="wt-h3" style={{ marginTop: 48 }}>Water hardness across {city.name}</h3>
+                    <div className="wt-tablewrap">
+                      <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 520, maxWidth: 760 }}>
+                        <thead><tr><th scope="col">District</th><th scope="col">Area</th><th scope="col" style={{ textAlign: "right" }}>mg/L</th><th scope="col">Hardness</th></tr></thead>
+                        <tbody>
+                          {cityHardnessByDistrict.map((r) => (
+                            <tr key={r.district}>
+                              <td><Link href={`/postcode/${r.district}`}>{r.district}</Link>{r.h.estimated ? <span title="Postcode-area estimate">*</span> : null}</td>
+                              <td style={{ opacity: 0.75 }}>{r.areaName}</td>
+                              <td style={{ textAlign: "right" }}>{r.h.value}</td>
+                              <td style={{ textTransform: "capitalize" }}>{r.h.label}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+
+          <section className="wt-band wt-band--white">
+            <div className="wt-inner">
+              <p className="wt-pills">
+                <Link href={`/supplier/${primarySupplier.id}/`}>Main water supplier: {primarySupplier.name}{primarySupplier.count > 0 ? ` (${primarySupplier.count} postcode${primarySupplier.count !== 1 ? "s" : ""})` : ""}</Link>
+              </p>
+              <AreaRiversSection placeName={city.name} data={areaRivers} />
+            </div>
+          </section>
+
+          {scored.length >= 2 ? (
+            <section className="wt-band wt-band--foam">
+              <div className="wt-inner">
+                <h2 className="wt-h2">Best and worst areas in {city.name}</h2>
+                <div className="wt-twocol" style={{ marginTop: 32 }}>
+                  <div><h3 className="wt-h3">Best areas</h3><div className="wt-cards wt-nums">{bestPostcodes.map(tank)}</div></div>
+                  <div><h3 className="wt-h3">Areas to watch</h3><div className="wt-cards wt-nums">{worstPostcodes.map(tank)}</div></div>
                 </div>
               </div>
-            )}
-          </>
-        )}
+            </section>
+          ) : null}
+        </>
+      ) : (
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Not enough data yet</h2>
+            <p className="wt-sub">We don&apos;t have enough test results for {city.name} yet to show aggregate scores. Try searching for a specific postcode below.</p>
+            {unscoredPostcodes.length > 0 ? (
+              <p className="wt-pills" style={{ marginTop: 24 }}>
+                {unscoredPostcodes.map((pc) => <Link key={pc.district} href={`/postcode/${pc.district}`}>{pc.district} {pc.areaName}</Link>)}
+              </p>
+            ) : null}
+            <AreaRiversSection placeName={city.name} data={areaRivers} />
+          </div>
+        </section>
+      )}
 
-        <AreaRiversSection placeName={city.name} data={areaRivers} />
-
-        {/* Best & worst areas */}
-        {scored.length >= 2 && (
-          <>
-            <hr className="border-rule mt-10" />
-            <ScrollReveal delay={0}>
-              <section className="mt-8">
-                <h2 className="font-display text-2xl text-ink italic mb-5">
-                  Best and worst areas in {city.name}
-                </h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {/* Best */}
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-safe font-semibold mb-3">
-                      Best areas
-                    </p>
-                    <div className="space-y-2">
-                      {bestPostcodes.map((pc) => (
-                        <Link
-                          key={pc.district}
-                          href={`/postcode/${pc.district}`}
-                          className="card p-3 flex items-center justify-between group"
-                        >
-                          <div className="min-w-0">
-                            <span className="font-data font-bold text-sm text-ink">
-                              {pc.district}
-                            </span>
-                            <span className="text-sm text-muted ml-2 truncate">
-                              {pc.areaName}
-                            </span>
-                          </div>
-                          <span className={`font-data text-sm font-bold ml-3 shrink-0 ${scoreTextClass(pc.safetyScore)}`}>
-                            {pc.safetyScore.toFixed(1)}/10
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                  {/* Worst */}
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-warning font-semibold mb-3">
-                      Areas to watch
-                    </p>
-                    <div className="space-y-2">
-                      {worstPostcodes.map((pc) => (
-                        <Link
-                          key={pc.district}
-                          href={`/postcode/${pc.district}`}
-                          className="card p-3 flex items-center justify-between group"
-                        >
-                          <div className="min-w-0">
-                            <span className="font-data font-bold text-sm text-ink">
-                              {pc.district}
-                            </span>
-                            <span className="text-sm text-muted ml-2 truncate">
-                              {pc.areaName}
-                            </span>
-                          </div>
-                          <span className={`font-data text-sm font-bold ml-3 shrink-0 ${scoreTextClass(pc.safetyScore)}`}>
-                            {pc.safetyScore.toFixed(1)}/10
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </ScrollReveal>
-          </>
-        )}
-
-        {/* Related guides */}
-        {scored.length > 0 && (
-          <>
-            <hr className="border-rule mt-10" />
-            <ScrollReveal delay={0}>
-              <RelatedGuides
-                pfasDetected={pfasCount > 0}
-                hasLeadFlagged={topConcerns.some(([name]) => /lead/i.test(name))}
-                isHardWater={(avgHardness ?? 0) >= 180}
-                hasContaminantsFlagged={totalFlagged > 0}
-              />
-            </ScrollReveal>
-          </>
-        )}
-
-        {/* FAQ — the visible copy for the FAQSchema markup above */}
-        <hr className="border-rule mt-10" />
-        <ScrollReveal delay={0}>
-          <section className="mt-8">
-            <h2 className="font-display text-2xl text-ink italic mb-5">
-              {city.name} tap water: frequently asked questions
-            </h2>
-            <div className="space-y-6">
-              {cityFaqs.map((faq) => (
-                <div key={faq.question}>
-                  <h3 className="font-semibold text-ink text-base">
-                    {faq.question}
-                  </h3>
-                  <p className="text-sm text-body leading-relaxed mt-2">
-                    {faq.answer}
-                  </p>
-                </div>
+      {scored.length > 0 ? (
+        <section className="wt-read" style={{ paddingBlock: "var(--wt-pad)" }}>
+          <div className="wt-inner">
+            <h2 className="wt-h2">Related guides</h2>
+            <ul className="wt-guides">
+              {guides.map((g) => (
+                <li key={g.slug}><Link href={`/guides/${g.slug}/`}><strong>{g.title}</strong><span>{g.description}</span></Link></li>
               ))}
-            </div>
-          </section>
-        </ScrollReveal>
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
-        {bestPostcodes.length > 0 && (
-          <EmbedCta district={bestPostcodes[0].district} />
-        )}
+      <section className="wt-faq">
+        <div className="wt-inner">
+          <h2 className="wt-h2">{city.name} tap water: frequently asked questions</h2>
+          {cityFaqs.map((faq, i) => (
+            <details key={faq.question} open={i === 0}><summary>{faq.question}</summary><p>{faq.answer}</p></details>
+          ))}
+        </div>
+      </section>
 
-        <hr className="border-rule mt-10" />
-
-        {/* Check your postcode CTA */}
-        <ScrollReveal delay={0}>
-          <section className="mt-8 mb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <ShieldCheck className="w-4 h-4 text-safe shrink-0" />
-              <h2 className="font-display text-2xl text-ink italic">
-                Check your postcode
-              </h2>
-            </div>
-            <p className="text-sm text-muted mt-1 mb-5">
-              Get a detailed water quality report for your exact area in{" "}
-              {city.name}.
-            </p>
-
-            <div className="max-w-xl">
-              <PostcodeSearch size="sm" />
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* Methodology footer */}
-        <footer className="mt-10 pb-4 text-sm text-faint leading-relaxed">
-          Based on water quality data from {scored.length} postcode districts in{" "}
-          {city.name}. Data from your water company via the Stream Water Data
-          Portal and the Environment Agency. See our{" "}
-          <Link
-            href="/about/methodology"
-            className="underline underline-offset-2 hover:text-muted transition-colors"
-          >
-            methodology
-          </Link>{" "}
-          for how scores are calculated.
-        </footer>
-      </div>
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          {bestPostcodes.length > 0 ? <EmbedCta district={bestPostcodes[0].district} /> : null}
+          <div className="wt-check" style={{ marginTop: 40 }}>
+            <h2 className="wt-h2">Check your postcode</h2>
+            <p className="wt-sub">Get a detailed water quality report for your exact area in {city.name}.</p>
+            <TankSearch />
+          </div>
+          <p className="wt-fine" style={{ marginTop: 40 }}>
+            Based on water quality data from {scored.length} postcode districts in {city.name}. Data from your water company via the Stream Water Data Portal and the Environment Agency. See our{" "}
+            <Link href="/about/methodology">methodology</Link> for how scores are calculated.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
