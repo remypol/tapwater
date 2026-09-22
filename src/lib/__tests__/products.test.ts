@@ -61,7 +61,7 @@ describe("PRODUCTS catalogue", () => {
       // Awin: publisher id, not the merchant id, is the part that pays us. 3091503
       // is CCC Impact BV. Awin redirects for any live publisher id whether or not
       // it has joined the merchant, so a working link proves nothing: check the
-      // merchant is on the Joined tab in Awin before adding one.
+      // merchant is on the Joined tab of this account before adding one.
       "awin1.com": (u) => u.searchParams.get("awinaffid") === "3091503",
       // Osmio runs its own Magento program. The account id sits inside a base64
       // payload, so a truncated or hand-edited token has to be decoded to be caught.

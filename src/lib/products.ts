@@ -228,15 +228,16 @@ export const PRODUCTS: FilterProduct[] = [
     // and the running-cost table both quote this figure.
     priceGbp: 75,
     priceTier: "budget",
-    // Back on Amazon (22 Sept). From July this ran through Awin publisher 2996923 at
-    // 7%, but neither Awin account we can log into (3091503, Hugo's) has joined
-    // Waterdrop, and Awin redirects for any live publisher id, joined or not, so
-    // those clicks earned nothing. Amazon's 3% pays until Waterdrop approves
-    // 3091503; then this goes back to Awin on that id.
-    affiliateUrl: "https://www.amazon.co.uk/dp/B083NPW1DN?tag=tapwater2107-21",
-    affiliateProgram: "amazon",
-    commission: { type: "percent", rate: 0.03 },
-    affiliateTag: "tapwater2107-21",
+    // Waterdrop's own UK programme via Awin pays 7%, where the Amazon listing paid 3%.
+    // Publisher id is 3091503 (CCC Impact BV), the account Waterdrop is joined on.
+    // Until 22 Sept these links carried 2996923, an account that is not joined to
+    // Waterdrop. Awin redirects any live publisher id, joined or not, so the link
+    // worked for visitors while crediting nobody we can see.
+    affiliateUrl:
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=3091503&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Funder-sink-water-filter-direct-connect-filtration-system",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.07 },
+    affiliateTag: "awin-3091503",
     imageUrl: "/filters/waterdrop-10ua.png",
     rating: 4.4,
     badge: "budget",
@@ -310,22 +311,21 @@ export const PRODUCTS: FilterProduct[] = [
       "Nickel",
     ],
     certifications: ["NSF/ANSI 58", "NSF/ANSI 372"],
-    // Was an Impact link on publisher 5514161, not ours; our own Impact account
-    // (6413869) was declined in January. From July it ran through Awin publisher
-    // 2996923, which turned out not to be joined to Waterdrop on any account we
-    // can log into, so it earned nothing either. On Amazon (22 Sept) until
-    // Waterdrop approves Awin account 3091503. Amazon pays on anything bought in
-    // the 24 hours after the click, so when this listing is out of stock the
-    // alternatives Amazon offers on the page still pay.
+    // Was an Impact link on publisher 5514161 — not our account. Ours (CCC Impact,
+    // 6413869) was declined by Impact in January for not meeting their partner
+    // standards, so nothing here was ever going to reach us. Waterdrop is Awin
+    // merchant 117649, joined on our account 3091503 (CCC Impact BV), at 7%. See
+    // the 10UA above for why the publisher id changed on 22 Sept.
     //
     // Price corrected at source: the old £399 matched neither store. waterdropfilter
     // .co.uk lists £549.98 and the .eu store the old link pointed at lists €549.99.
     priceGbp: 550,
     priceTier: "premium",
-    affiliateUrl: "https://www.amazon.co.uk/dp/B0BKP8LNR3?tag=tapwater2107-21",
-    affiliateProgram: "amazon",
-    commission: { type: "percent", rate: 0.03 },
-    affiliateTag: "tapwater2107-21",
+    affiliateUrl:
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=3091503&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Fwaterdrop-reverse-osmosis-water-filtration-system",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.07 },
+    affiliateTag: "awin-3091503",
     imageUrl: "/filters/waterdrop-g3p600.png",
     rating: 4.6,
     badge: "best-match",
@@ -365,11 +365,10 @@ export const PRODUCTS: FilterProduct[] = [
     certifications: ["NSF/ANSI 58"],
     priceGbp: 329,
     priceTier: "premium",
-    // Amazon until Frizzlife (Awin 117015, 10%) approves Awin account 3091503.
-    affiliateUrl: "https://www.amazon.co.uk/dp/B0GQGCDFWG?tag=tapwater2107-21",
-    affiliateProgram: "amazon",
-    commission: { type: "percent", rate: 0.03 },
-    affiliateTag: "tapwater2107-21",
+    affiliateUrl: "https://www.awin1.com/cread.php?awinmid=117015&awinaffid=3091503&ued=https%3A%2F%2Fwww.frizzlife.co.uk%2Fproducts%2Fpd600tam3",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.10 },
+    affiliateTag: "awin-frizzlife-117015",
     imageUrl: "/filters/frizzlife-pd600.png",
     rating: 4.5,
     badge: "best-value",

@@ -43,10 +43,10 @@ Not found on any UK network: BWT UK, Harvey/Culligan, Kinetico, Aqua Optima, Pho
 
 ## Correction, 22 September evening
 
-Earlier today 2996923 was taken to be our account with the Waterdrop and Frizzlife approvals on it. It is not. Remy checked both Awin accounts he can log into: **CCC Impact BV (3091503)** has 0 joined advertisers, and Waterdrop is not joined on Hugo's account either.
+The Waterdrop, Frizzlife and Doulton approvals are on Remy's **new** Awin account, **CCC Impact BV, publisher id 3091503**, where all three show on the Joined tab. Until tonight every Awin link on the site carried **2996923**, which is not that account, and Waterdrop is not joined on Hugo's account either.
 
-The July check ("302 with sv_campaign_id=2996923") never proved the account had joined. Awin redirects any live publisher id with a fresh `awc`, joined or not: 3091503, with nothing joined, gets the same 302 to waterdropfilter.co.uk. Only a made-up id fails. So the ~153 Waterdrop clicks since 28 July (G3P600 82, 10UA 71) almost certainly earned nothing, and neither did the Frizzlife link during the few hours it was live.
+Why nobody noticed: Awin redirects any live publisher id to the merchant with a fresh `awc`, joined or not. The July check ("302 with sv_campaign_id=2996923") proved the id exists, not that it earns. Since 28 July about 153 Waterdrop clicks (G3P600 82, 10UA 71) went out on 2996923. If that account never joined Waterdrop, they earned nothing we can collect.
 
-Done: Waterdrop 10UA (B083NPW1DN), Waterdrop G3P600 (B0BKP8LNR3) and Frizzlife PD600 (B0GQGCDFWG) now go to Amazon with `tapwater2107-21`. The guard test now accepts only Awin id 3091503, so a link on the old id fails the build.
+Fixed: Waterdrop 10UA, Waterdrop G3P600 and Frizzlife PD600 now use `awinaffid=3091503`. The guard test accepts only 3091503, so a link on any other publisher id fails the build. waterdropfilter.co.uk and frizzlife.co.uk both run Awin's Shopify tracking, and all three products are in stock (22 Sept).
 
-To go back to Awin: from 3091503, complete the Awin profile, then apply to Waterdrop UK (117649) and Frizzlife (117015). Once each shows on the **Joined** tab, build the deep links in Awin's link builder and swap them in.
+Doulton (69790) is joined too, but doulton.com does not sell the HIP Ultracarb we recommend, only the HIS/HIP systems with Biotect Ultra and loose Ultracarb cartridges. That product stays on Amazon until we decide whether to recommend one of Doulton's own systems instead.

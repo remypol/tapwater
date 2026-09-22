@@ -593,7 +593,7 @@ export default function BestReverseOsmosisGuide() {
               "Installation requires drilling a hole for the dedicated tap",
               "Removes beneficial minerals \u2014 water can taste flat to some",
             ]}
-            ctaLabel="View on Amazon"
+            ctaLabel="View on Waterdrop"
           />
 
           <ProductReview

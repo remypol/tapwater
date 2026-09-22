@@ -554,7 +554,7 @@ export default function BestWaterFilterPfasGuide() {
               "Requires under-sink installation with a dedicated tap",
               "Wastes some water during filtration (3:1 pure-to-waste ratio)",
             ]}
-            ctaLabel="View on Amazon"
+            ctaLabel="View on Waterdrop"
           />
 
           <ProductReview
