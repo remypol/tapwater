@@ -247,62 +247,12 @@ export default async function SupplierPage({ params }: Props) {
       {/* Quality Summary stat row */}
       {avgScore !== null && (
         <section className="mb-10" aria-label="Quality summary">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {/* Average score */}
-            <div className="card p-5 text-center">
-              <p className={`font-display text-3xl italic ${getScoreBadgeColor(avgScore)}`}>
-                {avgScore}
-                <span className="text-base text-muted font-sans not-italic">/10</span>
-              </p>
-              <p className="text-sm text-muted mt-1">Average score</p>
-              <p className={`font-data text-xs mt-1 ${getScoreBadgeColor(avgScore)}`}>
-                {getScoreLabel(avgScore)}
-              </p>
-            </div>
-
-            {/* Worst area */}
-            {worstArea && (
-              <div className="card p-5 text-center">
-                <p className={`font-data text-2xl font-bold ${getScoreBadgeColor(worstArea.data!.safetyScore)}`}>
-                  {worstArea.area}
-                </p>
-                <p className="text-sm text-muted mt-1">Lowest scored area</p>
-                <p className={`font-data text-xs mt-1 ${getScoreBadgeColor(worstArea.data!.safetyScore)}`}>
-                  {worstArea.data!.safetyScore}/10
-                </p>
-              </div>
-            )}
-
-            {/* Best area */}
-            {bestArea && (
-              <div className="card p-5 text-center">
-                <p className={`font-data text-2xl font-bold ${getScoreBadgeColor(bestArea.data!.safetyScore)}`}>
-                  {bestArea.area}
-                </p>
-                <p className="text-sm text-muted mt-1">Highest scored area</p>
-                <p className={`font-data text-xs mt-1 ${getScoreBadgeColor(bestArea.data!.safetyScore)}`}>
-                  {bestArea.data!.safetyScore}/10
-                </p>
-              </div>
-            )}
-
-            {/* Contaminants flagged */}
-            <div className="card p-5 text-center">
-              <p
-                className={`font-data text-3xl font-bold ${
-                  totalFlagged === 0
-                    ? "text-[var(--color-safe)]"
-                    : totalFlagged <= 3
-                      ? "text-[var(--color-warning)]"
-                      : "text-[var(--color-danger)]"
-                }`}
-              >
-                {totalFlagged}
-              </p>
-              <p className="text-sm text-muted mt-1">Contaminants flagged</p>
-              <p className="text-xs text-faint mt-1">across all areas</p>
-            </div>
-          </div>
+          <ul className="wt-ledger wt-nums" style={{ maxWidth: 560 }}>
+            <li><strong>Average score</strong><b>{avgScore}/10 · {getScoreLabel(avgScore)}</b></li>
+            {worstArea && <li><strong>Lowest scored area</strong><b><Link href={`/postcode/${worstArea.area}`}>{worstArea.area}</Link> · {worstArea.data!.safetyScore}/10</b></li>}
+            {bestArea && <li><strong>Highest scored area</strong><b><Link href={`/postcode/${bestArea.area}`}>{bestArea.area}</Link> · {bestArea.data!.safetyScore}/10</b></li>}
+            <li><strong>Contaminants flagged</strong><b>{totalFlagged}</b></li>
+          </ul>
         </section>
       )}
 

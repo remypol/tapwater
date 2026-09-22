@@ -64,8 +64,9 @@ export function TankCanvas({ level, hardness }: TankCanvasProps) {
 
     const draw = (ms: number) => {
       const t = ms / 1000;
-      const top = height * (1 - level);
       const wide = width > 820;
+      // Phones shorten the sky (see tank.css); the drawn water follows the CSS fallback.
+      const top = wide ? height * (1 - level) : height * 0.09;
       ctx.clearRect(0, 0, width, height);
 
       const tones = ["#4f9bff", "#1f78ff", "#0a5cf5"];

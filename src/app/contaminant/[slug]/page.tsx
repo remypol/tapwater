@@ -436,34 +436,32 @@ export default async function ContaminantPage({ params }: Props) {
       </h1>
 
       {/* 3. Quick facts card */}
-      <div className="bg-accent-light rounded-xl p-6 mb-10">
-        <h2 className="text-sm font-semibold text-accent uppercase tracking-wide mb-4">
-          Quick Facts
-        </h2>
+      <div className="wt-check" style={{ marginBottom: 40 }}>
+        <h2 className="wt-h3" style={{ marginBottom: 20 }}>Quick facts</h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <p className="text-xs text-muted mb-1">UK Legal Limit</p>
-            <p className="text-base font-bold font-data text-ink">
+            <p style={{ fontSize: "0.8rem", color: "#a9c4ff", marginBottom: 4 }}>UK legal limit</p>
+            <p className="text-base font-bold font-data" style={{ color: "#fff" }}>
               {contaminant.ukLimit ?? (
                 <span className="text-warning">No UK limit set</span>
               )}
             </p>
           </div>
           <div>
-            <p className="text-xs text-muted mb-1">WHO Guideline</p>
-            <p className="text-base font-bold font-data text-ink">
+            <p style={{ fontSize: "0.8rem", color: "#a9c4ff", marginBottom: 4 }}>WHO guideline</p>
+            <p className="text-base font-bold font-data" style={{ color: "#fff" }}>
               {contaminant.whoGuideline}
             </p>
           </div>
           <div>
-            <p className="text-xs text-muted mb-1">EU Standard</p>
-            <p className="text-base font-bold font-data text-ink">
+            <p style={{ fontSize: "0.8rem", color: "#a9c4ff", marginBottom: 4 }}>EU standard</p>
+            <p className="text-base font-bold font-data" style={{ color: "#fff" }}>
               {contaminant.euLimit}
             </p>
           </div>
           <div>
-            <p className="text-xs text-muted mb-1">Primary Sources</p>
-            <p className="text-base font-semibold text-ink leading-snug">
+            <p style={{ fontSize: "0.8rem", color: "#a9c4ff", marginBottom: 4 }}>Primary sources</p>
+            <p className="text-base font-semibold leading-snug" style={{ color: "#fff" }}>
               {slug === "pfas"
                 ? "Industry, firefighting foam"
                 : slug === "lead"

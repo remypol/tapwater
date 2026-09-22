@@ -81,7 +81,9 @@
 .wt-tick::after { content: ""; width: 48px; height: 2px; background: currentColor; }
 .wt-tick--air { color: var(--wt-deep); }
 @media (max-width: 820px) {
-  .wt-tank .wt-inner { grid-template-columns: 1fr; row-gap: 40px; padding-block: 112px 48px; min-height: 0; }
+  .wt-tank .wt-inner { grid-template-columns: 1fr; row-gap: 40px; padding-block: 72px 48px; min-height: 0; }
+  .wt-tank { --wt-surface: 9% !important; }
+  .wt-tank h1 .wt-where { color: #fff; opacity: 1; }
   .wt-level { text-align: left; display: flex; align-items: baseline; gap: 16px; }
   .wt-level p { margin: 0; max-width: 28ch; }
   .wt-tick { display: none; }
