@@ -4,6 +4,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { ShieldCheck, Droplets, AlertTriangle, FlaskConical, BookOpen, Info } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
+import { FixPicks } from "@/components/fix-picks";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -536,6 +537,19 @@ export default function IsUKTapWaterSafeGuide() {
             </span>
           </li>
         </ul>
+
+        <FixPicks
+          className="mt-12"
+          pageType="guide"
+          placement="guide-picks"
+          title="If you want better water than the tap gives you"
+          intro={
+            <>
+              UK tap water is safe, so none of these is a must. They are the three fixes our readers pick most: a jug that takes out chlorine taste and
+              more, a shower filter, and a reverse osmosis unit that needs no plumbing.
+            </>
+          }
+        />
 
         {/* Sources */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink flex items-center gap-2">

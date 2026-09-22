@@ -5,6 +5,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
 import { OG_IMAGE } from "@/lib/og";
+import { FixPicks } from "@/components/fix-picks";
 
 const year = new Date().getFullYear();
 
@@ -180,6 +181,19 @@ export default function BottledWaterShelfLifeGuide() {
           emergencies remains sensible; rotating them once a year keeps the
           taste fresh.
         </p>
+
+        <FixPicks
+          className="mt-10"
+          pageType="guide"
+          placement="guide-picks"
+          title="Instead of buying bottles"
+          intro={
+            <>
+              A filter jug pays for itself within a few weeks for anyone who buys bottled water for the taste. These are the three fixes our readers
+              pick most.
+            </>
+          }
+        />
 
         <div className="mt-10 card-elevated p-8 text-center rounded-2xl">
           <div className="flex justify-center mb-4">

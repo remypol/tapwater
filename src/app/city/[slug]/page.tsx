@@ -7,6 +7,7 @@ import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { pickRelatedGuides } from "@/lib/guides";
 import { EmbedCta } from "@/components/embed-cta";
 import { HardWaterCta } from "@/components/hard-water-cta";
+import { FixPicks } from "@/components/fix-picks";
 import { AreaRiversSection } from "@/components/river-status";
 import { getRiversForDistricts } from "@/lib/river-status-data";
 import { getPostcodeData, getAllPostcodeDistricts, getNationalAverageScore, getHardness } from "@/lib/data";
@@ -481,6 +482,24 @@ export default async function CityPage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {scored.length > 0 ? (
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <FixPicks
+              pageType="city"
+              placement="city-picks"
+              title={`What ${city.name} households buy`}
+              intro={
+                <>
+                  Taste, chlorine and hardness bother people even where the water passes its tests. These are the three fixes our readers pick most: a jug for
+                  drinking water, a shower filter, and a reverse osmosis unit that needs no plumbing. Check your own postcode above to see which one your water needs.
+                </>
+              }
+            />
+          </div>
+        </section>
+      ) : null}
 
       {scored.length > 0 ? (
         <section className="wt-read" style={{ paddingBlock: "var(--wt-pad)" }}>
