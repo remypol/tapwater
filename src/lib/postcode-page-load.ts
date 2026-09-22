@@ -13,7 +13,7 @@ import {
 import type { PostcodeData } from "./types";
 import { CITIES } from "./cities";
 import { districtHighlights, type Highlight } from "./district-highlights";
-import { recommendFilters } from "./filters";
+import { recommendFilters, HARD_WATER_THRESHOLD } from "./filters";
 import { getPfasNearDistrict, type PfasNearbySummary } from "./pfas-data";
 import { getNationalRivers, getRiverForDistrict, type DistrictRiver } from "./river-status-data";
 import { describeRiverStatus, waterBodyNoun, type RiverStatusSummary } from "./river-status";
@@ -88,9 +88,16 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
   const hardnessEstimated = hardness?.estimated ?? false;
   const hardnessArea = hardness?.estimatedFrom ?? null;
 
-  // Recommendations need the hardness: hard water is not a flagged contaminant, and
-  // without it the recommender offers a jug that does nothing about scale.
-  const recommendations = hasData ? recommendFilters(flaggedNames, 3, { hardnessValue }) : [];
+  // On this page hard water is answered by the softener quote, which leads whenever the
+  // district is hard. The product slots beside it should answer drinking water, not scale:
+  // with the hardness passed in, the recommender ranked two £500 reverse osmosis units next
+  // to the quote, and 173 Osmio clicks in 60 days produced no orders. Hardness is only
+  // passed when nothing is flagged AND the water is not hard enough for a softener, so a
+  // moderately hard district still gets a filter that touches scale.
+  const softenerLeads = (hardnessValue ?? 0) >= HARD_WATER_THRESHOLD;
+  const recommendations = hasData
+    ? recommendFilters(flaggedNames, 3, softenerLeads ? {} : { hardnessValue })
+    : [];
 
   const scoredCount = data.readings.filter((r) => (r.ukLimit ?? r.whoGuideline) !== null).length;
   const plan = buildTankPlan({
