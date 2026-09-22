@@ -77,7 +77,7 @@ export default async function PfasNationalPage() {
 
   if (!data) {
     return (
-      <div className="bg-hero min-h-screen">
+      <div className="wt">
         <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-14">
           <BreadcrumbSchema
             items={[
@@ -253,14 +253,8 @@ export default async function PfasNationalPage() {
 
         {/* Hero */}
         <header className="mt-6 mb-10">
-          <p className="text-xs uppercase tracking-[0.15em] text-[#a855f7] font-semibold animate-fade-up delay-1">
-            {year} Live Data
-          </p>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
-            PFAS in UK Water:{" "}
-            <span className="italic">Live Tracker</span>
-          </h1>
-          <p className="text-muted mt-3 max-w-2xl text-lg animate-fade-up delay-3">
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>PFAS in UK Water: Live Tracker</h1>
+          <p className="wt-sub">
             By{" "}
             <Link
               href="/about"
@@ -275,7 +269,7 @@ export default async function PfasNationalPage() {
 
         {/* GEO summary callout */}
         <GeoCitation
-          accentBorderClass="border-l-[#a855f7]"
+          accentBorderClass="border-l-[#0a5cf5]"
           headline={`According to TapWater.uk's analysis of Environment Agency monitoring data, PFAS compounds have been detected at ${data.totalSamplingPoints.toLocaleString()} sampling points across ${data.citiesWithDetections} UK cities.`}
           detail={`England and Wales have no statutory limit for PFAS in drinking water as of ${year}, only a 0.1 µg/L regulator's guideline.`}
         />
@@ -286,7 +280,7 @@ export default async function PfasNationalPage() {
             <p className="text-xs text-muted uppercase tracking-wider">
               Total detections
             </p>
-            <p className="font-data text-3xl font-bold text-[#a855f7] mt-1">
+            <p className="font-data text-3xl font-bold text-[#0a5cf5] mt-1">
               {data.totalDetections.toLocaleString()}
             </p>
           </div>
@@ -378,7 +372,7 @@ export default async function PfasNationalPage() {
                   className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_120px_100px_110px_100px] gap-x-3 gap-y-0.5 items-center px-5 py-3.5 border-b border-[var(--color-rule)] last:border-b-0 hover:bg-[var(--color-wash)] transition-colors group"
                 >
                   <div className="min-w-0 flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#a855f7] shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-[#0a5cf5] shrink-0" />
                     <span className="font-medium text-sm text-ink group-hover:text-accent transition-colors">
                       {city.city}
                     </span>
@@ -396,7 +390,7 @@ export default async function PfasNationalPage() {
                     {city.compoundsFound}
                   </span>
 
-                  <span className="font-data text-sm font-bold text-right tabular-nums text-[#a855f7]">
+                  <span className="font-data text-sm font-bold text-right tabular-nums text-[#0a5cf5]">
                     {city.highestLevel.toFixed(3)}
                     <span className="text-xs text-faint font-normal">
                       {" "}
@@ -597,7 +591,7 @@ export default async function PfasNationalPage() {
                 className="card p-4 group flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <FlaskConical className="w-4 h-4 text-[#a855f7]" />
+                  <FlaskConical className="w-4 h-4 text-[#0a5cf5]" />
                   <span className="text-sm font-medium text-ink group-hover:text-accent transition-colors">
                     PFAS contaminant profile
                   </span>
@@ -609,7 +603,7 @@ export default async function PfasNationalPage() {
                 className="card p-4 group flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <Activity className="w-4 h-4 text-[#a855f7]" />
+                  <Activity className="w-4 h-4 text-[#0a5cf5]" />
                   <span className="text-sm font-medium text-ink group-hover:text-accent transition-colors">
                     PFAS in UK water explained
                   </span>
@@ -621,7 +615,7 @@ export default async function PfasNationalPage() {
                 className="card p-4 group flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <Activity className="w-4 h-4 text-[#a855f7]" />
+                  <Activity className="w-4 h-4 text-[#0a5cf5]" />
                   <span className="text-sm font-medium text-ink group-hover:text-accent transition-colors">
                     Best water filters for PFAS
                   </span>
@@ -633,7 +627,7 @@ export default async function PfasNationalPage() {
                 className="card p-4 group flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <Activity className="w-4 h-4 text-[#a855f7]" />
+                  <Activity className="w-4 h-4 text-[#0a5cf5]" />
                   <span className="text-sm font-medium text-ink group-hover:text-accent transition-colors">
                     Reverse osmosis systems
                   </span>

@@ -390,7 +390,7 @@ export default async function ContaminantPage({ params }: Props) {
   const contaminantFilters = recommendFilters([slug], 2);
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="wt max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
@@ -431,7 +431,7 @@ export default async function ContaminantPage({ params }: Props) {
       </nav>
 
       {/* 2. H1 */}
-      <h1 className="text-2xl lg:text-3xl font-bold font-display italic text-ink mb-6">
+      <h1 className="wt-h2" style={{ fontSize: "clamp(2.2rem, 5.4vw, 4rem)", marginBottom: 32 }}>
         {contaminant.name} in UK Drinking Water
       </h1>
 

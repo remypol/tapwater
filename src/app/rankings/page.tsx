@@ -280,7 +280,7 @@ export default async function RankingsPage() {
   ];
 
   return (
-    <div className="bg-hero min-h-screen">
+    <div className="wt">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-8 py-8 lg:py-14">
         <BreadcrumbSchema
           items={[
@@ -301,48 +301,17 @@ export default async function RankingsPage() {
 
         {/* ── Hero ── */}
         <header className="mt-6 mb-10">
-          <p className="text-xs uppercase tracking-[0.15em] text-accent font-semibold animate-fade-up delay-1">
-            {year} Report
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}>UK Water Quality Rankings</h1>
+          <p className="wt-sub wt-nums">
+            Based on <strong>{totalPostcodes.toLocaleString()} postcode districts</strong> tested. Last updated <strong>{formattedDate}</strong>.{" "}
+            <Link href="/about/methodology/" className="wt-link">How scores are calculated</Link>
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
-            UK Water Quality{" "}
-            <span className="italic">Rankings</span>
-          </h1>
-          <p className="text-muted mt-3 max-w-2xl text-lg animate-fade-up delay-3">
-            Based on{" "}
-            <span className="font-semibold text-ink">{totalPostcodes.toLocaleString()} postcode districts</span>{" "}
-            tested. Last updated:{" "}
-            <span className="font-medium text-ink">{formattedDate}</span>.
-          </p>
-          <p className="mt-2 animate-fade-up delay-4">
-            <Link
-              href="/about/methodology/"
-              className="text-sm text-accent hover:underline underline-offset-2 inline-flex items-center gap-1"
-            >
-              <Info className="w-3.5 h-3.5" />
-              How scores are calculated
-            </Link>
-          </p>
-
-          {/* Key stat strip */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fade-up delay-4">
-            <div className="card p-4 text-center">
-              <p className="font-data text-2xl font-bold text-ink">{cityRankings.length}</p>
-              <p className="text-xs text-faint uppercase tracking-wider mt-1">Cities ranked</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="font-data text-2xl font-bold text-ink">{supplierRankings.length}</p>
-              <p className="text-xs text-faint uppercase tracking-wider mt-1">Water companies</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="font-data text-2xl font-bold text-ink">{regionRankings.length}</p>
-              <p className="text-xs text-faint uppercase tracking-wider mt-1">Regions</p>
-            </div>
-            <div className="card p-4 text-center">
-              <p className="font-data text-2xl font-bold text-ink">{totalPostcodes.toLocaleString()}</p>
-              <p className="text-xs text-faint uppercase tracking-wider mt-1">Areas tested</p>
-            </div>
-          </div>
+          <ul className="wt-ledger wt-nums" style={{ maxWidth: 520, marginTop: 28 }}>
+            <li><strong>Cities ranked</strong><b>{cityRankings.length}</b></li>
+            <li><strong>Water companies</strong><b>{supplierRankings.length}</b></li>
+            <li><strong>Regions</strong><b>{regionRankings.length}</b></li>
+            <li><strong>Areas tested</strong><b>{totalPostcodes.toLocaleString()}</b></li>
+          </ul>
         </header>
 
         <hr className="border-rule" />

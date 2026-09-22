@@ -309,7 +309,7 @@ export default async function CityPage({ params }: Props) {
         <div className="wt-inner">
           <div>
             <h1>
-              <span className="wt-where">{`Tap water in ${city.name}${parentRegion ? `, ${parentRegion.name}` : ""}`}</span>
+              <span className="wt-where">{`Tap water in ${city.name}${parentRegion && parentRegion.name !== city.name ? `, ${parentRegion.name}` : ""}`}</span>
               <span>Is {city.name} tap water safe to drink?</span>
             </h1>
             <p className="wt-basis wt-nums">

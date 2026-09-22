@@ -229,7 +229,7 @@ export default async function SupplierPage({ params }: Props) {
       <IncidentAlerts incidents={activeIncidents} />
 
       {/* H1 */}
-      <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink italic tracking-tight mb-2">
+      <h1 className="wt-h2" style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)", marginBottom: 8 }}>
         {supplier.name}
       </h1>
       <p className="text-muted mb-4">

@@ -215,7 +215,7 @@ export default async function RegionPage({ params }: Props) {
         <div className="wt-inner">
           <div>
             <h1>
-              <span className="wt-where">{`Tap water across ${region.name}`}</span>
+              <span className="wt-where">{`${totalPostcodes} postcode districts tested`}</span>
               <span>Water quality in {region.name}</span>
             </h1>
             <p className="wt-basis wt-nums">

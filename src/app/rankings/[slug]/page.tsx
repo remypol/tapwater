@@ -469,9 +469,7 @@ export default async function RankingPage({
   const config = RANKINGS[rankingSlug];
   const { entries, totalAnalysed, worstValue, nationalAvg } = await buildRankingData(rankingSlug);
 
-  const year = new Date().getFullYear();
   const isPfas = config.accentColor === "pfas";
-  const accentClass = isPfas ? "text-[var(--color-pfas)]" : "text-accent";
 
 
   // Format the key finding for the GEO summary
@@ -489,7 +487,7 @@ export default async function RankingPage({
   const otherRankings = ALL_SLUGS.filter((s) => s !== rankingSlug);
 
   return (
-    <div className="bg-hero min-h-screen">
+    <div className="wt">
       <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-8 py-8 lg:py-14">
         <BreadcrumbSchema
           items={[
@@ -520,15 +518,8 @@ export default async function RankingPage({
 
         {/* ── Hero ── */}
         <header className="mt-6 mb-10">
-          <p className={`text-xs uppercase tracking-[0.15em] font-semibold animate-fade-up delay-1 ${accentClass}`}>
-            {year} Data
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight mt-2 animate-fade-up delay-2">
-            {config.title}
-          </h1>
-          <p className="text-muted mt-3 max-w-2xl text-lg animate-fade-up delay-3">
-            {config.description}
-          </p>
+          <h1 className="wt-h2" style={{ fontSize: "clamp(2.2rem, 5.4vw, 4rem)" }}>{config.title}</h1>
+          <p className="wt-sub">{config.description}</p>
 
           {/* GEO summary */}
           <div className={`mt-6 p-4 rounded-xl border animate-fade-up delay-4 ${
