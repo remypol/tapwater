@@ -304,7 +304,9 @@
 .wt-home .wt-band--foam .wt-cards { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 .wt-twocol { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 56px; }
 .wt-twocol .wt-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-.wt-twocol .wt-card { height: 168px; }
+.wt-twocol .wt-card { height: 150px; padding: 14px 16px; }
+.wt-twocol .wt-card b { font-size: 1.45rem; }
+.wt-twocol .wt-card span { font-size: 0.8rem; margin-top: 4px; }
 .wt-grouph { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 700; font-size: 1.05rem; margin-top: 40px; }
 .wt-grouph + .wt-pills { margin-top: 14px; }
 

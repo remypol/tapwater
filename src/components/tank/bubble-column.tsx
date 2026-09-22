@@ -9,7 +9,7 @@ import { formatReading } from "@/lib/tank-plan";
  * a labelled list. Server-rendered SVG, no JavaScript.
  */
 
-const W = 1000;
+const W = 1200;
 const H = 500;
 const PAD_L = 72; // room for the y-axis
 const PAD_R = 24;
@@ -129,7 +129,7 @@ export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
               <title>{`${p.b.name}: ${formatReading(p.b.value)} ${p.b.unit}, ${pct(p.b.share)} of the ${formatReading(p.b.limit)} ${p.b.unit} limit`}</title>
               <line x1={p.x} y1={above ? p.y - p.r : p.y + p.r} x2={lx} y2={above ? ly + 4 : ly - 12} stroke={ring} strokeOpacity="0.5" />
               <circle cx={p.x} cy={p.y} r={p.r} fill={fill} stroke={ring} strokeWidth="1.5" filter="url(#wt-b-shadow)" />
-              <text x={lx} y={ly} textAnchor="middle" fontSize="13" fontWeight="700" fill={text}>{p.b.name}</text>
+              <text x={lx} y={ly} textAnchor="middle" fontSize="14" fontWeight="700" fill={text}>{p.b.name}</text>
               <text x={lx} y={ly + 15} textAnchor="middle" fontSize="12" fontWeight="600" fill={text} fillOpacity="0.85">{pct(p.b.share)}</text>
             </g>
           );
