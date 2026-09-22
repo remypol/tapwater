@@ -95,9 +95,11 @@
 .wt-do-grid { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px; align-items: stretch; }
 .wt-primary { border-radius: 28px; padding: clamp(28px, 4vw, 44px); background: var(--wt-abyss); color: #fff; display: flex; flex-direction: column; gap: 20px; position: relative; overflow: hidden; }
 .wt-primary--chalk { background: var(--wt-chalk); color: var(--wt-kettle); }
-.wt-gauge { position: absolute; right: clamp(24px, 4vw, 44px); top: clamp(20px, 3vw, 36px); font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: clamp(3rem, 6vw, 5rem); line-height: 0.9; letter-spacing: -0.05em; color: var(--wt-chalk); opacity: 0.22; text-align: right; }
+.wt-gauge { position: absolute; right: clamp(24px, 4vw, 44px); top: clamp(20px, 3vw, 36px); pointer-events: none; font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: clamp(3rem, 6vw, 5rem); line-height: 0.9; letter-spacing: -0.05em; color: var(--wt-chalk); opacity: 0.22; text-align: right; }
 .wt-gauge small { display: block; font-size: 0.22em; letter-spacing: 0; font-weight: 700; margin-top: 6px; }
 .wt-primary h3 { font-weight: 900; font-size: clamp(1.7rem, 3.2vw, 2.4rem); letter-spacing: -0.03em; line-height: 1.04; max-width: 18ch; }
+/* The big number sits top-right; keep the heading and copy out from under it. */
+.wt-primary:has(.wt-gauge) h3, .wt-primary:has(.wt-gauge) > p:first-of-type { padding-right: clamp(120px, 22%, 200px); }
 .wt-primary p { max-width: 46ch; opacity: 0.92; }
 .wt-primary .wt-acts { margin-top: auto; padding-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
 .wt-assure { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.9rem; opacity: 0.85; }
@@ -116,6 +118,7 @@
 .wt-fine { font-size: 0.82rem; opacity: 0.75; max-width: 60ch; }
 .wt-fine a { color: inherit; }
 @media (max-width: 900px) { .wt-do-grid { grid-template-columns: 1fr; } .wt-primary .wt-btn, .wt-second .wt-btn { width: 100%; } }
+@media (max-width: 560px) { .wt-gauge { position: static; text-align: left; opacity: 0.35; font-size: 2.6rem; margin-bottom: 4px; } .wt-primary:has(.wt-gauge) h3, .wt-primary:has(.wt-gauge) > p:first-of-type { padding-right: 0; } }
 
 /* ── Bubbles ── */
 .wt-bubbles { background: linear-gradient(var(--wt-deep), var(--wt-abyss)); color: #fff; padding-block: var(--wt-pad); }
