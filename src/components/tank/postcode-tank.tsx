@@ -227,7 +227,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
         <div className="wt-inner">
           <h2 className="wt-h2" id="wt-glass-h">What&apos;s in a glass of {district} water</h2>
           <p className="wt-sub">
-            Every bubble is something the lab measured. The higher it floats, the closer it is to the legal limit. Tap a bubble for the numbers.
+            Every substance the lab measured, on one scale: how much of its legal limit the result used. The line on the right is the limit.
           </p>
           <BubbleColumn bubbles={plan.bubbles} />
           {plan.others.length > 0 ? (
