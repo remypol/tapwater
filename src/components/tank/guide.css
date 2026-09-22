@@ -8,6 +8,8 @@
  * re-pointed for the subtree, so the teal accent becomes pool blue everywhere at once.
  */
 .wt-legacy {
+  /* The tank tokens, so the rules below resolve outside a .wt subtree too. */
+  --wt-pool: #0a5cf5; --wt-deep: #06257a; --wt-abyss: #031349; --wt-sky: #cfe6ff; --wt-foam: #eef6ff; --wt-chalk: #f3efe6; --wt-kettle: #2a2622; --wt-sun: #ffd23f; --wt-ink: #08122e; --wt-mute: #4a5a80; --wt-line: #d5e3f7;
   --color-ink: #08122e;
   --color-body: #1c2a4d;
   --color-muted: #4a5a80;
@@ -83,7 +85,7 @@
 .wt-legacy .animate-fade-up, .wt-legacy .animate-fade-in { animation: none; opacity: 1; transform: none; }
 /* Score colours from the old palette become the tank's semantic set */
 .wt-legacy .text-safe, .wt-legacy .text-\[var\(--color-safe\)\] { color: #2f8a45; }
-.wt-legacy .text-warning, .wt-legacy .text-\[var\(--color-warning\)\] { color: #c98a06; }
+.wt-legacy .text-warning, .wt-legacy .text-\[var\(--color-warning\)\], .wt-legacy .text-amber-700, .wt-legacy .text-amber-600 { color: #8a5a00; }
 .wt-legacy .text-danger, .wt-legacy .text-\[var\(--color-danger\)\] { color: #c4362f; }
 .wt-legacy .text-pfas { color: #0a5cf5; }
 /* Old table headers in caps */
