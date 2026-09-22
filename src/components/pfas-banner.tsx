@@ -29,11 +29,11 @@ export function PfasBanner({
     // this is environmental monitoring. It points down to the module that explains.
     return (
       <div
-        className="w-full rounded-lg px-4 py-3 bg-violet-50/80 flex flex-wrap items-center gap-x-4 gap-y-1"
+        className="w-full rounded-lg px-4 py-3 bg-[#e6f0ff] flex flex-wrap items-center gap-x-4 gap-y-1"
         style={{ borderLeft: "3px solid var(--color-pfas)" }}
       >
-        <ShieldAlert className="w-4 h-4 text-violet-600 shrink-0" aria-hidden="true" />
-        <p className="text-sm text-violet-900 flex-1 min-w-[16rem]">
+        <ShieldAlert className="w-4 h-4 text-[#0a5cf5] shrink-0" aria-hidden="true" />
+        <p className="text-sm text-[#06257a] flex-1 min-w-[16rem]">
           PFAS were measured in rivers and groundwater within {radiusKm} km of {postcode}
           {level !== null ? (
             <>
@@ -44,7 +44,7 @@ export function PfasBanner({
         </p>
         <Link
           href="#pfas-nearby"
-          className="inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 hover:underline underline-offset-2"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[#0a5cf5] hover:text-[#06257a] hover:underline underline-offset-2"
         >
           See what was found
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -55,24 +55,24 @@ export function PfasBanner({
 
   return (
     <div
-      className="w-full rounded-lg p-5 bg-violet-50/80"
+      className="w-full rounded-lg p-5 bg-[#e6f0ff]"
       style={{ borderLeft: "3px solid var(--color-pfas)" }}
     >
       {/* Heading row */}
       <div className="flex items-center gap-2">
-        <ShieldAlert className="w-5 h-5 text-violet-600 shrink-0" aria-hidden="true" />
-        <span className="text-sm font-semibold text-violet-900 uppercase tracking-wide">
+        <ShieldAlert className="w-5 h-5 text-[#0a5cf5] shrink-0" aria-hidden="true" />
+        <span className="text-sm font-semibold text-[#06257a] uppercase tracking-wide">
           Forever chemicals found near you
         </span>
       </div>
 
       {/* Body */}
       <div className="mt-2 space-y-1">
-        <p className="text-sm text-violet-800">
+        <p className="text-sm text-[#06257a]">
           PFAS — known as &apos;forever chemicals&apos; — were found at{" "}
           <Link
             href="/pfas"
-            className="font-data font-semibold text-violet-700 hover:text-violet-900 underline underline-offset-2"
+            className="font-data font-semibold text-[#0a5cf5] hover:text-[#06257a] underline underline-offset-2"
           >
             {level !== null ? level : "—"} µg/L
           </Link>
@@ -84,14 +84,14 @@ export function PfasBanner({
       <div className="mt-3 flex flex-wrap gap-4">
         <Link
           href="/pfas"
-          className="inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 hover:underline underline-offset-2"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[#0a5cf5] hover:text-[#06257a] hover:underline underline-offset-2"
         >
           See PFAS tracker
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
         <Link
           href="/contaminant/pfas"
-          className="inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 hover:underline underline-offset-2"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[#0a5cf5] hover:text-[#06257a] hover:underline underline-offset-2"
         >
           How to remove them
           <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />

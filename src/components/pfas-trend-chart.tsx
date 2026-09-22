@@ -49,11 +49,11 @@ export function PfasTrendChart({ data, whoGuideline = 0.1 }: PfasTrendChartProps
       <text x={width - pad.right + 4} y={whoY + 4} fontSize={9} fill="#ef4444" textAnchor="start">WHO 0.1 µg/L</text>
 
       {/* Data line */}
-      <path d={linePath} fill="none" stroke="#a855f7" strokeWidth={2} strokeLinejoin="round" />
+      <path d={linePath} fill="none" stroke="#0a5cf5" strokeWidth={2} strokeLinejoin="round" />
 
       {/* Data points */}
       {data.map((d, i) => (
-        <circle key={i} cx={xScale(i)} cy={yScale(d.totalLevel)} r={3} fill="#a855f7" />
+        <circle key={i} cx={xScale(i)} cy={yScale(d.totalLevel)} r={3} fill="#0a5cf5" />
       ))}
 
       {/* X-axis labels */}

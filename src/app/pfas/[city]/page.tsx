@@ -206,7 +206,7 @@ export default async function PfasCityPage({ params }: Props) {
 
           {/* Header */}
           <header className="mt-6 mb-10">
-            <p className="text-xs uppercase tracking-[0.15em] text-[#a855f7] font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
+            <p className="text-xs uppercase tracking-[0.15em] text-[#0a5cf5] font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
               <MapPin className="w-3 h-3" />
               {data.region}
             </p>
@@ -221,7 +221,7 @@ export default async function PfasCityPage({ params }: Props) {
 
           {/* GEO summary */}
           <GeoCitation
-            accentBorderClass="border-l-[#a855f7]"
+            accentBorderClass="border-l-[#0a5cf5]"
             headline={`According to TapWater.uk's analysis, ${data.compoundsDetected.length} PFAS compound${data.compoundsDetected.length !== 1 ? "s have" : " has"} been detected across ${data.samplingPointCount} sampling point${data.samplingPointCount !== 1 ? "s" : ""} in ${data.city}.`}
             detail={`The highest recorded level is ${data.highestLevel.toFixed(3)} µg/L (${data.highestCompound}).`}
           />
@@ -232,7 +232,7 @@ export default async function PfasCityPage({ params }: Props) {
               <p className="text-xs text-muted uppercase tracking-wider">
                 Compounds detected
               </p>
-              <p className="font-data text-3xl font-bold text-[#a855f7] mt-1">
+              <p className="font-data text-3xl font-bold text-[#0a5cf5] mt-1">
                 {data.compoundsDetected.length}
               </p>
             </div>
@@ -357,13 +357,13 @@ export default async function PfasCityPage({ params }: Props) {
                     className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_100px_100px_120px] gap-x-3 gap-y-0.5 items-center px-5 py-3.5 border-b border-[var(--color-rule)] last:border-b-0"
                   >
                     <div className="min-w-0 flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-[#a855f7] shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-[#0a5cf5] shrink-0" />
                       <span className="text-sm text-ink truncate">
                         {point.label}
                       </span>
                     </div>
 
-                    <span className="font-data text-sm font-bold text-right tabular-nums text-[#a855f7]">
+                    <span className="font-data text-sm font-bold text-right tabular-nums text-[#0a5cf5]">
                       {point.maxLevel.toFixed(3)}
                       <span className="text-xs text-faint font-normal">
                         {" "}
@@ -456,7 +456,7 @@ export default async function PfasCityPage({ params }: Props) {
                       href={`/pfas/${c.slug}`}
                       className="pill"
                     >
-                      <MapPin className="w-3 h-3 text-[#a855f7] mr-1" />
+                      <MapPin className="w-3 h-3 text-[#0a5cf5] mr-1" />
                       {c.name}
                     </Link>
                   ))}
@@ -471,7 +471,7 @@ export default async function PfasCityPage({ params }: Props) {
           <ScrollReveal delay={0}>
             <section className="mt-8">
               <div className="flex items-center gap-2 mb-1">
-                <ShieldCheck className="w-4 h-4 text-[#a855f7] shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-[#0a5cf5] shrink-0" />
                 <h2 className="font-display text-2xl text-ink italic">
                   Check your postcode
                 </h2>
@@ -575,7 +575,7 @@ export default async function PfasCityPage({ params }: Props) {
 
         {/* Header */}
         <header className="mt-6 mb-10">
-          <p className="text-xs uppercase tracking-[0.15em] text-[#a855f7] font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
+          <p className="text-xs uppercase tracking-[0.15em] text-[#0a5cf5] font-semibold flex items-center gap-1.5 animate-fade-up delay-1">
             <MapPin className="w-3 h-3" />
             {data.region}
           </p>
@@ -676,7 +676,7 @@ export default async function PfasCityPage({ params }: Props) {
                     href={`/pfas/${c.slug}`}
                     className="pill"
                   >
-                    <MapPin className="w-3 h-3 text-[#a855f7] mr-1" />
+                    <MapPin className="w-3 h-3 text-[#0a5cf5] mr-1" />
                     {c.name}
                   </Link>
                 ))}

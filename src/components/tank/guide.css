@@ -10,6 +10,8 @@
 .wt-legacy {
   /* The tank tokens, so the rules below resolve outside a .wt subtree too. */
   --wt-pool: #0a5cf5; --wt-deep: #06257a; --wt-abyss: #031349; --wt-sky: #cfe6ff; --wt-foam: #eef6ff; --wt-chalk: #f3efe6; --wt-kettle: #2a2622; --wt-sun: #ffd23f; --wt-ink: #08122e; --wt-mute: #4a5a80; --wt-line: #d5e3f7;
+  --color-pfas: #0a5cf5;
+  --color-pfas-light: #e6f0ff;
   --color-ink: #08122e;
   --color-body: #1c2a4d;
   --color-muted: #4a5a80;
