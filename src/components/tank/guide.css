@@ -77,8 +77,6 @@
 .wt-legacy-index a.card:first-child { border-top: 2px solid var(--wt-ink); }
 
 /* Pages already rebuilt carry .wt themselves; they get nothing from this file. */
-.wt-legacy .wt { --color-ink: initial; }
-.wt-legacy > .wt, .wt-legacy .wt-tank, .wt-legacy .wt-chalk, .wt-legacy .wt-river, .wt-legacy .wt-bubbles { background: revert-layer; }
 /* Old ambient backgrounds go flat */
 .wt-legacy .bg-score-safe, .wt-legacy .bg-score-warning, .wt-legacy .bg-score-danger { background: #fff; }
 /* The old fade-ins: content is visible at rest */
