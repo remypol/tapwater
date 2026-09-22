@@ -17,7 +17,7 @@ export default async function Image() {
           flexDirection: "column",
           width: "100%",
           height: "100%",
-          backgroundColor: "#0c0f17",
+          backgroundColor: "#031349",
           color: "#ffffff",
           fontFamily: "sans-serif",
           padding: "60px",
@@ -31,7 +31,7 @@ export default async function Image() {
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", fontSize: 24, color: "#9ca3af" }}>tapwater.uk</div>
+          <div style={{ display: "flex", fontSize: 24, color: "#b9c8ea" }}>tapwater.uk</div>
           <div
             style={{
               display: "flex",
@@ -48,10 +48,10 @@ export default async function Image() {
                 width: 8,
                 height: 8,
                 borderRadius: "50%",
-                backgroundColor: "#a855f7",
+                backgroundColor: "#69b7ff",
               }}
             />
-            <div style={{ display: "flex", fontSize: 14, color: "#a855f7" }}>Live Tracker</div>
+            <div style={{ display: "flex", fontSize: 14, color: "#69b7ff" }}>Live Tracker</div>
           </div>
         </div>
 
@@ -73,37 +73,37 @@ export default async function Image() {
                 fontSize: 64,
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
-                color: "#a855f7",
+                color: "#69b7ff",
               }}
             >
               PFAS in UK Water
             </div>
-            <div style={{ display: "flex", fontSize: 24, color: "#9ca3af", marginTop: 16 }}>
+            <div style={{ display: "flex", fontSize: 24, color: "#b9c8ea", marginTop: 16 }}>
               Environment Agency monitoring data
             </div>
             {summary && (
               <div style={{ display: "flex", gap: 32, marginTop: 32 }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {summary.totalDetections}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Detections
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {summary.citiesWithDetections}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Cities affected
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {summary.totalSamplingPoints}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Sampling points
                   </div>
                 </div>
@@ -122,10 +122,10 @@ export default async function Image() {
             paddingTop: 20,
           }}
         >
-          <div style={{ display: "flex", fontSize: 16, color: "#6b7280" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#8ea0cc" }}>
             Forever chemicals tracker
           </div>
-          <div style={{ display: "flex", fontSize: 16, color: "#9ca3af" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#b9c8ea" }}>
             Check yours → tapwater.uk/pfas
           </div>
         </div>

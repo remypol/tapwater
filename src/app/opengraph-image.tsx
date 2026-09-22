@@ -14,7 +14,7 @@ export default function Image() {
           flexDirection: "column",
           width: "100%",
           height: "100%",
-          backgroundColor: "#0c0f17",
+          backgroundColor: "#031349",
           color: "#ffffff",
           fontFamily: "sans-serif",
           padding: 80,
@@ -28,7 +28,7 @@ export default function Image() {
               display: "flex",
               width: 56,
               height: 56,
-              backgroundColor: "#3b95a8",
+              backgroundColor: "#0a5cf5",
               borderRadius: 14,
               alignItems: "center",
               justifyContent: "center",
@@ -37,7 +37,7 @@ export default function Image() {
           >
             💧
           </div>
-          <span style={{ fontSize: 28, color: "#94a3b8", letterSpacing: -0.5 }}>
+          <span style={{ fontSize: 28, color: "#b9c8ea", letterSpacing: -0.5 }}>
             tapwater.uk
           </span>
         </div>
@@ -61,12 +61,12 @@ export default function Image() {
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: -2,
-              color: "#3b95a8",
+              color: "#0a5cf5",
             }}
           >
             tap water?
           </div>
-          <div style={{ fontSize: 24, color: "#94a3b8", marginTop: 8 }}>
+          <div style={{ fontSize: 24, color: "#b9c8ea", marginTop: 8 }}>
             Free water quality reports for every UK postcode
           </div>
         </div>
@@ -74,22 +74,22 @@ export default function Image() {
         {/* Bottom: stats */}
         <div style={{ display: "flex", gap: 48 }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: 36, fontWeight: 700, color: "#3b95a8" }}>
+            <span style={{ fontSize: 36, fontWeight: 700, color: "#0a5cf5" }}>
               2,800+
             </span>
-            <span style={{ fontSize: 16, color: "#64748b" }}>postcodes</span>
+            <span style={{ fontSize: 16, color: "#8ea0cc" }}>postcodes</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: 36, fontWeight: 700, color: "#3b95a8" }}>
+            <span style={{ fontSize: 36, fontWeight: 700, color: "#0a5cf5" }}>
               50+
             </span>
-            <span style={{ fontSize: 16, color: "#64748b" }}>contaminants</span>
+            <span style={{ fontSize: 16, color: "#8ea0cc" }}>contaminants</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: 36, fontWeight: 700, color: "#3b95a8" }}>
+            <span style={{ fontSize: 36, fontWeight: 700, color: "#0a5cf5" }}>
               16
             </span>
-            <span style={{ fontSize: 16, color: "#64748b" }}>water companies</span>
+            <span style={{ fontSize: 16, color: "#8ea0cc" }}>water companies</span>
           </div>
         </div>
       </div>

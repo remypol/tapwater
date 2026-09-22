@@ -19,7 +19,7 @@ export default async function Image({ params }: { params: Promise<{ city: string
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            backgroundColor: "#0c0f17",
+            backgroundColor: "#031349",
             color: "#ffffff",
             fontFamily: "sans-serif",
             alignItems: "center",
@@ -27,8 +27,8 @@ export default async function Image({ params }: { params: Promise<{ city: string
             gap: 16,
           }}
         >
-          <div style={{ display: "flex", fontSize: 28, color: "#9ca3af" }}>tapwater.uk</div>
-          <div style={{ display: "flex", fontSize: 22, color: "#6b7280" }}>City not found</div>
+          <div style={{ display: "flex", fontSize: 28, color: "#b9c8ea" }}>tapwater.uk</div>
+          <div style={{ display: "flex", fontSize: 22, color: "#8ea0cc" }}>City not found</div>
         </div>
       ),
       { ...size },
@@ -45,7 +45,7 @@ export default async function Image({ params }: { params: Promise<{ city: string
           flexDirection: "column",
           width: "100%",
           height: "100%",
-          backgroundColor: "#0c0f17",
+          backgroundColor: "#031349",
           color: "#ffffff",
           fontFamily: "sans-serif",
           padding: "60px",
@@ -59,7 +59,7 @@ export default async function Image({ params }: { params: Promise<{ city: string
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", fontSize: 24, color: "#9ca3af" }}>tapwater.uk</div>
+          <div style={{ display: "flex", fontSize: 24, color: "#b9c8ea" }}>tapwater.uk</div>
           <div
             style={{
               display: "flex",
@@ -76,10 +76,10 @@ export default async function Image({ params }: { params: Promise<{ city: string
                 width: 8,
                 height: 8,
                 borderRadius: "50%",
-                backgroundColor: "#a855f7",
+                backgroundColor: "#69b7ff",
               }}
             />
-            <div style={{ display: "flex", fontSize: 14, color: "#a855f7" }}>PFAS Tracker</div>
+            <div style={{ display: "flex", fontSize: 14, color: "#69b7ff" }}>PFAS Tracker</div>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export default async function Image({ params }: { params: Promise<{ city: string
                 fontSize: 56,
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
-                color: "#a855f7",
+                color: "#69b7ff",
               }}
             >
               PFAS in {data.city} Water
@@ -109,26 +109,26 @@ export default async function Image({ params }: { params: Promise<{ city: string
             {hasDetections ? (
               <div style={{ display: "flex", gap: 32, marginTop: 32 }}>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {data.compoundsDetected.length}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Compounds detected
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {data.highestLevel.toFixed(3)}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Highest level (µg/L)
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#a855f7" }}>
+                  <div style={{ display: "flex", fontSize: 42, fontWeight: 700, color: "#69b7ff" }}>
                     {data.samplingPointCount}
                   </div>
-                  <div style={{ display: "flex", fontSize: 14, color: "#6b7280" }}>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8ea0cc" }}>
                     Sampling points
                   </div>
                 </div>
@@ -159,12 +159,12 @@ export default async function Image({ params }: { params: Promise<{ city: string
             paddingTop: 20,
           }}
         >
-          <div style={{ display: "flex", fontSize: 16, color: "#6b7280" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#8ea0cc" }}>
             {hasDetections
               ? `${data.detectionCount} PFAS detections in ${data.city}`
               : `No PFAS detections recorded in ${data.city}`}
           </div>
-          <div style={{ display: "flex", fontSize: 16, color: "#9ca3af" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#b9c8ea" }}>
             Check yours → tapwater.uk/pfas
           </div>
         </div>

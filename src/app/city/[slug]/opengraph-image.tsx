@@ -38,7 +38,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             flexDirection: "column",
             width: "100%",
             height: "100%",
-            backgroundColor: "#0c0f17",
+            backgroundColor: "#031349",
             color: "#ffffff",
             fontFamily: "sans-serif",
             alignItems: "center",
@@ -46,8 +46,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             gap: 16,
           }}
         >
-          <div style={{ display: "flex", fontSize: 28, color: "#9ca3af" }}>tapwater.uk</div>
-          <div style={{ display: "flex", fontSize: 22, color: "#6b7280" }}>City not found</div>
+          <div style={{ display: "flex", fontSize: 28, color: "#b9c8ea" }}>tapwater.uk</div>
+          <div style={{ display: "flex", fontSize: 22, color: "#8ea0cc" }}>City not found</div>
         </div>
       ),
       { ...size },
@@ -86,7 +86,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           flexDirection: "column",
           width: "100%",
           height: "100%",
-          backgroundColor: "#0c0f17",
+          backgroundColor: "#031349",
           color: "#ffffff",
           fontFamily: "sans-serif",
           padding: "60px",
@@ -100,8 +100,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", fontSize: 24, color: "#9ca3af" }}>tapwater.uk</div>
-          <div style={{ display: "flex", fontSize: 16, color: "#6b7280" }}>City Water Quality</div>
+          <div style={{ display: "flex", fontSize: 24, color: "#b9c8ea" }}>tapwater.uk</div>
+          <div style={{ display: "flex", fontSize: 16, color: "#8ea0cc" }}>City Water Quality</div>
         </div>
 
         {/* Main content */}
@@ -126,10 +126,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             >
               {city.name}
             </div>
-            <div style={{ display: "flex", fontSize: 24, color: "#9ca3af", marginTop: 12 }}>
+            <div style={{ display: "flex", fontSize: 24, color: "#b9c8ea", marginTop: 12 }}>
               {scored.length} postcode areas tested
             </div>
-            <div style={{ display: "flex", fontSize: 20, color: "#6b7280", marginTop: 4 }}>
+            <div style={{ display: "flex", fontSize: 20, color: "#8ea0cc", marginTop: 4 }}>
               {primarySupplier}
             </div>
           </div>
@@ -148,13 +148,13 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                   display: "flex",
                   fontSize: 120,
                   fontWeight: 700,
-                  color: "#0891b2",
+                  color: "#0a5cf5",
                   lineHeight: 1,
                 }}
               >
                 {avgScore.toFixed(1)}
               </div>
-              <div style={{ display: "flex", fontSize: 28, color: "#6b7280", marginTop: 4 }}>
+              <div style={{ display: "flex", fontSize: 28, color: "#8ea0cc", marginTop: 4 }}>
                 /10
               </div>
               <div
@@ -178,7 +178,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 alignItems: "center",
               }}
             >
-              <div style={{ display: "flex", fontSize: 28, color: "#6b7280" }}>
+              <div style={{ display: "flex", fontSize: 28, color: "#8ea0cc" }}>
                 No Data Yet
               </div>
             </div>
@@ -195,12 +195,12 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             paddingTop: 20,
           }}
         >
-          <div style={{ display: "flex", fontSize: 16, color: "#6b7280" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#8ea0cc" }}>
             {scored.length > 0
               ? `${city.name} water quality report`
               : "Limited monitoring data available"}
           </div>
-          <div style={{ display: "flex", fontSize: 16, color: "#9ca3af" }}>
+          <div style={{ display: "flex", fontSize: 16, color: "#b9c8ea" }}>
             Check yours → tapwater.uk
           </div>
         </div>

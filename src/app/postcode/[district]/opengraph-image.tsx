@@ -30,7 +30,7 @@ export default async function Image({ params }: { params: Promise<{ district: st
             flexDirection: 'column',
             width: '100%',
             height: '100%',
-            backgroundColor: '#0c0f17',
+            backgroundColor: '#031349',
             color: '#ffffff',
             fontFamily: 'sans-serif',
             alignItems: 'center',
@@ -38,8 +38,8 @@ export default async function Image({ params }: { params: Promise<{ district: st
             gap: 16,
           }}
         >
-          <div style={{ display: 'flex', fontSize: 28, color: '#9ca3af' }}>tapwater.uk</div>
-          <div style={{ display: 'flex', fontSize: 22, color: '#6b7280' }}>Postcode not found</div>
+          <div style={{ display: 'flex', fontSize: 28, color: '#b9c8ea' }}>tapwater.uk</div>
+          <div style={{ display: 'flex', fontSize: 22, color: '#8ea0cc' }}>Postcode not found</div>
         </div>
       ),
       { ...size }
@@ -58,7 +58,7 @@ export default async function Image({ params }: { params: Promise<{ district: st
           flexDirection: 'column',
           width: '100%',
           height: '100%',
-          backgroundColor: '#0c0f17',
+          backgroundColor: '#031349',
           color: '#ffffff',
           fontFamily: 'sans-serif',
           padding: '60px',
@@ -72,8 +72,8 @@ export default async function Image({ params }: { params: Promise<{ district: st
             alignItems: 'center',
           }}
         >
-          <div style={{ display: 'flex', fontSize: 24, color: '#9ca3af' }}>tapwater.uk</div>
-          <div style={{ display: 'flex', fontSize: 16, color: '#6b7280' }}>Water Quality Report</div>
+          <div style={{ display: 'flex', fontSize: 24, color: '#b9c8ea' }}>tapwater.uk</div>
+          <div style={{ display: 'flex', fontSize: 16, color: '#8ea0cc' }}>Water Quality Report</div>
         </div>
 
         {/* Main content */}
@@ -98,10 +98,10 @@ export default async function Image({ params }: { params: Promise<{ district: st
             >
               {data.district}
             </div>
-            <div style={{ display: 'flex', fontSize: 28, color: '#9ca3af', marginTop: 8 }}>
+            <div style={{ display: 'flex', fontSize: 28, color: '#b9c8ea', marginTop: 8 }}>
               {data.areaName}
             </div>
-            <div style={{ display: 'flex', fontSize: 20, color: '#6b7280', marginTop: 4 }}>
+            <div style={{ display: 'flex', fontSize: 20, color: '#8ea0cc', marginTop: 4 }}>
               {data.city}, {data.region}
             </div>
             {data.pfasDetected && (
@@ -123,10 +123,10 @@ export default async function Image({ params }: { params: Promise<{ district: st
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    backgroundColor: '#a855f7',
+                    backgroundColor: '#69b7ff',
                   }}
                 />
-                <div style={{ display: 'flex', fontSize: 14, color: '#a855f7' }}>
+                <div style={{ display: 'flex', fontSize: 14, color: '#69b7ff' }}>
                   PFAS detected
                 </div>
               </div>
@@ -153,7 +153,7 @@ export default async function Image({ params }: { params: Promise<{ district: st
               >
                 {data.safetyScore.toFixed(1)}
               </div>
-              <div style={{ display: 'flex', fontSize: 28, color: '#6b7280', marginTop: 4 }}>
+              <div style={{ display: 'flex', fontSize: 28, color: '#8ea0cc', marginTop: 4 }}>
                 /10
               </div>
               <div
@@ -177,7 +177,7 @@ export default async function Image({ params }: { params: Promise<{ district: st
                 alignItems: 'center',
               }}
             >
-              <div style={{ display: 'flex', fontSize: 28, color: '#6b7280' }}>
+              <div style={{ display: 'flex', fontSize: 28, color: '#8ea0cc' }}>
                 Insufficient Data
               </div>
             </div>
@@ -194,12 +194,12 @@ export default async function Image({ params }: { params: Promise<{ district: st
             paddingTop: 20,
           }}
         >
-          <div style={{ display: 'flex', fontSize: 16, color: '#6b7280' }}>
+          <div style={{ display: 'flex', fontSize: 16, color: '#8ea0cc' }}>
             {hasData
               ? `${data.contaminantsTested} contaminants tested · ${data.contaminantsFlagged} flagged`
               : 'Limited monitoring data available'}
           </div>
-          <div style={{ display: 'flex', fontSize: 16, color: '#9ca3af' }}>
+          <div style={{ display: 'flex', fontSize: 16, color: '#b9c8ea' }}>
             Check yours → tapwater.uk
           </div>
         </div>
