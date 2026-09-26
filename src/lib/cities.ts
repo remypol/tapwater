@@ -255,7 +255,7 @@ export const CITIES: CityInfo[] = [
     region: "England",
     description:
       "Anglian Water supplies Northampton from the Ruthamford system, a network of reservoirs and river abstraction points.",
-    matches: ["Northampton", "Northamptonshire"],
+    matches: ["Northampton", "Northamptonshire", "West Northamptonshire"],
   },
   {
     slug: "sunderland",

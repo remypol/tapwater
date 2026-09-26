@@ -55,7 +55,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   }
 
   const allPostcodes = await getPostcodesForCity(city.matches);
-  const scored = allPostcodes.filter((p) => p.safetyScore >= 0);
+  const scored = allPostcodes.filter((p) => p.safetyScore >= 0 && p.dataSource !== "ea-only");
   const avgScore =
     scored.length > 0
       ? scored.reduce((sum, p) => sum + p.safetyScore, 0) / scored.length

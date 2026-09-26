@@ -82,8 +82,9 @@ export default async function RegionPage({ params }: Props) {
       seen.add(p.district);
       return true;
     });
-    const scored = deduped.filter((p) => p.safetyScore >= 0);
-    const unscored = deduped.filter((p) => p.safetyScore < 0);
+    // Tap water only: ea-only districts rest on river samples (see the city page).
+    const scored = deduped.filter((p) => p.safetyScore >= 0 && p.dataSource !== "ea-only");
+    const unscored = deduped.filter((p) => !(p.safetyScore >= 0 && p.dataSource !== "ea-only"));
     if (deduped.length > 0) {
       cityData.push({ city, postcodes: scored, unscoredPostcodes: unscored });
     }

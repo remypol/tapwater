@@ -55,6 +55,17 @@ async function getPostcodesForCity(
   return results;
 }
 
+/**
+ * A district counts toward a city's tap water score only if its readings come from
+ * tap water. ea-only districts rest on river and groundwater samples: the postcode
+ * pages already keep them out of the index, and until 26 Sept 2026 the city pages
+ * still averaged them, so Bristol and Bath showed a "drinking water" score built
+ * from river samples.
+ */
+function hasTapScore(p: PostcodeData): boolean {
+  return p.safetyScore >= 0 && p.dataSource !== "ea-only";
+}
+
 // ── Static generation ──
 
 export async function generateStaticParams() {
@@ -69,7 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!city) return { title: "Not Found" };
 
   const postcodes = await getPostcodesForCity(city.matches);
-  const scored = postcodes.filter((p) => p.safetyScore >= 0);
+  const scored = postcodes.filter(hasTapScore);
   const avgScore =
     scored.length > 0
       ? (scored.reduce((sum, p) => sum + p.safetyScore, 0) / scored.length)
@@ -86,7 +97,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Keep description under 155 chars
   const descFull = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants tested across ${scored.length} postcodes. Free ${year} report.`;
   const descShort = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants across ${scored.length} postcodes.`;
-  const description = descFull.length <= 155 ? descFull : descShort;
+  // With no tap water results the score line would read "0.0/10 based on 0
+  // contaminants across 0 postcodes", which is what Google showed for Edinburgh.
+  const descNoData = `Is ${city.name} tap water safe to drink? ${city.description} What we know so far, with river health and how to check your own postcode.`;
+  const description = scored.length === 0
+    ? (descNoData.length <= 160 ? descNoData : `Is ${city.name} tap water safe to drink? What we know so far, with river health nearby and how to check your own postcode.`)
+    : descFull.length <= 155 ? descFull : descShort;
 
   return {
     title: pageTitle,
@@ -118,7 +134,7 @@ export default async function CityPage({ params }: Props) {
     getPostcodesForCity(city.matches),
     getNationalAverageScore(),
   ]);
-  const scored = allPostcodes.filter((p) => p.safetyScore >= 0);
+  const scored = allPostcodes.filter(hasTapScore);
   const areaRivers = await getRiversForDistricts(allPostcodes.map((p) => p.district));
 
   // Aggregate stats
@@ -173,7 +189,7 @@ export default async function CityPage({ params }: Props) {
 
   // Unscored postcodes (safetyScore < 0) — still need internal links
   const unscoredPostcodes = allPostcodes
-    .filter((p) => p.safetyScore < 0)
+    .filter((p) => !hasTapScore(p))
     .sort((a, b) => a.district.localeCompare(b.district));
 
   // Best and worst areas
