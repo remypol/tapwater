@@ -266,7 +266,7 @@ export default function HowToTestYourWaterPage() {
             acid-washed to prevent contamination. Using the wrong container invalidates the result.
           </li>
           <li>
-            <strong className="text-ink">Do not touch the inside of the container or lid.</strong>
+            <strong className="text-ink">Do not touch the inside of the container or lid.</strong>{" "}
             Hold the container from the outside, and collect the sample by holding it directly
             under the flowing tap rather than pouring it in from another vessel. Even trace amounts
             of contaminant from your hands can affect microbiological results.
