@@ -557,7 +557,7 @@ export default function BestWaterFilterPfasGuide() {
             cons={[
               `£${waterdropRO.priceGbp} up front plus £${waterdropRO.annualCost}/year — the most expensive option`,
               "Requires under-sink installation with a dedicated tap",
-              "Wastes some water during filtration (3:1 pure-to-waste ratio)",
+              "Wastes some water: about 1 litre down the drain for every 2 you drink",
             ]}
             ctaLabel="View on Waterdrop"
           />
@@ -566,15 +566,15 @@ export default function BestWaterFilterPfasGuide() {
             product={frizzlife}
             heading="Frizzlife PD600 — Value RO pick"
             verdict={`Same NSF 58 PFAS removal standard for £${frizzlifeSaving} less than the Waterdrop.`}
-            review={`The Frizzlife PD600 carries the same NSF/ANSI 58 certification as the Waterdrop, which means identical PFAS removal verification. It removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate. What you give up for £${frizzlifeSaving} less: no TDS monitoring panel, slightly noisier operation, and fewer certifications overall. But the core PFAS removal performance is equivalent. If you want RO-level PFAS protection and price matters, the Frizzlife is the smarter buy.`}
+            review={`The Frizzlife PD600 carries the same NSF/ANSI 58 certification as the Waterdrop, which means identical PFAS removal verification. It removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate. Like the Waterdrop, it has a screen showing how clean the filtered water is and when a filter is due, so you can see it working. It also puts some minerals back after filtering, so the water tastes less flat. What you give up for £${frizzlifeSaving} less: slightly noisier operation and fewer certifications overall. The core PFAS removal is equivalent, and the filters cost about £${frizzlife.annualCost} a year against the Waterdrop's £${waterdropRO.annualCost}. If you want RO-level PFAS protection and price matters, the Frizzlife is the smarter buy.`}
             pros={[
               "NSF/ANSI 58 certified — same PFAS removal standard as the Waterdrop",
               `£${frizzlifeSaving} cheaper up front, with £${frizzlife.annualCost}/year running costs`,
+              "Screen shows how clean the water is and when a filter is due",
+              "Puts minerals back after filtering, so the water tastes less flat",
               "Twist-and-lock filter replacement takes 30 seconds",
-              "600 GPD flow rate — no waiting for filtered water",
             ]}
             cons={[
-              "No TDS monitoring panel — you need a separate TDS meter",
               "Slightly noisier pump during filtration",
               "Fewer certifications overall than the Waterdrop",
             ]}
@@ -585,7 +585,7 @@ export default function BestWaterFilterPfasGuide() {
             product={zerowater}
             heading="ZeroWater 12-Cup — Budget PFAS removal"
             verdict="The cheapest way to remove PFAS. NSF 53 and 401 certified in a simple jug."
-            review={`If you cannot install an under-sink system — or you want PFAS removal for £${zerowater.priceGbp} instead of £${frizzlife.priceGbp} — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £120/year in replacement filters, the annual running cost is higher than the RO systems. But as a starting point for PFAS removal, nothing else comes close at this price.`}
+            review={`If you cannot install an under-sink system — or you want PFAS removal for £${zerowater.priceGbp} instead of £${frizzlife.priceGbp} — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £${zerowater.annualCost}/year in replacement filters, it costs more to run than the Frizzlife RO system. But as a starting point for PFAS removal, nothing else comes close at this price.`}
             pros={[
               "NSF/ANSI 53 and 401 certified for PFAS removal",
               "Just £40 upfront — the cheapest PFAS removal entry point",
@@ -594,7 +594,7 @@ export default function BestWaterFilterPfasGuide() {
             ]}
             cons={[
               "Filters last only 2–3 weeks in hard water areas",
-              "£120/year running costs — higher than RO systems annually",
+              `£${zerowater.annualCost}/year running costs — more than the Frizzlife RO system`,
               "Slow pour rate — 5+ minutes to fill the jug",
             ]}
             ctaLabel="View on Amazon"

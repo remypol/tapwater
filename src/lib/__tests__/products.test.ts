@@ -183,6 +183,18 @@ describe("prices the guide copy compares", () => {
     expect(dearer).toEqual(["osmio-fusion-3"]);
   });
 
+  // The RO guide says the Frizzlife costs "£37 a year less in filters" and the
+  // PFAS guide that the ZeroWater jug costs more to run than the Frizzlife.
+  it("yearly filter costs keep the order the guide copy states", () => {
+    const yearly = (id: string) => {
+      const cost = PRODUCTS.find((x) => x.id === id)?.annualCost;
+      if (typeof cost !== "number") throw new Error(`No annualCost for ${id}`);
+      return cost;
+    };
+    expect(yearly("frizzlife-pd600")).toBeLessThan(yearly("waterdrop-g3p600"));
+    expect(yearly("zerowater-12cup")).toBeGreaterThan(yearly("frizzlife-pd600"));
+  });
+
   it("the Waterdrop G3P600 is the dearest of the PFAS guide's four picks", () => {
     for (const id of ["frizzlife-pd600", "zerowater-12cup", "tapp-water-ecopro"]) {
       expect(price(id)).toBeLessThan(price("waterdrop-g3p600"));
@@ -197,6 +209,25 @@ describe("prices the guide copy compares", () => {
       if (!point) continue;
       expect(point.brand1).toMatch(new RegExp(`^£${price(c.brand1ProductId)}\\b`));
       expect(point.brand2).toMatch(new RegExp(`^£${price(c.brand2ProductId)}\\b`));
+    }
+  });
+
+  // Same table, same drift: the Frizzlife row said "~£70/year" beside a
+  // catalogue figure that frizzlife.co.uk's filter prices put at £107.
+  it("comparison pages quote the catalogue yearly cost for running cost", () => {
+    const yearly = (id: string) => PRODUCTS.find((x) => x.id === id)?.annualCost;
+    for (const c of BRAND_COMPARISONS) {
+      const point = c.comparisonPoints.find((pt) => pt.category === "Running cost");
+      if (!point) continue;
+      for (const [line, id] of [
+        [point.brand1, c.brand1ProductId],
+        [point.brand2, c.brand2ProductId],
+      ] as const) {
+        const cost = yearly(id);
+        const quoted = line.match(/^~?£(\d+)\/year/);
+        if (typeof cost !== "number" || !quoted) continue;
+        expect(Number(quoted[1]), `${c.brand1Slug} vs ${c.brand2Slug}: ${id}`).toBe(cost);
+      }
     }
   });
 

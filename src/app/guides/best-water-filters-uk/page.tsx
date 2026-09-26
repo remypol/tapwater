@@ -60,7 +60,7 @@ const FAQ_DATA = [
   {
     question: "What is the best water filter in the UK?",
     answer:
-      "For most UK homes that want one filter to cover everything in drinking water, the Waterdrop G3P600 reverse osmosis system is the best water filter we have compared. It is certified to NSF/ANSI 58 and 372, lists 12 contaminants including PFAS, fluoride, lead and nitrate, and costs around £550 plus about £80 a year in filters. If you cannot plumb anything in, the Osmio Zero 2.0 is a countertop RO unit that plugs into a socket. If you only want chlorine taste gone, a £25 BRITA Marella XL jug does that for about £52 a year. The right answer depends on what is in your water, which you can check by postcode on this page.",
+      "For most UK homes that want one filter to cover everything in drinking water, the Waterdrop G3P600 reverse osmosis system is the best water filter we have compared. It is certified to NSF/ANSI 58 and 372, lists 12 contaminants including PFAS, fluoride, lead and nitrate, and costs around £550 plus about £144 a year in filters. If you cannot plumb anything in, the Osmio Zero 2.0 is a countertop RO unit that plugs into a socket. If you only want chlorine taste gone, a £25 BRITA Marella XL jug does that for about £52 a year. The right answer depends on what is in your water, which you can check by postcode on this page.",
   },
   {
     question: "What is the best water filter system for a home?",
@@ -95,7 +95,7 @@ const FAQ_DATA = [
   {
     question: "How much does a home water filter system cost in the UK?",
     answer:
-      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £120 with £30 to £80 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £70 to £130 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
+      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £120 with £30 to £80 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £107 to £144 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
   },
 ];
 

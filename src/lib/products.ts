@@ -338,11 +338,16 @@ export const PRODUCTS: FilterProduct[] = [
     cons: [
       "Professional installation recommended — plumbing required",
       "Higher upfront cost than any jug or tap filter",
-      "Wastes some water during the RO process (3:1 ratio)",
+      "Wastes some water: about 1 litre down the drain for every 2 you drink",
     ],
     bestFor: "Maximum contaminant removal including PFAS and fluoride",
-    filterLife: "12–24 months depending on stage",
-    annualCost: 80,
+    // Checked at source 26 Sept on waterdropfilter.co.uk: the first filter (CF)
+    // every 6 months, the carbon filter (CB) every 12, the RO filter every 24.
+    // The 1-year set (two CF, one CB) is £88.98 and the RO filter £109.99, so
+    // £88.98 + £55 = about £144 a year. The old £80 matched none of that. The
+    // same page gives a 2:1 pure-to-drain ratio, not the 3:1 we used to quote.
+    filterLife: "6–24 months depending on filter",
+    annualCost: 144,
     flowRate: "2.3 L/min",
   },
   {
@@ -376,19 +381,30 @@ export const PRODUCTS: FilterProduct[] = [
     imageUrl: "/filters/frizzlife-pd600.png",
     rating: 4.5,
     badge: "best-value",
+    // The PD600-TAM3 on frizzlife.co.uk (checked 26 Sept) has a screen showing
+    // how clean the filtered water is and when a filter is due, a third stage
+    // that puts minerals back (TAM3), and a 2:1 pure-to-drain ratio. We used to
+    // say it had no screen, which was wrong for the model the link sells.
     pros: [
       "Lower price than Waterdrop G3P600 with similar performance",
+      "Puts minerals back after filtering, so the water tastes less flat",
+      "Screen shows how clean the water is and when a filter is due",
       "Twist-and-lock filter replacement — no tools needed",
-      "600 GPD flow rate fills a glass in seconds",
     ],
     cons: [
-      "Lacks the smart TDS monitoring panel",
       "Slightly noisier pump than Waterdrop",
       "Fewer certifications — NSF 58 only",
+      "Wastes some water: about 1 litre down the drain for every 2 you drink",
     ],
     bestFor: "Best value reverse osmosis for UK kitchens",
-    filterLife: "12 months (composite filter)",
-    annualCost: 70,
+    // frizzlife.co.uk, 26 Sept: first filter ASR211 £33.99 every 12 months, the
+    // mineral cartridge (FZ-4, the insert inside TAM3) £29.99 every year, and the
+    // RO filter ASR212-600G £85.99 every 2 years. £33.99 + £29.99 + £43 = about
+    // £107 a year. The TAM3 housing is reusable, so the £34.99 TAM3-HF kit (insert
+    // plus a new housing) is not needed each year. The old £70 left out the
+    // mineral cartridge and part of the RO filter.
+    filterLife: "12–24 months depending on filter",
+    annualCost: 107,
     flowRate: "2.3 L/min",
   },
 

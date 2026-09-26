@@ -12,6 +12,14 @@ import { OG_IMAGE } from "@/lib/og";
 
 const year = new Date().getFullYear();
 
+// Yearly filter costs the FAQ quotes, read from the catalogue. Typed by hand
+// they said £70 and £80 while the shops' own filter prices worked out at
+// £107 and £144.
+const faqCost = (id: string) =>
+  getProductsByCategory("reverse_osmosis").find((p) => p.id === id)?.annualCost;
+const frizzlifeYearly = faqCost("frizzlife-pd600");
+const waterdropYearly = faqCost("waterdrop-g3p600");
+
 const FAQ_DATA = [
   {
     question: "Do I actually need a reverse osmosis system in the UK?",
@@ -21,7 +29,7 @@ const FAQ_DATA = [
   {
     question: "How much does it cost to run a reverse osmosis system?",
     answer:
-      "Expect to spend between \u00a370 and \u00a3100 per year on replacement filters, depending on the model. The Frizzlife PD600 costs roughly \u00a370/year, the Waterdrop G3P600 around \u00a380/year. You will also see a small increase in your water bill because RO systems waste some water during filtration \u2014 typically 1 litre wasted for every 3 litres filtered on modern tankless systems.",
+      `Expect to spend roughly \u00a3100 to \u00a3150 a year on replacement filters, depending on the model. Going by each maker's own filter prices and replacement times, the Frizzlife PD600 costs about \u00a3${frizzlifeYearly} a year and the Waterdrop G3P600 about \u00a3${waterdropYearly}. You will also see a small rise in your water bill, because RO systems send some water down the drain as they filter: both of these run about 1 litre to the drain for every 2 litres you drink.`,
   },
   {
     question: "Can I install a reverse osmosis system myself?",
@@ -224,10 +232,12 @@ export default function BestReverseOsmosisGuide() {
   const frizzlifeSaving = waterdrop.priceGbp - frizzlife.priceGbp;
   const zeroOverFrizzlife = zero.priceGbp - frizzlife.priceGbp;
   const fusion2OverFrizzlife = fusion2.priceGbp - frizzlife.priceGbp;
+  const frizzlifeYearlySaving = (waterdrop.annualCost ?? 0) - (frizzlife.annualCost ?? 0);
 
   // Reading order. The two Osmio units come first: the Zero is the only system
-  // here that needs no plumbing, and the Fusion 2.0 is the one that puts minerals
-  // back, which are the two questions readers arrive with most often. The
+  // here that needs no plumbing, and the Fusion 2.0 puts minerals back from a UK
+  // supplier, which answer the two questions readers arrive with most often (the
+  // Frizzlife PD600-TAM3 puts minerals back too, so it is no longer unique). The
   // Waterdrop remains the under-sink system we recommend; see the verdict.
   const reviewOrder = [zero, fusion2, waterdrop, frizzlife, fusion3];
 
@@ -356,7 +366,7 @@ export default function BestReverseOsmosisGuide() {
             </div>
             <div className="flex items-start justify-between gap-4 pb-3 border-b border-rule">
               <div>
-                <p className="text-xs text-accent font-medium uppercase tracking-wider">Remineralised pick</p>
+                <p className="text-xs text-accent font-medium uppercase tracking-wider">UK supplier pick</p>
                 <p className="font-display text-base italic text-ink mt-0.5">
                   {fusion2.brand} {fusion2.model}
                 </p>
@@ -389,7 +399,7 @@ export default function BestReverseOsmosisGuide() {
                   {frizzlife.brand} {frizzlife.model}
                 </p>
                 <p className="text-sm text-muted mt-0.5">
-                  NSF 58 certified, tool-free filter swap, &pound;{frizzlifeSaving} less than the Waterdrop
+                  NSF 58 certified, puts minerals back, water-quality screen, &pound;{frizzlifeSaving} less than the Waterdrop
                 </p>
               </div>
               <span className="font-data text-lg font-bold text-ink shrink-0">
@@ -500,9 +510,11 @@ export default function BestReverseOsmosisGuide() {
             </h3>
             <p className="text-base text-body leading-relaxed">
               RO systems flush contaminants down the drain, so they always waste
-              some water. Look for a ratio of 3:1 (pure to waste) or better. Budget
+              some water. Look for a ratio of 2:1 (pure to waste) or better. Budget
               systems can waste 4 litres for every 1 litre of clean water. The
-              Waterdrop G3P600 achieves 3:1, which is best-in-class for under-sink RO.
+              Waterdrop G3P600 and Frizzlife PD600 both run at 2:1: about 1 litre
+              down the drain for every 2 you drink. The worktop Osmio Zero 2.0
+              does better, at 1 litre for every 5.
             </p>
           </div>
 
@@ -535,7 +547,7 @@ export default function BestReverseOsmosisGuide() {
                   : product.id === "frizzlife-pd600"
                     ? "Value pick \u2014 best for the money"
                     : product.id === "osmio-fusion-2"
-                      ? "Remineralised pick \u2014 UK supplier"
+                      ? "UK supplier pick \u2014 minerals put back"
                       : product.id === "osmio-fusion-3"
                         ? "Premium pick \u2014 tankless, hydrogen and chilled"
                         : "No-plumbing pick \u2014 plugs in"
@@ -567,11 +579,11 @@ export default function BestReverseOsmosisGuide() {
 
           <ProductReview
             product={fusion2}
-            heading="Osmio Fusion 2.0 — Remineralised pick"
+            heading="Osmio Fusion 2.0 — UK supplier pick"
             verdict="Puts minerals back after RO, from a UK supplier with UK spares."
-            review={`Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that remineralises the water and lifts the pH back up, which is the main reason to choose it over the Waterdrop. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while the certified Frizzlife PD600 costs £${fusion2OverFrizzlife} less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £${fusion2.priceGbp} it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install.`}
+            review={`Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that puts minerals back and lifts the pH, something the Waterdrop does not do. It is not the only one: the Frizzlife PD600 puts minerals back too, for £${fusion2OverFrizzlife} less. So the case for the Fusion is the company behind it and the list of what it removes. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while the certified Frizzlife PD600 costs £${fusion2OverFrizzlife} less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £${fusion2.priceGbp} it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install.`}
             pros={[
-              "Bioceramic stage remineralises and raises pH, which most RO systems do not",
+              "Bioceramic stage puts minerals back and raises pH, which the Waterdrop does not",
               "Widest contaminant list here, covering fluoride and nitrates as well as lead",
               "UK company, so spares and support do not ship from overseas",
             ]}
@@ -587,12 +599,11 @@ export default function BestReverseOsmosisGuide() {
             product={waterdrop}
             heading="Waterdrop G3P600 — Top pick"
             verdict="Our top pick. Best balance of performance, certifications, and usability."
-            review={`The Waterdrop G3P600 is the RO system we recommend to most people. It removes 12 contaminant categories we track, including PFAS, fluoride, arsenic, nitrate, and trihalomethanes. NSF/ANSI 58 and 372 certified \u2014 the 372 certification covers lead-free materials, which is a detail most competitors skip. The tankless design means it takes up about as much space as a loaf of bread under your sink. The smart TDS monitoring panel on the tap shows you real-time water quality before and after filtration, so you can see the system working. Filter changes are straightforward twist-and-pull, no tools needed. At £${waterdrop.priceGbp} it is not cheap, but the annual running cost of £${waterdrop.annualCost} is lower than most jug filters when you account for cartridge frequency.`}
+            review={`The Waterdrop G3P600 is the RO system we recommend to most people. It removes 12 contaminant categories we track, including PFAS, fluoride, arsenic, nitrate, and trihalomethanes. NSF/ANSI 58 and 372 certified \u2014 the 372 certification covers lead-free materials, which is a detail most competitors skip. The tankless design means it takes up about as much space as a loaf of bread under your sink. The smart TDS monitoring panel on the tap shows you real-time water quality before and after filtration, so you can see the system working. Filter changes are straightforward twist-and-pull, no tools needed. At £${waterdrop.priceGbp} it is not cheap, and the filters add about £${waterdrop.annualCost} a year: the first filter every 6 months, the carbon filter every year and the main RO filter every two years.`}
             pros={[
               "NSF/ANSI 58 and 372 dual certification \u2014 the strongest credentials here",
               "Smart TDS panel lets you verify filtration performance in real time",
               "Tankless design saves space \u2014 fits under standard UK sinks",
-              "3:1 pure-to-waste ratio \u2014 best-in-class water efficiency",
               "600 GPD flow rate fills a glass in about 6 seconds",
             ]}
             cons={[
@@ -606,18 +617,19 @@ export default function BestReverseOsmosisGuide() {
           <ProductReview
             product={frizzlife}
             heading="Frizzlife PD600 — Value pick"
-            verdict={`Same core performance as the Waterdrop for £${frizzlifeSaving} less.`}
-            review={`The Frizzlife PD600 is the smart buy if you want RO performance without paying top price. It carries the same NSF/ANSI 58 certification as the Waterdrop, removes 10 contaminant categories including PFAS, fluoride, arsenic, and nitrate, and matches the 600 GPD flow rate. What you give up for £${frizzlifeSaving} less: there is no TDS monitoring panel (you will need a separate \u00a310 TDS meter if you want to check), the pump is slightly noisier during filtration, and it carries fewer certifications overall. The twist-and-lock filter replacement system is genuinely tool-free and takes about 30 seconds. For most UK households, the Frizzlife does everything the Waterdrop does at a lower price.`}
+            verdict={`Same core filtering as the Waterdrop, minerals put back, for £${frizzlifeSaving} less.`}
+            review={`The Frizzlife PD600 is the smart buy if you want RO without paying top price. It carries the same NSF/ANSI 58 certification as the Waterdrop, removes 10 contaminant categories including PFAS, fluoride, arsenic and nitrate, matches the 600 GPD flow rate, and wastes no more water: both send about 1 litre down the drain for every 2 you drink. It also does something the Waterdrop does not. A third filter puts some minerals back after the RO stage, so the water tastes less flat. A screen shows how clean the filtered water is and when a filter is due, so you do not need a separate meter. What you give up for £${frizzlifeSaving} less: the pump is slightly noisier, and it carries one certification fewer. Filters twist out by hand with no tools. Budget about £${frizzlife.annualCost} a year: the first filter every 12 months, the mineral cartridge every year and the main RO filter every two years. That is about £${frizzlifeYearlySaving} a year less than the Waterdrop.`}
             pros={[
               "NSF/ANSI 58 certified \u2014 same RO standard as the Waterdrop",
-              `£${frizzlifeSaving} cheaper up front, with lower yearly filter costs (£${frizzlife.annualCost}/yr)`,
-              "Twist-and-lock filter swap takes 30 seconds, no tools",
-              "600 GPD flow rate \u2014 no waiting for filtered water",
+              `£${frizzlifeSaving} cheaper up front and about £${frizzlifeYearlySaving} a year less in filters (£${frizzlife.annualCost}/yr)`,
+              "Puts minerals back after filtering, so the water tastes less flat",
+              "Screen shows how clean the water is and when a filter is due",
+              "Twist-and-lock filter swap, no tools",
             ]}
             cons={[
-              "No TDS monitoring panel \u2014 you will need a separate meter",
               "Slightly noisier pump during filtration",
               "Fewer certifications \u2014 NSF 58 only, no NSF 372",
+              "Needs plumbing in and a hole for its own tap, like the Waterdrop",
             ]}
             ctaLabel="View on Frizzlife"
           />
@@ -690,26 +702,28 @@ export default function BestReverseOsmosisGuide() {
             before you buy.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            If flat-tasting RO water is what has put you off, the{" "}
+            If you want a UK company behind your system, the{" "}
             <strong className="text-ink">Osmio Fusion 2.0</strong> puts minerals
-            back after filtering, from a UK supplier that stocks UK spares. It
-            needs plumbing in, carries no stated NSF or WRAS certification, and
-            runs at roughly &pound;126 a year in filters.
+            back after filtering and comes from a supplier that stocks UK spares.
+            It needs plumbing in, carries no stated NSF or WRAS certification, and
+            runs at roughly &pound;{fusion2.annualCost} a year in filters.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             The <strong className="text-ink">Waterdrop G3P600</strong> is the RO
-            system we recommend. Dual NSF 58/372 certification, the best waste
-            ratio in its class, a smart TDS panel that lets you verify it is
-            working, and a compact tankless design that fits under any UK kitchen
-            sink. At &pound;{waterdrop.priceGbp} with &pound;{waterdrop.annualCost}/year running costs, it is the best
+            system we recommend. Dual NSF 58/372 certification, a smart TDS panel
+            that lets you verify it is working, and a compact tankless design that
+            fits under any UK kitchen sink. At &pound;{waterdrop.priceGbp} with &pound;{waterdrop.annualCost}/year running costs, it is the best
             balance of performance and value.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             If budget matters, the{" "}
-            <strong className="text-ink">Frizzlife PD600</strong> does 90% of
-            what the Waterdrop does for &pound;{frizzlifeSaving} less. You lose the TDS panel and
-            one certification, but the core RO filtration performance is virtually
-            identical. For most households, this is the smart choice.
+            <strong className="text-ink">Frizzlife PD600</strong> filters to the
+            same NSF 58 standard for &pound;{frizzlifeSaving} less, and about
+            &pound;{frizzlifeYearlySaving} a year less in filters. Like the
+            Waterdrop it has a screen showing water quality, and unlike the
+            Waterdrop it puts minerals back after filtering. You give up one
+            certification and a slightly quieter pump. For most households, this
+            is the smart choice.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             The <strong className="text-ink">Osmio Fusion 3.0</strong> is for
@@ -743,7 +757,7 @@ export default function BestReverseOsmosisGuide() {
             campaign="best-reverse-osmosis-guide"
             className="inline-flex items-center justify-center gap-2 border border-rule text-ink rounded-lg px-6 py-3 text-sm font-medium hover:bg-wash transition-colors"
           >
-            Get the Osmio Fusion 2.0 (remineralised)
+            Get the Osmio Fusion 2.0 (UK supplier)
             <ArrowRight className="w-4 h-4" />
           </AffiliateLink>
           <AffiliateLink

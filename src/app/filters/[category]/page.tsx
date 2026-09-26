@@ -82,7 +82,7 @@ const CATEGORY_INTRO: Partial<Record<ProductCategory, string[]>> = {
   reverse_osmosis: [
     "A reverse osmosis water filter pushes mains water through a semi-permeable membrane with pores small enough to reject dissolved contaminants that carbon filters let through: PFAS, fluoride, nitrates, heavy metals, and the hardness minerals behind limescale. A carbon pre-filter protects the membrane from chlorine, and a post-filter polishes the taste on the way out.",
     "In the UK the case for an RO system is specific rather than general. Tap water here meets strict legal standards, but PFAS currently has no statutory limit in England and Wales, fluoride passes every other filter type, and most of the country lives with hard water. Reverse osmosis is the one home technology that answers all three at once, which is why it anchors the top of our removal comparison.",
-    "The practical trade-offs: RO wastes some water (modern tankless systems run around 3:1 pure-to-drain), strips beneficial minerals along with the bad (remineralisation stages exist for that), and filters drinking water at one tap rather than the whole house. Check your postcode below to see whether your water actually carries the contaminants an RO system is built for.",
+    "The practical trade-offs: RO wastes some water (modern tankless systems send about 1 litre down the drain for every 2 you drink), strips beneficial minerals along with the bad (remineralisation stages exist for that), and filters drinking water at one tap rather than the whole house. Check your postcode below to see whether your water actually carries the contaminants an RO system is built for.",
   ],
   whole_house: [
     "A whole house water filter, also sold as a mains water filter or point-of-entry filter, sits on the pipe where water enters your home and treats everything downstream: kitchen tap, showers, bath, washing machine and boiler. Depending on the stages inside, it removes chlorine taste and smell, grit and rust from old mains, and on multi-stage systems bacteria, lead, nitrates and other metals.",
@@ -150,7 +150,7 @@ const CATEGORY_FAQS: Partial<
     {
       question: "Does reverse osmosis waste a lot of water?",
       answer:
-        "Modern tankless RO systems like the Waterdrop G3P600 have a 3:1 pure-to-waste ratio, meaning 3 litres of clean water for every 1 litre wasted. Older systems can be less efficient.",
+        "Less than older systems did. Modern tankless RO systems like the Waterdrop G3P600 and Frizzlife PD600 run at 2:1, meaning about 1 litre goes down the drain for every 2 litres you drink. Older systems can waste 4 litres for every 1 you drink.",
     },
     {
       question: "Does reverse osmosis remove minerals I need?",
