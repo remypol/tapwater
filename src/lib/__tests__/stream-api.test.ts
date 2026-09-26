@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { normalizeStreamRecord, parseStreamDate, fetchStreamData } from "../stream-api";
 import type { StreamSource } from "../stream-sources";
+import { getStreamSource, getAllStreamSupplierIds } from "../stream-sources";
+import { computeScore } from "../scoring";
 
 describe("parseStreamDate", () => {
   it("parses epoch milliseconds", () => {
@@ -198,5 +200,117 @@ describe("fetchStreamData", () => {
     const records = await fetchStreamData(mockSource, []);
     expect(records).toEqual([]);
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe("normalizeStreamRecord with a unit fallback (Southern Water extract)", () => {
+  const southern = getStreamSource("southern-water")!;
+  const extractRow = (determinand: string, units: string | null, operator: string | null, result: string) => ({
+    Sample_Date: "2026-03-02",
+    Determinand: determinand,
+    DWI_Code: "N/A",
+    Units: units,
+    Operator: operator,
+    Result: result,
+    LSOA: "E01016904",
+  });
+
+  it("fills a null unit from the fallback", () => {
+    const r = normalizeStreamRecord(extractRow("LEAD (UNFLUSHED)", null, null, "2.1"), "camel", "string", southern.unitFallback);
+    expect(r.unit).toBe("µg/l");
+    expect(r.value).toBe(2.1);
+    expect(r.belowDetectionLimit).toBe(false);
+  });
+
+  it("replaces an operator in the unit field and marks '<' as below detection", () => {
+    const r = normalizeStreamRecord(extractRow("NITRATE", "<", null, "2.13"), "camel", "string", southern.unitFallback);
+    expect(r.unit).toBe("mgNO3/l");
+    expect(r.belowDetectionLimit).toBe(true);
+  });
+
+  it("replaces '>' without marking below detection", () => {
+    const r = normalizeStreamRecord(extractRow("E. COLI (CONFIRMED)", ">", ">", "100"), "camel", "string", southern.unitFallback);
+    expect(r.unit).toBe("no/100ml");
+    expect(r.belowDetectionLimit).toBe(false);
+  });
+
+  it("leaves a determinand with no confirmed unit unitless", () => {
+    for (const name of ["HARDNESS (TOTAL)", "HARDNESS (°DH)", "PFOSA", "COLIFORMS (PRESUMPTIVE)", "SOMETHING NEW"]) {
+      expect(normalizeStreamRecord(extractRow(name, null, null, "1"), "camel", "string", southern.unitFallback).unit).toBe("");
+    }
+  });
+
+  it("keeps a published unit even when a fallback exists", () => {
+    const r = normalizeStreamRecord(extractRow("ALUMINIUM", "μg/l", "#", "8.4"), "camel", "string", southern.unitFallback);
+    expect(r.unit).toBe("µg/l");
+  });
+
+  it("leaves sources without a fallback exactly as before", () => {
+    const row = { SAMPLE_ID: "x", SAMPLE_DATE: 1743206400000, DETERMINAND: "LEAD (UNFLUSHED)", DWI_CODE: "", UNITS: "<", OPERATOR: "<", RESULT: 0.9, LSOA: "E1" };
+    expect(normalizeStreamRecord(row, "upper", "epoch").unit).toBe("<");
+    expect(normalizeStreamRecord({ ...row, UNITS: null, OPERATOR: null }, "upper", "epoch")).toMatchObject({ unit: "", belowDetectionLimit: false });
+    for (const id of getAllStreamSupplierIds().filter((s) => s !== "southern-water")) {
+      expect(getStreamSource(id)!.unitFallback).toBeUndefined();
+    }
+  });
+
+  it("feeds the scorer units it compares against the right limits", () => {
+    const fb = southern.unitFallback!;
+    const obs = (determinand: string, value: number) => ({ determinand, value, unit: fb[determinand], date: "2026-03-02" });
+    const result = computeScore([
+      obs("LEAD (UNFLUSHED)", 2.1),
+      obs("NITRATE", 31.4),
+      obs("NITRITE", 0.17),
+      obs("IRON", 18.1),
+      obs("COPPER (UNFLUSHED)", 0.054),
+      obs("E. COLI (CONFIRMED)", 0),
+      obs("PH", 7.4),
+    ]);
+    const byName = Object.fromEntries(result.readings.map((r) => [r.name, r]));
+    expect(byName.Lead.value).toBeCloseTo(0.0021);
+    expect(byName.Nitrate.value).toBeCloseTo(31.4);
+    expect(byName.Iron.value).toBeCloseTo(0.0181);
+    expect(byName.Copper.value).toBeCloseTo(0.054);
+    expect(byName["E. coli"].status).toBe("pass");
+    expect(result.contaminantsFlagged).toBe(0);
+    expect(result.safetyScore).toBeGreaterThanOrEqual(7);
+  });
+
+  it("maps no fallback name onto a scored parameter it does not measure", () => {
+    // Substring matching in the scorer is loose ("PHENOL" starts with "ph"); pin
+    // exactly which scored parameter each fallback name lands on.
+    const landed: Record<string, string[]> = {};
+    for (const [determinand, unit] of Object.entries(southern.unitFallback!)) {
+      const r = computeScore([{ determinand, value: 0, unit, date: "2026-01-01" }]);
+      for (const reading of r.readings) (landed[reading.name] ??= []).push(determinand);
+    }
+    expect(landed).toEqual({
+      Aluminium: ["ALUMINIUM", "ALUMINIUM (UNFLUSHED)"],
+      Antimony: ["ANTIMONY"],
+      Arsenic: ["ARSENIC"],
+      Bromate: ["BROMATE"],
+      Cadmium: ["CADMIUM"],
+      Chromium: ["CHROMIUM"],
+      Iron: ["IRON", "IRON (UNFLUSHED)", "IRON (DISSOLVED)"],
+      Lead: ["LEAD", "LEAD (UNFLUSHED)"],
+      Manganese: ["MANGANESE"],
+      Mercury: ["MERCURY"],
+      Nickel: ["NICKEL", "NICKEL (UNFLUSHED)"],
+      Selenium: ["SELENIUM"],
+      Trihalomethanes: ["TRIHALOMETHANES (SUM OF IDENTIFIED THMS)"],
+      "PFAS (total)": ["PFAS TOTAL IN TREATED WATER"],
+      Boron: ["BORON"],
+      Copper: ["COPPER", "COPPER (UNFLUSHED)"],
+      Fluoride: ["FLUORIDE"],
+      Nitrate: ["NITRATE"],
+      Nitrite: ["NITRITE"],
+      Ammonia: ["AMMONIA"],
+      Colour: ["COLOUR LIQUID FILTERED"],
+      pH: ["PH"],
+      Turbidity: ["TURBIDITY"],
+      Conductivity: ["CONDUCTIVITY"],
+      "E. coli": ["E. COLI (CONFIRMED)"],
+      "Coliform Bacteria": ["COLIFORMS (CONFIRMED TOTAL)"],
+    });
   });
 });

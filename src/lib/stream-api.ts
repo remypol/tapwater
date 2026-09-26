@@ -89,22 +89,35 @@ function getField(attrs: Record<string, unknown>, _fieldCase: "upper" | "camel",
   return attrs[upperName] ?? attrs[camelName];
 }
 
+/** What some services put in the Units field instead of a unit. */
+const OPERATOR_IN_UNIT = new Set(["", "<", ">", "#"]);
+
 export function normalizeStreamRecord(
   attrs: Record<string, unknown>,
   fieldCase: "upper" | "camel",
   dateFormat: "epoch" | "string",
+  unitFallback?: Record<string, string>,
 ): StreamRecord {
   const rawDate = getField(attrs, fieldCase, "SAMPLE_DATE", "Sample_Date");
   const rawOperator = getField(attrs, fieldCase, "OPERATOR", "Operator");
-  const rawUnit = String(getField(attrs, fieldCase, "UNITS", "Units") ?? "");
+  const determinand = String(getField(attrs, fieldCase, "DETERMINAND", "Determinand") ?? "");
+  let rawUnit = String(getField(attrs, fieldCase, "UNITS", "Units") ?? "");
+  let belowDetectionLimit = rawOperator === "<";
+
+  // Only sources that declare a fallback take this path; every other source
+  // keeps its unit exactly as published.
+  if (unitFallback && OPERATOR_IN_UNIT.has(rawUnit.trim())) {
+    if (rawUnit.trim() === "<") belowDetectionLimit = true;
+    rawUnit = unitFallback[determinand] ?? "";
+  }
 
   return {
     sampleId: String(getField(attrs, fieldCase, "SAMPLE_ID", "Sample_Id") ?? ""),
     sampleDate: parseStreamDate(rawDate as number | string | null, dateFormat),
-    determinand: String(getField(attrs, fieldCase, "DETERMINAND", "Determinand") ?? ""),
+    determinand,
     dwiCode: String(getField(attrs, fieldCase, "DWI_CODE", "DWI_Code") ?? ""),
     unit: rawUnit.replace("\u03bc", "\u00b5"),  // normalize greek mu to micro sign
-    belowDetectionLimit: rawOperator === "<",
+    belowDetectionLimit,
     value: Number(getField(attrs, fieldCase, "RESULT", "Result") ?? 0),
     lsoa: String(attrs.LSOA ?? attrs.LSOA_Name ?? attrs.LSOA21CD ?? attrs.lsoa21cd ?? attrs.lsoa ?? ""),
   };
@@ -155,7 +168,7 @@ export async function queryStreamService(
 
       const features = json.features ?? [];
       for (const f of features) {
-        const record = normalizeStreamRecord(f.attributes, source.fieldCase, source.dateFormat);
+        const record = normalizeStreamRecord(f.attributes, source.fieldCase, source.dateFormat, source.unitFallback);
         if (record.determinand && record.sampleDate) {
           allRecords.push(record);
         }
