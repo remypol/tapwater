@@ -482,6 +482,10 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             {flaggedNames.some((n) => /lead/i.test(n)) ? <Link href="/contaminant/lead">Lead in water</Link> : null}
             {flaggedNames.some((n) => /nitrate|nitrite/i.test(n)) ? <Link href="/contaminant/nitrate">Nitrate levels</Link> : null}
             {flaggedNames.some((n) => /chlorine/i.test(n)) ? <Link href="/contaminant/chlorine">Chlorine</Link> : null}
+            {/* The buying guide that answers the problem this district has */}
+            {isHard ? <Link href="/guides/best-boiling-water-tap-uk">Boiling water taps and hard water</Link> : null}
+            {flaggedNames.some((n) => /lead/i.test(n)) ? <Link href="/guides/best-under-sink-water-filter-uk">Under sink water filters</Link> : null}
+            {flaggedNames.some((n) => /chlorine/i.test(n)) ? <Link href="/guides/best-whole-house-water-filter-uk">Whole house water filters</Link> : null}
             <Link href="/guides/how-to-test-your-water">How to test your water</Link>
             <Link href="/guides/best-water-filters-uk">Best water filters</Link>
             <Link href="/guides/best-shower-filter-uk">Filter shower heads</Link>

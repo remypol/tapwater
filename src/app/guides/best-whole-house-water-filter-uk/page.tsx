@@ -16,6 +16,7 @@ import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { GuideHardnessData } from "@/components/guide-hardness-data";
 import { AffiliateNote, Kicker, TypicalPrice } from "@/components/commerce";
 import {
   GuideBreadcrumb,
@@ -34,7 +35,7 @@ const year = new Date().getFullYear();
 const SLUG = "best-whole-house-water-filter-uk";
 const URL = `https://www.tapwater.uk/guides/${SLUG}`;
 const PAGE_TYPE = "best-whole-house-filter-guide";
-const TITLE = `Best Whole House Water Filter UK (${year}): Systems Compared`;
+const TITLE = `Best Whole House Water Filter UK (${year}): Home Filtration Systems Compared`;
 const DESCRIPTION =
   "Whole house and mains water filters for UK homes: what they remove, sizing by flow rate, running costs, fitting, and why a filter is not a softener.";
 
@@ -380,7 +381,7 @@ export default function BestWholeHouseFilterGuide() {
         description={DESCRIPTION}
         url={URL}
         datePublished="2026-04-05"
-        dateModified={new Date().toISOString().split("T")[0]}
+        dateModified="2026-10-15"
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
@@ -392,13 +393,14 @@ export default function BestWholeHouseFilterGuide() {
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           Best Whole House Water Filter UK ({year})
         </h1>
-        <GuideByline updated={`September ${year}`} />
+        <GuideByline updated="October 2026" />
 
         <p className="text-lg text-body leading-relaxed">
-          A whole house water filter, sometimes called a mains water filter or
-          point-of-entry filter, sits on the pipe where water enters your home
-          and treats everything downstream: kitchen tap, showers, bath,
-          washing machine, boiler. One fitting, every outlet.
+          A whole house water filter, also sold as a whole house water
+          filtration system, a mains water filter or a point-of-entry filter,
+          sits on the pipe where water enters your home and treats everything
+          downstream: kitchen tap, showers, bath, washing machine, boiler. One
+          fitting, every outlet.
         </p>
         <p className="text-base text-body leading-relaxed mt-4">
           It is also the most misunderstood product we cover. Roughly half the
@@ -540,6 +542,12 @@ export default function BestWholeHouseFilterGuide() {
           </Link>
           .
         </p>
+
+        <GuideHardnessData threshold={200} heading="The hardness a whole house filter leaves in place">
+          A whole house filter does not change these numbers. Where your postcode
+          reads 200 mg/L or more, limescale is a softener&apos;s job, not a
+          filter&apos;s.
+        </GuideHardnessData>
 
         <div className="mt-8 card-elevated p-8 text-center rounded-2xl">
           <div className="flex justify-center mb-4">

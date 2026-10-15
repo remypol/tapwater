@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList, getHardnessAreaCodes } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
-import { CATEGORY_META, CATEGORY_ORDER } from "@/lib/products";
+import { CATEGORY_META, CATEGORY_ORDER, getProductsByCategory } from "@/lib/products";
+import { CATEGORY_LISTING } from "@/lib/filter-listing";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
 import { getNationalRivers } from "@/lib/river-status-data";
@@ -62,6 +63,19 @@ const GUIDE_SLUGS = [
   "qettle-vs-quooker",
   "fohen-vs-quooker",
 ];
+
+/**
+ * Guides with a real content date. Every other guide takes the latest data date,
+ * which moves with the pipeline rather than with the page; these five were
+ * rewritten on this date in the October 2026 test and keep it until they change.
+ */
+const GUIDE_LASTMOD: Record<string, string> = {
+  "best-whole-house-water-filter-uk": "2026-10-15",
+  "best-water-softener-uk": "2026-10-15",
+  "best-shower-filter-uk": "2026-10-15",
+  "best-under-sink-water-filter-uk": "2026-10-15",
+  "best-boiling-water-tap-uk": "2026-10-15",
+};
 
 /**
  * Get the most recent data date across all postcodes for static pages.
@@ -323,7 +337,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...GUIDE_SLUGS.map((slug) => ({
       url: `${BASE_URL}/guides/${slug}`,
-      lastModified: latestDataDate,
+      lastModified: GUIDE_LASTMOD[slug] ? new Date(GUIDE_LASTMOD[slug]) : latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
@@ -334,7 +348,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
-    ...CATEGORY_ORDER.map((cat) => ({
+    // Not listed: an empty category (it redirects to its guide) and a category
+    // whose canonical is its guide. A sitemap should only name canonical URLs.
+    ...CATEGORY_ORDER.filter(
+      (cat) => getProductsByCategory(cat).length > 0 && !CATEGORY_LISTING[cat]?.canonicalToGuide,
+    ).map((cat) => ({
       url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}`,
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,

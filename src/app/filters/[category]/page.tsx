@@ -12,6 +12,7 @@ import {
   getProductsByCategory,
 } from "@/lib/products";
 import type { ProductCategory } from "@/lib/types";
+import { CATEGORY_LISTING } from "@/lib/filter-listing";
 import { OG_IMAGE } from "@/lib/og";
 
 /* ── slug ↔ category mapping ──────────────────────────────────────────── */
@@ -261,7 +262,9 @@ export async function generateMetadata({
   const filters = count === 1 ? "1 Filter" : `${count} Filters`;
   const products = count === 1 ? "1 product" : `${count} products`;
 
-  const title = `${meta.title} — Compare ${filters}`;
+  const listing = CATEGORY_LISTING[category];
+  const guide = CATEGORY_GUIDE[category];
+  const title = listing?.title ?? `${meta.title} — Compare ${filters}`;
   const descFull = `${meta.description} ${products} compared with prices, ratings, and contaminant removal data.`;
   const descShort = `${meta.description} ${products} compared with prices and ratings.`;
   const firstSentence = meta.description.split(/(?<=\.)\s/)[0];
@@ -269,16 +272,20 @@ export async function generateMetadata({
   const description =
     descFull.length <= 155 ? descFull : descShort.length <= 155 ? descShort : descMin.slice(0, 155);
   const url = `https://www.tapwater.uk/filters/${meta.slug}`;
+  const canonical =
+    listing?.canonicalToGuide && guide
+      ? `https://www.tapwater.uk${guide.href.replace(/\/$/, "")}`
+      : url;
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical },
     openGraph: {
       images: OG_IMAGE,
       title,
       description,
-      url,
+      url: canonical,
       type: "website",
     },
     twitter: {
@@ -309,6 +316,7 @@ export default async function CategoryPage({
   const meta = CATEGORY_META[category];
   const products = getProductsByCategory(category);
   const guide = CATEGORY_GUIDE[category];
+  const listing = CATEGORY_LISTING[category];
   const intro = CATEGORY_INTRO[category] ?? [];
   const faqs = CATEGORY_FAQS[category] ?? [];
   // Salt and test tablets remove nothing, so a contaminant-removal table would be
@@ -348,15 +356,30 @@ export default async function CategoryPage({
 
         {/* Header */}
         <h1 className="font-display text-3xl sm:text-4xl text-ink italic tracking-tight">
-          {meta.title}
+          {listing?.h1 ?? meta.title}
         </h1>
+
+        {/* Buying guide first: this page lists, the guide recommends */}
+        {listing && guide && (
+          <div className="mt-5 p-5 bg-wash border border-rule rounded-xl max-w-2xl">
+            <p className="text-sm text-body">{listing.guideLead}</p>
+            <Link
+              href={guide.href}
+              className="inline-flex items-center gap-1.5 mt-2 text-base font-medium text-accent hover:underline"
+            >
+              {guide.title}
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        )}
+
         <p className="text-body mt-3 max-w-2xl text-lg">{meta.description}</p>
         <p className="text-sm text-muted mt-2">
           Best for: {meta.bestFor} &middot; {meta.priceRange}
         </p>
 
         {/* Guide link */}
-        {guide && (
+        {guide && !listing && (
           <Link
             href={guide.href}
             className="inline-flex items-center gap-1.5 mt-4 text-sm text-accent hover:underline"

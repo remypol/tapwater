@@ -564,6 +564,18 @@ export async function getHardnessAreaCodes(): Promise<string[]> {
   return areas.filter((a) => a.measured >= 2).map((a) => a.area).sort();
 }
 
+/**
+ * Every district with a hardness reading of its own, without the postcode-area
+ * estimates. The buying guides quote these as measurements, so nothing inferred
+ * may slip in. Same cached load as getHardness(), so no extra query.
+ */
+export async function getMeasuredHardness(): Promise<{ district: string; value: number }[]> {
+  if (!supabase) return [];
+  hardnessCache ??= loadHardness();
+  const { byDistrict } = await hardnessCache;
+  return Array.from(byDistrict, ([district, value]) => ({ district, value }));
+}
+
 export async function getHardness(
   district: string,
 ): Promise<HardnessReading | null> {

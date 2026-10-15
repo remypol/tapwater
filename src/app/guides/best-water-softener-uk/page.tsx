@@ -8,6 +8,7 @@ import { SoftenerGuidesNav } from "@/components/softener-guides-nav";
 import { HardnessBands } from "@/components/hardness-bands";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { GuideHardnessData } from "@/components/guide-hardness-data";
 import {
   GuideBreadcrumb,
   GuideByline,
@@ -23,7 +24,7 @@ export const revalidate = 86400;
 const year = new Date().getFullYear();
 const SLUG = "best-water-softener-uk";
 const URL = `https://www.tapwater.uk/guides/${SLUG}`;
-const TITLE = `Best Water Softener UK (${year})`;
+const TITLE = `Best Water Softener UK (${year}): Home Water Softeners Compared`;
 const DESCRIPTION =
   "Harvey, Kinetico, BWT, Monarch and Water2Buy compared: twin-cylinder vs metered, block salt vs tablets, real UK costs, and whether your postcode needs one at all.";
 
@@ -210,7 +211,7 @@ export default function BestWaterSoftenerGuide() {
         description={DESCRIPTION}
         url={URL}
         datePublished="2026-04-07"
-        dateModified={new Date().toISOString().split("T")[0]}
+        dateModified="2026-10-15"
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
@@ -220,17 +221,18 @@ export default function BestWaterSoftenerGuide() {
         <GuideBreadcrumb title="Best Water Softener UK" />
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
-          Best Water Softener UK ({year})
+          Best Home Water Softener UK ({year})
         </h1>
-        <GuideByline updated={`September ${year}`} />
+        <GuideByline updated="October 2026" />
 
         <p className="text-lg text-body leading-relaxed">
-          A water softener is the one home water product where the technology is
-          settled and the decision is not. Every unit worth buying works the same
-          way, by swapping the calcium and magnesium that make limescale for a
-          little sodium. What differs is whether it keeps softening while it
-          cleans itself, what kind of salt it eats, who fits it, and what all of
-          that costs over the fifteen or so years it will sit in your cupboard.
+          A home water softener is the one household water product where the
+          technology is settled and the decision is not. Every water softener worth
+          buying works the same way, by swapping the calcium and magnesium that
+          make limescale for a little sodium. What differs is whether it keeps
+          softening while it cleans itself, what kind of salt it eats, who fits
+          it, and what all of that costs over the fifteen or so years it will sit
+          in your cupboard.
         </p>
         <p className="text-base text-body leading-relaxed mt-4">
           This guide compares the five names you will actually be quoted for in
@@ -269,6 +271,11 @@ export default function BestWaterSoftenerGuide() {
         </p>
 
         <HardnessBands />
+
+        <GuideHardnessData threshold={200} heading="How hard is the water where you live?">
+          That is the level where a softener starts to pay for itself. The postcode
+          areas listed here sit furthest above and below it.
+        </GuideHardnessData>
 
         <div className="card-elevated p-8 text-center rounded-2xl">
           <div className="flex justify-center mb-4">
