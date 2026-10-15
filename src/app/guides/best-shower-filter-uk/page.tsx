@@ -16,6 +16,7 @@ import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { GuideHardnessData } from "@/components/guide-hardness-data";
 import { AffiliateNote, Kicker, TypicalPrice } from "@/components/commerce";
 import {
   GuideBreadcrumb,
@@ -34,7 +35,7 @@ const year = new Date().getFullYear();
 const SLUG = "best-shower-filter-uk";
 const URL = `https://www.tapwater.uk/guides/${SLUG}`;
 const PAGE_TYPE = "best-shower-filter-guide";
-const TITLE = `Best Shower Filter for Hard Water UK (${year}): 5 Compared`;
+const TITLE = `Best Shower Filter for Hard Water UK (${year}): Shower Heads and Inline Filters`;
 const DESCRIPTION =
   "Five UK shower filters compared: inline vs filter shower head, what they remove (chlorine, not limescale), running costs, picks for London and eczema.";
 
@@ -351,7 +352,7 @@ export default function BestShowerFilterGuide() {
         description={DESCRIPTION}
         url={URL}
         datePublished="2026-04-05"
-        dateModified={new Date().toISOString().split("T")[0]}
+        dateModified="2026-10-15"
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
@@ -363,10 +364,11 @@ export default function BestShowerFilterGuide() {
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
           Best Shower Filter for Hard Water UK ({year})
         </h1>
-        <GuideByline updated={`September ${year}`} />
+        <GuideByline updated="October 2026" />
 
         <p className="text-lg text-body leading-relaxed">
-          A shower filter removes chlorine. It does not remove hardness. If you
+          A hard water shower filter, whether it is a filter shower head or an
+          inline cartridge, removes chlorine. It does not remove hardness. If you
           came here because of limescale on the shower screen, soap that will
           not lather, or a film on your skin, a filter will not fix it and you
           should read the softener guides instead. If you came here because
@@ -641,6 +643,12 @@ export default function BestShowerFilterGuide() {
           </Link>{" "}
           shows where the bands fall.
         </p>
+
+        <GuideHardnessData threshold={200} heading="London's water, measured" list="london">
+          Below, the median for each London postcode area with three or more
+          measured districts. A shower filter takes out the chlorine and leaves
+          these numbers where they are.
+        </GuideHardnessData>
 
         {/* ── Eczema, hair, skin ──────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">

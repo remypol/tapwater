@@ -5,8 +5,11 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { ProductCard } from "@/components/product-card";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { GuideHardnessData } from "@/components/guide-hardness-data";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
+
+export const revalidate = 86400;
 
 const year = new Date().getFullYear();
 const URL = "https://www.tapwater.uk/guides/best-boiling-water-tap-uk";
@@ -169,7 +172,7 @@ export default function BestBoilingWaterTapGuide() {
         description="How instant boiling water taps work, what hard water does to them, and an honest comparison of Quooker, Qettle, Fohen, Franke and Hanstrom, with postcode hardness data."
         url={URL}
         datePublished="2026-09-07"
-        dateModified={new Date().toISOString().split("T")[0]}
+        dateModified="2026-10-15"
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
@@ -193,14 +196,14 @@ export default function BestBoilingWaterTapGuide() {
         </nav>
 
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
-          Best Boiling Water Tap UK {year}
+          Best Boiling Water Tap UK ({year})
         </h1>
         <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
           <span>
             By <span className="text-ink font-medium">TapWater.uk Research</span>
           </span>
           <span>&middot;</span>
-          <span>Updated September {year}</span>
+          <span>Updated October 2026</span>
         </div>
 
         <div className="prose-section">
@@ -209,8 +212,9 @@ export default function BestBoilingWaterTapGuide() {
             100°C under your sink, all day, every day. That is wonderful for
             tea and terrible for limescale, because a hot, still tank is the
             fastest place in your house for calcium carbonate to settle out. The
-            tap you should buy depends less on the brand than on a number your
-            water company already publishes: the hardness of your supply.
+            best boiling water tap for your kitchen depends less on the brand than
+            on a number your water company already publishes: the hardness of
+            your supply.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             This guide covers how the taps work, what 3-in-1 and 4-in-1 mean,
@@ -355,6 +359,12 @@ export default function BestBoilingWaterTapGuide() {
           </Link>{" "}
           on our hardness page.
         </p>
+
+        <GuideHardnessData threshold={250} heading="Where a boiling tap's filter works hardest">
+          From 250 mg/L the tank needs the most attention: budget for frequent
+          cartridges or a softener. These are the postcode areas furthest above
+          and below that line.
+        </GuideHardnessData>
 
         {/* ── Brand ledger ─────────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-2">

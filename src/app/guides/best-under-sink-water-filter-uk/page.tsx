@@ -8,10 +8,14 @@ import { ProductComparisonTable } from "@/components/product-comparison-table";
 import { RunningCostComparison } from "@/components/running-cost";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
+import { GuidePfasData } from "@/components/guide-pfas-data";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
 
+export const revalidate = 86400;
+
 const year = new Date().getFullYear();
+const TITLE = `Best Under Sink Water Filter UK (${year}): Kitchen Drinking Water Filters Compared`;
 
 const FAQ_DATA = [
   {
@@ -38,7 +42,7 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Best Under Sink Water Filter UK ${year}`,
+    title: TITLE,
     description:
       "Under sink water filters compared on certifications, what they actually remove, and true running costs, matched to real UK water quality data.",
     alternates: {
@@ -46,7 +50,7 @@ export function generateMetadata(): Metadata {
     },
     openGraph: {
       images: OG_IMAGE,
-      title: `Best Under Sink Water Filter UK (${year})`,
+      title: TITLE,
       description:
         "Under sink water filters compared on certifications, removal claims, and true running costs.",
       url: "https://www.tapwater.uk/guides/best-under-sink-water-filter-uk",
@@ -55,7 +59,7 @@ export function generateMetadata(): Metadata {
     twitter: {
       images: OG_IMAGE,
       card: "summary_large_image",
-      title: `Best Under Sink Water Filter UK (${year})`,
+      title: TITLE,
       description:
         "Under sink water filters compared on certifications and true running costs.",
     },
@@ -239,11 +243,11 @@ export default function BestUnderSinkFilterGuide() {
         ]}
       />
       <ArticleSchema
-        headline={`Best Under Sink Water Filter UK ${year}`}
+        headline={TITLE}
         description="Under sink water filters compared on certifications, removal claims, and true running costs, matched to real UK water quality data from 2,800 postcodes."
         url="https://www.tapwater.uk/guides/best-under-sink-water-filter-uk"
         datePublished="2026-08-20"
-        dateModified={new Date().toISOString().split("T")[0]}
+        dateModified="2026-10-15"
         authorName="TapWater.uk Research"
         authorUrl="https://www.tapwater.uk/about"
       />
@@ -276,14 +280,16 @@ export default function BestUnderSinkFilterGuide() {
 
         {/* ── Hero ─────────────────────────────────────────────────── */}
         <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
-          Best Under Sink Water Filter UK {year}
+          Best Under Sink Water Filter UK ({year})
         </h1>
-        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-3 mb-8 text-sm text-muted">
           <span>
             By <span className="text-ink font-medium">TapWater.uk Research</span>
           </span>
           <span>&middot;</span>
-          <span>Published August {year}</span>
+          <span>Published August 2026</span>
+          <span>&middot;</span>
+          <span>Updated October 2026</span>
         </div>
 
         <div className="prose-section">
@@ -294,11 +300,11 @@ export default function BestUnderSinkFilterGuide() {
             that basic jugs rarely match.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
-            We compared the under sink water filters most readily available in
-            the UK on their certifications, what they are actually rated to
-            remove, and what a year of cartridges really costs. Both picks fit
-            a standard UK kitchen cupboard, and one of them is a genuine DIY
-            install.
+            To find the best under sink water filter for a UK kitchen, we
+            compared the models most readily available here on their
+            certifications, what they are actually rated to remove, and what a
+            year of cartridges really costs. Both picks fit a standard UK
+            kitchen cupboard, and one of them is a genuine DIY install.
           </p>
         </div>
 
@@ -412,6 +418,13 @@ export default function BestUnderSinkFilterGuide() {
             </p>
           </div>
         </div>
+
+        <GuidePfasData>
+          For this choice: of the two filters here, only the Waterdrop 10UA makes
+          a PFAS claim, and that claim is the maker&apos;s own rather than an
+          NSF/ANSI 53 verification. If PFAS is the reason you are buying, an
+          under-sink reverse osmosis system is the verified route.
+        </GuidePfasData>
 
         <div className="mt-8 card-elevated p-8 text-center rounded-2xl">
           <div className="flex justify-center mb-4">
