@@ -1,5 +1,7 @@
 # Thames Water results are not matched to the right districts
 
+**Fixed on 17 November 2026.** Districts now take the zones Thames's own checker names for them, the 189 districts Thames does not mainly supply were given their real supplier's results, and four more faults found on the way were fixed too. The record is `docs/data/suppliers-and-zones-2026-11-17.md`. What follows is the problem as it was first written up.
+
 Found 17 November 2026 while chasing readings that looked too soft (Epsom 75 to 138 mg/L, Woking 138 to 204). It is not a unit error. Not fixed yet; what was done instead is at the bottom.
 
 ## What is wrong

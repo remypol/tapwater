@@ -70,12 +70,13 @@ export default function DataSourcesPage() {
         <p className="text-base text-body leading-relaxed mb-4">
           The <strong className="text-ink">Stream Water Data Portal</strong> is a collaborative
           initiative where UK water companies publish their drinking water quality test results.
-          Currently, 16 of 18 major water companies participate, including Yorkshire Water,
-          Severn Trent, United Utilities, Anglian Water, Southern Water, and others.
+          We load the sample results of 15 companies from it, including Yorkshire Water,
+          Severn Trent, United Utilities, Anglian Water, Southern Water and Affinity Water. The
+          full list is under Coverage below.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          Stream data includes <strong className="text-ink">121+ regulated parameters</strong> tested
-          by the Drinking Water Inspectorate (DWI): metals (lead, arsenic, copper), disinfection
+          Depending on the company, a dataset covers between about 35 and 120 substances, tested by
+          the water company under the rules the Drinking Water Inspectorate (DWI) enforces: metals (lead, arsenic, copper), disinfection
           byproducts (trihalomethanes, bromate), nutrients (nitrate, nitrite, fluoride), pesticides,
           microbiological indicators (E. coli, coliforms), and physical properties (turbidity, colour,
           pH). Results are mapped to Lower Super Output Areas (LSOAs), which we link to postcode

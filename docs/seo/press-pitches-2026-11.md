@@ -11,6 +11,8 @@ Replaces `press-pitches-2026-09.md`. The four September stories were checked aga
 | 2. Lead at 6 times the limit in London | **Do not send** | DA5 and SE10 share the top place with the identical reading, 0.0636 mg/L. That is one Thames zone's figure handed to two districts in rotation; we cannot say which district it belongs to. These districts are now removed from the public rankings |
 | 3. Best tap water (Wrexham, Northumberland) | **Hold** | The top places changed after today's scoring fix (now Northumberland, Bradford, Cumberland). The claim is sound in kind, but London and the Thames Valley are excluded from district rankings for now, and "best in Britain" with that gap needs saying out loud. Revisit after the Thames re-matching |
 
+**Update, 17 November 2026 (evening).** The data behind stories 1 to 3 has since been corrected (`docs/data/suppliers-and-zones-2026-11-17.md`): Thames districts now carry their real zones, a single extreme sample no longer stands for a zone, and 476 districts changed supplier. The lead figure in story 2 (0.0636 mg/L) was one sample of 562 µg/l among nine in zone SLE25; the other eight average 1.3 µg/l, so that story is dead, not postponed. Stories 1 and 3 need their tables drawn again from the corrected data, and the hardest-water entries still need checking against each company's own figure, before anything is sent.
+
 ## Story 4, ready: forever chemicals in the rivers and groundwater near UK cities
 
 All figures from the Environment Agency Water Quality Archive, as stored on 17 November 2026.
