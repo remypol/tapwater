@@ -1,5 +1,5 @@
 import type { HardnessTown } from "@/lib/hardness-towns";
-import { isThamesRotationDistrict } from "@/lib/thames-zones";
+import { isThamesApproximateDistrict } from "@/lib/thames-zones";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { AffiliateNote } from "@/components/commerce";
@@ -329,8 +329,8 @@ export function HardnessArea({ data, faqs, towns = [], softenerPrice, requests =
           <h2 className="wt-h2" id="districts">Hardness by {data.area} district</h2>
           <p className="wt-sub">
 Hardest first. Hard starts at 180 mg/L, very hard at 250.
-            {districts.some((d) => d.measured && isThamesRotationDistrict(d.district))
-              ? " Some figures come from water company supply zones, which do not follow postcode boundaries, so read them as typical for the area."
+            {districts.some((d) => d.measured && isThamesApproximateDistrict(d.district))
+              ? " A few inner London figures come from the supply zones around the district, because Thames Water's checker cannot place it, so read those as typical for the area."
               : ""}
             {measured.length < districts.length ? " Districts marked with an asterisk take the area's median rather than a reading of their own." : ""}
           </p>
@@ -356,7 +356,7 @@ Hardest first. Hard starts at 180 mg/L, very hard at 250.
         <section className="wt-chalk">
           <div className="wt-inner">
             <h2 className="wt-h2">A water softener in {town}</h2>
-            {softenerPrice ? <SoftenerLocalFacts place={town} area={data.area} hardness={summary.median} softenerPrice={softenerPrice} requests={requests} approximate={districts.some((d) => d.measured && isThamesRotationDistrict(d.district))} /> : null}
+            {softenerPrice ? <SoftenerLocalFacts place={town} area={data.area} hardness={summary.median} softenerPrice={softenerPrice} requests={requests} approximate={districts.some((d) => d.measured && isThamesApproximateDistrict(d.district))} /> : null}
             <div className="wt-do-grid" style={{ marginTop: 40 }}>
               <SoftenerPanel
                 hardness={summary.median}
@@ -462,10 +462,10 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
   const hardest = measured[0];
   const softest = measured[measured.length - 1];
   const single = measured.length === 1;
-  // Thames Water publishes results by supply zone and our match of zones to
-  // districts is approximate, so for these towns we give the typical figure and
-  // do not compare one district with another or name the supplier.
-  const approximate = measured.some((d) => isThamesRotationDistrict(d.district));
+  // Thames Water's checker cannot place E1 to E9, N1 to N9 and W2 to W9 in a
+  // supply zone, so those districts carry their neighbours' zones. For towns made
+  // of them we give the typical figure and do not compare one district with another.
+  const approximate = measured.some((d) => isThamesApproximateDistrict(d.district));
   const supplierText = approximate || suppliers.length === 0 ? null : suppliers.length === 1 ? suppliers[0] : `${suppliers.slice(0, -1).join(", ")} and ${suppliers[suppliers.length - 1]}`;
 
   return (
@@ -513,7 +513,7 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
           <h2 className="wt-h2" id="districts">Hardness by {town.town} postcode district</h2>
           <p className="wt-sub">
             {approximate
-              ? "These figures come from water company supply zones, which do not follow postcode boundaries. We match zones to districts approximately, so read each one as typical for the area, not exact for that district."
+              ? "Thames Water's postcode checker cannot place these districts in a supply zone, so each figure comes from the zones around it. Read it as typical for the area, not exact for that district."
               : estimated > 0
                 ? `Districts marked with an asterisk have no reading of their own and take the ${town.area} postcode area's median.`
                 : "Every figure is a water company reading for that district."}{" "}

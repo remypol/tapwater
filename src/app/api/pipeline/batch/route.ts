@@ -7,7 +7,7 @@ import type { StreamRecord } from "@/lib/stream-api";
 import { getStreamSource } from "@/lib/stream-sources";
 import { fetchStreamData } from "@/lib/stream-api";
 import { getLsoasForDistrict } from "@/lib/lsoa-lookup";
-import { getSupplier } from "@/lib/suppliers";
+import { getSupplierFor } from "@/lib/suppliers";
 
 export const maxDuration = 300;
 
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         let streamRecords: StreamRecord[] = [];
         try {
           if (seedData) {
-            const supplier = getSupplier(seedData.city);
+            const supplier = getSupplierFor(seedData.district, seedData.city);
             const streamSource = getStreamSource(supplier.id);
             if (streamSource) {
               const lsoas = await getLsoasForDistrict(district);

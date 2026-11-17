@@ -8,7 +8,7 @@ import { GeoCitation } from "@/components/geo-citation";
 import { GuideBreadcrumb, GuideByline, GuideFaq, GuideFooter } from "@/components/guide-chrome";
 import { getHardnessMap } from "@/lib/data";
 import { postcodeAreaName } from "@/lib/postcode-areas";
-import { isThamesRotationDistrict } from "@/lib/thames-zones";
+import { isThamesApproximateDistrict } from "@/lib/thames-zones";
 import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
 import {
   PART_L_DEFINITION,
@@ -78,7 +78,7 @@ export default async function HardWaterBoilerRegulationsGuide() {
   const rows: PartLDistrict[] = districts.map((d) => ({
     district: d.district,
     value: d.value,
-    basis: !d.measured ? "e" : isThamesRotationDistrict(d.district) ? "a" : "m",
+    basis: !d.measured ? "e" : isThamesApproximateDistrict(d.district) ? "a" : "m",
   }));
   const summary = summarisePartL(rows);
   const share = summary.measured > 0 ? Math.round((summary.over / summary.measured) * 100) : 0;
@@ -190,8 +190,9 @@ export default async function HardWaterBoilerRegulationsGuide() {
           </table>
         </div>
         <p className="text-sm text-muted leading-relaxed mt-3">
-          Counted from readings only; districts where we hold just a postcode-area estimate are left out. London and Thames Valley figures come
-          from Thames Water supply zones, matched to districts approximately.{" "}
+          Counted from readings only; districts where we hold just a postcode-area estimate are left out. Thames Water reports by supply
+          zone, so its districts take the average of the zones they fall in. In inner London (E1 to E9, N1 to N9, W2 to W9) Thames&apos;s
+          checker cannot name the zone, and we use the zones of the districts around them.{" "}
           <Link href="/guides/water-hardness-map" className="text-accent hover:underline">
             See the whole country on the hardness map
           </Link>

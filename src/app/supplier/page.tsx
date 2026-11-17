@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Building2, ChevronRight } from "lucide-react";
 
-import { MOCK_SUPPLIERS } from "@/lib/mock-data";
-import { getPostcodeData } from "@/lib/data";
+import { getPostcodeData, getSuppliersList } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import { BreadcrumbSchema } from "@/components/json-ld";
 import { OG_IMAGE } from "@/lib/og";
@@ -11,12 +10,12 @@ import { OG_IMAGE } from "@/lib/og";
 export const metadata: Metadata = {
   title: "UK Water Companies — Water Quality by Supplier",
   description:
-    "Compare water quality scores across all 16 major UK water companies. See which supplier has the best and worst tap water and coverage areas.",
+    "Compare water quality scores across the major UK water companies. See which supplier has the best and worst tap water and which postcode districts each one supplies.",
   openGraph: {
     images: OG_IMAGE,
     title: "UK Water Companies — Water Quality Comparison",
     description:
-      "Compare water quality scores across all 16 major UK water companies.",
+      "Compare water quality scores across the major UK water companies.",
     url: "https://www.tapwater.uk/supplier",
     type: "website",
   },
@@ -31,8 +30,9 @@ function scoreTextClass(score: number): string {
 
 export default async function SuppliersPage() {
   // Compute average scores for each supplier
+  const suppliers = await getSuppliersList();
   const supplierData = await Promise.all(
-    MOCK_SUPPLIERS.map(async (supplier) => {
+    suppliers.map(async (supplier) => {
       const scores: number[] = [];
       let streamCount = 0;
       for (const area of supplier.postcodeAreas) {
@@ -79,7 +79,7 @@ export default async function SuppliersPage() {
         UK Water Companies
       </h1>
       <p className="text-muted max-w-2xl mb-10">
-        All {MOCK_SUPPLIERS.length} major UK water companies ranked by average water
+        All {suppliers.length} major UK water companies ranked by average water
         quality score. Click any company to see detailed postcode-level data.
       </p>
 

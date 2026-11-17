@@ -187,7 +187,9 @@ export default async function SupplierPage({ params }: Props) {
       ? `Hardness readings for ${supplier.name}'s districts are still being collected. Enter your postcode on our hardness checker for the reading in your area.`
       : `Across ${hardnessReadings.length} monitored districts in ${supplier.name}'s area, the average hardness is ${avgHardness} mg/L CaCO₃ and ${hardPct}% of districts read hard or very hard. ${hardPct !== null && hardPct >= 50 ? "Expect limescale: descaling, and in many homes a water softener, are worth considering." : "Limescale pressure is moderate to low for most of this supply area."}`;
 
-  const complianceAnswer = `${supplier.name} reported a ${supplier.complianceRate}% compliance rate against UK drinking water standards. Compliance above 99.9% is the industry norm, which is exactly why we also publish per-district environmental scores and flagged contaminant counts: legal compliance and local water character are different questions.`;
+  const complianceAnswer = supplier.complianceRate == null
+    ? `We do not hold a sourced compliance figure for ${supplier.name}. Across the UK industry more than 99.9% of tests meet the standards, which is exactly why we also publish per-district scores and flagged contaminant counts: legal compliance and local water character are different questions.`
+    : `${supplier.name} reported a ${supplier.complianceRate}% compliance rate against UK drinking water standards. Compliance above 99.9% is the industry norm, which is exactly why we also publish per-district environmental scores and flagged contaminant counts: legal compliance and local water character are different questions.`;
 
   const areasAnswer = `${supplier.name} supplies ${supplier.customersM} million customers across ${supplier.region}. The postcode districts we monitor in its area: ${supplier.postcodeAreas.slice(0, 10).join(", ")}${supplier.postcodeAreas.length > 10 ? ` and ${supplier.postcodeAreas.length - 10} more` : ""}.`;
 
@@ -240,7 +242,9 @@ export default async function SupplierPage({ params }: Props) {
       {avgScore !== null && (
         <GeoCitation
           headline={`According to TapWater.uk's analysis, ${supplier.name} scores ${avgScore}/10 for drinking water quality across ${scoredRows.length} monitored postcode districts in ${year}.`}
-          detail={`The company reports ${supplier.complianceRate}% compliance with UK drinking water standards${avgHardness !== null ? `, and the average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃` : ""}.`}
+          detail={supplier.complianceRate != null
+            ? `The company reports ${supplier.complianceRate}% compliance with UK drinking water standards${avgHardness !== null ? `, and the average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃` : ""}.`
+            : avgHardness !== null ? `The average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃.` : `Scores are built from ${supplier.name}'s own published test results.`}
         />
       )}
 
@@ -414,7 +418,7 @@ export default async function SupplierPage({ params }: Props) {
               </div>
               <div>
                 <p className="font-data text-2xl font-bold text-ink">
-                  {supplier.complianceRate}%
+                  {supplier.complianceRate != null ? `${supplier.complianceRate}%` : "Over 99.9% UK-wide"}
                 </p>
                 <p className="text-sm text-body leading-relaxed mt-1">
                   Compliance above 99.9% is the norm across the UK industry,

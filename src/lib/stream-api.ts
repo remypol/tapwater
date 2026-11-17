@@ -26,6 +26,8 @@ export interface StreamRecord {
 
 // ── Date parsing ──
 
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
 export function parseStreamDate(
   raw: number | string | null,
   format: "epoch" | "string",
@@ -55,6 +57,15 @@ export function parseStreamDate(
       // M/D/YYYY — American format (or ambiguous, default to M/D)
       const [month, day, year] = parts;
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    }
+
+    // Format C: "30-Dec-24" → DD-Mon-YY (Portsmouth Water)
+    const named = datePart.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2}|\d{4})$/);
+    if (named) {
+      const month = MONTHS.indexOf(named[2].toLowerCase());
+      if (month < 0) return "";
+      const year = named[3].length === 2 ? `20${named[3]}` : named[3];
+      return `${year}-${String(month + 1).padStart(2, "0")}-${named[1].padStart(2, "0")}`;
     }
 
     // Format B: "2024-20-12" → YYYY-DD-MM (Welsh Water)

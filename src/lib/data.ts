@@ -5,11 +5,11 @@
  * All functions are async — pages must await them.
  */
 
-import { isThamesRotationDistrict } from "./thames-zones";
+import { getThamesZones, isThamesApproximateDistrict } from "./thames-zones";
 import { POST_TOWNS } from "@/data/post-towns";
 import { buildHardnessTowns, type HardnessTown } from "./hardness-towns";
 import { supabase } from "./supabase";
-import { getSupplier } from "./suppliers";
+import { getDistrictSuppliers, getSupplier, getSupplierFor } from "./suppliers";
 import { computeScore, type ScoreResult } from "./scoring";
 import type { PostcodeData, ContaminantReading, SupplierData } from "./types";
 
@@ -33,7 +33,7 @@ async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
   const cache = new Map<string, PostcodeData>();
 
   for (const entry of seedData) {
-    const supplier = getSupplier(entry.city);
+    const supplier = getSupplierFor(entry.district, entry.city);
     const observations = entry.topReadings.map((r) => ({
       determinand: r.determinand,
       value: r.value,
@@ -68,7 +68,7 @@ async function loadJsonFallback(): Promise<Map<string, PostcodeData>> {
       longitude: entry.longitude,
       supplier: supplier.name,
       supplierId: supplier.id,
-      supplyZone: `${entry.city} Central`,
+      supplyZone: "",
       safetyScore: score.safetyScore,
       scoreGrade: score.scoreGrade,
       contaminantsTested: score.contaminantsTested,
@@ -173,9 +173,14 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         supply_zone: string | null;
       };
 
-      const supplier = pd.supplier_id && supplierMap.has(pd.supplier_id)
-        ? supplierMap.get(pd.supplier_id)!
-        : getSupplier(pd.city);
+      // Ofwat's map decides in England and Wales; the stored id and the council
+      // list only cover what the map does not (Scotland, Northern Ireland).
+      const mapped = getDistrictSuppliers(row.postcode_district)?.[0];
+      const supplier = mapped
+        ? { id: mapped.id, name: mapped.name }
+        : pd.supplier_id && supplierMap.has(pd.supplier_id)
+          ? supplierMap.get(pd.supplier_id)!
+          : getSupplier(pd.city);
 
       const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
         .map((r) => ({ ...r, source: "drinking" as const }));
@@ -195,7 +200,7 @@ async function loadFromSupabase(): Promise<Map<string, PostcodeData> | null> {
         longitude: pd.longitude,
         supplier: supplier.name,
         supplierId: supplier.id,
-        supplyZone: pd.supply_zone ?? `${pd.city} Central`,
+        supplyZone: realSupplyZone(pd.supply_zone, pd.city, row.postcode_district),
         safetyScore: row.safety_score,
         scoreGrade: row.score_grade as PostcodeData["scoreGrade"],
         contaminantsTested: row.contaminants_tested,
@@ -257,6 +262,20 @@ async function loadSuppliersBatch(
     }
   }
   return result;
+}
+
+/**
+ * The supply zone to show, or "" when we do not know it. Rows written before
+ * November 2026 hold "<council> Central", which is not a real zone name; the
+ * Thames import overwrites it where a real one exists (Reading Central is real
+ * and is only kept for districts on the Thames zone map).
+ */
+const isOnThamesZoneMap = (district: string) => getThamesZones(district) != null;
+
+function realSupplyZone(zone: string | null, city: string, district?: string): string {
+  if (!zone) return "";
+  if (zone === `${city} Central` && !(district && isOnThamesZoneMap(district))) return "";
+  return zone;
 }
 
 // ── Unified loader: Supabase first, JSON fallback ──
@@ -660,11 +679,10 @@ export function isRankable(p: PostcodeData): boolean {
     p.dataSource !== "ea-only" &&
     p.lastSampleDate >= cutoffStr &&
     p.contaminantsTested >= MIN_TESTED_TO_RANK &&
-    // Thames Water zone results are not yet matched to the right district (two
-    // districts topped the lead table with the same zone's reading), so no district
-    // on that list may be named in a ranking until scripts/map-thames-zones.ts has
-    // been run and the import uses it.
-    !isThamesRotationDistrict(p.district)
+    // Thames's lookup cannot place E1 to E9, N1 to N9 and W2 to W9 in a supply
+    // zone, so those borrow their neighbours' zones. Good enough for the page,
+    // which says so; not good enough to name the district in a ranking.
+    !isThamesApproximateDistrict(p.district)
   );
 }
 
@@ -768,7 +786,7 @@ export async function getSuppliersList(): Promise<SupplierData[]> {
         .order("customers_m", { ascending: false });
 
       if (!error && data && data.length > 0) {
-        return data.map((row) => ({
+        return withRealDistricts(data.map((row) => ({
           id: row.id,
           name: row.name,
           region: row.region,
@@ -776,7 +794,7 @@ export async function getSuppliersList(): Promise<SupplierData[]> {
           complianceRate: row.compliance_rate,
           website: row.website,
           postcodeAreas: row.postcode_areas ?? [],
-        }));
+        })));
       }
     } catch {
       // Fall through to mock data
@@ -785,7 +803,31 @@ export async function getSuppliersList(): Promise<SupplierData[]> {
 
   // Fallback to static data
   const { MOCK_SUPPLIERS } = await import("./mock-data");
-  return MOCK_SUPPLIERS;
+  return withRealDistricts(MOCK_SUPPLIERS);
+}
+
+/**
+ * Give each supplier the districts it really supplies.
+ *
+ * The static list carries a handful of hand-typed districts per company (South
+ * East Water had one, and that one is Southern Water's), so a company's average
+ * score was an average of almost nothing. Every district with a page knows its
+ * supplier (Ofwat's map in England and Wales), so the list is read from there.
+ * A supplier with no district in the data keeps its static list.
+ */
+async function withRealDistricts(suppliers: SupplierData[]): Promise<SupplierData[]> {
+  const cache = await loadData();
+  const bySupplier = new Map<string, string[]>();
+  for (const [district, data] of cache) {
+    const list = bySupplier.get(data.supplierId) ?? [];
+    list.push(district);
+    bySupplier.set(data.supplierId, list);
+  }
+  const natural = new Intl.Collator("en", { numeric: true });
+  return suppliers.map((s) => {
+    const districts = bySupplier.get(s.id);
+    return districts && districts.length > 0 ? { ...s, postcodeAreas: districts.sort(natural.compare) } : s;
+  });
 }
 
 /**
@@ -916,9 +958,12 @@ export async function getRankedPostcodes(): Promise<{
             latitude: number; longitude: number;
             supplier_id: string | null; supply_zone: string | null;
           };
-          const supplier = pd.supplier_id
-            ? await getSupplierById(pd.supplier_id)
-            : getSupplier(pd.city);
+          const mapped = getDistrictSuppliers(row.postcode_district)?.[0];
+          const supplier = mapped
+            ? { id: mapped.id, name: mapped.name }
+            : pd.supplier_id
+              ? await getSupplierById(pd.supplier_id)
+              : getSupplier(pd.city);
           const drinkingReadings = ((row.drinking_water_readings ?? []) as ContaminantReading[])
             .map((r) => ({ ...r, source: "drinking" as const }));
           const envReadings = (row.all_readings ?? []) as ContaminantReading[];
@@ -937,7 +982,7 @@ export async function getRankedPostcodes(): Promise<{
             longitude: pd.longitude,
             supplier: supplier.name,
             supplierId: supplier.id,
-            supplyZone: pd.supply_zone ?? `${pd.city} Central`,
+            supplyZone: realSupplyZone(pd.supply_zone, pd.city, row.postcode_district),
             safetyScore: row.safety_score,
             scoreGrade: row.score_grade as PostcodeData["scoreGrade"],
             contaminantsTested: row.contaminants_tested,
@@ -960,9 +1005,9 @@ export async function getRankedPostcodes(): Promise<{
         };
 
         return {
-          // Same guard as isRankable: no Thames-list district is named until its zone is matched.
-          worst: await Promise.all(worstRes.data.filter((r) => !isThamesRotationDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
-          best: await Promise.all(bestRes.data.filter((r) => !isThamesRotationDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
+          // Same guard as isRankable: no district on borrowed Thames zones is named.
+          worst: await Promise.all(worstRes.data.filter((r) => !isThamesApproximateDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
+          best: await Promise.all(bestRes.data.filter((r) => !isThamesApproximateDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
         };
       }
     } catch {

@@ -7,7 +7,7 @@ import { formatPriceRange, installedPriceRange, MARKETPLACE_GUIDE } from "@/lib/
 import { softenerRequestsByArea } from "@/lib/softener-local";
 import { householdLoad, REQUEST_WINDOW_DAYS } from "@/lib/softener-sizing";
 import { formatSampleDate } from "@/lib/tank-plan";
-import { isThamesRotationDistrict } from "@/lib/thames-zones";
+import { isThamesApproximateDistrict } from "@/lib/thames-zones";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
@@ -43,7 +43,7 @@ function townTitle(town: HardnessTown): string {
 }
 
 function townDescription(town: HardnessTown): string {
-  const approximate = town.districts.some((d) => d.measured && isThamesRotationDistrict(d.district));
+  const approximate = town.districts.some((d) => d.measured && isThamesApproximateDistrict(d.district));
   const range = approximate ? "" : town.measuredCount > 1 ? `, from ${town.min} to ${town.max} mg/L across ${town.measuredCount} measured districts` : ` in ${town.districts.find((d) => d.measured)?.district}`;
   return `${town.town} tap water is ${town.median >= 250 ? "very hard" : "hard"} at ${town.median} mg/L${range}. District table, what it costs you and softener quotes.`;
 }
@@ -77,7 +77,7 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
     softenerRequestsByArea(),
   ]);
   const requests = requestsByArea.get(town.area) ?? 0;
-  const approximate = measured.some((d) => isThamesRotationDistrict(d.district));
+  const approximate = measured.some((d) => isThamesApproximateDistrict(d.district));
   // The supplier on record for these districts comes from the same unreliable list.
   const suppliers = approximate ? [] : [...new Set(records.map((r) => r?.supplier).filter((s): s is string => Boolean(s)))];
   const newest = records.map((r) => r?.lastSampleDate).filter((d): d is string => Boolean(d)).sort().pop();

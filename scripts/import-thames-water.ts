@@ -1,177 +1,184 @@
 /**
- * Thames Water Zone Data → Supabase Import
+ * Thames Water zone reports → the database, district by district.
  *
- * Takes parsed Thames Water zone PDFs (data/thames-water/all-zones.json)
- * and imports the parameter data into drinking_water_readings + page_data.
+ * For every district Thames mainly supplies (src/data/thames-zone-map.json) the
+ * readings are the average of the zone reports it falls in, weighted by how much
+ * of the district each zone covers (src/lib/thames-blend.ts). This replaces the
+ * old import, which handed zone reports to districts in rotation.
  *
- * Zone-to-postcode mapping strategy:
- * - Use postcode_lsoa + postcodes.io to find which postcode districts
- *   are in the Thames Water supply area
- * - For each Thames Water postcode district, find the nearest zone
- *   by matching the postcode's admin_district to zone names
- * - Assign the zone's parameter data to that postcode district
+ * It also clears Thames zone readings from districts that are no longer on the
+ * map: places another company supplies, which carried a Thames zone's figures
+ * by mistake. Those districts get their real supplier's results from
+ * scripts/refresh-districts.ts.
  *
- * Usage: npx tsx scripts/import-thames-water.ts
+ *   export $(grep -E "^(NEXT_PUBLIC_SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY)=" .env.local | xargs)
+ *   npx tsx scripts/import-thames-water.ts --dry-run
+ *   npx tsx scripts/import-thames-water.ts [--only RG1,KT1]
+ *
+ * The full yearly routine, when Thames publishes a new year's reports:
+ *   npx tsx scripts/map-thames-zones.ts                      (only for districts not yet asked)
+ *   python3 scripts/fetch-thames-zone-reports.py --refresh    (every report again, one every four seconds)
+ *   npx tsx scripts/build-thames-zone-map.ts
+ *   npx tsx scripts/import-thames-water.ts
  */
+import { readFileSync } from "node:fs";
+import { getSupabase } from "../src/lib/supabase";
+import { upsertPageData, writeStreamReadings } from "../src/lib/db-writer";
+import { blendZones, zoneLabel, type ZoneReport } from "../src/lib/thames-blend";
+import { THAMES_DISTRICTS, getThamesZones } from "../src/lib/thames-zones";
+import type { PostcodeSeedData } from "../src/lib/ea-fetcher";
+import type { StreamRecord } from "../src/lib/stream-api";
 
-import { createClient } from "@supabase/supabase-js";
-import { readFileSync } from "fs";
-import { computeScore } from "../src/lib/scoring";
-import { THAMES_ZONE_POSTCODES as ZONE_PREFIX_POSTCODES } from "../src/lib/thames-zones";
+const flags = process.argv.slice(2);
+const dryRun = flags.includes("--dry-run");
+const onlyIdx = flags.indexOf("--only");
+const only = onlyIdx >= 0 ? new Set(flags[onlyIdx + 1].split(",").map((d) => d.trim().toUpperCase())) : null;
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const HARDNESS = "Hardness (Total) as CaCO3";
+const SOURCE = "thames_water_zone";
+const db = getSupabase();
 
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-  console.error("Missing SUPABASE env vars. Run: source .env.local");
-  process.exit(1);
+interface DistrictRow { id: string; area_name: string; city: string; region: string; latitude: number; longitude: number }
+
+async function allDistricts(): Promise<Map<string, DistrictRow>> {
+  const out = new Map<string, DistrictRow>();
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await db.from("postcode_districts").select("id, area_name, city, region, latitude, longitude").order("id").range(offset, offset + 999);
+    if (error) throw error;
+    for (const d of data ?? []) out.set(d.id, d as DistrictRow);
+    if (!data || data.length < 1000) break;
+  }
+  return out;
 }
 
-const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-interface ZoneParam {
-  parameter: string;
-  unit: string;
-  regulatory_limit: string | null;
-  mean: { value: number; below_limit: boolean } | null;
-  max: { value: number; below_limit: boolean } | null;
-  total_samples: number | null;
-  contraventions: number;
+/** Districts that hold Thames zone readings today, with their hardness. */
+async function currentThamesHardness(): Promise<Map<string, number>> {
+  const out = new Map<string, number>();
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await db
+      .from("drinking_water_readings")
+      .select("id, postcode_district, value")
+      .eq("source", SOURCE)
+      .eq("determinand", HARDNESS)
+      .order("id")
+      .range(offset, offset + 999);
+    if (error) throw error;
+    for (const r of data ?? []) out.set(r.postcode_district, Number(r.value));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
 }
-
-interface Zone {
-  mapCode: string;
-  zone_code?: string;
-  zone_name?: string;
-  population?: number;
-  parameters: ZoneParam[];
-  year: number;
-}
-
 
 async function main() {
-  // Load zone data
-  const zones: Zone[] = JSON.parse(
-    readFileSync("data/thames-water/all-zones.json", "utf-8"),
-  );
-  console.log(`Loaded ${zones.length} Thames Water zones`);
+  const reports = new Map((JSON.parse(readFileSync("data/thames-water/all-zones.json", "utf8")) as ZoneReport[]).map((z) => [z.mapCode, z]));
+  const districts = await allDistricts();
+  const before = await currentThamesHardness();
+  console.log(`${reports.size} zone reports, ${THAMES_DISTRICTS.length} Thames districts on the map, ${before.size} districts hold Thames readings today${dryRun ? " (dry run)" : ""}`);
 
-  // Group zones by prefix
-  const zonesByPrefix: Record<string, Zone[]> = {};
-  for (const zone of zones) {
-    const prefix = zone.mapCode.replace(/\d+$/, "");
-    if (!zonesByPrefix[prefix]) zonesByPrefix[prefix] = [];
-    zonesByPrefix[prefix].push(zone);
-  }
-
-  // For each prefix, distribute zones across postcodes
-  let totalImported = 0;
-  let totalPostcodes = 0;
-
-  for (const [prefix, prefixZones] of Object.entries(zonesByPrefix)) {
-    const postcodes = ZONE_PREFIX_POSTCODES[prefix];
-    if (!postcodes) {
-      console.log(`  Skipping prefix ${prefix} — no postcode mapping`);
+  // ── 1. Districts on the map: write the blend of their zones ──
+  let written = 0;
+  const noPage: string[] = [];
+  const noReport: string[] = [];
+  for (const district of THAMES_DISTRICTS) {
+    if (only && !only.has(district)) continue;
+    const row = districts.get(district);
+    if (!row) {
+      noPage.push(district);
       continue;
     }
-
-    // Distribute postcodes across zones (round-robin)
-    // Sort zones by population (largest first) — they cover more area
-    prefixZones.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
-
-    for (let i = 0; i < postcodes.length; i++) {
-      const district = postcodes[i];
-      const zone = prefixZones[i % prefixZones.length];
-
-      // Convert zone parameters to observations for scoring
-      const observations = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => {
-          const val = p.mean ?? p.max;
-          return {
-            determinand: p.parameter,
-            value: val?.value ?? 0,
-            unit: p.unit,
-            date: `${zone.year}-12-31`,
-          };
-        });
-
-      // Compute score
-      const score = computeScore(observations, "drinking");
-
-      // Build drinking water readings for the DB
-      const readings = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => ({
-          postcode_district: district,
-          supplier_id: "thames-water",
-          supply_zone: zone.zone_name ?? zone.mapCode,
-          determinand: p.parameter,
-          value: p.mean?.value ?? p.max?.value ?? 0,
-          unit: p.unit,
-          uk_limit: p.regulatory_limit ? parseFloat(p.regulatory_limit) || null : null,
-          who_guideline: null,
-          sample_date: `${zone.year}-12-31`,
-          source: "thames_water_zone" as const,
-          source_ref: `zone:${zone.mapCode}`,
-        }));
-
-      // Delete existing Thames Water data for this district
-      await db
-        .from("drinking_water_readings")
-        .delete()
-        .eq("postcode_district", district)
-        .eq("source", "thames_water_zone");
-
-      // Insert readings in batches
-      if (readings.length > 0) {
-        for (let j = 0; j < readings.length; j += 500) {
-          const chunk = readings.slice(j, j + 500);
-          const { error } = await db.from("drinking_water_readings").insert(chunk);
-          if (error) {
-            console.error(`  Error inserting readings for ${district}:`, error.message);
-          }
-        }
-      }
-
-      // Update page_data
-      const { error: upsertError } = await db.from("page_data").upsert(
-        {
-          postcode_district: district,
-          safety_score: score.safetyScore,
-          score_grade: score.scoreGrade,
-          contaminants_tested: score.contaminantsTested,
-          contaminants_flagged: score.contaminantsFlagged,
-          pfas_detected: score.pfasDetected,
-          pfas_level: score.pfasLevel,
-          pfas_source: score.pfasDetected ? "drinking" : null,
-          drinking_water_readings: score.readings,
-          data_source: "stream",
-          sample_count: zone.parameters.reduce(
-            (sum, p) => sum + (p.total_samples ?? 0),
-            0,
-          ),
-          date_range_from: `${zone.year}-01-01`,
-          date_range_to: `${zone.year}-12-31`,
-          last_data_update: `${zone.year}-12-31`,
-        },
-        { onConflict: "postcode_district" },
-      );
-
-      if (upsertError) {
-        console.error(`  Error upserting page_data for ${district}:`, upsertError.message);
-      }
-
-      totalImported += readings.length;
-      totalPostcodes++;
-      process.stdout.write(`\r  ${prefix}: ${totalPostcodes} postcodes, ${totalImported} readings...`);
+    const entry = getThamesZones(district);
+    const blend = entry ? blendZones(reports, entry.zones) : null;
+    if (!entry || !blend) {
+      noReport.push(district);
+      continue;
     }
-    console.log();
+    const hardness = blend.readings.find((r) => r.determinand === HARDNESS)?.value;
+    const was = before.get(district);
+    const label = zoneLabel(blend.zones);
+    console.log(
+      `  ${district.padEnd(5)} ${String(was ?? "-").padStart(5)} -> ${String(hardness ?? "-").padStart(5)} mg/L  ` +
+      `${blend.zones.map((z) => `${z.code} ${z.share}%`).join(", ")}${entry.approx ? `  (borrowed from ${entry.approx.join(", ")})` : ""}`,
+    );
+    written++;
+    if (dryRun) continue;
+
+    const sampleDate = `${blend.year}-12-31`;
+    const sourceRef = `${blend.zones.length === 1 ? "zone" : "zones"}:${blend.zones.map((z) => z.code).join(",")}`.slice(0, 200);
+    const { error: delError } = await db.from("drinking_water_readings").delete().eq("postcode_district", district).eq("source", SOURCE);
+    if (delError) throw new Error(`${district}: ${delError.message}`);
+    const { error: insError } = await db.from("drinking_water_readings").insert(
+      blend.readings.map((r) => ({
+        postcode_district: district,
+        supplier_id: "thames-water",
+        supply_zone: label,
+        determinand: r.determinand,
+        value: r.value,
+        unit: r.unit,
+        uk_limit: r.ukLimit,
+        who_guideline: null,
+        sample_date: sampleDate,
+        source: SOURCE,
+        source_ref: sourceRef,
+      })),
+    );
+    if (insError) throw new Error(`${district}: ${insError.message}`);
+
+    // The page reads page_data, built the same way the refresh job builds it.
+    const records: StreamRecord[] = blend.readings.map((r) => ({
+      sampleId: `thames-zone-${district}`,
+      sampleDate,
+      determinand: r.determinand,
+      dwiCode: "",
+      unit: r.unit,
+      belowDetectionLimit: false,
+      value: r.value,
+      lsoa: "",
+    }));
+    await writeStreamReadings(district, "thames-water", records);
+    const { data: page } = await db.from("page_data").select("environmental_context").eq("postcode_district", district).maybeSingle();
+    const ctx = (page?.environmental_context ?? {}) as Partial<PostcodeSeedData>;
+    await upsertPageData(
+      {
+        district,
+        areaName: row.area_name,
+        city: row.city,
+        region: row.region,
+        latitude: row.latitude,
+        longitude: row.longitude,
+        samplingPointCount: ctx.samplingPointCount ?? 0,
+        recentObservations: ctx.recentObservations ?? 0,
+        pfasDetected: false,
+        topReadings: ctx.topReadings ?? [],
+      },
+      records,
+    );
+    // The zone name is only worth showing when one zone covers most of the district.
+    const main = blend.zones[0];
+    await db
+      .from("postcode_districts")
+      .update({ supplier_id: "thames-water", supply_zone: !entry.approx && main.share >= 60 ? main.name : null })
+      .eq("id", district);
   }
 
-  console.log(
-    `\nDone! ${totalPostcodes} postcodes updated, ${totalImported} readings imported`,
-  );
+  // ── 2. Districts off the map that still hold Thames zone readings: clear them ──
+  const onMap = new Set(THAMES_DISTRICTS);
+  const stale = [...before.keys()].filter((d) => !onMap.has(d) && (!only || only.has(d))).sort();
+  console.log(`\n${stale.length} districts hold Thames zone readings but Thames is not their main supplier: ${stale.join(" ")}`);
+  if (!dryRun) {
+    for (const district of stale) {
+      // Both the zone rows and the copies the refresh job made of them.
+      await db.from("drinking_water_readings").delete().eq("postcode_district", district).eq("source", SOURCE);
+      await db.from("drinking_water_readings").delete().eq("postcode_district", district).eq("source", "stream_portal").eq("source_ref", `thames-zone-${district}`);
+    }
+  }
+
+  console.log(`\n${written} districts ${dryRun ? "would be" : ""} written, ${stale.length} cleared`);
+  if (noPage.length) console.log(`on the map but without a page: ${noPage.length}`);
+  if (noReport.length) console.log(`no zone report held, left as they are: ${noReport.join(" ")}`);
+  if (stale.length && !dryRun) console.log(`Next: npx tsx scripts/refresh-districts.ts ${stale.slice(0, 3).join(" ")} … (or --changed) to give the cleared districts their real supplier's results.`);
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

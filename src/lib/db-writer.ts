@@ -5,9 +5,8 @@
  */
 
 import { getSupabase } from "./supabase";
-import { getSupplier } from "./suppliers";
+import { getSupplierFor } from "./suppliers";
 import { computeScore } from "./scoring";
-import { getThamesZonePrefix } from "./thames-zones";
 import type { PostcodeSeedData } from "./ea-fetcher";
 import type { StreamRecord } from "./stream-api";
 import type { ScoreResult } from "./scoring";
@@ -18,7 +17,7 @@ import type { ScoreResult } from "./scoring";
  */
 export async function upsertPostcodeDistrict(seedData: PostcodeSeedData): Promise<void> {
   const db = getSupabase();
-  const supplier = getSupplier(seedData.city);
+  const supplier = getSupplierFor(seedData.district, seedData.city);
 
   // Ensure supplier exists
   if (supplier.id !== "unknown") {
@@ -41,7 +40,8 @@ export async function upsertPostcodeDistrict(seedData: PostcodeSeedData): Promis
       latitude: seedData.latitude,
       longitude: seedData.longitude,
       supplier_id: supplier.id !== "unknown" ? supplier.id : null,
-      supply_zone: `${seedData.city} Central`,
+      // supply_zone is left alone: it used to be written as "<council> Central",
+      // a name no water company uses. Only imports that know the real zone set it.
       has_page: true,
     },
     { onConflict: "id" },
@@ -220,9 +220,6 @@ export async function upsertPageData(
 export async function getThamesReadings(
   district: string,
 ): Promise<{ determinand: string; value: number; unit: string; sampleDate: string }[] | null> {
-  const prefix = getThamesZonePrefix(district);
-  if (!prefix) return null;
-
   const db = getSupabase();
   const { data, error } = await db
     .from("drinking_water_readings")
@@ -253,7 +250,7 @@ export async function writePostcodeData(
   await upsertPostcodeDistrict(seedData);
 
   if (streamRecords && streamRecords.length > 0) {
-    const supplier = getSupplier(seedData.city);
+    const supplier = getSupplierFor(seedData.district, seedData.city);
     await writeStreamReadings(seedData.district, supplier.id, streamRecords);
   }
 

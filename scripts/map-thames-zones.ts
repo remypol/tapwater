@@ -10,13 +10,16 @@
  * lookup for each, and keep every zone it names with how often. A district where
  * Thames names no zone for any sampled postcode is not supplied by Thames.
  *
- *   npx tsx scripts/map-thames-zones.ts            # all districts in src/lib/thames-zones.ts
+ *   npx tsx scripts/map-thames-zones.ts            # every district Ofwat's map gives Thames 20% or more of, not yet asked
  *   npx tsx scripts/map-thames-zones.ts RG1 KT17   # just these
  *
- * Writes data/thames-district-zones.json. Safe to re-run; it resumes.
+ * Writes data/thames-district-zones.json. Safe to re-run; it resumes. Afterwards:
+ *   python3 scripts/fetch-thames-zone-reports.py   # reports for any zone newly named
+ *   npx tsx scripts/build-thames-zone-map.ts       # src/data/thames-zone-map.json
+ *   npx tsx scripts/import-thames-water.ts         # into the database
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { THAMES_ZONE_POSTCODES } from "../src/lib/thames-zones";
+import districtSuppliers from "../src/data/district-suppliers.json";
 
 const OUT = "data/thames-district-zones.json";
 const THAMES = "https://water-quality-api.prod.p.webapp.thameswater.co.uk/water-quality-api/PostCode";
@@ -95,7 +98,10 @@ async function mapDistrict(district: string): Promise<DistrictZones | null> {
 
 async function main() {
   const wanted = process.argv.slice(2).map((d) => d.toUpperCase());
-  const all = [...new Set(Object.values(THAMES_ZONE_POSTCODES).flat())];
+  // Every district where Ofwat's map gives Thames Water a real share.
+  const all = Object.entries(districtSuppliers as unknown as Record<string, [string, number][]>)
+    .filter(([, shares]) => shares.some(([id, share]) => id === "thames-water" && share >= 20))
+    .map(([d]) => d);
   const districts = wanted.length > 0 ? wanted : all;
   const result: Record<string, DistrictZones> = existsSync(OUT) ? JSON.parse(readFileSync(OUT, "utf8")) : {};
   const todo = districts.filter((d) => wanted.length > 0 || !result[d]);

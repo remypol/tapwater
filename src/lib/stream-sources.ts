@@ -202,11 +202,14 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "portsmouth-water": {
     orgId: STREAM_ORG,
     services: [
-      { year: 2024, serviceName: "Portsmouth_Water_Drinking_Water_Quality_Data_2022_2023_2024" },
+      // Renamed by Portsmouth Water; the old "_2022_2023_2024" service is gone
+      // (found 17 Nov 2026: every Portsmouth district had no results). Dates
+      // in this one are text, "30-Dec-24".
+      { year: 2024, serviceName: "Portsmouth_Water_Drinking_Water_Quality_Data_2016_-_2024" },
     ],
     geoField: "LSOA",
     fieldCase: "upper",
-    dateFormat: "epoch",
+    dateFormat: "string",
   },
   "welsh-water": {
     orgId: STREAM_ORG,

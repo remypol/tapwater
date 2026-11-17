@@ -77,7 +77,7 @@ export function PartLChecker({ packed }: { packed: string }) {
               {found.basis === "m"
                 ? "A water company reading for this district, as mg/L of calcium carbonate, which is the same as ppm."
                 : found.basis === "a"
-                  ? "Thames Water publishes results by supply zone and our match to this district is approximate. Confirm the zone figure with Thames Water before relying on it."
+                  ? "Thames Water's postcode checker cannot place this district in a supply zone, so this figure comes from the zones around it. Confirm it with Thames Water before relying on it."
                   : "No reading of its own for this district: this is the median for its postcode area. Check the water company's figure for the address."}{" "}
               <Link href={`/postcode/${found.district}`} className="text-accent hover:underline">
                 Full water report for {found.district}

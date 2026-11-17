@@ -5,6 +5,12 @@ import { getStreamSource, getAllStreamSupplierIds } from "../stream-sources";
 import { computeScore } from "../scoring";
 
 describe("parseStreamDate", () => {
+  it("reads Portsmouth Water's day-month-name dates", () => {
+    expect(parseStreamDate("30-Dec-24", "string")).toBe("2024-12-30");
+    expect(parseStreamDate("3-Jan-2023", "string")).toBe("2023-01-03");
+    expect(parseStreamDate("30-Xyz-24", "string")).toBe("");
+  });
+
   it("parses epoch milliseconds", () => {
     expect(parseStreamDate(1743206400000, "epoch")).toBe("2025-03-29");
   });

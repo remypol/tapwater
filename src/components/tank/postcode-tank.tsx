@@ -16,6 +16,8 @@ import { SOFTENER_GUIDES, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
 import { pickRelatedGuides } from "@/lib/guides";
 import { formatReading, formatSampleDate, hardnessBandLabel, type TankAction } from "@/lib/tank-plan";
 import { isOverPartLLine } from "@/lib/part-l";
+import { describeSupplierSplit } from "@/lib/suppliers";
+import { getThamesZones } from "@/lib/thames-zones";
 import { catchmentExplorerUrl, chemicalFails, describeRiverStatus, failingElements, waterBodyNoun, ECOLOGICAL_CLASSES } from "@/lib/river-status";
 import { formatMicrograms, formatSampleMonth, humaniseSiteLabel } from "@/components/pfas-nearby";
 import type { PostcodePageLoad } from "@/lib/postcode-page-load";
@@ -107,6 +109,9 @@ function SoftenerAction({ action, district, lead, hardness }: { action: Extract<
 export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
   const { data, plan, hardness, river, pfasNearby, neighbours, highlights, faqs, city, nationalAverage, incidents } = page;
   const district = data.district;
+  const supplierSplit = describeSupplierSplit(district);
+  // Set for the few Thames districts whose zones were taken from their neighbours.
+  const borrowedFrom = data.supplierId === "thames-water" ? getThamesZones(district)?.approx ?? null : null;
   const level = Math.max(0.12, Math.min(0.92, data.safetyScore / 10));
   const avg = Math.max(0, Math.min(1, nationalAverage / 10));
   const hardValue = hardness?.value ?? null;
@@ -426,11 +431,13 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             <p className="wt-lead wt-nums">
               Tap water in {district} ({data.areaName === data.city ? data.city : `${data.areaName}, ${data.city}`}) is supplied by{" "}
               {data.supplierId && data.supplierId !== "unknown" ? <Link href={`/supplier/${data.supplierId}`}>{data.supplier}</Link> : data.supplier}
+              {supplierSplit ? ` (${supplierSplit})` : ""}
               {data.supplyZone ? ` in the ${data.supplyZone} zone` : ""} and scores {data.safetyScore.toFixed(1)} out of 10, against an England and Wales average of {nationalAverage.toFixed(1)}.{" "}
               {data.contaminantsFlagged > 0
                 ? `${data.contaminantsFlagged} of ${data.contaminantsTested} tested substances ${data.contaminantsFlagged === 1 ? "was" : "were"} close to or over a limit.`
                 : `None of the ${data.contaminantsTested} tested substances came close to a limit.`}{" "}
               The latest sample is from {formatSampleDate(data.lastSampleDate)}.
+              {borrowedFrom ? ` Thames Water's postcode checker cannot place ${district} in a supply zone, so these results are from the zones around it (${borrowedFrom.join(", ")}). Read them as typical for the area.` : ""}
             </p>
           </div>
           {highlights.length > 0 ? (

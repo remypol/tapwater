@@ -126,16 +126,20 @@ export default function DataSourcesPage() {
         {/* Update frequency */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Update Frequency</h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          Our data pipeline runs automatically on a daily schedule:
+          Our data pipeline runs automatically and works through every district about every four days:
         </p>
         <ul className="list-disc pl-5 mb-4 space-y-1 text-base text-body leading-relaxed">
           <li>
             <strong className="text-ink">Stream Water Data Portal</strong> — water companies publish
-            annual datasets. We fetch the most recent year&apos;s data for each company daily.
+            annual datasets. We fetch the most recent year&apos;s data for each company on every pass.
           </li>
           <li>
-            <strong className="text-ink">EA Water Quality API</strong> — queried daily for
+            <strong className="text-ink">EA Water Quality API</strong> — queried on every pass for
             each covered postcode area. New observations are incorporated automatically.
+          </li>
+          <li>
+            <strong className="text-ink">Thames Water zone reports</strong> — yearly. We check each month
+            whether a new year has been published.
           </li>
           <li>
             <strong className="text-ink">LSOA mappings</strong> — updated when the ONS publishes
@@ -143,18 +147,47 @@ export default function DataSourcesPage() {
           </li>
         </ul>
 
+        {/* Who supplies you */}
+        <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Which company supplies a postcode</h2>
+        <p className="text-base text-body leading-relaxed mb-4">
+          In England and Wales we take the supplier from{" "}
+          <strong className="text-ink">Ofwat&apos;s map of water supply areas</strong>, published under the
+          Open Government Licence. Each census small area is placed on that map, and a postcode district
+          goes to the company that supplies most of its postcodes. About one district in twelve is shared
+          between two companies; its page says so and gives each company&apos;s share. Scotland is Scottish
+          Water and Northern Ireland is NI Water.
+        </p>
+
         {/* Coverage */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Coverage</h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          Stream drinking water data is currently available from: Yorkshire Water, Severn Trent,
-          United Utilities, Anglian Water, Southern Water, South West Water, Portsmouth Water,
-          Welsh Water, and Northumbrian Water. Thames Water, Wessex Water, and Bristol Water
-          are not yet on the portal — postcodes in those areas use EA environmental data only.
+          We cover about 2,800 postcode districts across England, Wales, Scotland and Northern Ireland.
+          Where the tap-water results come from depends on the company:
         </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          We cover 220 postcode districts across England, Wales, and parts of Scotland, with more
-          being added as water companies publish additional data.
-        </p>
+        <ul className="list-disc pl-5 mb-4 space-y-1 text-base text-body leading-relaxed">
+          <li>
+            <strong className="text-ink">Sample by sample, from the Stream portal:</strong> Yorkshire Water,
+            Severn Trent, United Utilities, Anglian Water, Southern Water, South West Water, Portsmouth
+            Water, Welsh Water, Northumbrian Water, Essex &amp; Suffolk Water, Affinity Water, SES Water,
+            South Staffs Water, Cambridge Water and Hafren Dyfrdwy.
+          </li>
+          <li>
+            <strong className="text-ink">Thames Water</strong> is not on the portal. It publishes one report
+            per supply zone for each calendar year. We ask Thames&apos;s own postcode checker which zones a
+            district falls in and give the district the average of those zones&apos; results. The checker
+            cannot place E1 to E9, N1 to N9 and W2 to W9, so those districts use the zones of the districts
+            around them, and their pages say so.
+          </li>
+          <li>
+            <strong className="text-ink">Scottish Water and NI Water</strong> publish reports per supply
+            zone, which we read the same way.
+          </li>
+          <li>
+            <strong className="text-ink">South East Water, Wessex Water and Bristol Water</strong> publish
+            no sample results we can use. Their districts show water hardness from the company&apos;s own
+            postcode checker, and river and groundwater monitoring from the Environment Agency.
+          </li>
+        </ul>
 
         {/* Open data */}
         <h2 className="font-display text-xl italic text-ink mt-10 mb-4">Open Data Commitment</h2>
@@ -168,7 +201,8 @@ export default function DataSourcesPage() {
           Sources:{' '}
           <a href="https://portal-streamwaterdata.hub.arcgis.com/" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Stream Water Data Portal</a>,{' '}
           <a href="https://environment.data.gov.uk/water-quality" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">EA Water Quality API</a>,{' '}
-          <a href="https://geoportal.statistics.gov.uk/" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">ONS Open Geography Portal</a>.
+          <a href="https://geoportal.statistics.gov.uk/" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">ONS Open Geography Portal</a>,{' '}
+          Ofwat water supply areas (published on the Stream portal) and Thames Water&apos;s zone reports.
         </p>
       </div>
     </div>

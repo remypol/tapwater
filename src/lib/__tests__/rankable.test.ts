@@ -59,9 +59,13 @@ describe("isRankable", () => {
     expect(isRankable(district({ dataSource: "mixed" }))).toBe(true);
   });
 
-  it("keeps Thames-list districts out until their zones are matched to districts", () => {
-    expect(isRankable(district({ district: "SE10" }))).toBe(false);
-    expect(isRankable(district({ district: "DA5" }))).toBe(false);
+  it("keeps districts on borrowed Thames zones out, and lets matched ones in", () => {
+    // E1 and W4 have no zone of their own from Thames's checker; they borrow their neighbours'.
+    expect(isRankable(district({ district: "E1" }))).toBe(false);
+    expect(isRankable(district({ district: "W4" }))).toBe(false);
+    // SE10 and DA5 shared one zone's lead reading under the old rotation. Both now have their own zones.
+    expect(isRankable(district({ district: "SE10" }))).toBe(true);
+    expect(isRankable(district({ district: "DA5" }))).toBe(true);
     expect(isRankable(district({ district: "LS1" }))).toBe(true);
   });
 });

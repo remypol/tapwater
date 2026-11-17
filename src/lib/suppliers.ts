@@ -1,13 +1,52 @@
 /**
  * Water supplier mapping for TapWater.uk
- * Maps local authority area names to water companies.
  * Shared between the data pipeline and the data layer.
+ *
+ * Two sources, in this order:
+ * 1. src/data/district-suppliers.json: every district in England and Wales,
+ *    worked out from Ofwat's own map of supply areas by
+ *    scripts/build-district-suppliers.py. Use getSupplierFor().
+ * 2. SUPPLIER_MAP below, a hand-written list of council areas. It named the
+ *    wrong company for one district in five in England and Wales, so it is now
+ *    only the fallback for Scotland, Northern Ireland and anything the file
+ *    does not hold.
  */
+import districtSuppliers from "../data/district-suppliers.json";
 
 export interface SupplierInfo {
   name: string;
   id: string;
 }
+
+/** A company's part of a district, as a percentage of its postcodes. */
+export interface SupplierShare extends SupplierInfo {
+  share: number;
+}
+
+const DISTRICT_SUPPLIERS = districtSuppliers as unknown as Record<string, [string, number][]>;
+
+/** Display names for every supplier id the district file can hold. */
+export const SUPPLIER_NAMES: Record<string, string> = {
+  "affinity-water": "Affinity Water",
+  "anglian-water": "Anglian Water",
+  "bristol-water": "Bristol Water",
+  "cambridge-water": "Cambridge Water",
+  "essex-suffolk-water": "Essex & Suffolk Water",
+  "hafren-dyfrdwy": "Hafren Dyfrdwy",
+  "northumbrian-water": "Northumbrian Water",
+  "portsmouth-water": "Portsmouth Water",
+  "ses-water": "SES Water",
+  "severn-trent": "Severn Trent",
+  "south-east-water": "South East Water",
+  "south-staffs-water": "South Staffs Water",
+  "south-west-water": "South West Water",
+  "southern-water": "Southern Water",
+  "thames-water": "Thames Water",
+  "united-utilities": "United Utilities",
+  "welsh-water": "Dŵr Cymru Welsh Water",
+  "wessex-water": "Wessex Water",
+  "yorkshire-water": "Yorkshire Water",
+};
 
 export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
   // ─── Thames Water ────────────────────────────────────────────────────────────
@@ -456,6 +495,45 @@ export const SUPPLIER_MAP: Record<string, SupplierInfo> = {
 
 const UNKNOWN_SUPPLIER: SupplierInfo = { name: "Unknown", id: "unknown" };
 
+/** Supplier by council area. Prefer getSupplierFor(), which knows the district. */
 export function getSupplier(city: string): SupplierInfo {
   return SUPPLIER_MAP[city] ?? UNKNOWN_SUPPLIER;
+}
+
+/**
+ * The companies that supply a district in England or Wales, largest share
+ * first, from Ofwat's map. Null for Scotland, Northern Ireland and districts
+ * the file does not hold.
+ */
+export function getDistrictSuppliers(district: string): SupplierShare[] | null {
+  const rows = DISTRICT_SUPPLIERS[district.trim().toUpperCase()];
+  if (!rows || rows.length === 0) return null;
+  return rows.map(([id, share]) => ({ id, name: SUPPLIER_NAMES[id] ?? id, share }));
+}
+
+/** The main supplier of a district: Ofwat's map first, the council list second. */
+export function getSupplierFor(district: string, city: string): SupplierInfo {
+  const main = getDistrictSuppliers(district)?.[0];
+  return main ? { id: main.id, name: main.name } : getSupplier(city);
+}
+
+/**
+ * For a district more than one company supplies: "about 54% of postcodes; SES
+ * Water supplies the rest". Null when one company has all of it. Companies
+ * with under 5% are not in the file, so they are not mentioned.
+ */
+export function describeSupplierSplit(district: string): string | null {
+  const rows = getDistrictSuppliers(district);
+  if (!rows || rows.length < 2) return null;
+  const [main, ...others] = rows;
+  if (others.length === 1) return `about ${main.share}% of postcodes; ${others[0].name} supplies the rest`;
+  const parts = others.map((o) => `${o.name} about ${o.share}%`);
+  return `about ${main.share}% of postcodes; ${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}
+
+/** Share of a district's postcodes supplied by one company, 0 to 100. Null when the district is not in the file. */
+export function supplierShare(district: string, supplierId: string): number | null {
+  const rows = getDistrictSuppliers(district);
+  if (!rows) return null;
+  return rows.find((r) => r.id === supplierId)?.share ?? 0;
 }

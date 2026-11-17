@@ -102,7 +102,8 @@ export interface SupplierData {
   name: string;
   region: string;
   customersM: number;
-  complianceRate: number;
+  /** Percent of tests meeting the standards, as published. Null when we hold no sourced figure. */
+  complianceRate: number | null;
   website: string;
   postcodeAreas: string[];
 }

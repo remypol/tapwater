@@ -2,6 +2,7 @@ import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
 import { PFAS_RUN_SOURCE, PFAS_SOURCE, describePfasHealth } from "@/lib/pfas-ingest";
 import { RIVER_STATUS_SOURCE, describeRiverStatusHealth } from "@/lib/river-status";
+import { THAMES_CHECK_SOURCE } from "@/lib/thames-zones";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -349,6 +350,17 @@ export async function getHealthReport(): Promise<HealthReport> {
     .order("checked_at", { ascending: false })
     .limit(1);
   issues.push(...describeRiverStatusHealth(riverRun.data?.[0] ?? null));
+
+  // The monthly Thames check only looks; a new year of zone reports needs the
+  // import script run by hand, so it has to surface here.
+  const thamesCheck = await db
+    .from("scrape_log")
+    .select("status, error_message")
+    .eq("source", THAMES_CHECK_SOURCE)
+    .order("started_at", { ascending: false })
+    .limit(1);
+  const thames = thamesCheck.data?.[0];
+  if (thames && thames.status !== "success" && thames.error_message) issues.push(thames.error_message);
 
   const leadIssue = describeSoftenerLeadBacklog(softenerLeads);
   if (leadIssue) issues.push(leadIssue);

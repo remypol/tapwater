@@ -193,6 +193,8 @@ export const MOCK_SUPPLIERS: SupplierData[] = [
   { id: "wessex-water", name: "Wessex Water", region: "South West", customersM: 2.8, complianceRate: 99.96, website: "https://www.wessexwater.co.uk", postcodeAreas: ["BA1", "BA2"] },
   { id: "affinity-water", name: "Affinity Water", region: "South East England", customersM: 3.6, complianceRate: 99.92, website: "https://www.affinitywater.co.uk", postcodeAreas: ["N11", "N12", "NW9"] },
   { id: "essex-suffolk-water", name: "Essex & Suffolk Water", region: "Essex and Suffolk", customersM: 1.8, complianceRate: 99.96, website: "https://www.eswater.co.uk", postcodeAreas: ["CM1", "CM2", "CM3", "IP17", "IP18", "IG1", "RM8"] },
+  { id: "ses-water", name: "SES Water", region: "East Surrey, West Sussex, west Kent and south London", customersM: 0.75, complianceRate: null, website: "https://seswater.co.uk", postcodeAreas: ["SM1", "SM2", "RH1", "RH2"] },
+  { id: "hafren-dyfrdwy", name: "Hafren Dyfrdwy", region: "North east and mid Wales", customersM: 0.22, complianceRate: null, website: "https://www.hdcymru.co.uk", postcodeAreas: ["LL11", "LL12", "LL13", "SY16"] },
   { id: "cambridge-water", name: "Cambridge Water", region: "Cambridge", customersM: 0.35, complianceRate: 99.96, website: "https://www.cambridge-water.co.uk", postcodeAreas: ["CB2", "CB3", "CB4", "CB5"] },
 ];
 
