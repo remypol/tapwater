@@ -50,7 +50,7 @@ export default async function PfasNationalPage() {
     {
       question: "Is UK tap water safe from PFAS?",
       answer:
-        "There are no statutory standards for PFAS in drinking water in England and Wales. There is a regulator's guideline: the Drinking Water Inspectorate sets a value of 0.1 \u00b5g/L that applies to individual PFAS compounds and to the combined sum-of figure, and since March 2025 water companies must monitor a wider range of PFAS and update their risk assessments. Those results are not published per location, so no public dataset shows what was found in a given postcode.",
+        "There are no statutory standards for PFAS in drinking water in England and Wales. There is a regulator's guideline: the Drinking Water Inspectorate sets a value of 0.1 \u00b5g/L for the sum of 48 named PFAS, so no single compound may exceed it either, and since March 2025 water companies must monitor a wider range of PFAS and update their risk assessments. Those results are not published per location, so no public dataset shows what was found in a given postcode.",
     },
     {
       question: "Which UK cities have PFAS in their water?",
@@ -120,8 +120,8 @@ export default async function PfasNationalPage() {
               <strong className="text-ink">required</strong> to monitor PFAS.
               Since March 2025 the Drinking Water Inspectorate has required them
               to test for a wider range of PFAS and update their risk
-              assessments against a guideline of 0.1 µg/L, which applies both to
-              individual PFAS compounds and to the combined sum-of figure. Those
+              assessments against a guideline of 0.1 µg/L for the sum of 48 named
+              PFAS, so no single compound may exceed it either. Those
               results go to the regulator. They are not released per supply zone
               or per postcode.
             </p>

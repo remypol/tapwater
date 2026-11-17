@@ -16,7 +16,7 @@ Replaces `press-pitches-2026-09.md`. The four September stories were checked aga
 All figures from the Environment Agency Water Quality Archive, as stored on 17 November 2026.
 
 - 12,844 PFAS detections at 534 river and groundwater sampling points, near 43 of the 50 largest UK cities, between January 2023 and October 2026. 44 different compounds.
-- 32 readings were above 0.1 µg/L. The Drinking Water Inspectorate uses 0.1 µg/L as its guideline value for PFAS in tap water. These are environmental samples, not tap water, so the comparison is context, not a breach.
+- 32 readings were above 0.1 µg/L. The Drinking Water Inspectorate's guideline value for tap water is 0.1 µg/L for the sum of 48 named PFAS (checked on dwi.gov.uk, 17 November 2026), so a single compound above 0.1 is above it too. These are environmental samples, not tap water, so the comparison is context, not a breach.
 - Readings above 0.1 µg/L were found near Liverpool, Sheffield, Derby, Blackburn, Warrington, Swindon, Huddersfield and Hull.
 
 | City | Detections | Sites | Compounds | Highest reading |
@@ -87,5 +87,5 @@ Subject: 12,844 PFAS detections near UK cities, and no public data on what is in
 ## Not done yet
 
 - **No recipient list exists.** The September file names outlets, not people or addresses. Each outlet's published news-desk address has to be looked up; none has been guessed.
-- **Check the two claims about regulation before sending**: that the 0.1 µg/L value is how the Inspectorate currently states its guideline, and that the March 2025 monitoring change is described correctly. Both are taken from the site's own `/pfas` page, not re-checked today.
+- **Regulatory claims checked against dwi.gov.uk on 17 November 2026:** no statutory PFAS standard in England and Wales; guideline 0.1 µg/L for the sum of 48 named PFAS; updated guidance in March 2025 requires monitoring for a wider range. Our request for area results was refused on cost grounds in July 2026 (ref EIR2026/16348).
 - Nothing has been sent.
