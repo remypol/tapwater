@@ -281,7 +281,8 @@ export async function fetchStreamData(
   // If our best data is older than the newest hardcoded year, or we have nothing,
   // try discovering newer services on the portal
   if (bestYear < newestHardcodedYear || bestRecords.length === 0) {
-    const discovered = await discoverServices(source.orgId);
+    // Only this company's own datasets: see `discover` in stream-sources.ts.
+    const discovered = (await discoverServices(source.orgId)).filter((name) => source.discover.test(name));
     const triedNames = new Set(sortedServices.map((s) => s.serviceName));
 
     for (const serviceName of discovered) {
@@ -302,5 +303,16 @@ export async function fetchStreamData(
     }
   }
 
-  return bestRecords;
+  return keepRecent(bestRecords, source.keepMonths);
+}
+
+/** Drop samples older than `months` before the newest one. No limit when `months` is not set. */
+export function keepRecent(records: StreamRecord[], months?: number): StreamRecord[] {
+  if (!months || records.length === 0) return records;
+  const newest = records.reduce((a, b) => (a.sampleDate > b.sampleDate ? a : b)).sampleDate;
+  const cutoff = new Date(`${newest}T00:00:00Z`);
+  if (Number.isNaN(cutoff.getTime())) return records;
+  cutoff.setUTCMonth(cutoff.getUTCMonth() - months);
+  const from = cutoff.toISOString().slice(0, 10);
+  return records.filter((r) => r.sampleDate >= from);
 }

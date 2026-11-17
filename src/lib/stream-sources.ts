@@ -29,6 +29,25 @@ export interface StreamSource {
   unitFallback?: Record<string, string>;
   /** Exact determinand names to leave out, where a company's name for something would be misread. */
   skipDeterminands?: string[];
+  /**
+   * The company's exact name for hardness published in mg/l of calcium. When
+   * set, a district's hardness as CaCO3 is worked out from those samples and
+   * stored beside them (src/lib/derived-hardness.ts).
+   */
+  hardnessAsCalcium?: string;
+  /**
+   * Which of the portal's dataset names are this company's. A newer dataset is
+   * only looked for among names that match. Without this the search tried
+   * every company's datasets with the district's census areas, and whatever
+   * came back was stored under this company's name.
+   */
+  discover: RegExp;
+  /**
+   * Keep only samples from this many months up to the newest one. For datasets
+   * that go back many years (Portsmouth from 2016: 31,000 rows for one
+   * district). Only the latest sample of each substance is scored anyway.
+   */
+  keepMonths?: number;
 }
 
 const STREAM_ORG = "XxS6FebPX29TRGDJ";
@@ -61,8 +80,11 @@ function withUnit(unit: string, names: string[]): Record<string, string> {
  * - HARDNESS (TOTAL) is mg/l expressed as calcium, not as CaCO3: it equals
  *   CALCIUM + MAGNESIUM x 40.08/24.31 (median ratio 1.000 over 1,989 samples).
  *   The scorer labels hardness "as CaCO3", so Brighton's 113 (about 283 as
- *   CaCO3, very hard) would read as moderately soft. HARDNESS (°DH) takes only
- *   the values 5, 11, 15, 25 and 58, which is a band code, not a measurement.
+ *   CaCO3, very hard) would read as moderately soft. It stays unitless here;
+ *   since 17 Nov 2026 the district's hardness as CaCO3 is worked out from these
+ *   samples and stored as its own row (hardnessAsCalcium below).
+ *   HARDNESS (°DH) takes only the values 5, 11, 15, 25 and 58, which is a band
+ *   code, not a measurement.
  * - Individual PFAS compounds. They are µg/l (LODs of 0.0004-0.005, well
  *   under the DWI's 0.01 µg/l tier 1), but most rows are below-detection
  *   placeholders and the scorer counts any PFAS row as a detection, so 25
@@ -137,6 +159,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "upper",
     dateFormat: "epoch",
+    discover: /^Yorkshire Water/i,
   },
   "severn-trent": {
     orgId: STREAM_ORG,
@@ -150,6 +173,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /Severn_Trent|_STW_/i,
   },
   "southern-water": {
     orgId: STREAM_ORG,
@@ -165,6 +189,10 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     fieldCase: "camel",
     dateFormat: "string",
     unitFallback: SOUTHERN_UNIT_FALLBACK,
+    // Checked on 17 Nov 2026: Brighton (BN1) averages calcium 105.3 and magnesium
+    // 2.5 mg/l, which is 109.4 as calcium; HARDNESS (TOTAL) averages 109.2.
+    hardnessAsCalcium: "HARDNESS (TOTAL)",
+    discover: /^Southern_Water/i,
   },
   "united-utilities": {
     orgId: STREAM_ORG,
@@ -178,6 +206,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /^United_Utilities/i,
   },
   "anglian-water": {
     orgId: STREAM_ORG,
@@ -189,6 +218,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA21CD",
     fieldCase: "camel",
     dateFormat: "epoch",
+    discover: /^Anglian_Water/i,
   },
   "south-west-water": {
     orgId: STREAM_ORG,
@@ -200,6 +230,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA_Name",
     fieldCase: "upper",
     dateFormat: "epoch",
+    discover: /^South_West_Water_\(SWB\)/i,
   },
   "portsmouth-water": {
     orgId: STREAM_ORG,
@@ -212,6 +243,8 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "upper",
     dateFormat: "string",
+    discover: /^Portsmouth_Water/i,
+    keepMonths: 36,
   },
   "welsh-water": {
     orgId: STREAM_ORG,
@@ -221,6 +254,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /Welsh_Water/i,
   },
   "northumbrian-water": {
     orgId: STREAM_ORG,
@@ -230,6 +264,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /^Northumbrian_Water/i,
   },
   // Essex & Suffolk Water is part of the Northumbrian group and publishes in
   // the same service; the LSOA filter keeps each district to its own rows.
@@ -241,6 +276,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /^Northumbrian_Water/i,
   },
   // ── Companies added from Stream portal discovery ──
   "affinity-water": {
@@ -254,6 +290,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /Affinity_Water/i,
   },
   // south-east-water: NOT on Stream portal. Do not confuse with SES Water.
   "ses-water": {
@@ -269,6 +306,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     // the combined index with a limit of 1. Read as nitrite against 0.5 mg/L it
     // failed in most districts. The real figure is "Nitrite - consumers taps".
     skipDeterminands: ["Nitrite"],
+    discover: /^SES_Water/i,
   },
   "south-staffs-water": {
     orgId: STREAM_ORG,
@@ -278,6 +316,8 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "upper",
     dateFormat: "string",
+    discover: /^South_Staffs/i,
+    keepMonths: 36,
   },
   "cambridge-water": {
     orgId: STREAM_ORG,
@@ -287,6 +327,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "upper",
     dateFormat: "string",
+    discover: /^CAM_/i,
   },
   "hafren-dyfrdwy": {
     orgId: STREAM_ORG,
@@ -299,6 +340,7 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "LSOA",
     fieldCase: "camel",
     dateFormat: "string",
+    discover: /Hafren_Dyfrdwy|_HD_/i,
   },
 };
 

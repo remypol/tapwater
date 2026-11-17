@@ -7,6 +7,8 @@
 import { getSupabase } from "./supabase";
 import { getSupplierFor } from "./suppliers";
 import { computeScore } from "./scoring";
+import { getStreamSource } from "./stream-sources";
+import { DERIVED_HARDNESS_REF, HARDNESS_AS_CACO3, deriveHardnessAsCaCO3 } from "./derived-hardness";
 import type { PostcodeSeedData } from "./ea-fetcher";
 import type { StreamRecord } from "./stream-api";
 import type { ScoreResult } from "./scoring";
@@ -81,6 +83,26 @@ export async function writeStreamReadings(
     source: "stream_portal",
     source_ref: r.sampleId,
   }));
+
+  // A company that publishes hardness as calcium gets one more row: the
+  // district's hardness as CaCO3, which is what the rest of the site reads.
+  const asCalcium = getStreamSource(supplierId)?.hardnessAsCalcium;
+  const hardness = asCalcium ? deriveHardnessAsCaCO3(records, asCalcium) : null;
+  if (hardness) {
+    rows.push({
+      postcode_district: district,
+      supplier_id: supplierId,
+      supply_zone: null,
+      determinand: HARDNESS_AS_CACO3,
+      value: hardness.value,
+      unit: "mg/l",
+      uk_limit: null,
+      who_guideline: null,
+      sample_date: hardness.sampleDate,
+      source: "stream_portal",
+      source_ref: DERIVED_HARDNESS_REF,
+    });
+  }
 
   // Batch insert in chunks of 1000
   for (let i = 0; i < rows.length; i += 1000) {

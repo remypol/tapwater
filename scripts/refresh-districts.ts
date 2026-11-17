@@ -101,16 +101,19 @@ async function main() {
 
     const stored = await storedSuppliers(d.id);
     const foreign = stored.filter((s) => s !== supplier.id);
+    const { data: page } = await db.from("page_data").select("data_source, environmental_context").eq("postcode_district", d.id).maybeSingle();
+    // The page still shows tap results, but nothing of this company's is stored
+    // to back them: they are another company's, whose rows are already gone.
+    const orphaned = records.length === 0 && page?.data_source === "stream" && !stored.includes(supplier.id);
     const what = records.length > 0
       ? `${records.length} samples`
       : source
         ? "no samples published for this district"
         : "company publishes no samples";
-    console.log(`  ${label} ${what}${foreign.length ? `; removes ${foreign.join(", ")} rows` : ""}`);
-    count(records.length > 0 ? "with samples" : foreign.length ? "cleared, river and groundwater layer only" : "no change in results");
+    console.log(`  ${label} ${what}${foreign.length ? `; removes ${foreign.join(", ")} rows` : ""}${orphaned && !foreign.length ? "; page still showed another company's results" : ""}`);
+    count(records.length > 0 ? "with samples" : foreign.length || orphaned ? "cleared, river and groundwater layer only" : "no change in results");
     if (dryRun) continue;
 
-    const { data: page } = await db.from("page_data").select("environmental_context").eq("postcode_district", d.id).maybeSingle();
     const ctx = (page?.environmental_context ?? {}) as Partial<PostcodeSeedData>;
     const seed: PostcodeSeedData = {
       district: d.id,
@@ -131,8 +134,8 @@ async function main() {
       if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
       await writeStreamReadings(d.id, supplier.id, records);
       if (page) await upsertPageData(seed, records);
-    } else if (foreign.length) {
-      await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
+    } else if (foreign.length || orphaned) {
+      if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
       if (page) await upsertPageData(seed);
     }
   }

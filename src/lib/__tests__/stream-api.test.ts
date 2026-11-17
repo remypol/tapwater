@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { normalizeStreamRecord, parseStreamDate, fetchStreamData } from "../stream-api";
+import { normalizeStreamRecord, parseStreamDate, fetchStreamData, keepRecent } from "../stream-api";
 import type { StreamSource } from "../stream-sources";
 import { getStreamSource, getAllStreamSupplierIds } from "../stream-sources";
 import { computeScore } from "../scoring";
@@ -117,6 +117,7 @@ describe("fetchStreamData", () => {
     geoField: "LSOA",
     fieldCase: "upper",
     dateFormat: "epoch",
+    discover: /^Company_/,
   };
 
   const makeFeature = (determinand: string, date: number) => ({
@@ -202,6 +203,18 @@ describe("fetchStreamData", () => {
     const records = await fetchStreamData(mockSource, ["E01000001"]);
     expect(records.length).toBe(1);
     expect(records[0].determinand).toBe("Lead");
+  });
+
+  it("never takes another company's dataset when its own have nothing", async () => {
+    fetchSpy
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(emptyResponse())
+      .mockResolvedValueOnce(discoveryResponse(["Rival_Drinking_Water_Quality_2026", "Company_2025", "Company_2024"]));
+
+    const records = await fetchStreamData(mockSource, ["E01000001"]);
+    expect(records).toEqual([]);
+    // Two of its own, then the listing. The rival's dataset is never queried.
+    expect(fetchSpy).toHaveBeenCalledTimes(3);
   });
 
   it("returns empty array when no services have data", async () => {
@@ -330,5 +343,20 @@ describe("normalizeStreamRecord with a unit fallback (Southern Water extract)", 
       "E. coli": ["E. COLI (CONFIRMED)"],
       "Coliform Bacteria": ["COLIFORMS (CONFIRMED TOTAL)"],
     });
+  });
+});
+
+describe("keepRecent", () => {
+  const rec = (sampleDate: string) => ({ sampleId: "", sampleDate, determinand: "Lead", dwiCode: "", unit: "µg/l", belowDetectionLimit: false, value: 1, lsoa: "" });
+
+  it("keeps the months up to the newest sample and drops what is older", () => {
+    const out = keepRecent([rec("2016-03-01"), rec("2022-01-15"), rec("2023-06-01"), rec("2024-12-30")], 36);
+    expect(out.map((r) => r.sampleDate)).toEqual(["2022-01-15", "2023-06-01", "2024-12-30"]);
+  });
+
+  it("keeps everything when no limit is set", () => {
+    const all = [rec("2016-03-01"), rec("2024-12-30")];
+    expect(keepRecent(all)).toBe(all);
+    expect(keepRecent([], 36)).toEqual([]);
   });
 });

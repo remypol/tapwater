@@ -16,6 +16,14 @@ describe("scottishZoneReadings", () => {
     expect(readings).toEqual([{ determinand: "Coliform Bacteria", value: 0, unit: "no./100ml", ukLimit: null }]);
   });
 
+  it("does the same when the report leaves the bacteria limit empty, as Scottish Water's do", () => {
+    const readings = scottishZoneReadings(zone([
+      { parameter: "Coliform Bacteria", unit: "CFU/100ml", regulatory_limit: null, min: v(0), mean: v(0.01), max: v(1), total_samples: 156, fail_percent: 0.64 },
+      { parameter: "E. coli", unit: "CFU/100ml", regulatory_limit: null, min: v(0), mean: v(0.01), max: v(1), total_samples: 72, fail_percent: 1.39 },
+    ] as ParsedScottishZone["parameters"]));
+    expect(readings.map((r) => r.value)).toEqual([0, 0]);
+  });
+
   it("uses the year's mean for an ordinary parameter and carries its limit", () => {
     const readings = scottishZoneReadings(zone([
       { parameter: "Colour", unit: "mg/l Pt/Co", regulatory_limit: "20", min: v(2), mean: v(3), max: v(6), total_samples: 40, fail_percent: 0 },

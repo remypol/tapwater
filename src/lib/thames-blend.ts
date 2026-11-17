@@ -72,7 +72,9 @@ export function zoneFigure(p: ZoneReportParameter): number | null {
   const failed = p.contraventions ?? 0;
   const limit = p.regulatory_limit != null && p.regulatory_limit !== "" ? parseFloat(p.regulatory_limit) : NaN;
   const mostlyFailing = p.total_samples != null && p.total_samples > 0 && failed * 2 >= p.total_samples;
-  const isCount = limit === 0 || !p.mean;
+  // A count of organisms: a limit of zero, no mean at all, or a unit "per 100 ml"
+  // (Scottish reports leave the limit column empty for bacteria).
+  const isCount = limit === 0 || !p.mean || /\/\s*100\s*ml/i.test(p.unit);
   if (isCount) {
     if (mostlyFailing) return p.mean?.value ?? p.max?.value ?? p.min?.value ?? null;
     return p.min?.value ?? p.mean?.value ?? p.max?.value ?? null;
