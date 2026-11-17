@@ -6,7 +6,7 @@ import { getHardnessMap } from "@/lib/data";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { waitingByArea } from "@/lib/lead-delivery";
 import { OG_IMAGE } from "@/lib/og";
-import { FREE_LEADS, MAX_INSTALLERS_PER_LEAD, PACK_LEADS, PACK_PRICE_GBP, PRICE_PER_LEAD_GBP, formatGbp } from "@/lib/partner-offer";
+import { EXCLUSIVE_AREA_MIN_REQUESTS, EXCLUSIVE_AREA_MONTHLY_GBP, FREE_LEADS, MAX_INSTALLERS_PER_LEAD, PACK_LEADS, PACK_PRICE_GBP, PRICE_PER_LEAD_GBP, formatGbp } from "@/lib/partner-offer";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { supabase } from "@/lib/supabase";
 import "@/components/tank/tank.css";
@@ -66,6 +66,10 @@ const FAQS = [
   {
     q: "Is there a contract or a monthly fee?",
     a: `No. After your ${FREE_LEADS} free leads you buy ${PACK_LEADS} at a time by card, and they stay on your account until they are used. Stop whenever you like by not topping up.`,
+  },
+  {
+    q: "Can I have an area to myself?",
+    a: `Yes. For ${formatGbp(EXCLUSIVE_AREA_MONTHLY_GBP)} a month you get every request in one postcode area and nobody else does. A month with fewer than ${EXCLUSIVE_AREA_MIN_REQUESTS} requests is not charged, and you can stop at the end of any month. Each area goes to the first installer who asks: email partners@tapwater.uk with the area you want.`,
   },
   {
     q: "Why do you check installers first?",
@@ -151,6 +155,25 @@ export default async function PartnersPage() {
               </p>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <section className="wt-band wt-band--white" id="exclusive">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Or take an area to yourself</h2>
+          <p className="wt-sub" style={{ maxWidth: "62ch" }}>
+            Every request in one postcode area, sent to you and to nobody else, for <strong>{formatGbp(EXCLUSIVE_AREA_MONTHLY_GBP)} a month</strong>. A month
+            that brings fewer than {EXCLUSIVE_AREA_MIN_REQUESTS} requests is not charged, and you can stop at the end of any month.
+          </p>
+          <ul className="wt-ledger wt-nums" style={{ maxWidth: 560, marginTop: 28 }}>
+            <li><strong>Shared, pay per lead</strong><b>{formatGbp(PRICE_PER_LEAD_GBP)} a lead, up to {MAX_INSTALLERS_PER_LEAD} installers</b></li>
+            <li><strong>An area to yourself</strong><b>{formatGbp(EXCLUSIVE_AREA_MONTHLY_GBP)} a month, one installer</b></li>
+          </ul>
+          <p style={{ marginTop: 28, maxWidth: "62ch" }}>
+            Each area goes to the first installer who asks for it.{" "}
+            <a className="wt-link" href="mailto:partners@tapwater.uk?subject=An%20area%20to%20myself">Email us the area you want</a> and we will confirm
+            whether it is still free.
+          </p>
         </div>
       </section>
 

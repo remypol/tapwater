@@ -27,3 +27,13 @@ export const PRICE_PER_LEAD_GBP = Math.round(PACK_PRICE_PENCE / PACK_LEADS) / 10
 export function formatGbp(amount: number): string {
   return `£${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
 }
+
+/**
+ * An area to yourself: every request in one postcode area, sent to one installer
+ * only, for a flat monthly fee. Offered by arrangement (the installer emails us)
+ * until an area is sold, then it gets its own card subscription. A month that
+ * brings fewer than the floor is not charged, so nobody pays for an empty area.
+ * At the floor the fee works out at about the per-lead price, without sharing.
+ */
+export const EXCLUSIVE_AREA_MONTHLY_GBP = 149;
+export const EXCLUSIVE_AREA_MIN_REQUESTS = 3;
