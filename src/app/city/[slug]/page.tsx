@@ -626,7 +626,7 @@ export default async function CityPage({ params }: Props) {
               intro={
                 <>
                   Taste, chlorine and hardness bother people even where the water passes its tests. These are the three fixes our readers pick most: a jug for
-                  drinking water, a shower filter, and a reverse osmosis unit that needs no plumbing. Check your own postcode above to see which one your water needs.
+                  drinking water, an under-sink filter you can fit yourself, and a reverse osmosis system for PFAS, fluoride and lead. Check your own postcode above to see which one your water needs.
                 </>
               }
             />

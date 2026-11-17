@@ -4,6 +4,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, ArticleSchema } from "@/components/json-ld";
 import { Pipette, AlertTriangle, BookOpen, ShieldCheck } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
+import { GuideFilters } from "@/components/guide-filters";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -225,6 +226,16 @@ export default function LeadPipesGuide() {
           Activated carbon block filters certified to NSF/ANSI Standard 53 (or the equivalent British Standard BS EN 14743) are effective at reducing lead at the tap. Pitcher-style filters with certified lead reduction — note that not all carbon filters reduce lead; look for specific lead certification — are the most accessible option. Under-sink reverse osmosis systems, which remove 90 to 99 percent of lead, provide a more robust solution. See our{" "}
           <Link href="/contaminant/lead" className="text-accent hover:underline font-medium">lead filter recommendations</Link>{" "}for a guide to certified products at different price points.
         </p>
+        <GuideFilters
+          reason="lead"
+          picks={[
+            { slug: "zerowater-12-cup", highlight: "A jug certified for lead, for the least money" },
+            { slug: "waterdrop-g3p600", highlight: "Reverse osmosis under the sink, for the most lead removed" },
+          ]}
+        >
+          Two that fit that description, at either end of the price range. A filter does not replace the pipe: it protects the tap it is fitted to
+          while the lead is still there.
+        </GuideFilters>
 
         <h3 className="text-lg font-semibold mt-6 mb-2 text-ink">Test your water and consider pipe replacement</h3>
         <p className="text-base text-body leading-relaxed mb-4">

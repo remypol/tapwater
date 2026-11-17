@@ -99,13 +99,14 @@ export function awinLinksInProducts(): AwinProductLink[] {
 }
 
 async function programmes(relationship: string): Promise<Json[]> {
-  const data = await awin(`/publishers/${PUBLISHER_ID}/programmes?relationship=${encodeURIComponent(relationship)}&countryCode=GB`);
+  // No country filter: Frizzlife, Jolie and Hello Klean are registered in the US and sell in the UK.
+  const data = await awin(`/publishers/${PUBLISHER_ID}/programmes?relationship=${encodeURIComponent(relationship)}`);
   return Array.isArray(data) ? (data as Json[]) : [];
 }
 
 async function cmdProgrammes(relationship: string) {
   const list = await programmes(relationship);
-  console.log(`${list.length} programmes with relationship "${relationship}" (GB):\n`);
+  console.log(`${list.length} programmes with relationship "${relationship}":\n`);
   for (const p of list.sort((a, b) => String(a.name).localeCompare(String(b.name)))) {
     console.log(`${String(pick(p, "id", "advertiserId")).padEnd(8)} ${String(p.name ?? "?").padEnd(42)} ${String(pick(p, "primarySector", "sector") ?? "")}`);
   }

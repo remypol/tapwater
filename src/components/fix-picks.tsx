@@ -13,17 +13,21 @@ import { getProductBySlug } from "@/lib/products";
  * is (our three most-clicked fixes) without the copy changing under an editor's feet.
  */
 const PICKS: { slug: string; highlight: string }[] = [
+  // Checked against the click log on 17 Nov 2026 (90 days): Waterdrop 10UA 456,
+  // ZeroWater 330, Waterdrop G3P600 239. The rail used to show a shower filter (76)
+  // and a countertop unit (139) in the second and third places while its copy said
+  // "most-clicked". Re-run `npx tsx scripts/link-report.ts` before changing these.
   {
     slug: "zerowater-12-cup",
     highlight: "The jug for cleaner drinking water",
   },
   {
-    slug: "jolie-filtered-showerhead",
-    highlight: "For dry skin and hair after a shower",
+    slug: "waterdrop-10ua",
+    highlight: "Under the sink, fitted without a plumber",
   },
   {
-    slug: "osmio-zero",
-    highlight: "Reverse osmosis without a plumber",
+    slug: "waterdrop-g3p600",
+    highlight: "Reverse osmosis for PFAS, fluoride and lead",
   },
 ];
 

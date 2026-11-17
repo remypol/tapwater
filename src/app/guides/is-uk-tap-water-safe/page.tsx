@@ -545,8 +545,8 @@ export default function IsUKTapWaterSafeGuide() {
           title="If you want better water than the tap gives you"
           intro={
             <>
-              UK tap water is safe, so none of these is a must. They are the three fixes our readers pick most: a jug that takes out chlorine taste and
-              more, a shower filter, and a reverse osmosis unit that needs no plumbing.
+              UK tap water is safe, so none of these is a must. They are the three fixes our readers pick most: a jug that takes out lead and
+              more, an under-sink filter you can fit yourself, and a reverse osmosis system for PFAS, fluoride and lead.
             </>
           }
         />

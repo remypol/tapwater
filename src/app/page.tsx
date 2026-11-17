@@ -215,8 +215,8 @@ export default async function HomePage() {
               title="The fixes people actually buy"
               intro={
                 <>
-                  Of everything we link to, these three are what readers click most: a jug for drinking water, a shower filter for chlorine, and a reverse osmosis
-                  unit that needs no plumbing. They are starting points, not a prescription. Check your postcode above and the report tells you what your own water
+                  Of everything we link to, these three are what readers click most: a jug for drinking water, an under-sink filter you can fit yourself, and a
+                  reverse osmosis system for PFAS, fluoride and lead. They are starting points, not a prescription. Check your postcode above and the report tells you what your own water
                   needs.
                 </>
               }

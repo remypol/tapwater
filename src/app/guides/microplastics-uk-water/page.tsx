@@ -4,6 +4,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Microscope, Waves, ShieldQuestion, BookOpen } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
+import { GuideFilters } from "@/components/guide-filters";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -240,6 +241,17 @@ export default function MicroplasticsGuide() {
             Switching to bottled water is not a solution. A WHO-commissioned study and subsequent research by Orb Media found that bottled water frequently contains <strong className="text-ink">more</strong> microplastic particles than tap water — likely due to contamination from the plastic bottle itself during manufacturing, storage, and transport. In one widely cited analysis, 93% of bottled water brands tested contained microplastics.
           </p>
         </div>
+
+        <GuideFilters
+          reason="microplastics"
+          picks={[
+            { slug: "waterdrop-g3p600", highlight: "Reverse osmosis, the method rated highest above" },
+            { slug: "doulton-hip-ultracarb", highlight: "A ceramic filter listed for microplastics" },
+          ]}
+        >
+          One of each kind, if you would rather filter than wait for the research. They are chosen on how they filter. Check the maker's own
+          test figures for microplastics before you buy.
+        </GuideFilters>
 
         {/* Check your area */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">

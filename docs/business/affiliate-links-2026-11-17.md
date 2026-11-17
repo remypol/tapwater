@@ -49,23 +49,45 @@ Left as they are:
 - **BRITA:** Amazon's listing now says MAXTRA PRO reduces PFAS. Our guide says BRITA does not claim that. Needs checking against BRITA's own data sheet before the guide changes.
 - Seven Amazon products could not be checked for stock from a Dutch address (TAPP EcoPro, BWT E1, the softener salts, Eddy descaler).
 
-## Programmes on Awin we have not joined
+## Applications sent, 17 November 2026
 
-Awin lists 21,593 programmes we have not joined, 3,431 of them UK. The ones that sell what the site already recommends:
+Remy approved applying. All ten were submitted on account 2996923 with the website https://www.tapwater.uk as the promotion type and a short description of the site. Awin's API lists every one as pending:
 
 | Programme | Awin id | Why |
 |---|---|---|
-| Our Taap UK | 122454 | The block is built and switched off until we are accepted. £60 per 24-month plan per the competitor analysis |
-| Helloklean | 92037 | UK shower filter brand; the shower guide has no direct-paying pick |
-| Jolie Skin Co | 96543 | Our top shower pick, now a 3% Amazon link. Registered as a US programme; check it pays on UK orders |
-| Fahren Hot Taps | 34865 | Boiling water taps; the boiling tap guide has no direct partner |
+| Our Taap UK | 122454 | Pays £60 per 24-month plan, £30 per 12-month plan, £10 per rolling plan, 3% on direct purchases; 30-day cookie. The block on postcode pages is built and switched off until we are accepted: set `NEXT_PUBLIC_OUR_TAAP_JOINED=1` in Vercel |
+| Helloklean | 92037 | UK shower filter brand, registered as a US programme. The message asks them to confirm UK orders are tracked |
+| Jolie Skin Co | 96543 | Our top shower pick, now a 3% Amazon link. Also US-registered; same question asked |
+| Fahren Hot Taps | 34865 | Boiling water taps; the three boiling tap guides link to Quooker, Qettle and Fohen for nothing |
 | Pure Clear Filters | 86411 | Filter bottles and jugs |
-| Tefal, Morphy Richards UK | 82985, 115194 | Kettles in the hard-water kettle guide, now 3% Amazon links |
-| Robert Dyas, Plumbworld, Wickes | 1528, 17287, 1563 | Sell BRITA, softener salt and plumbing parts; a fallback when Amazon is out of stock |
+| Tefal | 82985 | Kettle already in the hard-water kettle guide on a 3% Amazon link |
+| Morphy Richards UK | 115194 | Same |
+| Robert Dyas | 1528 | Sells BRITA jugs, kettles and softener salt |
+| Plumbworld | 17287 | Taps and shower fittings |
+| Wickes | 1563 | Softeners, salt, taps |
+
+None of the ten publishes programme-specific terms on its Terms tab, so Awin's standard publisher terms apply. Awin shows a notice that its publisher terms change on 24 November 2026 and that continuing to use the account accepts them.
+
+Already pending before today, not sent by this session: Bark UK (58889) and ration1.de DE (23193). The second looks unrelated to this site.
 
 Not on Awin at all: ZeroWater, BRITA UK, TAPP Water, BWT. ZeroWater UK was on Webgains in September.
 
-Commission rates for programmes we have not joined are not available through the API. Joining has to be done on Awin's site, on account 2996923, and each application is Remy's decision.
+When one is approved it shows under `npx tsx scripts/awin.ts programmes joined`. Build its links with `npx tsx scripts/awin.ts link <id> <url>` and run `check`.
+
+## Every link with its traffic
+
+`npx tsx scripts/link-report.ts` writes `docs/business/link-report-<date>.md`: every product link with its clicks, the pages they come from, the programme, the rate and the estimated commission per sale; every page with its search visits and shop clicks; and shop links written into pages that pay nothing. First run: `link-report-2026-11-17.md`.
+
+What it showed, 90 days:
+
+- 2,068 shop clicks: Amazon 1,063, Awin 711, Osmio 294. Awin recorded 96 of its 711 because of the account mix-up above.
+- Postcode pages send 898 clicks from 2,319 search visits. The under-sink guide sends 214 from 411.
+- Swapping a cheap product to a better programme is worth almost nothing: a jug or shower filter pays £1 to £2 a sale whoever pays it. Waterdrop's own jug (£15.59, 7%) and Doulton's shower filter (£24.95, 5%) were checked and left out for that reason.
+- What matters is which products sit in the busy slots. The three-product rail on the home page, city pages and two guides (about 5,300 search visits a quarter) said "what readers click most" and showed a shower filter and a countertop unit. It now shows the three that are clicked most: ZeroWater jug, Waterdrop 10UA and Waterdrop G3P600, the last two on Awin at 7%.
+- The lead pipes and microplastics guides (176 search visits) explained which filters work and named none. Each now names two.
+- Osmio takes 294 clicks a quarter and its dashboard showed no orders in September. Its figures cannot be read from here. If it still shows none, its slots should go to Waterdrop's countertop units, which are tracked.
+- Boiling tap guides link to Quooker, Qettle and Fohen 21 times for nothing; Fahren and Our Taap are the applications that would change that.
+- Pages with search visits and no shop link at all: /rankings (451), tap water vs bottled (104), rainwater (106), smart water (82).
 
 ## Using the tool
 

@@ -87,7 +87,7 @@ async function refreshTokenAccess(creds: OAuthCredentials): Promise<string> {
   return body.access_token;
 }
 
-async function getAccessToken(): Promise<string> {
+export async function getAccessToken(): Promise<string> {
   if (process.env.GSC_OAUTH_JSON) {
     const creds = decodeJson<OAuthCredentials>(process.env.GSC_OAUTH_JSON);
     quotaProject ??= creds.quota_project_id;
@@ -141,7 +141,7 @@ interface Row {
   position: number;
 }
 
-async function query(
+export async function query(
   token: string,
   body: Record<string, unknown>,
 ): Promise<Row[]> {
