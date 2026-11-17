@@ -125,6 +125,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: title.length > 65 ? `Water Hardness in ${town} (${data.area}): ${data.summary.label}` : title,
     description: description.length > 155 ? description.slice(0, 152).replace(/[\s,;:]+\S*$/, "") + "…" : description,
+    alternates: { canonical: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}` },
     openGraph: { title, description, url: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}`, type: "article" },
   };
 }

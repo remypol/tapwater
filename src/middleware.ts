@@ -13,6 +13,8 @@ import type { NextRequest } from "next/server";
 const FULL_POSTCODE_RE =
   /^\/postcode\/([A-Z]{1,2}\d[A-Z\d]?)\d[A-Z]{2}$/i;
 
+const LOWERCASE_SECTIONS = /^\/(hardness|city|region|guides|contaminant|rankings|pfas|filters|supplier)\//;
+
 export function middleware(request: NextRequest) {
   // Google indexed /Guides (stray capital G) and ranks it while it 404s; send
   // that casing to the real index. This must live here and not in
@@ -22,6 +24,21 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/Guides") {
     const url = request.nextUrl.clone();
     url.pathname = "/guides";
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Postcode pages live at upper case (/postcode/RG1); every other section is lower
+  // case. People type and link both ways, and the wrong case used to be a 404.
+  const path = request.nextUrl.pathname;
+  const district = path.match(/^\/postcode\/([A-Za-z]{1,2}\d[A-Za-z\d]?)$/);
+  if (district && district[1] !== district[1].toUpperCase()) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/postcode/${district[1].toUpperCase()}`;
+    return NextResponse.redirect(url, 308);
+  }
+  if (LOWERCASE_SECTIONS.test(path) && path !== path.toLowerCase()) {
+    const url = request.nextUrl.clone();
+    url.pathname = path.toLowerCase();
     return NextResponse.redirect(url, 308);
   }
 
@@ -37,5 +54,17 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/postcode/:path*", "/Guides"],
+  matcher: [
+    "/postcode/:path*",
+    "/Guides",
+    "/hardness/:path*",
+    "/city/:path*",
+    "/region/:path*",
+    "/guides/:path*",
+    "/contaminant/:path*",
+    "/rankings/:path*",
+    "/pfas/:path*",
+    "/filters/:path*",
+    "/supplier/:path*",
+  ],
 };

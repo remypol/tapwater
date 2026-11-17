@@ -1,6 +1,6 @@
 import { HardnessHub } from "@/components/tank/hardness-pages"
 import type { Metadata } from "next"
-import { getHardnessMap } from "@/lib/data"
+import { getHardnessMap, getHardnessTowns } from "@/lib/data"
 import { postcodeAreaName } from "@/lib/postcode-areas"
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld"
 import { OG_IMAGE } from "@/lib/og";
@@ -29,7 +29,7 @@ export function generateMetadata(): Metadata {
 }
 
 export default async function WaterHardnessCheckerPage() {
-  const { areas } = await getHardnessMap()
+  const [{ areas }, towns] = await Promise.all([getHardnessMap(), getHardnessTowns()])
   const browseAreas = areas
     .filter((a) => a.measured >= 2)
     .map((a) => ({ ...a, town: postcodeAreaName(a.area) }))
@@ -87,7 +87,7 @@ export default async function WaterHardnessCheckerPage() {
           authorName="TapWater.uk Research"
           authorUrl="https://www.tapwater.uk/about"
         />
-      <HardnessHub areas={browseAreas} year={year} dateModified={dateModified} />
+      <HardnessHub towns={towns} areas={browseAreas} year={year} dateModified={dateModified} />
     </>
   )
 }

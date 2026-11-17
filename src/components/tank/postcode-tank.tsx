@@ -323,6 +323,18 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   <i style={{ left: `${Math.min(hardValue / HARD_MAX, 1) * 100}%` }} />
                 </div>
                 <div className="wt-ends"><span>Soft</span><span>{HARD_MAX} mg/L</span></div>
+                {page.hardnessLinks.town || page.hardnessLinks.area ? (
+                  <p className="wt-hardlinks">
+                    {page.hardnessLinks.town ? (
+                      <Link className="wt-link" href={`/hardness/${page.hardnessLinks.town.slug}`}>Water hardness in {page.hardnessLinks.town.name}</Link>
+                    ) : null}
+                    {page.hardnessLinks.area ? (
+                      <Link className="wt-link" href={`/hardness/${page.hardnessLinks.area.code.toLowerCase()}`}>
+                        Hardness across {page.hardnessLinks.area.name} ({page.hardnessLinks.area.code})
+                      </Link>
+                    ) : null}
+                  </p>
+                ) : null}
               </div>
             </div>
             {isHard ? (
@@ -577,6 +589,11 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
 export function PostcodeTankEmpty({ page }: { page: PostcodePageLoad }) {
   const { data, city } = page;
   const district = data.district;
+  // Many districts with no test results still have a hardness reading of their own.
+  // An area estimate is not shown here: the page would then say nothing measured.
+  const hardKnown = page.hardness != null && !page.hardness.estimated;
+  const hardValue = hardKnown ? (page.hardness?.value ?? null) : null;
+  const isHard = hardValue != null && hardValue >= HARD_WATER_THRESHOLD;
   return (
     <div className="wt">
       <div className="wt-top">
@@ -598,12 +615,67 @@ export function PostcodeTankEmpty({ page }: { page: PostcodePageLoad }) {
               <span>Not enough test results yet.</span>
             </h1>
             <p className="wt-basis">
-              We do not hold enough results for {district} to say anything useful about it. That is a gap in the published data, not a sign that the water is unsafe.
+              {hardKnown
+                ? `We do not hold enough tap test results for ${district} to score its water, but we do know how hard it is. The gap is in the published data, not a sign that the water is unsafe.`
+                : `We do not hold enough results for ${district} to say anything useful about it. That is a gap in the published data, not a sign that the water is unsafe.`}
               {data.supplierId && data.supplierId !== "unknown" ? <> Your supplier is <Link className="wt-link" href={`/supplier/${data.supplierId}`}>{data.supplier}</Link>.</> : null}
             </p>
           </div>
         </div>
       </section>
+      {hardKnown && hardValue != null ? (
+        <section className={`wt-chalk${isHard ? "" : " wt-chalk--soft"}`} id="wt-hardness" aria-labelledby="wt-hard-h">
+          <div className="wt-inner">
+            <div className="wt-chalk-grid">
+              <p className="wt-n wt-nums">
+                {Math.round(hardValue)}
+                <small>mg of limescale minerals in every litre</small>
+              </p>
+              <div>
+                <h2 className="wt-h2" id="wt-hard-h">
+                  {isHard ? `${district} has hard water` : hardValue < 120 ? `${district} has soft water` : `${district} water is middling in hardness`}
+                </h2>
+                <p>
+                  {isHard
+                    ? `${hardnessBandLabel(hardValue)} on the UK scale. It is fine to drink. It is hard on boilers, showers and anything that heats water, and only a softener removes it.`
+                    : hardValue < 120
+                      ? "You will not need a softener here, and you will use less soap and detergent than most of England."
+                      : "Below the point where a softener pays for itself. Descaling the kettle now and then is all most homes need."}
+                </p>
+                <div className="wt-crust" role="img" aria-label={`${Math.round(hardValue)} mg/L on a scale from soft to ${HARD_MAX}`}>
+                  <u style={{ left: `${(SOFTENER_THRESHOLD_MGL / HARD_MAX) * 100}%` }}>a softener pays off from {SOFTENER_THRESHOLD_MGL}</u>
+                  <i style={{ left: `${Math.min(hardValue / HARD_MAX, 1) * 100}%` }} />
+                </div>
+                <div className="wt-ends"><span>Soft</span><span>{HARD_MAX} mg/L</span></div>
+                {page.hardnessLinks.town || page.hardnessLinks.area ? (
+                  <p className="wt-hardlinks">
+                    {page.hardnessLinks.town ? (
+                      <Link className="wt-link" href={`/hardness/${page.hardnessLinks.town.slug}`}>Water hardness in {page.hardnessLinks.town.name}</Link>
+                    ) : null}
+                    {page.hardnessLinks.area ? (
+                      <Link className="wt-link" href={`/hardness/${page.hardnessLinks.area.code.toLowerCase()}`}>
+                        Hardness across {page.hardnessLinks.area.name} ({page.hardnessLinks.area.code})
+                      </Link>
+                    ) : null}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+            {isHard ? (
+              <div className="wt-form">
+                <SoftenerLeadForm
+                  postcode={district}
+                  hardnessValue={hardValue}
+                  hardnessLabel={hardnessBandLabel(hardValue).toLowerCase()}
+                  source="postcode_page"
+                  heading={`Softener quotes for ${district}`}
+                  intro={`Leave your details and we will email you when we can match you with installers who cover ${district}. No obligation.`}
+                />
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ) : null}
       {data.nearbyPostcodes.length > 0 ? (
         <section className="wt-next">
           <div className="wt-inner">

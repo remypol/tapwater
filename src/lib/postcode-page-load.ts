@@ -6,12 +6,15 @@
 
 import {
   getHardness,
+  getHardnessAreaCodes,
+  getHardnessTowns,
   getNationalAverageScore,
   getPostcodeData,
   getPostcodesByCity,
 } from "./data";
 import type { PostcodeData } from "./types";
 import { CITIES } from "./cities";
+import { postcodeAreaName } from "./postcode-areas";
 import { districtHighlights, type Highlight } from "./district-highlights";
 import { recommendFilters, HARD_WATER_THRESHOLD } from "./filters";
 import { getPfasNearDistrict, type PfasNearbySummary } from "./pfas-data";
@@ -41,6 +44,8 @@ export interface PostcodePageLoad {
   highlights: Highlight[];
   faqs: { question: string; answer: string }[];
   incidents: Awaited<ReturnType<typeof getActiveIncidentsForPostcode>>;
+  /** Hardness pages this district belongs to, so the postcode page can link up to them. */
+  hardnessLinks: { area: { code: string; name: string } | null; town: { slug: string; name: string } | null };
 }
 
 /** The city page this district belongs to, for breadcrumbs and city-wide comparisons. */
@@ -169,7 +174,18 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
     }] : []),
   ] : [];
 
+  // The area and town hardness pages are where "water hardness in {place}" searches
+  // should land; until November 2026 no postcode page linked to either.
+  const areaCode = data.district.toUpperCase().replace(/[0-9].*$/, "");
+  const [areaCodes, towns] = await Promise.all([getHardnessAreaCodes(), getHardnessTowns()]);
+  const town = towns.find((t) => t.districts.some((d) => d.district.toUpperCase() === data.district.toUpperCase()));
+  const hardnessLinks = {
+    area: areaCodes.includes(areaCode) ? { code: areaCode, name: postcodeAreaName(areaCode) } : null,
+    town: town ? { slug: town.slug, name: town.town } : null,
+  };
+
   return {
+    hardnessLinks,
     data,
     hasData,
     city,

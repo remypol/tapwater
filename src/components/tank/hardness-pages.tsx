@@ -90,7 +90,7 @@ function SoftenerGuideList({ current }: { current?: string }) {
 
 // ── /hardness ─────────────────────────────────────────────────────────────────
 
-export function HardnessHub({ areas, year, dateModified }: { areas: (HardnessMapArea & { town: string })[]; year: number; dateModified: string }) {
+export function HardnessHub({ areas, towns = [], year, dateModified }: { areas: (HardnessMapArea & { town: string })[]; towns?: HardnessTown[]; year: number; dateModified: string }) {
   return (
     <div className="wt">
       <Crumbs items={[{ label: "Home", href: "/" }, { label: "Water Hardness Checker" }]} />
@@ -222,6 +222,20 @@ export function HardnessHub({ areas, year, dateModified }: { areas: (HardnessMap
             <h2 className="wt-h2" id="browse-areas-heading">Hardness by postcode area</h2>
             <p className="wt-sub">Every area with measured readings, from water company tests and their own postcode checkers. The number is the median across the area&rsquo;s districts.</p>
             <AreaPills areas={areas} />
+          </div>
+        </section>
+      ) : null}
+
+      {towns.length > 0 ? (
+        <section className="wt-band wt-band--white" aria-labelledby="browse-towns-heading">
+          <div className="wt-inner">
+            <h2 className="wt-h2" id="browse-towns-heading">Hard-water towns</h2>
+            <p className="wt-sub">{towns.length} towns where the water is hard or very hard, each with a figure for every district. The number is mg/L.</p>
+            <div className="wt-pills">
+              {towns.map((t) => (
+                <Link key={t.slug} href={`/hardness/${t.slug}`}>{t.name} <span className="wt-nums" style={{ opacity: 0.65 }}>{t.median}</span></Link>
+              ))}
+            </div>
           </div>
         </section>
       ) : null}

@@ -465,3 +465,4 @@
 .wt-compare li { padding: 24px 28px; border-radius: 28px; background: var(--wt-foam); display: grid; gap: 8px; }
 .wt-compare b { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.015em; }
 .wt-compare small { color: var(--wt-mute); font-size: 0.9rem; }
+.wt-hardlinks { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 0.98rem; }
