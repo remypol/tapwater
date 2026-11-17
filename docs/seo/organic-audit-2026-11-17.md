@@ -28,23 +28,48 @@ Running record of what was found and what was done. Search Console figures are f
 | Hardness area pages declare a canonical address | Live |
 | No-data postcode pages show the district's hardness reading where we hold one (515 districts) | Live |
 
-## In progress
+## Done later on 17 November (all live)
 
-The ten page changes from the analysis, the technical crawl, and whatever the crawl turns up. See the end of this file once complete.
+**Data faults found on the way**
 
-## What the technical crawl showed (388 pages fetched, 600 internal links checked)
-
-| Finding | Scale | Action |
+| Fault | Scale | Fix |
 |---|---|---|
-| City, contaminant and supplier pages sent a loading placeholder as the main content; the real text arrived hidden and was swapped in by script | 88 pages | The three `loading.tsx` files are removed, so the full page is in the first response |
-| Unknown supplier addresses returned 200 (a "soft 404"), and /rankings links to /supplier/unknown | 1 template | Expected to become a real 404 now the placeholder is gone; the /rankings link is being fixed |
-| City comparison pages involving Glasgow or Edinburgh had nothing to compare (79 words) | 4 pages | Marked noindex and taken out of the sitemap until Scottish scores exist |
-| Sitemap listed filter comparisons in both orders although the reverse points its canonical at the other | 4 URLs | Sitemap lists the canonical order only |
-| /news had no canonical | 1 page | Added |
-| Hardness area and town pages had no share image | 429 pages | Being added |
-| Ranking sub-page titles were as short as "Hardest Water (2026)" | 6 pages | Now use the full descriptive title |
-| Hubs link heavily to pages hidden from search (233 of 351 checked postcode links; old news) | /postcode, the map guide, /news | Not changed; see "Left for a decision" |
-| Very large pages: /postcode and the map guide about 1 MB of HTML, home and /news about 0.5 MB | 4 pages | Not changed yet |
-| Nine guide titles over 65 characters | 9 pages | Left alone where the page ranks well (under-sink guide) |
+| The combined nitrate/nitrite index (limit 1.0) was scored as nitrite (limit 0.5), so a normal 0.55 showed as "Nitrite is over the limit" | Thames 330 districts, Anglian 138, Yorkshire 50, Southern 21, Affinity 19, Severn Trent 12, Cambridge 9, Portsmouth 5 had index rows over 0.5 | Scoring fixed with a test; page data rebuilt for Thames (420 districts), Anglian (195), Yorkshire (191), Severn Trent (328), Affinity (28), Portsmouth (6) and 7 Southern districts |
+| One bacteria detection in a year (for example 1 of 144 samples) headlined as "Coliform Bacteria is over the limit" | 36 of 150 Thames zones, so roughly a quarter of London districts | Headline now reads "{substance} found in a sample" and explains the company must investigate and retest |
+| Thames results assigned to districts in rotation | 442 districts | NOT fixed; see `docs/business/thames-data-problem-2026-11-17.md` |
 
-Checked and fine: every sampled sitemap URL returns 200 with no redirect; all 600 internal links return 200; exactly one h1 per page; structured data present and valid on every page; robots.txt blocks nothing in the sitemap; no image lacks alt text.
+**Click-through changes (Search Console evidence above)**
+
+| Page type | Change |
+|---|---|
+| City pages (50) | Title answers the question: "Can You Drink Tap Water in Manchester? Yes: 9.4/10 (2026)". "Yes" only where no district has a reading over its limit; London reads "8.7/10, 58 Areas Tested". Cities without scores say "What We Know". New "In hotels, rentals and student halls" section and FAQ |
+| Region pages (11) | Same answer-first pattern |
+| Hardness area pages (93) | "Is Manchester Water Hard or Soft? Soft, 29 mg/L (M)"; full-sentence description; FAQ uses the searched wording |
+| /hardness and the map guide | Link to each other with "water hardness by postcode" and "UK water hardness map" |
+| /rankings | Retitled "Which UK City Has the Best Tap Water? Rankings (2026)" so it stops competing with /compare |
+| Testing guide | Title and a heading target "how to test water quality"; linked from the homepage |
+| Bottled-water guide | New section and FAQ: "How long does tap water last in a bottle?" (24 hours in the fridge, per the Drinking Water Inspectorate) |
+| Smart water guide | Title answers the question |
+| Filter comparisons | "{Brand} alternatives in the UK" sections; title carries "Alternatives" |
+| Softener guide | New section for "home water softener" |
+| Category pages | Test kits and reverse osmosis point their canonical at the buying guide. Under-sink, whole-house and shower are left as listings because the under-sink guide ranks well as things are |
+
+**Crawl fixes**: listed in the crawl table above; all live. Verified on production: city, contaminant and supplier pages now carry 700 to 2,700 words in the first response; an unknown supplier address returns 404.
+
+## Left open, with my decision on each
+
+| Item | Decision |
+|---|---|
+| Thames district matching | Blocked by Thames's firewall after a too-fast run. Re-run `scripts/map-thames-zones.ts` slowly, then switch the import. Highest-value data fix remaining |
+| 515 districts with a hardness reading but no test results are hidden from Google | Keep hidden. The page is about 150 words; indexing 515 thin pages three months after a spam update is not worth the risk. Revisit once Scottish and Northern Irish test results are imported |
+| Hubs link to many hidden pages (/postcode, map guide, /news) | Leave. They help visitors; the fix is importing data, not removing links |
+| Very large pages (/postcode and the map guide at about 1 MB) | Leave for now; response times are 0.4 to 0.6 seconds. Worth trimming if Core Web Vitals show a problem |
+| Southern Water: 28 districts would score lower if rebuilt | Not rebuilt. Cause not established; known unit problems in that extract |
+| "Who supplies water in {town}" (8,288 impressions, no page) | Do after the supplier data is trustworthy, not before |
+| Hosepipe-ban and storm-overflow pages | Build before April; seasonal |
+| Links from other sites (domain rating 9) | The biggest remaining lever and not a code change: the press pitches in `docs/seo/press-pitches-2026-09.md` have not been sent |
+| /rankings body text still says "51 major UK cities" | Minor; fix with the next edit to that page |
+
+## How to tell whether it worked
+
+Compare with `docs/numbers/baseline-2026-11-17.md` on 1 and 15 December. For this round specifically: click-through on /city pages (1.0% at position 6.7) and /hardness area pages (1.0% at 5.6); clicks to /hardness (43 in 28 days); position of /guides/how-to-test-your-water for "how to test water quality" (87); first impressions on /hardness/{town} pages.
