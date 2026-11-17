@@ -69,6 +69,7 @@ async function main() {
   });
   console.log(`${targets.length} districts${dryRun ? " (dry run)" : ""}`);
 
+  const unfinished: string[] = [];
   const tally: Record<string, number> = {};
   const count = (k: string) => (tally[k] = (tally[k] ?? 0) + 1);
 
@@ -128,17 +129,34 @@ async function main() {
       topReadings: ctx.topReadings ?? [],
     };
 
-    await upsertPostcodeDistrict(seed);
-    if (records.length > 0) {
-      // Another company's rows first: writeStreamReadings only replaces stream_portal rows.
-      if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
-      await writeStreamReadings(d.id, supplier.id, records);
-      if (page) await upsertPageData(seed, records);
-    } else if (foreign.length || orphaned) {
-      if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
-      if (page) await upsertPageData(seed);
+    // Storing replaces the district's rows (delete, then insert), so a dropped
+    // connection half-way leaves it empty. Try twice, then carry on and name it
+    // at the end instead of stopping the whole run.
+    const store = async () => {
+      await upsertPostcodeDistrict(seed);
+      if (records.length > 0) {
+        // Another company's rows first: writeStreamReadings only replaces stream_portal rows.
+        if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
+        await writeStreamReadings(d.id, supplier.id, records);
+        if (page) await upsertPageData(seed, records);
+      } else if (foreign.length || orphaned) {
+        if (foreign.length) await db.from("drinking_water_readings").delete().eq("postcode_district", d.id).in("source", ["stream_portal", "thames_water_zone"]).in("supplier_id", foreign);
+        if (page) await upsertPageData(seed);
+      }
+    };
+    try {
+      await store();
+    } catch {
+      await new Promise((r) => setTimeout(r, 5000));
+      try {
+        await store();
+      } catch (err) {
+        unfinished.push(d.id);
+        console.log(`  ${d.id.padEnd(5)} could not be stored (${err instanceof Error ? err.message.slice(0, 80) : err})`);
+      }
     }
   }
+  if (unfinished.length) console.log(`\nNot stored, run these again: ${unfinished.join(" ")}`);
 
   console.log(Object.entries(tally).map(([k, n]) => `${n} ${k}`).join(", "));
 }

@@ -10,6 +10,10 @@
  * up with no other change. One request a second, browser-like headers, and only
  * companies whose robots.txt allows the endpoint.
  *
+ * Checked and left out: Severn Trent. Its checker calls /bin/waterquality/info.json,
+ * and its robots.txt disallows /bin (17 Nov 2026). Its open dataset carries no
+ * hardness, calcium or magnesium either, so the Midlands stay without a figure.
+ *
  *   npx tsx scripts/ingest-company-hardness.ts united-utilities [--limit 5] [--dry] [--delay 3000] [--only EX17,EX2] [--skip-existing]
  *   npx tsx scripts/ingest-company-hardness.ts all
  */
@@ -103,6 +107,21 @@ const ADAPTERS: Record<string, Adapter> = {
     if (!Number.isFinite(v)) return null;
     const zone = html?.match(/ZONE\s+\d+\s+[A-Z &'-]+/)?.[0]?.trim() ?? null;
     return { mgCaCO3: v, zone };
+  },
+
+  // Bristol Water's "Water Quality and Hardness checker". The field numbers are
+  // the ones its own page script reads: 1 zone name, 8 total hardness in mg/l as
+  // CaCO3 (6 calcium, 7 magnesium, 9 to 11 Clark, French and German degrees).
+  // An empty list means the postcode is not Bristol Water's. robots.txt only
+  // disallows /_hcms/preview/. Read on 17 Nov 2026.
+  "bristol-water": async (postcode) => {
+    const d = await getJson<{ objects?: { values?: Record<string, unknown> }[] }>(
+      `https://www.bristolwater.co.uk/_hcms/api/getWQHubdbDataInfo?q=${encodeURIComponent(postcode)}`,
+    );
+    const values = d?.objects?.[0]?.values;
+    const v = num(values?.["8"] == null ? null : String(values["8"]));
+    if (!Number.isFinite(v) || v <= 0) return null;
+    return { mgCaCO3: v, zone: values?.["1"] ? String(values["1"]) : null };
   },
 
   "anglian-water": async (_postcode, lat, lng) => {

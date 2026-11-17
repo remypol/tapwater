@@ -80,9 +80,21 @@ One more of the same kind: 29 South East Water and Wessex Water districts (Wokin
 
 - 261 corrected districts got a hardness reading from their real company's own checker (`scripts/ingest-company-hardness.ts`): Affinity 94, South East Water 81, Essex & Suffolk 45, Wessex 22, Anglian 13, Northumbrian 3, United Utilities 3. Woking reads 271 mg/L (the site said 139), Maidenhead 334, Wokingham 302.
 - Southern Water publishes hardness as calcium, not as calcium carbonate, so its 90 districts had no measured hardness. The conversion is exact (× 100.09/40.08) and is now done on every refresh (`src/lib/derived-hardness.ts`): Brighton 276, Worthing 279 to 300, Southampton about 300, Hastings 81.
-- Districts with a measured hardness: 1,773 before, **1,969** after. Over the 200 ppm line in the building regulations guidance: 759 before, **929** after.
+- Bristol Water has a postcode checker its robots.txt allows; an adapter was added and all 47 of its districts have a reading (Bristol about 205 to 290, Frome 334).
+- Districts with a measured hardness: 1,773 before, **2,016** after. Over the 200 ppm line in the building regulations guidance: 759 before, **967** after.
 
-Still on a postcode-area estimate, because the company has no checker we use and no hardness in its samples: Severn Trent (298 districts), Welsh Water (210), Bristol Water (56), South Staffs (45), SES Water (29), Portsmouth (23), Hafren Dyfrdwy (13), Cambridge (12). SES, Portsmouth and Cambridge are hard-water areas, so those three are the ones worth an adapter.
+Still without a measured figure:
+
+| Company | Districts | Why |
+|---|---|---|
+| Severn Trent | 275 (195 with no figure at all: B, CV, DE, DY, LE, ST, TF, WR, WV) | Its checker calls `/bin/waterquality/info.json`, and its robots.txt disallows `/bin`. Its open dataset has no hardness, calcium or magnesium. **Do not automate it.** This is the largest gap: Coventry, Leicester and Derby are hard-water towns |
+| Welsh Water | 191 (184 with no figure) | No hardness in its samples; checker not looked at. Mostly soft water, so low value for softener requests |
+| South Staffs Water | 45 (none) | No hardness in its samples; checker not looked at. Hard water (Walsall, West Bromwich) |
+| South West Water | 41 of 131 (TQ, TR) | Its checker allows about twenty calls an hour; the run was never finished. Soft water |
+| SES Water | 28 (21 on an area estimate, 7 none) | Has a postcode "water quality and hardness report"; endpoint not looked at. Very hard water, so worth doing |
+| Portsmouth Water | 23 (area estimate) | Not looked at. Very hard |
+| Cambridge Water | 11 (area estimate) | Not looked at. Very hard |
+| Hafren Dyfrdwy | 13 | Not looked at. Soft |
 
 ## 7. Company pages
 
@@ -100,7 +112,7 @@ Still on a postcode-area estimate, because the company has no checker we use and
 - **Would have been lost:** about 30 districts that carried Thames figures by mistake and belong to South East Water or Wessex Water, which publish no samples: Wokingham (RG40, RG41), Bracknell (RG12, RG42), Maidenhead (SL6), Camberley, Chippenham, Salisbury. Several are in our best softener-lead area. The rule was "no tap results, no index".
 - **Rule now** (`isIndexableDistrict` in `src/lib/data.ts`, used by the page and the sitemap): a page is indexed when it has tap results, or when it has the water company's own hardness reading for the district. A page resting on river samples and an estimated hardness stays out (Bristol, for example).
 - Pages without tap results say so in their summary: the score comes from rivers and groundwater nearby, the hardness figure is the company's own.
-- Counted after the changes: 2,695 of 2,782 district pages are indexable (about 1,940 before), and there are 418 hard-water town pages (336 before), because more districts now have a measured hardness reading.
+- Counted after the changes: 2,731 of 2,782 district pages are indexable (about 1,940 before), and there are 432 hard-water town pages (336 before), because more districts now have a measured hardness reading.
 - The company table ranks a company only on districts with its own tap results. South East Water, Wessex Water and Bristol Water are listed without a score, with the reason.
 
 ## Scripts, in the order they are used
