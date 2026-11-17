@@ -109,7 +109,14 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   const tone: TankTone = over.length > 0 ? "over" : thin ? "thin" : "clear";
 
   const headline: string[] = [];
-  if (tone === "over") {
+  // Bacteria and other must-be-zero substances "fail" when a single sample in the
+  // year finds any at all (Thames reports, for example, 1 contravention in 144
+  // samples). That is a detection the company must investigate, not water that is
+  // currently over a limit, so the headline says what happened.
+  const detectionOnly = over.length > 0 && over.every((r) => r.ukLimit === 0);
+  if (tone === "over" && detectionOnly) {
+    headline.push(over.length === 1 ? `${over[0].name} found in a sample.` : `${over.length} must-be-zero results found in samples.`);
+  } else if (tone === "over") {
     headline.push(over.length === 1 ? `${over[0].name} is over the limit.` : `${over.length} results are over the limit.`);
   } else if (tone === "thin") {
     headline.push("Too few tap tests to call it.");
@@ -121,7 +128,9 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   const closest = bubbles[0] ?? null;
   const counted = `${input.sampleCount > 0 ? `${input.sampleCount.toLocaleString("en-GB")} samples, ` : ""}${readings.length} substances, latest on ${formatSampleDate(input.lastSampleDate)}.`;
   let basis: string;
-  if (tone === "over") {
+  if (tone === "over" && detectionOnly) {
+    basis = `${counted} ${joinNames(over.slice(0, 3).map((r) => r.name))} ${over.length === 1 ? "was" : "were"} found in at least one sample in the period. The legal standard is none at all, so the water company has to investigate and retest when that happens. Everything else passed.`;
+  } else if (tone === "over") {
     basis = `${counted} ${joinNames(over.slice(0, 3).map((r) => r.name))} came in above the legal limit. Everything else passed.`;
   } else if (tone === "thin") {
     basis =

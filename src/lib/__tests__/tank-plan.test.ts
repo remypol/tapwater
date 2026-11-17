@@ -141,3 +141,19 @@ describe("formatting", () => {
     expect(formatReading(0.0127)).toBe("0.0127");
   });
 });
+
+describe("must-be-zero detections", () => {
+  const base = { district: "SW10", dataSource: "drinking", sampleCount: 144, lastSampleDate: "2025-12-31", scoredCount: 20, hardness: null, recommendations: [] };
+  const reading = (name: string, value: number, ukLimit: number | null, status: "pass" | "fail") =>
+    ({ name, value, unit: "", ukLimit, whoGuideline: null, status, source: "drinking" }) as never;
+  it("says a single bacteria detection was found in a sample, not that the water is over a limit", () => {
+    const plan = buildTankPlan({ ...base, readings: [reading("Coliform Bacteria", 1, 0, "fail"), reading("Nitrate", 25, 50, "pass")] } as never);
+    expect(plan.headline[0]).toBe("Coliform Bacteria found in a sample.");
+    expect(plan.basis).toContain("found in at least one sample");
+    expect(plan.basis).not.toContain("above the legal limit");
+  });
+  it("still says over the limit when a substance with a real limit exceeds it", () => {
+    const plan = buildTankPlan({ ...base, readings: [reading("Lead", 15, 10, "fail"), reading("Coliform Bacteria", 1, 0, "fail")] } as never);
+    expect(plan.headline[0]).toBe("2 results are over the limit.");
+  });
+});
