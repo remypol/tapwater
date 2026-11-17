@@ -56,6 +56,40 @@ async function getText(url: string, init: RequestInit = {}): Promise<string | nu
 
 const num = (s: string | undefined | null) => (s == null ? NaN : parseFloat(s));
 
+/** What South West Water's and SES Water's postcode searches answer with. */
+interface WaterQualitySearch {
+  match?: boolean;
+  areaName?: string;
+  partsPerMillion?: number;
+  clarkeDegrees?: number;
+}
+
+/**
+ * Hardness as CaCO3 from a "waterqualitysearch" answer.
+ *
+ * Both sites give "partsPerMillion" beside Clark degrees, but not of the same
+ * thing: South West Water's are of calcium carbonate, SES Water's of calcium
+ * (74 beside 13 Clark degrees; 13 × 14.254 = 185 and 74 × 100.09/40.08 = 185).
+ * The Clark degrees say which: one Clark degree is 14.254 mg/l as CaCO3. A
+ * figure that fits neither reading is left out. Without Clark degrees the
+ * parts per million are taken as CaCO3, as before.
+ */
+function fromWaterQualitySearch(d: WaterQualitySearch | null, postcode: string): Lookup | null {
+  if (!d?.match || typeof d.partsPerMillion !== "number" || !(d.partsPerMillion > 0)) return null;
+  const ppm = d.partsPerMillion;
+  const zone = d.areaName ?? null;
+  const clark = Number(d.clarkeDegrees);
+  if (!(clark > 0)) return { mgCaCO3: ppm, zone };
+  const fromClark = clark * 14.254;
+  // Clark degrees are whole numbers, so allow the half-degree of rounding too.
+  const fits = (v: number) => Math.abs(v - fromClark) <= Math.max(0.1 * fromClark, 8);
+  if (fits(ppm)) return { mgCaCO3: ppm, zone };
+  const asCaCO3 = ppm * (100.09 / 40.08);
+  if (fits(asCaCO3)) return { mgCaCO3: Math.round(asCaCO3), zone };
+  console.log(`     ${postcode}: ${ppm} ppm and ${clark} Clark degrees fit neither reading, left out`);
+  return null;
+}
+
 const ADAPTERS: Record<string, Adapter> = {
   "united-utilities": async (postcode) => {
     type Row = { chemical?: string; average?: string; units?: string };
@@ -69,12 +103,11 @@ const ADAPTERS: Record<string, Adapter> = {
   },
 
   "south-west-water": async (postcode) => {
-    const d = await getJson<{ match?: boolean; partsPerMillion?: number; areaName?: string }>(
+    const d = await getJson<WaterQualitySearch>(
       "https://www.southwestwater.co.uk/api/waterqualitysearch/search",
       { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ postcode }) },
     );
-    if (!d?.match || typeof d.partsPerMillion !== "number") return null;
-    return { mgCaCO3: d.partsPerMillion, zone: d.areaName ?? null };
+    return fromWaterQualitySearch(d, postcode);
   },
 
   "south-east-water": async (postcode) => {
@@ -128,30 +161,18 @@ const ADAPTERS: Record<string, Adapter> = {
     return { mgCaCO3: v, zone: values?.["1"] ? String(values["1"]) : null };
   },
 
-  // SES Water's "water quality and hardness report" search. It answers with
-  // "partsPerMillion" beside Clark, French and German degrees, and the parts
-  // per million are of calcium, not calcium carbonate: 74 beside 13 Clark
-  // degrees (13 × 14.254 = 185, and 74 × 100.09/40.08 = 185). SES softens its
-  // water at the works, which is why Sutton and Redhill read about 185 and not
-  // the 280 of their neighbours. The figure is only used when the calcium and
-  // the Clark degrees agree. robots.txt disallows /episerver/ and /utils/ only.
+  // SES Water's "water quality and hardness report" search, on the same system
+  // as South West Water's (see fromWaterQualitySearch). SES softens its water at
+  // the works, which is why Sutton and Redhill read about 185 and not the 280 of
+  // their neighbours. robots.txt disallows /episerver/ and /utils/ only. It
+  // answers 429 after about seven requests at one a second: use --delay 20000.
   // Read on 17 Nov 2026.
   "ses-water": async (postcode) => {
-    const d = await getJson<{ match?: boolean; areaName?: string; partsPerMillion?: number; clarkeDegrees?: number }>(
+    const d = await getJson<WaterQualitySearch>(
       "https://www.seswater.co.uk/api/waterqualitysearch/search",
       { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ postcode }) },
     );
-    if (!d?.match) return null;
-    const asCalcium = Number(d.partsPerMillion);
-    const clark = Number(d.clarkeDegrees);
-    if (!(asCalcium > 0) || !(clark > 0)) return null;
-    const fromCalcium = asCalcium * (100.09 / 40.08);
-    const fromClark = clark * 14.254;
-    if (Math.abs(fromCalcium - fromClark) / fromClark > 0.1) {
-      console.log(`     ${postcode}: ${asCalcium} ppm and ${clark} Clark degrees do not agree, left out`);
-      return null;
-    }
-    return { mgCaCO3: Math.round(fromCalcium), zone: d.areaName ?? null };
+    return fromWaterQualitySearch(d, postcode);
   },
 
   "anglian-water": async (_postcode, lat, lng) => {
@@ -308,7 +329,11 @@ async function main() {
       .slice(0, limit);
     console.log(`\n${supplier}: ${rows.length} districts${dry ? " (dry run)" : ""}`);
     let ok = 0, miss = 0;
-    for (const d of rows) {
+    for (const [index, d] of rows.entries()) {
+      // The pause comes before every request after the first. It used to sit at
+      // the end of the loop, where a district without a reading skipped it, so a
+      // run of misses went out as fast as the network allowed and drew a 429.
+      if (index > 0) await sleep(delayMs);
       const district: string = d.id;
       try {
         const postcode = supplier === "anglian-water" ? district : await nearestPostcode(d.latitude, d.longitude);
@@ -342,7 +367,6 @@ async function main() {
         miss++;
         console.log(`  ${district.padEnd(5)} error: ${err instanceof Error ? err.message : String(err)}`);
       }
-      await sleep(delayMs);
     }
     console.log(`${supplier}: ${ok} stored, ${miss} without a reading`);
   }
