@@ -5,6 +5,7 @@
  * All functions are async — pages must await them.
  */
 
+import { isThamesRotationDistrict } from "./thames-zones";
 import { POST_TOWNS } from "@/data/post-towns";
 import { buildHardnessTowns, type HardnessTown } from "./hardness-towns";
 import { supabase } from "./supabase";
@@ -658,7 +659,12 @@ export function isRankable(p: PostcodeData): boolean {
     p.safetyScore >= 0 &&
     p.dataSource !== "ea-only" &&
     p.lastSampleDate >= cutoffStr &&
-    p.contaminantsTested >= MIN_TESTED_TO_RANK
+    p.contaminantsTested >= MIN_TESTED_TO_RANK &&
+    // Thames Water zone results are not yet matched to the right district (two
+    // districts topped the lead table with the same zone's reading), so no district
+    // on that list may be named in a ranking until scripts/map-thames-zones.ts has
+    // been run and the import uses it.
+    !isThamesRotationDistrict(p.district)
   );
 }
 
@@ -899,8 +905,8 @@ export async function getRankedPostcodes(): Promise<{
           .gte("contaminants_tested", MIN_TESTED_TO_RANK);
 
       const [worstRes, bestRes] = await Promise.all([
-        rankable().order("safety_score", { ascending: true }).limit(3),
-        rankable().order("safety_score", { ascending: false }).limit(3),
+        rankable().order("safety_score", { ascending: true }).limit(60),
+        rankable().order("safety_score", { ascending: false }).limit(60),
       ]);
 
       if (!worstRes.error && !bestRes.error && worstRes.data && bestRes.data) {
@@ -954,8 +960,9 @@ export async function getRankedPostcodes(): Promise<{
         };
 
         return {
-          worst: await Promise.all(worstRes.data.map(mapRow)),
-          best: await Promise.all(bestRes.data.map(mapRow)),
+          // Same guard as isRankable: no Thames-list district is named until its zone is matched.
+          worst: await Promise.all(worstRes.data.filter((r) => !isThamesRotationDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
+          best: await Promise.all(bestRes.data.filter((r) => !isThamesRotationDistrict(r.postcode_district)).slice(0, 3).map(mapRow)),
         };
       }
     } catch {

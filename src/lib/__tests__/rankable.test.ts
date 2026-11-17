@@ -21,6 +21,7 @@ function yearsAgo(n: number): string {
 
 function district(overrides: Partial<PostcodeData> = {}): PostcodeData {
   return {
+    district: "LS1",
     safetyScore: 7,
     dataSource: "stream",
     lastSampleDate: yearsAgo(1),
@@ -56,5 +57,11 @@ describe("isRankable", () => {
 
   it("accepts mixed sources, which still contain drinking water results", () => {
     expect(isRankable(district({ dataSource: "mixed" }))).toBe(true);
+  });
+
+  it("keeps Thames-list districts out until their zones are matched to districts", () => {
+    expect(isRankable(district({ district: "SE10" }))).toBe(false);
+    expect(isRankable(district({ district: "DA5" }))).toBe(false);
+    expect(isRankable(district({ district: "LS1" }))).toBe(true);
   });
 });

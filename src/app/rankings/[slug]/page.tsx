@@ -858,7 +858,9 @@ export default async function RankingPage({
         {/* Footer */}
         <footer className="mt-4 pb-6 text-sm text-faint leading-relaxed border-t border-[var(--color-rule)] pt-6">
           Data from the Environment Agency Water Quality Archive and water company testing.
-          Rankings compiled by TapWater.uk from {totalAnalysed.toLocaleString()} postcode districts.
+          Rankings compiled by TapWater.uk from {totalAnalysed.toLocaleString()} postcode districts. Districts in London and the
+          Thames Valley that take their results from Thames Water supply zones are left out for now: we are re-matching those zones to
+          districts, and until that is done a figure there cannot be pinned to one district.
           See our{" "}
           <Link
             href="/about/methodology/"
