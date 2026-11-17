@@ -257,7 +257,7 @@ export default async function RankingsPage() {
     {
       question: "Which UK city has the best tap water?",
       answer: topCity
-        ? `${topCity.name} has the best tap water quality of all 51 major UK cities, with an average safety score of ${topCity.avgScore.toFixed(1)}/10 across ${topCity.postcodeCount} postcode districts tested. Data is sourced from the Environment Agency.`
+        ? `${topCity.name} has the best tap water quality of the ${cityRankings.length} major UK cities we rank, with an average safety score of ${topCity.avgScore.toFixed(1)}/10 across ${topCity.postcodeCount} postcode districts tested. Data is sourced from the Environment Agency.`
         : "Rankings are computed from Environment Agency water quality data across all major UK cities.",
     },
     {
