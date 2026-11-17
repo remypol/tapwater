@@ -89,9 +89,9 @@ Still without a measured figure:
 | Company | Districts | Why |
 |---|---|---|
 | Severn Trent | 275 (195 with no figure at all: B, CV, DE, DY, LE, ST, TF, WR, WV) | Its checker calls `/bin/waterquality/info.json`, and its robots.txt disallows `/bin`. Its open dataset has no hardness, calcium or magnesium. **Do not automate it.** This is the largest gap: Coventry, Leicester and Derby are hard-water towns |
-| Welsh Water | 191 (184 with no figure) | No hardness in its samples; checker not looked at. Mostly soft water, so low value for softener requests |
+| Welsh Water | 191 (184 with no figure) | No hardness in its samples. Its "In your area" search runs on a third-party map service (digdat), not looked into. Mostly soft water, so low value for softener requests |
 | South Staffs Water | 45 (none) | No hardness in its samples. Its robots.txt disallows nothing, but no postcode checker was found on its water hardness or water quality pages in a short look. Hard water (Walsall, West Bromwich) |
-| South West Water | 41 of 131 (TQ, TR) | Its checker allows about twenty calls an hour; the run was never finished. Soft water |
+| South West Water | 73 of 131 when written (TQ, TR and others) | Its checker allows about twenty calls an hour. A run for the rest was started on the evening of 17 Nov at nineteen an hour (`--skip-existing --delay 190000`, about four hours); re-run the same command if it was cut short. Soft water |
 | Portsmouth Water | 23 (area estimate) | Its website refused us outright with a Cloudflare block page (17 Nov 2026, from a Dutch connection). Not pursued. Very hard water |
 | Cambridge Water | 11 (area estimate) | Shares South Staffs Water's site; no postcode checker found in a short look. Very hard water |
 | Hafren Dyfrdwy | 13 | Not looked at. Soft |
