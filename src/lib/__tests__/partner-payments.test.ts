@@ -24,7 +24,7 @@ describe("verifyStripeSignature", () => {
 describe("parseCompletedCheckout", () => {
   const event = (over: Record<string, unknown> = {}) => ({
     type: "checkout.session.completed",
-    data: { object: { id: "cs_1", payment_status: "paid", amount_total: 17500, metadata: { partner_id: "p1", credits: "5" }, ...over } },
+    data: { object: { id: "cs_1", payment_status: "paid", amount_total: 17500, metadata: { site: "tapwater", partner_id: "p1", credits: "5" }, ...over } },
   });
   it("reads the partner, credits and amount from a paid session", () => {
     expect(parseCompletedCheckout(event())).toEqual({ sessionId: "cs_1", partnerId: "p1", credits: 5, amountPence: 17500 });
@@ -33,7 +33,10 @@ describe("parseCompletedCheckout", () => {
     expect(parseCompletedCheckout(event({ payment_status: "unpaid" }))).toBeNull();
     expect(parseCompletedCheckout({ type: "payment_intent.succeeded", data: { object: {} } })).toBeNull();
     expect(parseCompletedCheckout(event({ metadata: {} }))).toBeNull();
-    expect(parseCompletedCheckout(event({ metadata: { partner_id: "p1", credits: "-3" } }))).toBeNull();
+    expect(parseCompletedCheckout(event({ metadata: { site: "tapwater", partner_id: "p1", credits: "-3" } }))).toBeNull();
+    // Another project's payment on the shared Stripe account, even with look-alike fields.
+    expect(parseCompletedCheckout(event({ metadata: { partner_id: "p1", credits: "5" } }))).toBeNull();
+    expect(parseCompletedCheckout(event({ metadata: { site: "chemtracker", partner_id: "p1", credits: "5" } }))).toBeNull();
     expect(parseCompletedCheckout(null)).toBeNull();
   });
 });
@@ -46,6 +49,9 @@ describe("checkoutParams", () => {
     expect(p.get("line_items[0][price_data][unit_amount]")).toBe(String(PACK_PRICE_PENCE));
     expect(p.get("metadata[credits]")).toBe(String(PACK_LEADS));
     expect(p.get("metadata[partner_id]")).toBe("p1");
+    expect(p.get("metadata[site]")).toBe("tapwater");
+    expect(p.get("branding_settings[display_name]")).toBe("TapWater.uk");
+    expect(p.get("locale")).toBe("en-GB");
   });
 });
 

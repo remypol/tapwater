@@ -22,10 +22,25 @@ export interface CheckoutInput {
   cancelUrl: string;
 }
 
+/**
+ * The Stripe account is shared with other projects (Invoice Navigator, ChemTracker,
+ * Wijntje), and every project's listener is sent every checkout on the account.
+ * This marker is how ours tells its own payments from theirs.
+ */
+export const STRIPE_SITE_MARKER = "tapwater";
+
 /** Form-encoded body for POST /v1/checkout/sessions. Exported for the tests. */
 export function checkoutParams(input: CheckoutInput): URLSearchParams {
   return new URLSearchParams({
     mode: "payment",
+    // The account's own name is "SFM Studios"; these put ours on the payment page
+    // and on the installer's card statement, and keep the page in English.
+    locale: "en-GB",
+    "branding_settings[display_name]": "TapWater.uk",
+    "branding_settings[button_color]": "#08122e",
+    "payment_intent_data[statement_descriptor_suffix]": "TAPWATER",
+    "payment_intent_data[description]": "TapWater.uk installer leads",
+    "metadata[site]": STRIPE_SITE_MARKER,
     "line_items[0][quantity]": "1",
     "line_items[0][price_data][currency]": "gbp",
     "line_items[0][price_data][unit_amount]": String(input.amountPence),
@@ -96,6 +111,7 @@ export function parseCompletedCheckout(event: unknown): CompletedCheckout | null
   const s = e.data?.object;
   if (!s || s.payment_status !== "paid") return null;
   const meta = (s.metadata ?? {}) as Record<string, string>;
+  if (meta.site !== STRIPE_SITE_MARKER) return null;
   const credits = Number(meta.credits);
   const partnerId = meta.partner_id;
   if (typeof s.id !== "string" || !partnerId || !Number.isInteger(credits) || credits <= 0) return null;
