@@ -686,20 +686,40 @@ export function isRankable(p: PostcodeData): boolean {
   );
 }
 
+/**
+ * Whether a district page should be in Google's index and in the sitemap.
+ *
+ * A page with tap-water results always is. A page without them used to be
+ * left out as thin. Since 17 November 2026 districts get the company that
+ * really supplies them, and three companies (South East Water, Wessex Water,
+ * Bristol Water) publish no sample results: Wokingham, Bracknell, Maidenhead
+ * and Chippenham lost the Thames figures they had carried by mistake. Those
+ * pages still hold the water company's own hardness reading for the district,
+ * the supplier and the softener route, which is what people there search for,
+ * so a measured hardness reading is enough to keep the page indexed. An
+ * estimate taken from the postcode area is not.
+ */
+export function isIndexableDistrict(data: PostcodeData, hardnessIsMeasured: boolean): boolean {
+  if (data.safetyScore < 0) return false;
+  if (data.dataSource !== "ea-only") return true;
+  return hardnessIsMeasured;
+}
+
 export async function getScoredPostcodeDistricts(): Promise<string[]> {
   const cache = await loadData();
+  hardnessCache ??= loadHardness();
+  const { byDistrict } = await hardnessCache;
   const cutoff = new Date();
   cutoff.setFullYear(cutoff.getFullYear() - 3);
   const cutoffStr = cutoff.toISOString().split("T")[0];
 
   return Array.from(cache.entries())
     .filter(
-      ([, data]) =>
-        data.safetyScore >= 0 &&
+      ([district, data]) =>
         data.lastSampleDate >= cutoffStr &&
-        // ea-only pages are noindexed (see the postcode route), so the sitemap
-        // must not advertise them either.
-        data.dataSource !== "ea-only",
+        // The same rule the postcode route uses for its robots tag, so the
+        // sitemap never advertises a page that says noindex.
+        isIndexableDistrict(data, byDistrict.has(district.toUpperCase())),
     )
     .map(([district]) => district)
     .sort();

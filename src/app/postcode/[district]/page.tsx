@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPostcodeDistricts } from "@/lib/data";
+import { getAllPostcodeDistricts, isIndexableDistrict } from "@/lib/data";
 import { highlightDescription } from "@/lib/district-highlights";
 import { loadPostcodePage } from "@/lib/postcode-page-load";
 import { PostcodeTank, PostcodeTankEmpty } from "@/components/tank/postcode-tank";
@@ -66,9 +66,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: pageTitle,
     description,
     // Prevent thin pages from polluting the index — keep follow for link equity.
-    // ea-only districts rest on river/groundwater samples, not tap tests: they
-    // stay live for visitors but are not a page we want Google to judge us on.
-    ...(hasData && data.dataSource !== "ea-only" ? {} : { robots: "noindex, follow" }),
+    // A district with no tap results and no hardness reading of its own rests on
+    // river and groundwater samples alone: it stays live for visitors but is not
+    // a page we want Google to judge us on. See isIndexableDistrict.
+    ...(isIndexableDistrict(data, page.hardness != null && !page.hardness.estimated) ? {} : { robots: "noindex, follow" }),
     openGraph: {
       title: `${data.district} Water Quality: Is It Safe?`,
       description,

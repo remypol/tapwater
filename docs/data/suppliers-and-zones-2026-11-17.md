@@ -94,6 +94,14 @@ Still on a postcode-area estimate, because the company has no checker we use and
 - A line in the press material said compliance tests are taken at treatment works and not at taps. That was untrue (most samples are taken at taps) and is gone.
 - 2,498 district rows carried an invented supply zone name, "<council> Central", shown on the page as "in the Woking Central zone". Removed; only real zone names from Thames and Scottish reports remain.
 
+## 8. What this did to the pages Google sees
+
+- **Gained:** 430 Scottish and 80 Northern Irish districts now have tap-water results, so they leave "noindex" and join the sitemap. So do the SES Water, South Staffs, Hafren Dyfrdwy and Portsmouth districts.
+- **Would have been lost:** about 30 districts that carried Thames figures by mistake and belong to South East Water or Wessex Water, which publish no samples: Wokingham (RG40, RG41), Bracknell (RG12, RG42), Maidenhead (SL6), Camberley, Chippenham, Salisbury. Several are in our best softener-lead area. The rule was "no tap results, no index".
+- **Rule now** (`isIndexableDistrict` in `src/lib/data.ts`, used by the page and the sitemap): a page is indexed when it has tap results, or when it has the water company's own hardness reading for the district. A page resting on river samples and an estimated hardness stays out (Bristol, for example).
+- Pages without tap results say so in their summary: the score comes from rivers and groundwater nearby, the hardness figure is the company's own.
+- The company table ranks a company only on districts with its own tap results. South East Water, Wessex Water and Bristol Water are listed without a score, with the reason.
+
 ## Scripts, in the order they are used
 
 ```

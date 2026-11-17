@@ -110,6 +110,8 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
   const { data, plan, hardness, river, pfasNearby, neighbours, highlights, faqs, city, nationalAverage, incidents } = page;
   const district = data.district;
   const supplierSplit = describeSupplierSplit(district);
+  // No tap results for this district: what we hold is the river and groundwater layer.
+  const riverOnly = data.dataSource === "ea-only";
   // Set for the few Thames districts whose zones were taken from their neighbours.
   const borrowedFrom = data.supplierId === "thames-water" ? getThamesZones(district)?.approx ?? null : null;
   const level = Math.max(0.12, Math.min(0.92, data.safetyScore / 10));
@@ -432,10 +434,21 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
               Tap water in {district} ({data.areaName === data.city ? data.city : `${data.areaName}, ${data.city}`}) is supplied by{" "}
               {data.supplierId && data.supplierId !== "unknown" ? <Link href={`/supplier/${data.supplierId}`}>{data.supplier}</Link> : data.supplier}
               {supplierSplit ? ` (${supplierSplit})` : ""}
-              {data.supplyZone ? ` in the ${data.supplyZone} zone` : ""} and scores {data.safetyScore.toFixed(1)} out of 10, against an England and Wales average of {nationalAverage.toFixed(1)}.{" "}
-              {data.contaminantsFlagged > 0
-                ? `${data.contaminantsFlagged} of ${data.contaminantsTested} tested substances ${data.contaminantsFlagged === 1 ? "was" : "were"} close to or over a limit.`
-                : `None of the ${data.contaminantsTested} tested substances came close to a limit.`}{" "}
+              {data.supplyZone ? ` in the ${data.supplyZone} zone` : ""}
+              {riverOnly ? (
+                <>
+                  . {data.supplier} publishes no tap-water test results for this area, so the score of {data.safetyScore.toFixed(1)} out of 10 comes
+                  from {data.contaminantsTested} substances measured in rivers and groundwater nearby, not from the tap. Treat it as background.
+                  {hardness && !hardness.estimated ? ` The hardness figure, ${Math.round(hardness.value)} mg/L, is ${data.supplier}'s own for this district.` : ""}{" "}
+                </>
+              ) : (
+                <>
+                  {" "}and scores {data.safetyScore.toFixed(1)} out of 10, against an England and Wales average of {nationalAverage.toFixed(1)}.{" "}
+                  {data.contaminantsFlagged > 0
+                    ? `${data.contaminantsFlagged} of ${data.contaminantsTested} tested substances ${data.contaminantsFlagged === 1 ? "was" : "were"} close to or over a limit.`
+                    : `None of the ${data.contaminantsTested} tested substances came close to a limit.`}{" "}
+                </>
+              )}
               The latest sample is from {formatSampleDate(data.lastSampleDate)}.
               {borrowedFrom ? ` Thames Water's postcode checker cannot place ${district} in a supply zone, so these results are from the zones around it (${borrowedFrom.join(", ")}). Read them as typical for the area.` : ""}
             </p>

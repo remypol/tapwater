@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isRankable, MIN_TESTED_TO_RANK } from "../data";
+import { isIndexableDistrict, isRankable, MIN_TESTED_TO_RANK } from "../data";
 import type { PostcodeData } from "../types";
 
 /**
@@ -67,5 +67,24 @@ describe("isRankable", () => {
     expect(isRankable(district({ district: "SE10" }))).toBe(true);
     expect(isRankable(district({ district: "DA5" }))).toBe(true);
     expect(isRankable(district({ district: "LS1" }))).toBe(true);
+  });
+});
+
+describe("isIndexableDistrict", () => {
+  it("indexes a district with tap results, whatever its hardness", () => {
+    expect(isIndexableDistrict(district({ dataSource: "stream" }), false)).toBe(true);
+  });
+
+  it("indexes a district without tap results when the company's own hardness reading is held", () => {
+    // Wokingham: South East Water publishes no samples, but its checker gives 302 mg/L.
+    expect(isIndexableDistrict(district({ district: "RG40", dataSource: "ea-only" }), true)).toBe(true);
+  });
+
+  it("leaves out a district that rests on river samples and an estimated hardness", () => {
+    expect(isIndexableDistrict(district({ dataSource: "ea-only" }), false)).toBe(false);
+  });
+
+  it("leaves out a district with no score at all", () => {
+    expect(isIndexableDistrict(district({ safetyScore: -1, dataSource: "ea-only" }), true)).toBe(false);
   });
 });
