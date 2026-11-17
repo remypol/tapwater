@@ -85,6 +85,29 @@ Subject: Softener quote requests in {AREAS} with nobody to send them to
 | 9 North East WS | (none) | YO and S | 3 | Two of them, in S60 (Rotherham) and S73 (Barnsley), are from the last 30 days and nobody has called them yet. If you travel that far they would be the first you receive. |
 | 10 Aquastream | (none) | PE, IP and SG | 4 | I had no installer there to pass them to, so I am looking for one before the next request arrives. |
 
+### Second note to Softwater Solutions, same evening
+
+A homeowner in NN7 (West Northamptonshire, just outside Northampton) asked for quotes at 17:26 UTC on 17 November, the first request from that district. Softwater Solutions is in Northampton and had the Bedford email that afternoon, so a short second note went to info@softwatersolutions.com from `partners@tapwater.uk` at 18:23 UTC. Remy left the decision to Claude ("neem de lead"). Resend shows it delivered. No details of the homeowner were in it.
+
+Subject: A softener quote request near Northampton today (NN7)
+
+> Hello Steve,
+>
+> I wrote to you earlier today about a homeowner in Bedford. Since then another has asked for water softener quotes, this time on your doorstep: postcode district NN7, at 5.26 this evening. Anglian Water gives the water there as 195 mg/L, which is hard.
+>
+> Nobody has called them, because I have no installer for Northampton yet. They ticked the box agreeing to be contacted by a local installer about quotes.
+>
+> If you pick NN and MK at https://www.tapwater.uk/partners (two minutes, no card), both requests come to you by email as soon as your account is approved, each with the name, phone number and email address. They would be the first two of your three free leads.
+>
+> If you would rather talk first, just reply to this email.
+>
+> Remy
+> TapWater.uk
+>
+> If this is not for you, reply "no thanks" and I will not write again.
+
+If they sign up, the application arrives by email with an approve link; on approval the NN7 and MK40 requests are sent to them automatically (both are inside the 30-day window). Do not write to them again before 24 November unless they reply.
+
 ### Text, Kinetico (1)
 
 Subject: Homeowner softener enquiries in Reading, Slough and Kingston
