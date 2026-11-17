@@ -168,7 +168,9 @@ function massExponent(unit: string): number | null {
   // Order matters: nanograms first, since "ng" would otherwise fall through to null
   // and PFAS reported in ng/L would be compared against a µg/L guideline unconverted.
   if (u.includes("ng")) return -9;
-  if (u.includes("ug") || u.includes("µg") || u.includes("μg") || u.includes("?g")) return -6;
+  // "\uFFFDg" is what a micro sign becomes when a file is saved in the wrong
+  // encoding and read back (SES Water's "\uFFFDg/L Pb").
+  if (u.includes("ug") || u.includes("µg") || u.includes("μg") || u.includes("?g") || u.includes("\uFFFDg")) return -6;
   if (u.includes("mg")) return -3;
   return null;
 }
@@ -222,6 +224,11 @@ export function computeScore(
 
     const key = normalizeDeterminand(obs.determinand);
     if (!key) continue;
+    // A substance with a limit in mg/L needs a reading whose unit says how much
+    // a unit is. Without that the value was taken as mg/L: SES Water's
+    // "6 \uFFFDg/L Fe" became iron at 6 mg/L, thirty times the limit. A reading
+    // we cannot convert is left out; no reading is better than a wrong one.
+    if (massExponent(LIMITS[key].unit) !== null && massExponent(obs.unit) === null) continue;
     // Skip bacteria from EA environmental data (expected in rivers, not meaningful for tap water)
     if (source === "environmental" && DRINKING_WATER_ONLY.has(key)) continue;
     const existing = latest.get(key);

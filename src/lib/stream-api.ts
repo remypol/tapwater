@@ -127,7 +127,10 @@ export function normalizeStreamRecord(
     sampleDate: parseStreamDate(rawDate as number | string | null, dateFormat),
     determinand,
     dwiCode: String(getField(attrs, fieldCase, "DWI_CODE", "DWI_Code") ?? ""),
-    unit: rawUnit.replace("\u03bc", "\u00b5"),  // normalize greek mu to micro sign
+    // Greek mu to the micro sign; and the replacement character in front of
+    // "g/", which is all that is left of a micro sign saved in the wrong
+    // encoding (SES Water publishes "\uFFFDg/L Pb").
+    unit: rawUnit.replace("\u03bc", "\u00b5").replace(/\uFFFD(?=g\/)/g, "\u00b5"),
     belowDetectionLimit,
     value: Number(getField(attrs, fieldCase, "RESULT", "Result") ?? 0),
     lsoa: String(attrs.LSOA ?? attrs.LSOA_Name ?? attrs.LSOA21CD ?? attrs.lsoa21cd ?? attrs.lsoa ?? ""),
@@ -180,6 +183,7 @@ export async function queryStreamService(
       const features = json.features ?? [];
       for (const f of features) {
         const record = normalizeStreamRecord(f.attributes, source.fieldCase, source.dateFormat, source.unitFallback);
+        if (source.skipDeterminands?.includes(record.determinand)) continue;
         if (record.determinand && record.sampleDate) {
           allRecords.push(record);
         }

@@ -38,7 +38,7 @@ export default function IsUKTapWaterSafeGuide() {
           {
             question: "Is UK tap water safe to drink?",
             answer:
-              "Yes. UK tap water is among the safest in the world, regulated by the Drinking Water Inspectorate (DWI) and subject to testing against 40+ parameters. It passes compliance tests 99.96% of the time. That said, 'safe' does not mean 'perfect' — trace levels of some contaminants such as lead, nitrates, and PFAS can be present depending on your area and the age of your home's pipes.",
+              "Yes. UK tap water is among the safest in the world, regulated by the Drinking Water Inspectorate (DWI) and subject to testing against 40+ parameters. In England 99.97% of tests met the legal standards in 2025. That said, 'safe' does not mean 'perfect' — trace levels of some contaminants such as lead, nitrates, and PFAS can be present depending on your area and the age of your home's pipes.",
           },
           {
             question: "Can you drink bathroom tap water in the UK?",
@@ -135,7 +135,7 @@ export default function IsUKTapWaterSafeGuide() {
           </p>
           <p className="text-base text-body leading-relaxed">
             Yes, UK tap water is among the safest in the world. The Drinking Water Inspectorate
-            tests it against 40+ parameters and it passes 99.96% of compliance checks. But
+            oversees testing against 40+ parameters, and in England 99.97% of those tests met the standards in 2025. But
             "safe" does not mean "perfect" — trace contaminants, hard water, and ageing pipes
             mean your specific postcode matters. Read on to understand exactly what is in your
             water.
@@ -163,10 +163,10 @@ export default function IsUKTapWaterSafeGuide() {
           distribution network, and at customers' taps.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          The result is a system that catches problems early. In 2023, UK tap water passed
-          99.96% of all compliance tests — a figure that has remained consistently above 99.9%
-          for two decades. When failures occur, they are typically short-lived and result in
-          public notices from water companies.
+          The result is a system that catches problems early. In 2025, 99.97% of tests in England
+          met the standards. Scotland&apos;s regulator reported 99.91% for the same year and Northern
+          Ireland&apos;s 99.88% for 2024. When failures occur, they are typically short-lived and result
+          in public notices from water companies.
         </p>
         <div className="card p-5 mt-2">
           <div className="grid grid-cols-3 gap-4 text-center">
@@ -181,8 +181,8 @@ export default function IsUKTapWaterSafeGuide() {
               <p className="text-xs text-faint uppercase tracking-wider mb-1">
                 Compliance rate
               </p>
-              <p className="font-data text-lg font-bold text-ink">99.96%</p>
-              <p className="text-xs text-muted mt-1">Tests passed in 2023</p>
+              <p className="font-data text-lg font-bold text-ink">99.97%</p>
+              <p className="text-xs text-muted mt-1">Tests passed in England, 2025</p>
             </div>
             <div>
               <p className="text-xs text-faint uppercase tracking-wider mb-1">
@@ -559,8 +559,10 @@ export default function IsUKTapWaterSafeGuide() {
         <p className="text-base text-body leading-relaxed mb-4">
           Data on UK tap water quality is drawn from the Drinking Water Inspectorate's annual
           reports, the Environment Agency's Water Quality Archive, and water company Water Quality
-          Reports published under statutory obligations. The 99.96% compliance figure is from the
-          DWI's 2023 Drinking Water in England report. Regulatory standards are sourced from the
+          Reports published under statutory obligations. The 99.97% figure is from the
+          DWI's Drinking Water 2025 report for England; the Scottish figure is from the Drinking Water
+          Quality Regulator's 2025 annual report and the Northern Ireland figure from the Drinking
+          Water Inspectorate for Northern Ireland's 2024 report. Regulatory standards are sourced from the
           Water Supply (Water Quality) Regulations 2016 (SI 2016/614) and the WHO Guidelines for
           Drinking-water Quality (4th edition, 2022).
         </p>

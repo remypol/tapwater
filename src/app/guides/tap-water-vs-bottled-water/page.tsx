@@ -37,7 +37,7 @@ export default function TapVsBottledGuide() {
         faqs={[
           {
             question: "Is UK tap water safe to drink?",
-            answer: "Yes. UK tap water is among the safest in the world. It is continuously tested against 48+ regulated parameters by water companies under the supervision of the Drinking Water Inspectorate (DWI). Over 99.96% of tests meet all legal standards.",
+            answer: "Yes. UK tap water is among the safest in the world. It is continuously tested against 48+ regulated parameters by water companies under the supervision of the Drinking Water Inspectorate (DWI). In England 99.97% of tests met the legal standards in 2025.",
           },
           {
             question: "Is bottled water safer than tap water in the UK?",

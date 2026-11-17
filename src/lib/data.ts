@@ -774,34 +774,12 @@ export interface MapPostcode {
 }
 
 /**
- * Fetches the list of water suppliers.
- * Tries Supabase first, falls back to MOCK_SUPPLIERS.
+ * The list of water suppliers, each with the districts it really supplies.
  */
 export async function getSuppliersList(): Promise<SupplierData[]> {
-  if (supabase) {
-    try {
-      const { data, error } = await supabase
-        .from("water_suppliers")
-        .select("id, name, region, customers_m, compliance_rate, website, postcode_areas")
-        .order("customers_m", { ascending: false });
-
-      if (!error && data && data.length > 0) {
-        return withRealDistricts(data.map((row) => ({
-          id: row.id,
-          name: row.name,
-          region: row.region,
-          customersM: row.customers_m,
-          complianceRate: row.compliance_rate,
-          website: row.website,
-          postcodeAreas: row.postcode_areas ?? [],
-        })));
-      }
-    } catch {
-      // Fall through to mock data
-    }
-  }
-
-  // Fallback to static data
+  // The company figures live in code, each with its source (see mock-data.ts).
+  // This used to try the water_suppliers table first, but the query named a
+  // column that does not exist, so it failed on every call and fell through.
   const { MOCK_SUPPLIERS } = await import("./mock-data");
   return withRealDistricts(MOCK_SUPPLIERS);
 }

@@ -290,7 +290,7 @@ async function buildBestWorstOverall(): Promise<PressStoryData> {
     csvHeaders: ["Rank", "Postcode", "Area", "City", "Safety Score (/10)", "Category"],
     citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/best-water)\nData: Environment Agency & Drinking Water Inspectorate, analysed by TapWater.uk`,
     lede: `UK tap water quality varies more than most people realise. ${bestDistrict} leads the country with a safety score of ${bestScore}/10 — consistently low contaminant readings across all 19 tested parameters. At the other end of the table, several postcodes score below 5, with multiple contaminants reading close to or above legal limits.`,
-    context: `The UK's Drinking Water Inspectorate reports that 99.96% of tests pass legal standards at the point of measurement — but compliance tests are taken at the treatment works, not the tap. TapWater.uk scores are based on what arrives at household taps, incorporating distribution losses, pipe age, and local geology.`,
+    context: `The Drinking Water Inspectorate reports that 99.97% of tests in England met the legal standards in 2025. That is one figure for the whole country; TapWater.uk scores each postcode district from the test results published for that area, so the differences between places show.`,
     methodology: `Safety scores combine 19 contaminant readings from Environment Agency and DWI data, normalised against legal limits and weighted by health risk. Scores reflect the most recent annual data for each postcode district.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };

@@ -1,6 +1,37 @@
 import { describe, it, expect } from "vitest";
 import { computeScore } from "../scoring";
 
+describe("readings whose unit cannot be converted", () => {
+  const on = "2025-06-01";
+
+  it("reads a micro sign broken by a wrong encoding as micrograms", () => {
+    // SES Water publishes "\uFFFDg/L Fe". Read as mg/L, 6 was thirty times the iron limit.
+    const score = computeScore([{ determinand: "Iron", value: 6, unit: "\uFFFDg/L Fe", date: on }]);
+    expect(score.readings[0]).toMatchObject({ name: "Iron", value: 0.006, status: "pass" });
+  });
+
+  it("leaves out a reading with a limit in mg/L and a unit that says no amount", () => {
+    const score = computeScore([
+      { determinand: "Lead", value: 0.3, unit: "units/l", date: on },
+      { determinand: "Nitrate", value: 20, unit: "mg/l", date: on },
+    ]);
+    expect(score.readings.map((r) => r.name)).toEqual(["Nitrate"]);
+  });
+
+  it("does not let an unreadable newer sample hide an older readable one", () => {
+    const score = computeScore([
+      { determinand: "Lead", value: 1.2, unit: "µg/l", date: "2024-01-01" },
+      { determinand: "Lead", value: 900, unit: "per/l", date: "2025-01-01" },
+    ]);
+    expect(score.readings[0]).toMatchObject({ name: "Lead", value: 0.0012, status: "pass" });
+  });
+
+  it("still scores readings that are not amounts by weight", () => {
+    const score = computeScore([{ determinand: "Turbidity", value: 0.2, unit: "NTU", date: on }]);
+    expect(score.readings[0]).toMatchObject({ name: "Turbidity", status: "pass" });
+  });
+});
+
 describe("computeScore", () => {
   it("does not read the combined nitrate/nitrite index as a nitrite reading", () => {
     const result = computeScore([

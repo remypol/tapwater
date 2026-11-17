@@ -537,3 +537,23 @@ export function supplierShare(district: string, supplierId: string): number | nu
   if (!rows) return null;
   return rows.find((r) => r.id === supplierId)?.share ?? 0;
 }
+
+/** The middle company's Compliance Risk Index in England and Wales, 2025 (Drinking Water Inspectorate). */
+export const INDUSTRY_MEDIAN_CRI = { value: 2.9, year: 2025 };
+
+/**
+ * One sentence on how the regulator rates a company, for pages and FAQ answers.
+ * Takes the `quality` field of a supplier; returns null when there is none.
+ */
+export function describeSupplierQuality(
+  name: string,
+  quality: { kind: "cri"; value: number; year: number; note?: string } | { kind: "percent"; value: number; year: number; regulator: string } | null,
+): string | null {
+  if (!quality) return null;
+  if (quality.kind === "percent") {
+    return `${quality.value}% of the samples taken at customers' taps in ${quality.year} met the legal standards, according to the ${quality.regulator}.`;
+  }
+  const versus = quality.value < INDUSTRY_MEDIAN_CRI.value ? "better than" : quality.value > INDUSTRY_MEDIAN_CRI.value ? "worse than" : "level with";
+  const zero = quality.value === 0 ? " A score of 0 means no failed test counted against it." : "";
+  return `The Drinking Water Inspectorate gave ${name} a Compliance Risk Index of ${quality.value} for ${quality.year}, ${versus} the middle company's ${INDUSTRY_MEDIAN_CRI.value}. Lower is better.${zero}${quality.note ? ` ${quality.note}` : ""}`;
+}

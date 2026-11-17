@@ -50,7 +50,47 @@ describe("blendZones", () => {
     expect(blendZones(new Map([["A", zone("A", [param(HARDNESS, 300)])]]), {})).toBeNull();
   });
 
-  it("falls back to the maximum where a zone reports no mean", () => {
+  it("does not let one bad sample in a year stand for the zone", () => {
+    // 60 samples, one of them with 2 coliforms: the typical sample is clean.
+    const coliform = param("Coliform bacteria", null, {
+      unit: "no./100ml",
+      regulatory_limit: "0",
+      min: { value: 0, below_limit: false },
+      max: { value: 2, below_limit: false },
+      total_samples: 60,
+      contraventions: 1,
+    });
+    const reports = new Map([["A", zone("A", [coliform])]]);
+    expect(blendZones(reports, { A: 6 })?.readings[0]).toMatchObject({ determinand: "Coliform bacteria", value: 0 });
+  });
+
+  it("keeps the highest value where most of the year's samples failed", () => {
+    const bad = param("Coliform bacteria", null, {
+      unit: "no./100ml",
+      regulatory_limit: "0",
+      min: { value: 0, below_limit: false },
+      max: { value: 5, below_limit: false },
+      total_samples: 10,
+      contraventions: 6,
+    });
+    expect(blendZones(new Map([["A", zone("A", [bad])]]), { A: 1 })?.readings[0].value).toBe(5);
+  });
+
+  it("drops a single failing sample when it alone lifts the mean over the limit", () => {
+    // Zone SLE25, 2025: nine lead samples, one of 562.2, mean 63.6, limit 10.
+    const lead = param("Lead as Pb", 63.6, { unit: "µg/l", regulatory_limit: "10.0", max: { value: 562.2, below_limit: false }, total_samples: 9, contraventions: 1 });
+    const value = blendZones(new Map([["A", zone("A", [lead])]]), { A: 1 })?.readings[0].value;
+    expect(value).toBeCloseTo(1.275, 3);
+  });
+
+  it("keeps the mean when more than one sample failed, or the mean is under the limit anyway", () => {
+    const two = param("Lead as Pb", 30, { unit: "µg/l", regulatory_limit: "10.0", max: { value: 100, below_limit: false }, total_samples: 9, contraventions: 2 });
+    expect(blendZones(new Map([["A", zone("A", [two])]]), { A: 1 })?.readings[0].value).toBe(30);
+    const under = param("Lead as Pb", 6, { unit: "µg/l", regulatory_limit: "10.0", max: { value: 40, below_limit: false }, total_samples: 9, contraventions: 1 });
+    expect(blendZones(new Map([["A", zone("A", [under])]]), { A: 1 })?.readings[0].value).toBe(6);
+  });
+
+  it("uses the maximum only when a report gives nothing else", () => {
     const reports = new Map([["A", zone("A", [param("E. coli", null, { unit: "no./100ml", max: { value: 0, below_limit: false } })])]]);
     expect(blendZones(reports, { A: 6 })?.readings[0]).toMatchObject({ determinand: "E. coli", value: 0 });
   });

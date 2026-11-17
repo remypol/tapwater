@@ -175,27 +175,47 @@ export const MOCK_FILTERS: FilterProduct[] = [
   },
 ];
 
+/**
+ * The water companies, with figures that each have a source:
+ *
+ * - quality, England and Wales: the Drinking Water Inspectorate's Compliance
+ *   Risk Index for 2025 (Drinking Water 2025, read from the data behind the
+ *   report's company chart on 17 November 2026). The Inspectorate publishes no
+ *   percentage per company. The percentages this list carried until then
+ *   ("99.96% compliance") had no source and are gone.
+ * - quality, Scotland: share of samples at customers' taps that met the
+ *   standards in 2025 (DWQR annual report). Northern Ireland: the same for
+ *   2024 (Drinking Water Inspectorate for Northern Ireland annual report).
+ * - customersM: people supplied with drinking water, from the Inspectorate's
+ *   Company Performance Data for 2024, rounded. Northumbrian (2.7) and Essex &
+ *   Suffolk (2.0) are the company's own figures, because the Inspectorate
+ *   counts them together. Several earlier values were the sewerage population
+ *   (Thames 15, Southern 4.7, Wessex 2.8). Null where no sourced figure was found.
+ * - postcodeAreas here is only a fallback: getSuppliersList() replaces it with
+ *   every district the company really supplies.
+ */
 export const MOCK_SUPPLIERS: SupplierData[] = [
-  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 15, complianceRate: 99.96, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1V", "SW3", "SW6", "SW7", "SW11", "SW15", "SW18", "SW19", "SE1", "SE10", "SE13", "SE15", "E1", "E2", "E3", "E8", "E14", "N1", "N7", "NW1", "NW3", "NW10", "W2", "W4", "W8", "W12", "OX1", "OX2", "RG1"] },
-  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8, complianceRate: 99.95, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "B3", "B5", "B8", "B11", "B15", "NG1", "NG2", "NG7", "DE1", "CV1", "CV3", "LE1", "LE2"] },
-  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7, complianceRate: 99.97, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "M3", "M4", "M5", "M14", "M20", "M21", "L1", "L2", "L3", "L5", "L8"] },
-  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5, complianceRate: 99.94, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "LS2", "LS3", "LS6", "LS7", "S1", "S2", "S10", "S11", "YO1", "YO10"] },
-  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.5, complianceRate: 99.93, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1", "CB2", "NR1", "NR2"] },
-  { id: "southern-water", name: "Southern Water", region: "South East", customersM: 4.7, complianceRate: 99.91, website: "https://www.southernwater.co.uk", postcodeAreas: ["BN1", "BN2", "PO1", "PO2", "SO14", "SO15"] },
-  { id: "south-west-water", name: "South West Water", region: "Devon and Cornwall", customersM: 1.8, complianceRate: 99.92, website: "https://www.southwestwater.co.uk", postcodeAreas: ["EX1", "EX2", "PL1", "PL2"] },
-  { id: "welsh-water", name: "Dŵr Cymru Welsh Water", region: "Wales", customersM: 3, complianceRate: 99.94, website: "https://www.dwrcymru.com", postcodeAreas: ["CF10", "CF11", "CF14", "SA1", "SA2"] },
-  { id: "northumbrian-water", name: "Northumbrian Water", region: "North East", customersM: 2.7, complianceRate: 99.96, website: "https://www.nwl.co.uk", postcodeAreas: ["NE1", "NE2", "NE3", "NE4", "NE6"] },
-  { id: "bristol-water", name: "Bristol Water", region: "Bristol and surrounding area", customersM: 1.2, complianceRate: 99.97, website: "https://www.bristolwater.co.uk", postcodeAreas: ["BS1", "BS2", "BS3", "BS5", "BS6", "BS8", "BA1", "BA2"] },
-  { id: "scottish-water", name: "Scottish Water", region: "Scotland", customersM: 5.4, complianceRate: 99.91, website: "https://www.scottishwater.co.uk", postcodeAreas: ["EH1", "EH3", "EH7", "G1", "G2", "G3", "G12", "AB10", "AB11"] },
-  { id: "portsmouth-water", name: "Portsmouth Water", region: "Hampshire and West Sussex", customersM: 0.7, complianceRate: 99.98, website: "https://www.portsmouthwater.co.uk", postcodeAreas: ["PO4", "PO5"] },
-  { id: "south-east-water", name: "South East Water", region: "South East England", customersM: 2.2, complianceRate: 99.93, website: "https://www.southeastwater.co.uk", postcodeAreas: ["BN3"] },
-  { id: "south-staffs-water", name: "South Staffs Water", region: "South Staffordshire and Cambridge", customersM: 1.6, complianceRate: 99.95, website: "https://www.south-staffs-water.co.uk", postcodeAreas: ["CB3", "CB4"] },
-  { id: "wessex-water", name: "Wessex Water", region: "South West", customersM: 2.8, complianceRate: 99.96, website: "https://www.wessexwater.co.uk", postcodeAreas: ["BA1", "BA2"] },
-  { id: "affinity-water", name: "Affinity Water", region: "South East England", customersM: 3.6, complianceRate: 99.92, website: "https://www.affinitywater.co.uk", postcodeAreas: ["N11", "N12", "NW9"] },
-  { id: "essex-suffolk-water", name: "Essex & Suffolk Water", region: "Essex and Suffolk", customersM: 1.8, complianceRate: 99.96, website: "https://www.eswater.co.uk", postcodeAreas: ["CM1", "CM2", "CM3", "IP17", "IP18", "IG1", "RM8"] },
-  { id: "ses-water", name: "SES Water", region: "East Surrey, West Sussex, west Kent and south London", customersM: 0.75, complianceRate: null, website: "https://seswater.co.uk", postcodeAreas: ["SM1", "SM2", "RH1", "RH2"] },
-  { id: "hafren-dyfrdwy", name: "Hafren Dyfrdwy", region: "North east and mid Wales", customersM: 0.22, complianceRate: null, website: "https://www.hdcymru.co.uk", postcodeAreas: ["LL11", "LL12", "LL13", "SY16"] },
-  { id: "cambridge-water", name: "Cambridge Water", region: "Cambridge", customersM: 0.35, complianceRate: 99.96, website: "https://www.cambridge-water.co.uk", postcodeAreas: ["CB2", "CB3", "CB4", "CB5"] },
+  { id: "thames-water", name: "Thames Water", region: "London and Thames Valley", customersM: 10.1, quality: { kind: "cri", value: 4.32, year: 2025 }, website: "https://www.thameswater.co.uk", postcodeAreas: ["SW1A", "SW1V", "SW3", "SW6", "SW7", "SW11", "SW15", "SW18", "SW19", "SE1", "SE10", "SE13", "SE15", "E1", "E2", "E3", "E8", "E14", "N1", "N7", "NW1", "NW3", "NW10", "W2", "W4", "W8", "W12", "OX1", "OX2", "RG1"] },
+  { id: "severn-trent", name: "Severn Trent", region: "Midlands", customersM: 8.8, quality: { kind: "cri", value: 1.24, year: 2025 }, website: "https://www.stwater.co.uk", postcodeAreas: ["B1", "B2", "B3", "B5", "B8", "B11", "B15", "NG1", "NG2", "NG7", "DE1", "CV1", "CV3", "LE1", "LE2"] },
+  { id: "united-utilities", name: "United Utilities", region: "North West", customersM: 7.4, quality: { kind: "cri", value: 2.11, year: 2025 }, website: "https://www.unitedutilities.com", postcodeAreas: ["M1", "M2", "M3", "M4", "M5", "M14", "M20", "M21", "L1", "L2", "L3", "L5", "L8"] },
+  { id: "yorkshire-water", name: "Yorkshire Water", region: "Yorkshire", customersM: 5.7, quality: { kind: "cri", value: 3.15, year: 2025 }, website: "https://www.yorkshirewater.com", postcodeAreas: ["LS1", "LS2", "LS3", "LS6", "LS7", "S1", "S2", "S10", "S11", "YO1", "YO10"] },
+  { id: "anglian-water", name: "Anglian Water", region: "East of England", customersM: 4.9, quality: { kind: "cri", value: 3.13, year: 2025 }, website: "https://www.anglianwater.co.uk", postcodeAreas: ["CB1", "CB2", "NR1", "NR2"] },
+  { id: "affinity-water", name: "Affinity Water", region: "Home counties north and west of London, and parts of Essex and Kent", customersM: 3.8, quality: { kind: "cri", value: 3.17, year: 2025 }, website: "https://www.affinitywater.co.uk", postcodeAreas: ["N11", "N12", "NW9"] },
+  { id: "welsh-water", name: "Dŵr Cymru Welsh Water", region: "Wales", customersM: 3.1, quality: { kind: "cri", value: 7.1, year: 2025 }, website: "https://www.dwrcymru.com", postcodeAreas: ["CF10", "CF11", "CF14", "SA1", "SA2"] },
+  { id: "southern-water", name: "Southern Water", region: "Kent, Sussex, Hampshire and the Isle of Wight", customersM: 2.7, quality: { kind: "cri", value: 3.19, year: 2025 }, website: "https://www.southernwater.co.uk", postcodeAreas: ["BN1", "BN2", "PO1", "PO2", "SO14", "SO15"] },
+  { id: "northumbrian-water", name: "Northumbrian Water", region: "North East", customersM: 2.7, quality: { kind: "cri", value: 3.9, year: 2025, note: "The regulator scores Northumbrian Water and Essex & Suffolk Water together." }, website: "https://www.nwl.co.uk", postcodeAreas: ["NE1", "NE2", "NE3", "NE4", "NE6"] },
+  { id: "south-east-water", name: "South East Water", region: "Kent, Sussex, Surrey, Hampshire and Berkshire", customersM: 2.3, quality: { kind: "cri", value: 2.08, year: 2025 }, website: "https://www.southeastwater.co.uk", postcodeAreas: ["BN3"] },
+  { id: "south-west-water", name: "South West Water", region: "Devon, Cornwall and the Bournemouth area", customersM: 2.3, quality: { kind: "cri", value: 1.37, year: 2025 }, website: "https://www.southwestwater.co.uk", postcodeAreas: ["EX1", "EX2", "PL1", "PL2"] },
+  { id: "essex-suffolk-water", name: "Essex & Suffolk Water", region: "Essex and Suffolk", customersM: 2.0, quality: { kind: "cri", value: 3.9, year: 2025, note: "The regulator scores Essex & Suffolk Water and Northumbrian Water together." }, website: "https://www.eswater.co.uk", postcodeAreas: ["CM1", "CM2", "CM3", "IP17", "IP18", "IG1", "RM8"] },
+  { id: "wessex-water", name: "Wessex Water", region: "Somerset, Wiltshire, Dorset and Bath", customersM: 1.4, quality: { kind: "cri", value: 0.92, year: 2025 }, website: "https://www.wessexwater.co.uk", postcodeAreas: ["BA1", "BA2"] },
+  { id: "south-staffs-water", name: "South Staffs Water", region: "South Staffordshire and the West Midlands", customersM: 1.4, quality: { kind: "cri", value: 1.26, year: 2025 }, website: "https://www.south-staffs-water.co.uk", postcodeAreas: ["CB3", "CB4"] },
+  { id: "bristol-water", name: "Bristol Water", region: "Bristol and surrounding area", customersM: 1.3, quality: { kind: "cri", value: 3.95, year: 2025 }, website: "https://www.bristolwater.co.uk", postcodeAreas: ["BS1", "BS2", "BS3", "BS5", "BS6", "BS8", "BA1", "BA2"] },
+  { id: "portsmouth-water", name: "Portsmouth Water", region: "Hampshire and West Sussex", customersM: 0.76, quality: { kind: "cri", value: 0.45, year: 2025 }, website: "https://www.portsmouthwater.co.uk", postcodeAreas: ["PO4", "PO5"] },
+  { id: "ses-water", name: "SES Water", region: "East Surrey, West Sussex, west Kent and south London", customersM: 0.75, quality: { kind: "cri", value: 0, year: 2025 }, website: "https://seswater.co.uk", postcodeAreas: ["SM1", "SM2", "RH1", "RH2"] },
+  { id: "cambridge-water", name: "Cambridge Water", region: "Cambridge", customersM: 0.35, quality: { kind: "cri", value: 0.53, year: 2025 }, website: "https://www.cambridge-water.co.uk", postcodeAreas: ["CB2", "CB3", "CB4", "CB5"] },
+  { id: "hafren-dyfrdwy", name: "Hafren Dyfrdwy", region: "North east and mid Wales", customersM: 0.21, quality: { kind: "cri", value: 1.26, year: 2025 }, website: "https://www.hdcymru.co.uk", postcodeAreas: ["LL11", "LL12", "LL13", "SY16"] },
+  { id: "scottish-water", name: "Scottish Water", region: "Scotland", customersM: null, quality: { kind: "percent", value: 99.88, year: 2025, regulator: "Drinking Water Quality Regulator for Scotland" }, website: "https://www.scottishwater.co.uk", postcodeAreas: ["EH1", "EH3", "EH7", "G1", "G2", "G3", "G12", "AB10", "AB11"] },
+  { id: "ni-water", name: "NI Water", region: "Northern Ireland", customersM: null, quality: { kind: "percent", value: 99.87, year: 2024, regulator: "Drinking Water Inspectorate for Northern Ireland" }, website: "https://www.niwater.com", postcodeAreas: ["BT1", "BT2", "BT7", "BT9"] },
 ];
 
 export const MOST_CHECKED = ["SW1A", "E1", "M1", "B1", "LS1", "BS1", "EH1", "CF10", "NE1", "OX1"];

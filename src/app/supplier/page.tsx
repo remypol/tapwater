@@ -90,7 +90,7 @@ export default async function SuppliersPage() {
               <th className="text-left px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold">#</th>
               <th className="text-left px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold">Company</th>
               <th className="text-left px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold hidden sm:table-cell">Region</th>
-              <th className="text-right px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold hidden md:table-cell">Customers</th>
+              <th className="text-right px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold hidden md:table-cell">People supplied</th>
               <th className="text-right px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold">Avg Score</th>
               <th className="text-right px-4 py-3 text-xs uppercase tracking-[0.1em] text-faint font-semibold hidden sm:table-cell">Areas</th>
             </tr>
@@ -116,7 +116,7 @@ export default async function SuppliersPage() {
                 </td>
                 <td className="px-4 py-3.5 text-muted hidden sm:table-cell">{supplier.region}</td>
                 <td className="px-4 py-3.5 text-right font-data text-muted hidden md:table-cell">
-                  {supplier.customersM}M
+                  {supplier.customersM != null ? `${supplier.customersM}M` : "n/a"}
                 </td>
                 <td className="px-4 py-3.5 text-right">
                   {supplier.avgScore !== null ? (

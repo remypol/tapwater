@@ -97,13 +97,26 @@ export interface FilterProduct {
   availableInUk?: boolean; // undefined or true = available. false = not yet available in UK market.
 }
 
+/**
+ * How a regulator rates a company's drinking water.
+ *
+ * In England and Wales the Drinking Water Inspectorate publishes no percentage
+ * per company, only its Compliance Risk Index (lower is better). Scotland and
+ * Northern Ireland each have one company, so their regulators do publish the
+ * share of tests that met the standards.
+ */
+export type SupplierQuality =
+  | { kind: "cri"; value: number; year: number; note?: string }
+  | { kind: "percent"; value: number; year: number; regulator: string };
+
 export interface SupplierData {
   id: string;
   name: string;
   region: string;
-  customersM: number;
-  /** Percent of tests meeting the standards, as published. Null when we hold no sourced figure. */
-  complianceRate: number | null;
+  /** People supplied with drinking water, in millions. Null when we hold no sourced figure. */
+  customersM: number | null;
+  /** The regulator's rating, or null when none is published. */
+  quality: SupplierQuality | null;
   website: string;
   postcodeAreas: string[];
 }

@@ -4,6 +4,18 @@ import type { StreamSource } from "../stream-sources";
 import { getStreamSource, getAllStreamSupplierIds } from "../stream-sources";
 import { computeScore } from "../scoring";
 
+describe("units a company publishes with a broken micro sign", () => {
+  it("reads SES Water's \uFFFDg/L as micrograms", () => {
+    const rec = normalizeStreamRecord({ Determinand: "Lead (10)", Units: "\uFFFDg/L Pb", Result: 0.3, Sample_Date: 1734393600000 }, "camel", "epoch");
+    expect(rec.unit).toBe("µg/L Pb");
+  });
+
+  it("leaves a replacement character alone anywhere else", () => {
+    const rec = normalizeStreamRecord({ Determinand: "Colony", Units: "Number/1ml at 22\uFFFDC", Result: 3, Sample_Date: 1734393600000 }, "camel", "epoch");
+    expect(rec.unit).toBe("Number/1ml at 22\uFFFDC");
+  });
+});
+
 describe("parseStreamDate", () => {
   it("reads Portsmouth Water's day-month-name dates", () => {
     expect(parseStreamDate("30-Dec-24", "string")).toBe("2024-12-30");

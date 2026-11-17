@@ -164,19 +164,17 @@ export default function UnderstandingYourWaterSupplierPage() {
 
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">What compliance rates mean</h2>
         <p className="text-base text-body leading-relaxed mb-4">
-          The headline compliance figure published by the DWI for England and Wales is typically
-          around 99.96 percent. This number appears reassuring, and in the context of what it
-          represents &mdash; the proportion of individual test results that fall within their legal
-          limit &mdash; it is genuinely impressive. But it requires careful interpretation.
+          The headline figure the DWI publishes for England is the share of individual test
+          results that met their legal limit: 99.97 percent in 2025. Scotland&apos;s regulator
+          reported 99.91 percent for the same year and Northern Ireland&apos;s 99.88 percent for
+          2024. These numbers are reassuring, and they are real. But they need careful reading.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
-          Water companies collectively carry out several million individual regulatory tests each
-          year. At 99.96 percent compliance, that leaves roughly 4,000 test failures annually
-          across England and Wales. Most of these failures are minor, short-lived, and caught
-          quickly by the testing regime. A test failure does not automatically mean consumers
-          were exposed to unsafe water; in many cases, the water company identifies and resolves
-          the cause before the supply is affected. But the raw compliance percentage obscures
-          the actual number and nature of individual failures.
+          So many tests are taken that even a pass rate this high leaves a good number of
+          failures. Most are minor, short-lived and caught quickly. A failed test does not
+          automatically mean anyone drank unsafe water; often the company finds and fixes the
+          cause before the supply is affected. But one percentage for a whole country hides
+          how many failures there were and what kind.
         </p>
 
         <div className="card p-5 mb-6">
@@ -185,25 +183,25 @@ export default function UnderstandingYourWaterSupplierPage() {
             <div>
               <p className="text-sm font-semibold text-ink mb-1">Putting the numbers in context</p>
               <p className="text-sm text-body leading-relaxed">
-                A 99.96% compliance rate across 10 million tests equals approximately 4,000
-                individual test failures. The significance of each failure depends on the
-                parameter, the concentration, and how quickly it was identified and remedied.
-                A single turbidity exceedance during a storm event is very different from
-                persistent lead exceedances across a supply zone.
+                In Scotland in 2025, 296,935 tests were taken and 255 failed: a pass rate of
+                99.91 percent. What each failure means depends on the substance, the level,
+                and how quickly it was found and put right. One cloudy sample after a burst
+                main is very different from lead turning up again and again in the same area.
               </p>
             </div>
           </div>
         </div>
 
         <p className="text-base text-body leading-relaxed mb-4">
-          The DWI&apos;s annual report breaks down compliance by parameter and by water company,
-          which gives a more useful picture than the headline aggregate. Parameters with
-          the most frequent failures in recent years have been lead (driven by legacy lead
-          service pipes in older properties), coliform bacteria (typically isolated incidents
-          associated with distribution system disturbance), and certain pesticides in
-          agricultural catchments. A company with 99.99 percent compliance may be performing
-          significantly better than one at 99.90 percent, even though both numbers look
-          high in isolation.
+          For individual companies in England and Wales the DWI does not publish a pass rate
+          at all. It publishes a Compliance Risk Index, which weighs every failed test by how
+          serious the substance is, how many people the failure could reach and how the
+          company dealt with it. Lower is better. In 2025 the middle company scored 2.9, and
+          scores ran from 0 for SES Water to 7.1 for D&#373;r Cymru Welsh Water. The index
+          swings from year to year, because one failure at a large treatment works weighs
+          heavily: Severn Trent scored 10.3 in 2024 and 1.2 in 2025. Each{" "}
+          <Link href="/supplier" className="text-accent hover:underline">company page</Link>{" "}
+          on this site shows its latest index.
         </p>
         <p className="text-base text-body leading-relaxed mb-4">
           Compliance figures are also averaged across large supply zones. A zone covering

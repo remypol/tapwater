@@ -27,6 +27,8 @@ export interface StreamSource {
    * no unit is better than a guessed one on a health page.
    */
   unitFallback?: Record<string, string>;
+  /** Exact determinand names to leave out, where a company's name for something would be misread. */
+  skipDeterminands?: string[];
 }
 
 const STREAM_ORG = "XxS6FebPX29TRGDJ";
@@ -262,6 +264,11 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
     geoField: "lsoa21cd",
     fieldCase: "camel",
     dateFormat: "epoch",
+    // SES publishes a row called plain "Nitrite" that is not nitrite: across the
+    // dataset it averages 0.567, which is nitrate/50 + nitrite/3 (27.5/50 + 0.05/3),
+    // the combined index with a limit of 1. Read as nitrite against 0.5 mg/L it
+    // failed in most districts. The real figure is "Nitrite - consumers taps".
+    skipDeterminands: ["Nitrite"],
   },
   "south-staffs-water": {
     orgId: STREAM_ORG,

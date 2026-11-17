@@ -20,6 +20,7 @@ import { MOCK_SUPPLIERS } from "@/lib/mock-data";
 import { getPostcodeData, getSupplierBySlug, getHardness } from "@/lib/data";
 import type { HardnessReading } from "@/lib/data";
 import { getActiveIncidentsForSupplier } from "@/lib/incidents";
+import { INDUSTRY_MEDIAN_CRI, describeSupplierQuality } from "@/lib/suppliers";
 import { getScoreColor } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
 import { HardWaterCta } from "@/components/hard-water-cta";
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const shortTitle = `${supplier.name} Water Quality ${year}`;
   const title = fullTitle.length <= 45 ? fullTitle : shortTitle;
 
-  const description = `${supplier.name} water quality, hardness, and compliance data across ${supplier.region}, measured per postcode district.`;
+  const description = `${supplier.name} water quality, hardness and the regulator's rating across ${supplier.region}, with every postcode district it supplies.`;
   const url = `https://www.tapwater.uk/supplier/${supplier.id}`;
 
   return {
@@ -130,11 +131,13 @@ export default async function SupplierPage({ params }: Props) {
     getActiveIncidentsForSupplier(supplier.id),
   ]);
 
+  // A score of -1 means "no results to score": such a district has a page but
+  // must not be listed with a score or drag the company's average down.
   const postcodeRows = allAreaData
-    .filter((row) => row.data !== null)
+    .filter((row) => row.data !== null && row.data.safetyScore >= 0)
     .sort((a, b) => (a.data!.safetyScore ?? 0) - (b.data!.safetyScore ?? 0));
   const unknownAreas = allAreaData
-    .filter((row) => row.data === null)
+    .filter((row) => row.data === null || row.data.safetyScore < 0)
     .map((row) => row.area);
 
   // Aggregate quality stats
@@ -187,18 +190,21 @@ export default async function SupplierPage({ params }: Props) {
       ? `Hardness readings for ${supplier.name}'s districts are still being collected. Enter your postcode on our hardness checker for the reading in your area.`
       : `Across ${hardnessReadings.length} monitored districts in ${supplier.name}'s area, the average hardness is ${avgHardness} mg/L CaCO₃ and ${hardPct}% of districts read hard or very hard. ${hardPct !== null && hardPct >= 50 ? "Expect limescale: descaling, and in many homes a water softener, are worth considering." : "Limescale pressure is moderate to low for most of this supply area."}`;
 
-  const complianceAnswer = supplier.complianceRate == null
-    ? `We do not hold a sourced compliance figure for ${supplier.name}. Across the UK industry more than 99.9% of tests meet the standards, which is exactly why we also publish per-district scores and flagged contaminant counts: legal compliance and local water character are different questions.`
-    : `${supplier.name} reported a ${supplier.complianceRate}% compliance rate against UK drinking water standards. Compliance above 99.9% is the industry norm, which is exactly why we also publish per-district environmental scores and flagged contaminant counts: legal compliance and local water character are different questions.`;
+  const qualitySentence = describeSupplierQuality(supplier.name, supplier.quality);
+  const complianceAnswer = `${qualitySentence ?? `No regulator publishes a rating for ${supplier.name} on its own.`} ${
+    supplier.quality?.kind === "cri"
+      ? "The index weighs every failed test by how serious the substance is, how many people the failure could reach and how the company dealt with it. The Inspectorate does not publish a pass rate for each company; across England 99.97% of tests met the standards in 2025."
+      : "Almost every test passes at every UK water company, which is why we also publish scores and flagged substances for each postcode district."
+  }`;
 
-  const areasAnswer = `${supplier.name} supplies ${supplier.customersM} million customers across ${supplier.region}. The postcode districts we monitor in its area: ${supplier.postcodeAreas.slice(0, 10).join(", ")}${supplier.postcodeAreas.length > 10 ? ` and ${supplier.postcodeAreas.length - 10} more` : ""}.`;
+  const areasAnswer = `${supplier.name} supplies ${supplier.customersM != null ? `drinking water to about ${supplier.customersM} million people in` : "homes across"} ${supplier.region}. The postcode districts we monitor in its area: ${supplier.postcodeAreas.slice(0, 10).join(", ")}${supplier.postcodeAreas.length > 10 ? ` and ${supplier.postcodeAreas.length - 10} more` : ""}.`;
 
   const incidentsAnswer = `Active incidents affecting ${supplier.name} appear at the top of this page as soon as our monitoring picks them up, alongside the affected postcodes. For supply emergencies always check ${supplier.name}'s own website, which carries the operational updates.`;
 
   const supplierFaqs = [
     { question: `Is ${supplier.name} water safe to drink?`, answer: safetyAnswer },
     { question: `Is ${supplier.name} water hard or soft?`, answer: hardnessAnswer },
-    { question: `What is ${supplier.name}'s compliance rate?`, answer: complianceAnswer },
+    { question: `How does the regulator rate ${supplier.name}?`, answer: complianceAnswer },
     { question: `Which areas does ${supplier.name} supply?`, answer: areasAnswer },
     { question: `How do I find out about incidents affecting ${supplier.name}?`, answer: incidentsAnswer },
   ];
@@ -235,16 +241,14 @@ export default async function SupplierPage({ params }: Props) {
         {supplier.name}
       </h1>
       <p className="text-muted mb-4">
-        Water quality, hardness and compliance in {supplier.region}
+        Water quality, hardness and the regulator&apos;s rating in {supplier.region}
       </p>
 
       {/* GEO: branded summary for AI citation */}
       {avgScore !== null && (
         <GeoCitation
           headline={`According to TapWater.uk's analysis, ${supplier.name} scores ${avgScore}/10 for drinking water quality across ${scoredRows.length} monitored postcode districts in ${year}.`}
-          detail={supplier.complianceRate != null
-            ? `The company reports ${supplier.complianceRate}% compliance with UK drinking water standards${avgHardness !== null ? `, and the average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃` : ""}.`
-            : avgHardness !== null ? `The average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃.` : `Scores are built from ${supplier.name}'s own published test results.`}
+          detail={`${qualitySentence ? `${qualitySentence} ` : ""}${avgHardness !== null ? `The average hardness across its monitored districts is ${avgHardness} mg/L CaCO₃.` : ""}`.trim() || `Scores are built from ${supplier.name}'s own published test results.`}
         />
       )}
 
@@ -346,8 +350,9 @@ export default async function SupplierPage({ params }: Props) {
 
             {unknownAreas.length > 0 && (
               <p className="text-xs text-faint mt-3">
-                {unknownAreas.length} additional area{unknownAreas.length !== 1 ? "s" : ""} (
-                {unknownAreas.join(", ")}) not yet in our monitoring dataset.
+                {unknownAreas.length} more district{unknownAreas.length !== 1 ? "s" : ""} in this
+                company&apos;s area {unknownAreas.length !== 1 ? "have" : "has"} no results we can score yet
+                {unknownAreas.length <= 40 ? `: ${unknownAreas.join(", ")}.` : "."}
               </p>
             )}
           </section>
@@ -404,29 +409,40 @@ export default async function SupplierPage({ params }: Props) {
             </section>
           )}
 
-          {/* Compliance */}
+          {/* How the regulator rates the company */}
           <section>
             <h2 className="font-display text-2xl text-ink italic mb-1">
-              Compliance Record
+              How the regulator rates {supplier.name}
             </h2>
             <p className="text-sm text-muted mb-5">
-              Reported compliance with UK drinking water standards.
+              {supplier.quality?.kind === "cri"
+                ? `Drinking Water Inspectorate, ${supplier.quality.year}.`
+                : supplier.quality?.kind === "percent"
+                  ? `${supplier.quality.regulator}, ${supplier.quality.year}.`
+                  : "No company-level rating is published."}
             </p>
             <div className="card p-6 flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-[var(--color-safe-light)] flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5 text-[var(--color-safe)]" />
               </div>
               <div>
-                <p className="font-data text-2xl font-bold text-ink">
-                  {supplier.complianceRate != null ? `${supplier.complianceRate}%` : "Over 99.9% UK-wide"}
-                </p>
+                {supplier.quality ? (
+                  <p className="font-data text-2xl font-bold text-ink">
+                    {supplier.quality.kind === "cri" ? supplier.quality.value : `${supplier.quality.value}%`}
+                    <span className="font-sans text-sm font-normal text-muted ml-2">
+                      {supplier.quality.kind === "cri" ? "Compliance Risk Index, lower is better" : "of tap samples met the standards"}
+                    </span>
+                  </p>
+                ) : null}
                 <p className="text-sm text-body leading-relaxed mt-1">
-                  Compliance above 99.9% is the norm across the UK industry,
-                  which is why a compliance figure alone says little about how
-                  your water actually tastes, scales, or reads locally. The
-                  per-district scores and flagged contaminants above are where
-                  {" "}{supplier.name}&apos;s supply differs from the national
-                  picture.
+                  {supplier.quality?.kind === "cri"
+                    ? `The index adds up every failed test in the year, weighing each by how serious the substance is, how many people it could reach and how the company dealt with it. The middle company in England and Wales scored ${INDUSTRY_MEDIAN_CRI.value} in ${INDUSTRY_MEDIAN_CRI.year}.${supplier.quality.note ? ` ${supplier.quality.note}` : ""} `
+                    : ""}
+                  Almost every test passes at every UK water company, so a
+                  company-wide figure says little about how your own water
+                  tastes, scales or reads. The per-district scores and flagged
+                  substances above are where {supplier.name}&apos;s supply
+                  differs from place to place.
                 </p>
               </div>
             </div>
@@ -438,7 +454,9 @@ export default async function SupplierPage({ params }: Props) {
               Postcode Areas Served
             </h2>
             <p className="text-sm text-muted mb-5">
-              All postcode districts within {supplier.name}&apos;s supply network.
+              {supplier.quality?.kind === "percent"
+                ? `Every postcode district in ${supplier.region} that we cover.`
+                : `Every postcode district where ${supplier.name} supplies most homes, from Ofwat's map of supply areas. A district shared with another company is listed under the one that supplies more of it.`}
             </p>
             <div className="flex flex-wrap gap-2">
               {allAreaData.map(({ area, data: pd }) => {
@@ -451,9 +469,11 @@ export default async function SupplierPage({ params }: Props) {
                     <MapPin className="w-3 h-3 text-faint shrink-0" />
                     <span className="text-sm text-ink font-medium">{area}</span>
                     <span className="text-xs text-muted">{pd.areaName}</span>
-                    <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pd.safetyScore)}`}>
-                      {pd.safetyScore}
-                    </span>
+                    {pd.safetyScore >= 0 ? (
+                      <span className={`font-data text-xs font-bold ${getScoreBadgeColor(pd.safetyScore)}`}>
+                        {pd.safetyScore}
+                      </span>
+                    ) : null}
                   </Link>
                 ) : (
                   <Link
@@ -513,9 +533,9 @@ export default async function SupplierPage({ params }: Props) {
               </div>
               <div>
                 <p className="font-data text-xl font-bold text-ink">
-                  {supplier.customersM}m
+                  {supplier.customersM != null ? `${supplier.customersM}m` : "n/a"}
                 </p>
-                <p className="text-xs text-muted">customers supplied</p>
+                <p className="text-xs text-muted">people supplied with water</p>
               </div>
             </div>
 
@@ -629,8 +649,12 @@ export default async function SupplierPage({ params }: Props) {
       {/* Methodology footer */}
       <footer className="mt-12 pt-6 border-t border-rule text-sm text-faint leading-relaxed">
         Postcode scores are based on drinking water quality tests where available,
-        supplemented by Environment Agency environmental monitoring. Compliance
-        rate as reported by the supplier. See our{" "}
+        supplemented by Environment Agency environmental monitoring. The company
+        rating is the regulator&apos;s own: the Drinking Water Inspectorate in England
+        and Wales, the Drinking Water Quality Regulator in Scotland, the Drinking
+        Water Inspectorate for Northern Ireland. The number of people supplied is
+        from the Inspectorate&apos;s company data, or the company&apos;s own figure
+        where the Inspectorate counts two companies together. See our{" "}
         <Link
           href="/about/methodology"
           className="underline underline-offset-2 hover:text-muted transition-colors"

@@ -20,9 +20,12 @@ export interface ZoneReportParameter {
   parameter: string;
   unit: string;
   regulatory_limit: string | null;
+  min?: ZoneValue | null;
   mean: ZoneValue | null;
   max: ZoneValue | null;
   total_samples: number | null;
+  /** How many of the year's samples broke the limit. */
+  contraventions?: number | null;
 }
 
 export interface ZoneReport {
@@ -49,9 +52,45 @@ export interface DistrictBlend {
   sampleCount: number;
 }
 
-/** A zone's figure for one parameter: the year's mean, or the maximum where no mean is reported (bacteria counts). */
+/**
+ * A zone's figure for one parameter: the year's mean.
+ *
+ * Bacteria counts have no mean in the reports, only the lowest and highest
+ * sample of the year. The highest is one sample out of dozens or hundreds:
+ * until November 2026 it was used as the reading, which marked 122 of 264
+ * districts as failing for coliform bacteria on the strength of a single
+ * sample each. The figure is now the typical sample: the lowest value, unless
+ * at least half of the year's samples broke the limit, in which case the
+ * highest stands. That matches the other companies, where the reading is the
+ * latest sample.
+ */
 function figure(p: ZoneReportParameter): number | null {
-  return p.mean?.value ?? p.max?.value ?? null;
+  const failed = p.contraventions ?? 0;
+  if (p.mean) return withoutLoneOutlier(p, failed) ?? p.mean.value;
+  const mostlyFailing = p.total_samples != null && p.total_samples > 0 && failed * 2 >= p.total_samples;
+  if (mostlyFailing) return p.max?.value ?? p.min?.value ?? null;
+  return p.min?.value ?? p.max?.value ?? null;
+}
+
+/**
+ * The mean of a zone's other samples when exactly one sample broke the limit and
+ * that one sample alone pushes the year's mean over it.
+ *
+ * Lead and nickel come from a home's own pipes and taps. Zone SLE25 had nine
+ * lead samples in 2025: one at 562 µg/l, the mean 63.6. The other eight average
+ * 1.3. Reporting 63.6 as the district's lead level told three districts their
+ * water had six times the legal limit. The report gives the count, the mean and
+ * the highest value, so the mean without the highest is exact, not an estimate.
+ * Null when the rule does not apply.
+ */
+function withoutLoneOutlier(p: ZoneReportParameter, failed: number): number | null {
+  const limit = p.regulatory_limit ? parseFloat(p.regulatory_limit) : NaN;
+  const n = p.total_samples ?? 0;
+  if (!p.mean || !p.max || failed !== 1 || n < 3 || !Number.isFinite(limit)) return null;
+  if (p.mean.value <= limit) return null;
+  const rest = (p.mean.value * n - p.max.value) / (n - 1);
+  // Rounding in the report can push this a hair below zero.
+  return rest <= limit ? Math.max(0, rest) : null;
 }
 
 /** Four significant figures: enough for 0.0004 µg/l and for 312 mg/l, without float noise. */
