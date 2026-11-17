@@ -47,11 +47,11 @@ export function SoftenerButton({ district, label, paint, placement }: SoftenerBu
  * Phone-only bar that carries the page's primary action once the first screen has
  * scrolled away, and steps aside again when the matching section is on screen.
  */
-export function StickyAction({ title, note, children }: { title: string; note: string; children: React.ReactNode }) {
+export function StickyAction({ title, note, children, heroId = "wt-tank" }: { title: string; note: string; children: React.ReactNode; heroId?: string }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const hero = document.getElementById("wt-tank");
+    const hero = document.getElementById(heroId);
     // Step aside wherever the same button is already on screen.
     const targets = [document.getElementById("wt-fix"), document.getElementById("softener-quotes")].filter(
       (el): el is HTMLElement => el !== null,
@@ -77,7 +77,7 @@ export function StickyAction({ title, note, children }: { title: string; note: s
       heroIo.disconnect();
       targetIo.disconnect();
     };
-  }, []);
+  }, [heroId]);
 
   return (
     <div className="wt-sticky" data-show={show} aria-hidden={!show}>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TankSearch } from "@/components/tank/tank-search";
+import { SoftenerButton, StickyAction } from "@/components/tank/tank-actions";
 import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { pickRelatedGuides } from "@/lib/guides";
@@ -253,6 +254,9 @@ export default async function CityPage({ params }: Props) {
   const hardnessSpread = hardestRow && softestRow && hardestRow.district !== softestRow.district
     ? ` It ranges from ${softestRow.h.value} mg/L in ${softestRow.district} to ${hardestRow.h.value} mg/L in ${hardestRow.district}.`
     : "";
+  // The quote form only renders inside the scored-city layout, so the hero link
+  // and the sticky bar must follow the same condition or they point at nothing.
+  const cityIsHard = scored.length > 0 && avgHardness != null && hardnessClass != null && avgHardness >= 180;
   const hardnessAnswer = avgHardness != null
     ? `Water in ${city.name} has an average hardness of ${Math.round(avgHardness)} mg/L CaCO₃, which is classified as ${hardnessClass}.${hardnessSpread} ${avgHardness >= 180 ? "Hard water causes limescale buildup in kettles and appliances. A water softener or filter may help." : avgHardness < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`
     : `Hardness data is not yet available for ${city.name}. Enter your postcode for detailed water quality data.`;
@@ -322,7 +326,7 @@ export default async function CityPage({ params }: Props) {
       ) : null}
 
       {/* ── The tank: the city filled to its average ── */}
-      <section className="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
+      <section className="wt-tank" id="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
         <div className="wt-inner">
           <div>
             <h1>
@@ -338,6 +342,12 @@ export default async function CityPage({ params }: Props) {
               ) : city.description}
             </p>
             <div className="wt-heroacts"><TankSearch /></div>
+            {cityIsHard ? (
+              <p className="wt-herohard wt-nums">
+                {city.name} water is {hardnessClass} at {Math.round(avgHardness ?? 0)} mg/L.{" "}
+                <a href="#softener-quotes" className="wt-link">Get softener quotes</a>
+              </p>
+            ) : null}
           </div>
           {scored.length > 0 ? (
             <div className="wt-level wt-nums">
@@ -528,6 +538,12 @@ export default async function CityPage({ params }: Props) {
             </ul>
           </div>
         </section>
+      ) : null}
+
+      {cityIsHard ? (
+        <StickyAction title={`${Math.round(avgHardness ?? 0)} mg/L: ${hardnessClass} water`} note={`Softener quotes in ${city.name}`}>
+          <SoftenerButton district={city.name} label="Get quotes" paint="sun" placement="sticky" />
+        </StickyAction>
       ) : null}
 
       <section className="wt-faq">

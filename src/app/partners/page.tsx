@@ -1,202 +1,165 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbSchema } from "@/components/json-ld";
-import { REGIONS } from "@/lib/regions";
-import { PartnerSignupForm } from "@/components/partner-signup-form";
+import { PartnerSignupForm, type PartnerArea } from "@/components/partner-signup-form";
+import { getHardnessMap } from "@/lib/data";
+import { HARD_WATER_THRESHOLD } from "@/lib/filters";
+import { waitingByArea } from "@/lib/lead-delivery";
 import { OG_IMAGE } from "@/lib/og";
+import { FREE_LEADS, MAX_INSTALLERS_PER_LEAD, PACK_LEADS, PACK_PRICE_GBP, PRICE_PER_LEAD_GBP, formatGbp } from "@/lib/partner-offer";
+import { postcodeAreaName } from "@/lib/postcode-areas";
+import { supabase } from "@/lib/supabase";
+import "@/components/tank/tank.css";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
-const year = new Date().getFullYear();
+const TITLE = "Water Softener Leads for Installers";
+const DESCRIPTION = `Homeowners who have just checked how hard their water is, asking for softener quotes in your postcode areas. First ${FREE_LEADS} leads free, then ${formatGbp(PRICE_PER_LEAD_GBP)} each. No contract.`;
 
 export function generateMetadata(): Metadata {
   return {
-    title: "Partner With TapWater.uk",
-    description:
-      "Get qualified water softener leads from homeowners in hard water areas. Join our installer partner network.",
-    alternates: {
-      canonical: "https://www.tapwater.uk/partners",
-    },
-    openGraph: {
-      images: OG_IMAGE,
-      title: "Partner With TapWater.uk",
-      description:
-        "Get qualified water softener leads from homeowners in hard water areas. Join our installer partner network.",
-      url: "https://www.tapwater.uk/partners",
-      type: "website",
-    },
-    twitter: {
-      images: OG_IMAGE,
-      card: "summary",
-      title: "Partner With TapWater.uk",
-      description:
-        "Get qualified water softener leads from homeowners in hard water areas. Join our installer partner network.",
-    },
+    title: TITLE,
+    description: DESCRIPTION,
+    alternates: { canonical: "https://www.tapwater.uk/partners" },
+    openGraph: { images: OG_IMAGE, title: TITLE, description: DESCRIPTION, url: "https://www.tapwater.uk/partners", type: "website" },
+    twitter: { images: OG_IMAGE, card: "summary", title: TITLE, description: DESCRIPTION },
   };
 }
 
-export default function PartnersPage() {
-  const regionNames = REGIONS.map((r) => r.name);
+const WINDOW_DAYS = 90;
+
+async function loadAreas(): Promise<{ areas: PartnerArea[]; total: number }> {
+  const [{ areas }, counts] = await Promise.all([
+    getHardnessMap(),
+    supabase ? waitingByArea(supabase, WINDOW_DAYS) : Promise.resolve(new Map<string, number>()),
+  ]);
+  const hard = areas
+    .filter((a) => a.median >= HARD_WATER_THRESHOLD)
+    .map((a) => ({ area: a.area, town: postcodeAreaName(a.area), median: Math.round(a.median), requests: counts.get(a.area) ?? 0 }))
+    .sort((a, b) => b.requests - a.requests || b.median - a.median);
+  let total = 0;
+  for (const n of counts.values()) total += n;
+  return { areas: hard, total };
+}
+
+const FAQS = [
+  {
+    q: "What is in a lead?",
+    a: "The homeowner's name, phone number, email address, postcode district and the water hardness we measured for it, sent to you by email the moment they ask. Every one has ticked a box agreeing to be contacted by local installers about softener quotes.",
+  },
+  {
+    q: "How many installers get the same lead?",
+    a: `At most ${MAX_INSTALLERS_PER_LEAD}. Installers who joined an area first are served first.`,
+  },
+  {
+    q: "What if the phone number is wrong?",
+    a: "Reply to the lead email within seven days and we put the lead back on your account.",
+  },
+  {
+    q: "Is there a contract or a monthly fee?",
+    a: `No. After your ${FREE_LEADS} free leads you buy ${PACK_LEADS} at a time by card, and they stay on your account until they are used. Stop whenever you like by not topping up.`,
+  },
+  {
+    q: "Why do you check installers first?",
+    a: "We are passing on people's phone numbers, so we confirm every applicant is a real softener installer before anything is shared. It usually takes one working day.",
+  },
+];
+
+export default async function PartnersPage() {
+  const { areas, total } = await loadAreas();
+  const busiest = areas.filter((a) => a.requests > 0).slice(0, 3);
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-      {/* ── Schema markup ──────────────────────────────────────────── */}
+    <div className="wt">
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
-          {
-            name: "Partners",
-            url: "https://www.tapwater.uk/partners",
-          },
+          { name: "For installers", url: "https://www.tapwater.uk/partners" },
         ]}
       />
+      <div className="wt-top">
+        <div className="wt-inner">
+          <nav aria-label="Breadcrumb" className="wt-crumbs">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">For installers</span>
+          </nav>
+        </div>
+      </div>
 
-      <div className="max-w-3xl mx-auto">
-        {/* ── Breadcrumb nav ─────────────────────────────────────── */}
-        <nav className="text-sm text-muted mb-6" aria-label="Breadcrumb">
-          <ol className="flex items-center gap-1.5">
+      <section className="wt-chalk">
+        <div className="wt-inner">
+          <div className="wt-chalk-grid">
+            <p className="wt-n wt-nums">
+              {total}
+              <small>homeowners asked us for water softener quotes in the last {WINDOW_DAYS} days</small>
+            </p>
+            <div>
+              <h1 className="wt-h2">They looked up their water, saw the limescale number, and asked for an installer.</h1>
+              <p>
+                TapWater.uk shows people the measured hardness of their own tap water. Where it is hard, they can ask for softener quotes. Those requests
+                go to installers who cover the postcode area{busiest.length > 0 ? `; the busiest right now are ${busiest.map((a) => a.town).join(", ")}` : ""}.
+              </p>
+              <p>
+                <strong>Your first {FREE_LEADS} leads are free.</strong> After that they are {formatGbp(PRICE_PER_LEAD_GBP)} each, with no contract.
+              </p>
+              <p style={{ marginTop: 28 }}>
+                <a href="#join" className="wt-btn wt-btn--ink">Pick your areas</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="wt-band wt-band--white" id="join">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Pick your areas</h2>
+          <p className="wt-sub">Choose where you install. We check your details, switch your account on, and requests in those areas start arriving by email.</p>
+          <PartnerSignupForm areas={areas} />
+        </div>
+      </section>
+
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner">
+          <h2 className="wt-h2">What happens after you apply</h2>
+          <ol className="wt-seq">
             <li>
-              <Link href="/" className="hover:text-accent transition-colors">
-                Home
-              </Link>
+              <h3>We check you are an installer</h3>
+              <p>Usually within one working day. You get an email when your account is live.</p>
             </li>
-            <li aria-hidden="true">/</li>
-            <li className="font-medium text-ink" aria-current="page">
-              Partners
+            <li>
+              <h3>Recent requests reach you first</h3>
+              <p>Anything asked for in your areas in the last 30 days that is still open is sent straight away, as part of your {FREE_LEADS} free leads.</p>
+            </li>
+            <li>
+              <h3>New requests arrive as they happen</h3>
+              <p>Name, phone, email, district and measured hardness, by email, to at most {MAX_INSTALLERS_PER_LEAD} installers.</p>
+            </li>
+            <li>
+              <h3>Top up when you want more</h3>
+              <p>
+                {PACK_LEADS} leads for {formatGbp(PACK_PRICE_GBP)}, paid by card. When your account is empty we tell you a request is waiting, without the
+                homeowner&rsquo;s details, and send it as soon as you top up.
+              </p>
             </li>
           </ol>
-        </nav>
-
-        {/* ── Hero ───────────────────────────────────────────────── */}
-        <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
-          Get qualified water softener leads in your area
-        </h1>
-        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-          <span>
-            By <span className="text-ink font-medium">TapWater.uk Research</span>
-          </span>
-          <span>&middot;</span>
-          <span>Updated April {year}</span>
         </div>
+      </section>
 
-        {/* ── Value proposition callout ───────────────────────────── */}
-        <div className="card p-6 mb-10 border-l-4 border-l-accent">
-          <p className="text-base text-body leading-relaxed">
-            <strong className="text-ink">
-              We connect homeowners in hard water areas with trusted local
-              installers.
-            </strong>{" "}
-            Our postcode-level water data identifies households most likely to
-            need a water softener. When they request quotes, we forward
-            their details directly to partner installers in the area.
+      <section className="wt-faq">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Questions installers ask</h2>
+          {FAQS.map((f) => (
+            <details key={f.q}>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+          <p style={{ marginTop: 32 }}>
+            Something else? Email <a className="wt-link" href="mailto:partners@tapwater.uk">partners@tapwater.uk</a>.
           </p>
         </div>
-
-        {/* ── How it works ───────────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-12 mb-6">
-          How it works
-        </h2>
-        <div className="space-y-6">
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-              <span className="font-data text-sm font-bold text-accent">1</span>
-            </div>
-            <div>
-              <p className="font-semibold text-ink">Homeowner checks their water</p>
-              <p className="text-sm text-body mt-1 leading-relaxed">
-                A visitor enters their postcode on TapWater.uk and sees their
-                local water hardness level. If it&apos;s hard or very hard, they
-                can request a free water softener assessment.
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-              <span className="font-data text-sm font-bold text-accent">2</span>
-            </div>
-            <div>
-              <p className="font-semibold text-ink">We match them to your coverage area</p>
-              <p className="text-sm text-body mt-1 leading-relaxed">
-                Our system checks the lead&apos;s postcode against your
-                registered coverage areas and forwards qualified leads to up to
-                3 matching installers.
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-              <span className="font-data text-sm font-bold text-accent">3</span>
-            </div>
-            <div>
-              <p className="font-semibold text-ink">You contact the homeowner</p>
-              <p className="text-sm text-body mt-1 leading-relaxed">
-                You receive the lead by email with full contact details and
-                hardness data. Contact the homeowner within 24 hours to arrange a
-                site visit or quote.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Stats ──────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
-          <div className="card p-5 text-center">
-            <p className="text-xs text-faint uppercase tracking-wider">
-              Postcodes covered
-            </p>
-            <p className="font-data text-2xl font-bold text-ink mt-1">
-              2,800+
-            </p>
-            <p className="text-sm text-muted mt-1">UK postcode districts</p>
-          </div>
-          <div className="card p-5 text-center">
-            <p className="text-xs text-faint uppercase tracking-wider">
-              Hard water coverage
-            </p>
-            <p className="font-data text-2xl font-bold text-ink mt-1">
-              60% of England
-            </p>
-            <p className="text-sm text-muted mt-1">Has hard or very hard water</p>
-          </div>
-          <div className="card p-5 text-center">
-            <p className="text-xs text-faint uppercase tracking-wider">
-              Data freshness
-            </p>
-            <p className="font-data text-2xl font-bold text-ink mt-1">
-              Daily updates
-            </p>
-            <p className="text-sm text-muted mt-1">
-              From water company reports
-            </p>
-          </div>
-        </div>
-
-        {/* ── Partner signup form ─────────────────────────────────── */}
-        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
-          Register as an installer partner
-        </h2>
-        <p className="text-base text-body leading-relaxed mb-6">
-          Fill in the form below and we&apos;ll get back to you within 48 hours
-          to discuss lead volumes and pricing for your area.
-        </p>
-
-        <PartnerSignupForm regionNames={regionNames} />
-
-        {/* ── Footer ─────────────────────────────────────────────── */}
-        <footer className="mt-12 pb-4 text-sm text-faint leading-relaxed border-t border-rule pt-6">
-          <p>
-            TapWater.uk partner programme. Water hardness data sourced from
-            the Environment Agency and water company compliance reports
-            covering 2,800 UK postcode districts.{" "}
-            <Link
-              href="/about/methodology"
-              className="underline underline-offset-2 hover:text-muted transition-colors"
-            >
-              Our methodology
-            </Link>
-          </p>
-        </footer>
-      </div>
+      </section>
     </div>
   );
 }

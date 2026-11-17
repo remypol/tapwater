@@ -10,6 +10,7 @@ import { SOFTENER_GUIDES } from "@/lib/softener-guides";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import type { HardnessAreaPage, HardnessMapArea, HardnessMapDistrict } from "@/lib/data";
 import { TankSearch } from "./tank-search";
+import { SoftenerButton, StickyAction } from "./tank-actions";
 import { AreaPills, AreaTable, CheckPostcode, GuideLink, HardnessScale, SoftenerPanel } from "./hardness-blocks";
 import "./tank.css";
 
@@ -295,6 +296,12 @@ export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { q
                 their own water company reading{measured.length < districts.length ? ` and ${districts.length - measured.length} estimated from the area` : ""}.
               </p>
               <HardnessScale value={summary.median} />
+              {hard ? (
+                <div className="wt-heroacts">
+                  <SoftenerButton district={data.area} label={`Get softener quotes in ${town}`} paint="ink" placement="hero" />
+                  <a href="#districts" className="wt-link">Find your district</a>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -372,6 +379,12 @@ export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { q
             <div style={{ marginTop: 20 }}><AreaPills areas={nearby} /></div>
           </div>
         </section>
+      ) : null}
+
+      {hard ? (
+        <StickyAction heroId="wt-hardness" title={`${summary.median} mg/L in ${town}`} note="Compare softener quotes">
+          <SoftenerButton district={data.area} label="Get quotes" paint="sun" placement="sticky" />
+        </StickyAction>
       ) : null}
 
       <section className="wt-faq">

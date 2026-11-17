@@ -392,3 +392,43 @@
 .wt-verdict { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: clamp(1.6rem, 3.4vw, 2.6rem); letter-spacing: -0.03em; line-height: 1.05; max-width: 22ch; margin-top: 28px; }
 .wt-table .wt-better { color: #2f8a45; font-weight: 700; }
 .wt-table .wt-better::after { content: " ✓"; }
+
+/* ── Installer signup: the areas are the form ── */
+.wt-join { margin-top: 40px; display: grid; gap: 40px; max-width: 920px; }
+.wt-join fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.wt-join legend { padding: 0; font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: 1.5rem; letter-spacing: -0.02em; }
+.wt-join-hint { margin-top: 8px; color: var(--wt-mute); max-width: 62ch; }
+.wt-areas { margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; }
+.wt-area { position: relative; display: grid; grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 2px; align-items: baseline; text-align: left; min-height: 76px; padding: 12px 14px; border: 0; border-radius: 18px; background: var(--wt-foam); color: var(--wt-ink); font: inherit; cursor: pointer; box-shadow: inset 0 0 0 2px transparent; transition: background-color 0.15s ease, box-shadow 0.15s ease; }
+.wt-area:hover { background: var(--wt-sky); }
+.wt-area b { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1; }
+.wt-area span { font-weight: 600; font-size: 0.95rem; line-height: 1.2; min-width: 0; overflow-wrap: anywhere; }
+.wt-area small { grid-column: 1 / -1; font-size: 0.82rem; color: var(--wt-mute); }
+.wt-area em { position: absolute; top: -8px; right: 10px; font-style: normal; font-weight: 700; font-size: 0.78rem; line-height: 1; padding: 5px 9px; border-radius: 999px; background: var(--wt-sun); color: var(--wt-ink); }
+.wt-area[aria-pressed="true"] { background: var(--wt-deep); color: #fff; box-shadow: inset 0 0 0 2px var(--wt-deep); }
+.wt-area[aria-pressed="true"] small { color: #cfe0ff; }
+.wt-join-more { margin-top: 16px; background: none; border: 0; padding: 0; font: inherit; font-weight: 600; cursor: pointer; color: var(--wt-deep); }
+.wt-join-tally { margin-top: 20px; font-weight: 600; }
+.wt-fields { margin-top: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.wt-fields label { display: grid; gap: 6px; font-weight: 600; font-size: 0.92rem; }
+.wt-fields-wide { grid-column: 1 / -1; }
+.wt-fields input { min-height: 52px; padding: 0 16px; border: 0; border-radius: 14px; background: var(--wt-foam); box-shadow: inset 0 0 0 2px var(--wt-line); font: inherit; font-size: 1rem; color: var(--wt-ink); }
+.wt-fields input:focus { outline: 0; box-shadow: inset 0 0 0 2px var(--wt-pool); background: #fff; }
+.wt-join > .wt-btn { justify-self: start; }
+.wt-join > .wt-btn:disabled { opacity: 0.6; cursor: progress; }
+.wt-join-error { font-weight: 600; color: #a3261a; }
+.wt-join-small { font-size: 0.88rem; color: var(--wt-mute); max-width: 62ch; margin-top: -24px; }
+.wt-join-done { margin-top: 40px; max-width: 640px; padding: clamp(24px, 4vw, 40px); border-radius: 28px; background: var(--wt-deep); color: #fff; }
+.wt-join-done h3 { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.02em; }
+.wt-join-done p { margin-top: 12px; }
+.wt-seq { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; counter-reset: seq; }
+.wt-seq li { counter-increment: seq; padding-top: 20px; border-top: 3px solid var(--wt-ink); }
+.wt-seq li::before { content: counter(seq); display: block; font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 900; font-size: 2.6rem; line-height: 1; letter-spacing: -0.04em; color: var(--wt-pool); margin-bottom: 12px; }
+.wt-seq h3 { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.01em; }
+.wt-seq p { margin-top: 8px; color: #2c3a5e; }
+@media (max-width: 640px) {
+  .wt-fields { grid-template-columns: 1fr; }
+  .wt-areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wt-join > .wt-btn { justify-self: stretch; }
+}
+.wt-herohard { margin-top: 20px; font-weight: 600; font-size: 1rem; }

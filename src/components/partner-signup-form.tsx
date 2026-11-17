@@ -2,248 +2,170 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, AlertCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { FREE_LEADS } from "@/lib/partner-offer";
 
-interface PartnerSignupFormProps {
-  regionNames: string[];
+export interface PartnerArea {
+  /** "RG" */
+  area: string;
+  /** "Reading" */
+  town: string;
+  /** Median hardness across the area, mg/L. */
+  median: number;
+  /** Quote requests from the area in the last 90 days. */
+  requests: number;
 }
 
-const VOLUME_OPTIONS = [
-  "5-10 leads",
-  "10-25 leads",
-  "25-50 leads",
-  "50+ leads",
-];
+const MAX_AREAS = 12;
 
-export function PartnerSignupForm({ regionNames }: PartnerSignupFormProps) {
+/**
+ * The installer application. The areas are the form: each one shows how hard the
+ * water is and how many homeowners asked for quotes there recently, so an
+ * installer picks territory by looking at demand, not by reading a pitch.
+ */
+export function PartnerSignupForm({ areas }: { areas: PartnerArea[] }) {
+  const [picked, setPicked] = useState<string[]>([]);
+  const [showAll, setShowAll] = useState(false);
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
-  const [coverageRegions, setCoverageRegions] = useState<string[]>([]);
-  const [monthlyVolume, setMonthlyVolume] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  function toggleRegion(region: string) {
-    setCoverageRegions((prev) =>
-      prev.includes(region) ? prev.filter((r) => r !== region) : [...prev, region]
-    );
+  const busy = status === "submitting";
+  const visible = showAll ? areas : areas.slice(0, 24);
+  const pickedRequests = areas.filter((a) => picked.includes(a.area)).reduce((sum, a) => sum + a.requests, 0);
+
+  function toggle(area: string) {
+    setErrorMsg("");
+    setPicked((prev) => {
+      if (prev.includes(area)) return prev.filter((a) => a !== area);
+      if (prev.length >= MAX_AREAS) {
+        setErrorMsg(`Pick up to ${MAX_AREAS} areas. Remove one to add another.`);
+        return prev;
+      }
+      return [...prev, area];
+    });
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!companyName || !contactName || !email || !phone) return;
-
+    if (picked.length === 0) {
+      setStatus("error");
+      setErrorMsg("Pick at least one postcode area you cover.");
+      return;
+    }
     setStatus("submitting");
     setErrorMsg("");
-
     try {
       const res = await fetch("/api/partners", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          companyName,
-          contactName,
-          email,
-          phone,
-          website: website || undefined,
-          coverageRegions,
-          monthlyVolume,
-        }),
+        body: JSON.stringify({ companyName, contactName, email, phone, website: website || undefined, areas: picked }),
       });
-
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(data.error || "The application was not sent. Try again in a minute.");
       }
-
       setStatus("success");
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Failed to submit");
+      setErrorMsg(err instanceof Error ? err.message : "The application was not sent. Try again in a minute.");
     }
   }
 
   if (status === "success") {
     return (
-      <div className="card p-6 lg:p-8 bg-[var(--color-surface-raised)]">
-        <div className="flex items-start gap-3 animate-fade-up">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-            <Check className="w-5 h-5 text-safe" />
-          </div>
-          <div>
-            <p className="text-lg font-semibold text-ink">
-              Application received
-            </p>
-            <p className="text-sm text-muted mt-1">
-              Thanks {contactName}, we&apos;ve received your partner application
-              for <span className="font-medium text-ink">{companyName}</span>.
-              We&apos;ll review your details and get back to you within 48 hours
-              at <span className="font-medium text-ink">{email}</span>.
-            </p>
-          </div>
-        </div>
+      <div className="wt-join-done" role="status">
+        <h3>Application sent</h3>
+        <p>
+          We have {companyName} down for {picked.join(", ")}. We check every installer before sharing homeowners&rsquo; details, usually within one
+          working day, and email {email} the moment your account is live. Your first {FREE_LEADS} leads are free.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="card p-6 lg:p-8 bg-[var(--color-surface-raised)]">
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label htmlFor="ps-company" className="block text-xs font-semibold text-muted mb-1">
-              Company name
-            </label>
-            <input
-              id="ps-company"
-              type="text"
-              required
-              placeholder="Your company name"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              disabled={status === "submitting"}
-              className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
-            />
-          </div>
-          <div>
-            <label htmlFor="ps-contact" className="block text-xs font-semibold text-muted mb-1">
-              Contact name
-            </label>
-            <input
-              id="ps-contact"
-              type="text"
-              required
-              placeholder="Your name"
-              value={contactName}
-              onChange={(e) => setContactName(e.target.value)}
-              disabled={status === "submitting"}
-              className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-          <div>
-            <label htmlFor="ps-email" className="block text-xs font-semibold text-muted mb-1">
-              Email
-            </label>
-            <input
-              id="ps-email"
-              type="email"
-              required
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={status === "submitting"}
-              className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
-            />
-          </div>
-          <div>
-            <label htmlFor="ps-phone" className="block text-xs font-semibold text-muted mb-1">
-              Phone
-            </label>
-            <input
-              id="ps-phone"
-              type="tel"
-              required
-              placeholder="07XXX XXXXXX"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              disabled={status === "submitting"}
-              className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
-            />
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <label htmlFor="ps-website" className="block text-xs font-semibold text-muted mb-1">
-            Website <span className="font-normal text-faint">(optional)</span>
-          </label>
-          <input
-            id="ps-website"
-            type="url"
-            placeholder="https://www.yourcompany.com"
-            value={website}
-            onChange={(e) => setWebsite(e.target.value)}
-            disabled={status === "submitting"}
-            className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50"
-          />
-        </div>
-
-        <fieldset className="mt-4">
-          <legend className="block text-xs font-semibold text-muted mb-2">
-            Coverage regions
-          </legend>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {regionNames.map((region) => (
-              <label
-                key={region}
-                className="flex items-center gap-2 cursor-pointer select-none"
-              >
-                <input
-                  type="checkbox"
-                  checked={coverageRegions.includes(region)}
-                  onChange={() => toggleRegion(region)}
-                  disabled={status === "submitting"}
-                  className="rounded border-rule text-accent focus:ring-accent/20"
-                />
-                <span className="text-sm text-body">{region}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <div className="mt-4">
-          <label htmlFor="ps-volume" className="block text-xs font-semibold text-muted mb-1">
-            Desired monthly volume
-          </label>
-          <select
-            id="ps-volume"
-            value={monthlyVolume}
-            onChange={(e) => setMonthlyVolume(e.target.value)}
-            disabled={status === "submitting"}
-            className="w-full border border-rule rounded-lg px-3 py-2.5 text-sm text-body focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent disabled:opacity-50 bg-[var(--color-surface)]"
-          >
-            <option value="">Select volume...</option>
-            {VOLUME_OPTIONS.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="w-full mt-5 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-white hover:bg-accent/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {status === "submitting" ? "Sending\u2026" : "Apply to become a partner"}
-        </button>
-
-        {status === "error" && (
-          <div className="mt-3 flex items-center gap-2 text-xs text-[var(--color-danger)]">
-            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-            {errorMsg || "Something went wrong. Please try again."}
-          </div>
-        )}
-      </form>
-
-      <div className="mt-5 pt-4 border-t border-rule">
-        <p className="text-xs text-muted text-center leading-relaxed">
-          By submitting, you agree to our{" "}
-          <Link
-            href="/privacy"
-            className="underline underline-offset-2 hover:text-ink"
-          >
-            privacy policy
-          </Link>
-          . We&apos;ll only use your details to process your partner application.
+    <form onSubmit={handleSubmit} className="wt-join" noValidate={false}>
+      <fieldset disabled={busy}>
+        <legend>Which postcode areas do you cover?</legend>
+        <p className="wt-join-hint">
+          Hard-water areas only, busiest first. The number is how many homeowners asked us for softener quotes there in the last 90 days.
         </p>
-      </div>
-    </div>
+        <div className="wt-areas">
+          {visible.map((a) => {
+            const on = picked.includes(a.area);
+            return (
+              <button key={a.area} type="button" className="wt-area" aria-pressed={on} onClick={() => toggle(a.area)}>
+                <b>{a.area}</b>
+                <span>{a.town}</span>
+                <small className="wt-nums">{a.median} mg/L</small>
+                {a.requests > 0 ? (
+                  <em className="wt-nums">
+                    {a.requests} request{a.requests === 1 ? "" : "s"}
+                  </em>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+        {areas.length > 24 && !showAll ? (
+          <button type="button" className="wt-link wt-join-more" onClick={() => setShowAll(true)}>
+            Show all {areas.length} hard-water areas
+          </button>
+        ) : null}
+        <p className="wt-join-tally wt-nums" aria-live="polite">
+          {picked.length === 0
+            ? "No areas picked yet."
+            : `${picked.length} area${picked.length === 1 ? "" : "s"} picked: ${picked.join(", ")}. ${pickedRequests} request${pickedRequests === 1 ? "" : "s"} there in the last 90 days.`}
+        </p>
+      </fieldset>
+
+      <fieldset disabled={busy}>
+        <legend>Who are you?</legend>
+        <div className="wt-fields">
+          <label>
+            Company name
+            <input type="text" required maxLength={200} autoComplete="organization" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+          </label>
+          <label>
+            Your name
+            <input type="text" required maxLength={100} autoComplete="name" value={contactName} onChange={(e) => setContactName(e.target.value)} />
+          </label>
+          <label>
+            Email for leads
+            <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </label>
+          <label>
+            Phone
+            <input type="tel" required autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </label>
+          <label className="wt-fields-wide">
+            Website, if you have one
+            <input type="text" maxLength={200} autoComplete="url" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          </label>
+        </div>
+      </fieldset>
+
+      {errorMsg ? (
+        <p className="wt-join-error" role="alert">
+          {errorMsg}
+        </p>
+      ) : null}
+
+      <button type="submit" className="wt-btn wt-btn--ink" disabled={busy}>
+        {busy ? "Sending application" : "Apply for these areas"}
+        <ArrowRight aria-hidden="true" />
+      </button>
+      <p className="wt-join-small">
+        No card needed to apply. By applying you agree to contact homeowners only about the quote they asked for.{" "}
+        <Link href="/privacy" className="wt-link">
+          Privacy policy
+        </Link>
+      </p>
+    </form>
   );
 }

@@ -3,6 +3,10 @@ import { getSupabase } from "@/lib/supabase";
 import { Resend } from "resend";
 import { subscribeLimiter, isMemoryRateLimited } from "@/lib/rate-limit";
 import { isSoftenerLeadSource } from "@/lib/softener-lead-source";
+import { isDuplicateLead } from "@/lib/lead-routing";
+import { offerNewLead, type LeadRow } from "@/lib/lead-delivery";
+import { DUPLICATE_WINDOW_HOURS } from "@/lib/partner-offer";
+import { FROM_SITE, esc } from "@/lib/partner-emails";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UK_PHONE_RE = /^(?:0|\+?44)\d{9,10}$/;
@@ -78,24 +82,51 @@ export async function POST(request: NextRequest) {
 
   const supabase = getSupabase();
 
-  const { error: dbError } = await supabase.from("softener_leads").insert({
-    name,
-    email,
-    phone,
-    postcode_district: postcode,
-    hardness_value: hardnessValue,
-    hardness_label: hardnessLabel,
-    source,
-    consent_to_installer_sharing: true,
-    consent_recorded_at: new Date().toISOString(),
-  });
+  // A double tap on the button, or the same person asking again the same day, is
+  // one request. Answer as if it were saved so the form shows its thank-you.
+  const now = new Date();
+  const { data: recent } = await supabase
+    .from("softener_leads")
+    .select("email, postcode_district, created_at")
+    .eq("email", email)
+    .gte("created_at", new Date(now.getTime() - DUPLICATE_WINDOW_HOURS * 3_600_000).toISOString());
+  if (recent && isDuplicateLead({ email, district: postcode, at: now }, recent)) {
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
 
-  if (dbError) {
+  const { data: saved, error: dbError } = await supabase
+    .from("softener_leads")
+    .insert({
+      name,
+      email,
+      phone,
+      postcode_district: postcode,
+      hardness_value: hardnessValue,
+      hardness_label: hardnessLabel,
+      source,
+      consent_to_installer_sharing: true,
+      consent_recorded_at: now.toISOString(),
+    })
+    .select("id, name, email, phone, postcode_district, hardness_value, hardness_label, status, consent_to_installer_sharing, created_at")
+    .single();
+
+  if (dbError || !saved) {
     console.error("[softener-leads] DB error:", dbError);
     return NextResponse.json(
       { error: "Failed to save your request" },
       { status: 500 }
     );
+  }
+
+  // Installers who cover this district and have leads on their account get it now.
+  let sentTo: string[] = [];
+  let withheld = 0;
+  try {
+    const offer = await offerNewLead(supabase, saved as LeadRow);
+    sentTo = offer.sentTo;
+    withheld = offer.withheld;
+  } catch (err) {
+    console.error("[softener-leads] Installer forwarding error:", err);
   }
 
   const resendKey = process.env.RESEND_API_KEY;
@@ -121,11 +152,11 @@ export async function POST(request: NextRequest) {
         We've received your request
       </h1>
       <p style="margin:0 0 16px;font-size:15px;color:#94a3b8;line-height:1.6;">
-        Thanks ${name}, we've got your water softener assessment request for <strong style="color:#ffffff;">${postcode}</strong>.
+        Thanks ${esc(name)}, we've got your water softener assessment request for <strong style="color:#ffffff;">${postcode}</strong>.
       </p>
-      ${hardnessValue ? `<p style="margin:0 0 16px;font-size:15px;color:#94a3b8;line-height:1.6;">Your area has <strong style="color:#f59e0b;">${hardnessLabel} water (${Math.round(hardnessValue)} mg/L)</strong>. A water softener can reduce limescale and protect your appliances.</p>` : ""}
+      ${hardnessValue ? `<p style="margin:0 0 16px;font-size:15px;color:#94a3b8;line-height:1.6;">Your area has <strong style="color:#f59e0b;">${esc(hardnessLabel)} water (${Math.round(hardnessValue)} mg/L)</strong>. A water softener can reduce limescale and protect your appliances.</p>` : ""}
       <p style="margin:0 0 24px;font-size:15px;color:#94a3b8;line-height:1.6;">
-        We&rsquo;ll be in touch as soon as we can match you with installers covering your area. No obligation, and you can opt out any time.
+        ${sentTo.length > 0 ? `We have passed your request to ${esc(sentTo.join(" and "))}. Expect a call or an email from them in the next few days.` : "We&rsquo;ll be in touch as soon as we can match you with installers covering your area."} No obligation, and you can opt out any time.
       </p>
       <div style="border-top:1px solid #334155;padding-top:20px;margin-top:8px;">
         <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">In the meantime</p>
@@ -148,79 +179,24 @@ export async function POST(request: NextRequest) {
 
       const adminEmail = process.env.ADMIN_EMAIL || "remy@tapwater.uk";
       await resend.emails.send({
-        from: "TapWater.uk <alerts@tapwater.uk>",
+        from: FROM_SITE,
         to: adminEmail,
-        subject: `New softener lead: ${name} (${postcode})`,
+        subject: `New softener lead: ${postcode}${sentTo.length > 0 ? `, sent to ${sentTo.join(" and ")}` : ", no installer yet"}`,
         html: `
 <h2>New Water Softener Lead</h2>
 <table style="border-collapse:collapse;">
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Name:</td><td>${name}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Email:</td><td>${email}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Phone:</td><td>${phone}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Name:</td><td>${esc(name)}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Email:</td><td>${esc(email)}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Phone:</td><td>${esc(phone)}</td></tr>
   <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Postcode:</td><td>${postcode}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Hardness:</td><td>${hardnessValue ? `${Math.round(hardnessValue)} mg/L (${hardnessLabel})` : "Unknown"}</td></tr>
+  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Hardness:</td><td>${hardnessValue ? `${Math.round(hardnessValue)} mg/L (${esc(hardnessLabel)})` : "Unknown"}</td></tr>
   <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Source:</td><td>${source}</td></tr>
 </table>
-<p>Forward this lead to Bark/Checkatrade/MyBuilder.</p>`,
+<p>${sentTo.length > 0 ? `Sent to ${esc(sentTo.join(" and "))}.` : withheld > 0 ? `${withheld} installer${withheld === 1 ? " covers" : "s cover"} this district but had no leads left on their account; they were told a request is waiting.` : "No approved installer covers this district yet. It will go to the first one who signs up for this area within 30 days."}</p>`,
       });
     } catch (err) {
       console.error("[softener-leads] Email error:", err);
     }
-  }
-
-  // Forward lead to matching installer partners
-  try {
-    const { data: partners } = await supabase
-      .from("installer_partners")
-      .select("id, company_name, contact_name, email, coverage_regions, coverage_postcodes")
-      .eq("status", "active");
-
-    if (partners && partners.length > 0 && resendKey) {
-      const postcodePrefix = postcode.replace(/[0-9]/g, "");
-      const matchedPartners = partners.filter((p: { coverage_postcodes: string[] | null }) => {
-        if (p.coverage_postcodes && p.coverage_postcodes.length > 0) {
-          return p.coverage_postcodes.some((cp: string) =>
-            postcode.startsWith(cp) || postcodePrefix === cp
-          );
-        }
-        return false;
-      });
-
-      if (matchedPartners.length > 0) {
-        const resend = new Resend(resendKey);
-        for (const partner of matchedPartners.slice(0, 3)) {
-          await resend.emails.send({
-            from: "TapWater.uk Leads <alerts@tapwater.uk>",
-            to: partner.email,
-            subject: `New water softener lead in ${postcode}`,
-            html: `
-<h2>New Water Softener Lead</h2>
-<p>A homeowner in your coverage area has requested water softener quotes.</p>
-<table style="border-collapse:collapse;">
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Name:</td><td>${name}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Phone:</td><td>${phone}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Email:</td><td>${email}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Postcode:</td><td>${postcode}</td></tr>
-  <tr><td style="padding:4px 12px 4px 0;font-weight:bold;">Hardness:</td><td>${hardnessValue ? `${Math.round(hardnessValue)} mg/L (${hardnessLabel})` : "Unknown"}</td></tr>
-</table>
-<p style="margin-top:16px;color:#666;font-size:13px;">This lead was sent to up to 3 installers in the area. Please contact the homeowner within 24 hours.</p>
-<p style="color:#999;font-size:12px;">TapWater.uk Lead Service</p>`,
-          });
-        }
-
-        // Update lead status to forwarded
-        await supabase
-          .from("softener_leads")
-          .update({ status: "forwarded", forwarded_at: new Date().toISOString() })
-          .eq("postcode_district", postcode)
-          .eq("email", email)
-          .eq("status", "new")
-          .order("created_at", { ascending: false })
-          .limit(1);
-      }
-    }
-  } catch (err) {
-    console.error("[softener-leads] Installer forwarding error:", err);
   }
 
   return NextResponse.json({ ok: true });
