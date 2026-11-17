@@ -1,4 +1,5 @@
 import type { HardnessTown } from "@/lib/hardness-towns";
+import { isThamesRotationDistrict } from "@/lib/thames-zones";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { AffiliateNote } from "@/components/commerce";
@@ -312,7 +313,10 @@ export function HardnessArea({ data, faqs, towns = [] }: { data: HardnessAreaPag
         <div className="wt-inner">
           <h2 className="wt-h2" id="districts">Hardness by {data.area} district</h2>
           <p className="wt-sub">
-            Hardest first. Hard starts at 180 mg/L, very hard at 250.
+Hardest first. Hard starts at 180 mg/L, very hard at 250.
+            {districts.some((d) => d.measured && isThamesRotationDistrict(d.district))
+              ? " Some figures come from water company supply zones, which do not follow postcode boundaries, so read them as typical for the area."
+              : ""}
             {measured.length < districts.length ? " Districts marked with an asterisk take the area's median rather than a reading of their own." : ""}
           </p>
           <div className="wt-tablewrap" style={{ marginTop: 24 }}>
@@ -440,7 +444,11 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
   const hardest = measured[0];
   const softest = measured[measured.length - 1];
   const single = measured.length === 1;
-  const supplierText = suppliers.length === 0 ? null : suppliers.length === 1 ? suppliers[0] : `${suppliers.slice(0, -1).join(", ")} and ${suppliers[suppliers.length - 1]}`;
+  // Thames Water publishes results by supply zone and our match of zones to
+  // districts is approximate, so for these towns we give the typical figure and
+  // do not compare one district with another or name the supplier.
+  const approximate = measured.some((d) => isThamesRotationDistrict(d.district));
+  const supplierText = approximate || suppliers.length === 0 ? null : suppliers.length === 1 ? suppliers[0] : `${suppliers.slice(0, -1).join(", ")} and ${suppliers[suppliers.length - 1]}`;
 
   return (
     <div className="wt">
@@ -459,7 +467,9 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
               <h1 className="wt-h2">Water hardness in {town.name}</h1>
               <p style={{ marginTop: 16 }}>
                 Tap water in {town.town} is <strong>{bandSentence(town.median)}</strong>
-                {single ? (
+                {approximate ? (
+                  <>: about {town.median} mg/L calcium carbonate, typical of the water company zones that cover the {town.area} area.</>
+                ) : single ? (
                   <>: {hardest.value} mg/L calcium carbonate in <Link className="wt-link" href={`/postcode/${hardest.district}`}>{hardest.district}</Link>.</>
                 ) : (
                   <>
@@ -484,9 +494,11 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
         <div className="wt-inner">
           <h2 className="wt-h2" id="districts">Hardness by {town.town} postcode district</h2>
           <p className="wt-sub">
-            {estimated > 0
-              ? `Districts marked with an asterisk have no reading of their own and take the ${town.area} postcode area's median.`
-              : "Every figure is a water company reading for that district."}{" "}
+            {approximate
+              ? "These figures come from water company supply zones, which do not follow postcode boundaries. We match zones to districts approximately, so read each one as typical for the area, not exact for that district."
+              : estimated > 0
+                ? `Districts marked with an asterisk have no reading of their own and take the ${town.area} postcode area's median.`
+                : "Every figure is a water company reading for that district."}{" "}
             Hard starts at 180 mg/L, very hard at 250.
           </p>
           <div className="wt-tablewrap" style={{ marginTop: 28 }}>
@@ -525,7 +537,7 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
             <div className="wt-side">
               <div className="wt-second">
                 <h3>Check your own postcode first</h3>
-                <p>{single ? "Hardness can differ from one street's supply to the next." : `${town.town} districts run from ${town.min} to ${town.max} mg/L.`} Your postcode page has the full test results too.</p>
+                <p>{single || approximate ? "Hardness can differ from one supply zone to the next." : `${town.town} districts run from ${town.min} to ${town.max} mg/L.`} Your postcode page has the full test results too.</p>
                 <TankSearch hash="wt-hardness" id="wt-postcode-town" />
               </div>
             </div>

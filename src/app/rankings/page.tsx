@@ -235,7 +235,6 @@ async function buildRankings() {
 // ── Page ──
 
 export default async function RankingsPage() {
-  const year = new Date().getFullYear();
   const { cityRankings, supplierRankings, regionRankings, totalPostcodes, latestDate } =
     await buildRankings();
 

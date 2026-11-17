@@ -131,7 +131,8 @@ describe("formatting", () => {
   it("bands hardness on the site scale", () => {
     expect(hardnessBandLabel(40)).toBe("Soft");
     expect(hardnessBandLabel(190)).toBe("Hard");
-    expect(hardnessBandLabel(241)).toBe("Very hard");
+    expect(hardnessBandLabel(241)).toBe("Hard");
+    expect(hardnessBandLabel(250)).toBe("Very hard");
     expect(hardnessBandLabel(520)).toBe("Very hard");
   });
   it("trims float noise", () => {

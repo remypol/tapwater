@@ -5,6 +5,7 @@ import { getHardnessArea, getHardnessAreaCodes, getHardnessTowns, getPostcodeDat
 import { nearbyTowns, type HardnessTown } from "@/lib/hardness-towns";
 import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
 import { formatSampleDate } from "@/lib/tank-plan";
+import { isThamesRotationDistrict } from "@/lib/thames-zones";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
@@ -39,7 +40,8 @@ function townTitle(town: HardnessTown): string {
 }
 
 function townDescription(town: HardnessTown): string {
-  const range = town.measuredCount > 1 ? `, from ${town.min} to ${town.max} mg/L across ${town.measuredCount} measured districts` : ` in ${town.districts.find((d) => d.measured)?.district}`;
+  const approximate = town.districts.some((d) => d.measured && isThamesRotationDistrict(d.district));
+  const range = approximate ? "" : town.measuredCount > 1 ? `, from ${town.min} to ${town.max} mg/L across ${town.measuredCount} measured districts` : ` in ${town.districts.find((d) => d.measured)?.district}`;
   return `${town.town} tap water is ${town.median >= 250 ? "very hard" : "hard"} at ${town.median} mg/L${range}. District table, what it costs you and softener quotes.`;
 }
 
@@ -49,7 +51,9 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
     Promise.all(measured.slice(0, 6).map((d) => getPostcodeData(d.district))),
     getHardnessArea(town.area),
   ]);
-  const suppliers = [...new Set(records.map((r) => r?.supplier).filter((s): s is string => Boolean(s)))];
+  const approximate = measured.some((d) => isThamesRotationDistrict(d.district));
+  // The supplier on record for these districts comes from the same unreliable list.
+  const suppliers = approximate ? [] : [...new Set(records.map((r) => r?.supplier).filter((s): s is string => Boolean(s)))];
   const newest = records.map((r) => r?.lastSampleDate).filter((d): d is string => Boolean(d)).sort().pop();
   const softenerPrice = formatPriceRange(installedPriceRange());
   const veryHard = town.median >= 250;
@@ -58,7 +62,7 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
   const faqs = [
     {
       question: `Is ${town.town} a hard water area?`,
-      answer: `Yes. ${town.measuredCount === 1 ? `The reading for ${hardest.district} is ${hardest.value} mg/L calcium carbonate` : `The median across ${town.measuredCount} measured ${town.town} districts is ${town.median} mg/L calcium carbonate`}, which is ${veryHard ? "very hard" : "hard"}. Hard starts at 180 mg/L and very hard at 250.`,
+      answer: `Yes. ${approximate ? `Water in the supply zones covering ${town.town} is about ${town.median} mg/L calcium carbonate` : town.measuredCount === 1 ? `The reading for ${hardest.district} is ${hardest.value} mg/L calcium carbonate` : `The median across ${town.measuredCount} measured ${town.town} districts is ${town.median} mg/L calcium carbonate`}, which is ${veryHard ? "very hard" : "hard"}. Hard starts at 180 mg/L and very hard at 250.`,
     },
     {
       question: `What is the water hardness in ${town.town} in other units?`,
@@ -66,7 +70,7 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
     },
     {
       question: `Do I need a water softener in ${town.town}?`,
-      answer: `At ${town.median} mg/L a softener pays for itself in most homes, because kettles, boilers and showers scale up quickly. Fitted, one typically costs ${softenerPrice}. Check your own postcode first${town.measuredCount > 1 ? `, because ${town.town} districts range from ${town.min} to ${town.max} mg/L` : ""}.`,
+      answer: `At ${town.median} mg/L a softener pays for itself in most homes, because kettles, boilers and showers scale up quickly. Fitted, one typically costs ${softenerPrice}. Check your own postcode first${town.measuredCount > 1 && !approximate ? `, because ${town.town} districts range from ${town.min} to ${town.max} mg/L` : ""}.`,
     },
     ...(suppliers.length > 0
       ? [{

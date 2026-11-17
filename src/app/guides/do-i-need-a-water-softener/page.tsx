@@ -44,7 +44,7 @@ const FAQ_DATA = [
   {
     question: "What hardness level needs a water softener?",
     answer:
-      "Water companies class water above 200 mg/L as very hard, and that is the level at which installers and most independent advice say a softener is worth it. Much of London, the South East, East Anglia and the Midlands is above 250 mg/L, and parts of the Thames Valley and Cambridgeshire are above 300. Most of Scotland, Wales and north-west England is under 100 and does not need one.",
+      "Water above 200 mg/L is hard on every scale water companies use, and that is the level at which installers and most independent advice say a softener is worth it. Much of London, the South East, East Anglia and the Midlands is above 250 mg/L, and parts of the Thames Valley and Cambridgeshire are above 300. Most of Scotland, Wales and north-west England is under 100 and does not need one.",
   },
   {
     question: "What are the signs of hard water in a house?",

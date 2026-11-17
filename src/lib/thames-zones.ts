@@ -92,3 +92,17 @@ export function getThamesZonePrefix(district: string): string | null {
 export function isThamesPostcode(district: string): boolean {
   return getThamesZonePrefix(district) !== null;
 }
+
+const THAMES_LIST = new Set(Object.values(THAMES_ZONE_POSTCODES).flat());
+
+/**
+ * True for districts whose results came from the list above. Those results were
+ * handed out in rotation within each region, not matched to the district's real
+ * supply zone, and the list includes places Thames Water does not supply (Woking,
+ * Wokingham, Epsom). Until scripts/map-thames-zones.ts has been run to completion
+ * and the import uses its answers, pages must not present these figures as a
+ * reading for that district.
+ */
+export function isThamesRotationDistrict(district: string): boolean {
+  return THAMES_LIST.has(district.trim().toUpperCase());
+}

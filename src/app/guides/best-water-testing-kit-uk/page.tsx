@@ -63,7 +63,7 @@ const FAQ_DATA = [
   {
     question: "What is the best water testing kit for UK tap water?",
     answer:
-      "For most UK homes on a mains supply, the best first test is free: your water company's compliance data for your supply zone, which we hold for 2,800 postcode districts. If you then want to check your own tap, the SimplexHealth 17-in-1 strips at around £13 screen hardness, pH, chlorine, lead and more in two minutes, and the SJ WAVE 16-in-1 at around £15 gives you 150 strips for repeat testing. Neither detects PFAS or microplastics. If you need a number you can act on, for lead in an old house, a private supply, or after plumbing work, a UKAS-accredited laboratory test is the only home test that gives one.",
+      "For most UK homes on a mains supply, the best first test is free: your water company's compliance data for your supply zone, which we hold for 2,800 postcode districts. If you then want to check your own tap, the SimplexHealth Drinking Water Test Kit screens nine things, including bacteria, hardness, chlorine, copper and pH, in about ten minutes, and the SJ WAVE 16-in-1 at around £15 gives you 150 strips for repeat testing. Neither detects PFAS or microplastics. If you need a number you can act on, for lead in an old house, a private supply, or after plumbing work, a UKAS-accredited laboratory test is the only home test that gives one.",
   },
   {
     question: "Water test strips or a lab test: which should I use?",
@@ -158,7 +158,7 @@ const WHEN_LAB: { who: string; why: string; fit: Verdict }[] = [
   },
   {
     who: "Mains supply, no old pipes, water tastes fine",
-    why: "The free data already answers it. A strip kit is a reasonable £13 curiosity; a lab test is money you do not need to spend.",
+    why: "The free data already answers it. A strip kit is a low-cost curiosity; a lab test is money you do not need to spend.",
     fit: false,
   },
   {
@@ -310,7 +310,7 @@ export default function BestWaterTestingKitGuide() {
   const sjWave = testingProducts.find((p) => p.id === "sj-wave-16-in-1");
 
   const highlights: Record<string, string> = {
-    "simplexhealth-17-in-1": "Quick screen: 17 parameters in two minutes, the cheapest way to check your own tap",
+    "simplexhealth-17-in-1": "Quick screen: nine tests in about ten minutes, including bacteria, read against UK limits",
     "sj-wave-16-in-1": "Repeat testing: 150 strips, with a bacteria test for private supplies",
   };
 
@@ -360,7 +360,7 @@ export default function BestWaterTestingKitGuide() {
 
         <GeoCitation
           headline={`According to TapWater.uk's ${year} guide, most UK households on a mains supply do not need a water testing kit, because their water company's compliance data already covers their supply zone.`}
-          detail="Strip kits such as the SimplexHealth 17-in-1 screen hardness, pH, chlorine and lead in minutes; no strip or TDS meter can detect PFAS or measure lead against the 10 µg/L limit. That needs a UKAS-accredited laboratory."
+          detail="Home kits such as the SimplexHealth Drinking Water Test Kit screen hardness, pH, chlorine, copper and bacteria in minutes; no strip or TDS meter can detect PFAS or measure lead against the 10 µg/L limit. That needs a UKAS-accredited laboratory."
         />
 
         <GuideDisclosure />
@@ -596,9 +596,9 @@ export default function BestWaterTestingKitGuide() {
           {simplex && (
             <ProductReview
               product={simplex}
-              heading="SimplexHealth 17-in-1: quick screen"
-              verdict="The cheapest, fastest way to check your own tap, as long as you treat the result as a screen."
-              review="At around £13, the SimplexHealth 17-in-1 is where most people should start if they want to test at all. It covers 17 parameters, including lead, pH and hardness, and gives you colour-match results in about two minutes with no posting and no waiting. It is accurate enough to flag the obvious: water that is very hard, a pH that is off, a lot of chlorine, or a lead pad that changes colour when it should not. What it cannot do is give you a number. Colour matching is subjective, especially in poor light, so a result is a band rather than a figure, and SimplexHealth are clear that it does not test for PFAS or microplastics. If the strip flags something, that is your cue for a lab test or a call to the water company, not a filter purchase."
+              heading="SimplexHealth Drinking Water Test Kit: quick screen"
+              verdict="The quickest way to check your own tap for the common problems, as long as you treat the result as a screen."
+              review="The SimplexHealth Drinking Water Test Kit is where most people should start if they want to test at all. One box covers nine things: bacteria, nitrate, nitrite, hardness, total alkalinity, chlorine, copper, iron and pH, and it reads the results against UK limits. It takes about ten minutes, with no posting and no waiting. It is good enough to flag the obvious: very hard water, a pH that is off, a lot of chlorine, or bacteria in a private supply. What it cannot do is give you a precise number, and it does not test for lead at all. Colour matching is subjective, especially in poor light. Treat a clear result as reassurance and anything odd as a reason to ask your water company or pay for a laboratory test."
               pros={simplex.pros}
               cons={simplex.cons}
               ctaLabel="View on Amazon"
@@ -629,8 +629,8 @@ export default function BestWaterTestingKitGuide() {
         <p className="text-base text-body leading-relaxed">
           Start with your postcode. For most UK homes the water company&apos;s
           data is the test, and it is free. If you want to check your own tap
-          once, the <strong className="text-ink">SimplexHealth 17-in-1</strong>{" "}
-          at around £13 is the screen to buy. If you are on a private supply
+          once, the <strong className="text-ink">SimplexHealth Drinking Water Test Kit</strong>{" "}
+          is the screen to buy. If you are on a private supply
           or want to test every month, the{" "}
           <strong className="text-ink">SJ WAVE 16-in-1</strong> with its 150
           strips and bacteria test is the one.
@@ -655,7 +655,7 @@ export default function BestWaterTestingKitGuide() {
               campaign={PAGE_TYPE}
               className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
             >
-              View the SimplexHealth 17-in-1 on Amazon
+              View the SimplexHealth kit on Amazon
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </AffiliateLink>
           )}

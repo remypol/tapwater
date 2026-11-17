@@ -60,8 +60,8 @@ export const HARDNESS_BANDS = [
   { label: "Soft", from: 0, to: 60 },
   { label: "Moderately soft", from: 60, to: 120 },
   { label: "Slightly hard", from: 120, to: 180 },
-  { label: "Hard", from: 180, to: 200 },
-  { label: "Very hard", from: 200, to: 400 },
+  { label: "Hard", from: 180, to: 250 },
+  { label: "Very hard", from: 250, to: 400 },
 ] as const;
 
 /** Above this a softener pays for itself in most homes. */
