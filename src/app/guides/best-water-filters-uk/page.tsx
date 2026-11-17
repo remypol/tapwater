@@ -95,7 +95,7 @@ const FAQ_DATA = [
   {
     question: "How much does a home water filter system cost in the UK?",
     answer:
-      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £285 with £30 to £59 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £107 to £144 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
+      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £285 with £30 to £59 a year in cartridges; reverse osmosis systems £309 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £89 to £144 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
   },
 ];
 
@@ -145,8 +145,8 @@ const NEEDS: NeedPick[] = [
   },
   {
     need: "Best reverse osmosis without plumbing",
-    slug: "osmio-zero",
-    why: "The only RO unit we compare that plugs into a socket. Listed for chlorine, lead, bacteria, nitrate, fluoride and limescale, and it dispenses hot as well as cold.",
+    slug: "waterdrop-k19-hg",
+    why: "Stands on the worktop and plugs into a socket. Certified to NSF/ANSI 58, listed for lead, fluoride, arsenic and nitrate, and it dispenses hot water up to 95°C.",
     guide: { href: "/guides/best-reverse-osmosis-system-uk", label: "Reverse osmosis guide" },
   },
   {
@@ -164,7 +164,7 @@ const NEEDS: NeedPick[] = [
   {
     need: "Best for renters",
     slug: "tapp-water-ecopro",
-    why: "Screws onto the tap and comes off when you leave. Listed for chlorine, lead, microplastics and PFAS, though SGS tested rather than NSF certified. The Osmio Zero above is the no-plumbing step up.",
+    why: "Screws onto the tap and comes off when you leave. Listed for chlorine, lead, microplastics and PFAS, though SGS tested rather than NSF certified. The Waterdrop K19-HG above is the no-plumbing step up.",
     guide: { href: "/guides/best-water-filter-tap-uk", label: "Tap filter guide" },
   },
 ];
@@ -207,7 +207,7 @@ const TYPE_ROWS: TypeRow[] = [
     type: "Reverse osmosis",
     category: "reverse_osmosis",
     removes: "The widest list: PFAS, fluoride, lead, nitrate, arsenic and more.",
-    install: "Plumbed under the sink, usually by a plumber. The Osmio Zero plugs in instead.",
+    install: "Plumbed under the sink, usually by a plumber. The Waterdrop K19-HG plugs in instead.",
     href: "/guides/best-reverse-osmosis-system-uk",
   },
   {
@@ -291,7 +291,7 @@ export default function BestWaterFiltersGuide() {
 
   const featured = [
     { slug: "waterdrop-g3p600", highlight: "Best overall: the widest certified removal list we compare" },
-    { slug: "osmio-zero", highlight: "Best without plumbing: reverse osmosis that plugs into a socket" },
+    { slug: "waterdrop-k19-hg", highlight: "Best without plumbing: reverse osmosis that plugs into a socket" },
     { slug: "brita-marella-xl", highlight: "Best budget jug: chlorine and taste for £52 a year" },
     { slug: "osmio-pro-iii-ultimate", highlight: "Best whole house: every tap and shower from one fitting" },
   ]
@@ -303,7 +303,7 @@ export default function BestWaterFiltersGuide() {
     "tapp-water-ecopro",
     "doulton-hip-ultracarb",
     "waterdrop-g3p600",
-    "osmio-zero",
+    "waterdrop-k19-hg",
     "osmio-pro-iii-ultimate",
     "jolie-filtered-showerhead",
   ]
@@ -317,7 +317,7 @@ export default function BestWaterFiltersGuide() {
     "waterdrop-10ua",
     "doulton-hip-ultracarb",
     "waterdrop-g3p600",
-    "osmio-zero",
+    "waterdrop-k19-hg",
   ]
     .map((slug) => getProductBySlug(slug))
     .filter((p): p is FilterProduct => !!p && p.availableInUk !== false);
@@ -620,7 +620,7 @@ export default function BestWaterFiltersGuide() {
             },
             {
               mark: "yes",
-              text: "Lead, PFAS or nitrate flagged, or you want one system that covers everything in drinking water: buy the Waterdrop G3P600, or the Osmio Zero 2.0 if you cannot plumb anything in.",
+              text: "Lead, PFAS or nitrate flagged, or you want one system that covers everything in drinking water: buy the Waterdrop G3P600, or the Waterdrop K19-HG if you cannot plumb anything in (it is not listed for PFAS).",
             },
             {
               mark: "partial",

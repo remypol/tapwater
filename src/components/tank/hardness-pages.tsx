@@ -59,7 +59,7 @@ function Crumbs({ items }: { items: { label: string; href?: string }[] }) {
 
 function Picks({ pageType, placement, reason }: { pageType: string; placement: string; reason: string }) {
   const shower = getProductBySlug("jolie-filtered-showerhead");
-  const ro = getProductBySlug("osmio-zero");
+  const ro = getProductBySlug("waterdrop-k19-hg");
   const picks = [
     { product: shower, highlight: "For dry skin and hair after a shower" },
     { product: ro, highlight: "Reverse osmosis without a plumber" },

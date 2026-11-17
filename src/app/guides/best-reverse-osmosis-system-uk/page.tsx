@@ -225,21 +225,23 @@ export default function BestReverseOsmosisGuide() {
   const fusion2 = roProducts.find((p) => p.id === "osmio-fusion-2")!;
   const fusion3 = roProducts.find((p) => p.id === "osmio-fusion-3")!;
   const zero = roProducts.find((p) => p.id === "osmio-zero")!;
+  const k19 = roProducts.find((p) => p.id === "waterdrop-k19-hg")!;
 
   // Price gaps the copy quotes, worked out from the catalogue so they follow the
   // shops. Written by hand, the Frizzlife stayed "£70 less" than the Waterdrop
   // long after frizzlife.co.uk put it at £449.99 against £549.98.
   const frizzlifeSaving = waterdrop.priceGbp - frizzlife.priceGbp;
   const zeroOverFrizzlife = zero.priceGbp - frizzlife.priceGbp;
+  const zeroOverK19 = zero.priceGbp - k19.priceGbp;
   const fusion2OverFrizzlife = fusion2.priceGbp - frizzlife.priceGbp;
   const frizzlifeYearlySaving = (waterdrop.annualCost ?? 0) - (frizzlife.annualCost ?? 0);
 
-  // Reading order. The two Osmio units come first: the Zero is the only system
-  // here that needs no plumbing, and the Fusion 2.0 puts minerals back from a UK
-  // supplier, which answer the two questions readers arrive with most often (the
-  // Frizzlife PD600-TAM3 puts minerals back too, so it is no longer unique). The
-  // Waterdrop remains the under-sink system we recommend; see the verdict.
-  const reviewOrder = [zero, fusion2, waterdrop, frizzlife, fusion3];
+  // Reading order. The plug-in unit comes first because "can I have this without
+  // a plumber?" is the question readers arrive with most often, then the under-sink
+  // system we recommend and its cheaper rival. The Waterdrop K19-HG took the
+  // no-plumbing place from the Osmio Zero on 17 Nov 2026: it is certified where the
+  // Zero is not, costs less, and publishes its filter life. The Osmio units follow.
+  const reviewOrder = [k19, waterdrop, frizzlife, zero, fusion2, fusion3];
 
   const comparisonContaminants = [
     "PFAS (total)",
@@ -513,8 +515,9 @@ export default function BestReverseOsmosisGuide() {
               some water. Look for a ratio of 2:1 (pure to waste) or better. Budget
               systems can waste 4 litres for every 1 litre of clean water. The
               Waterdrop G3P600 and Frizzlife PD600 both run at 2:1: about 1 litre
-              down the drain for every 2 you drink. The worktop Osmio Zero 2.0
-              does better, at 1 litre for every 5.
+              down the drain for every 2 you drink. The worktop units do better:
+              the Waterdrop K19-HG at 1 litre for every 3, the Osmio Zero 2.0 at
+              1 for every 5.
             </p>
           </div>
 
@@ -550,7 +553,9 @@ export default function BestReverseOsmosisGuide() {
                       ? "UK supplier pick \u2014 minerals put back"
                       : product.id === "osmio-fusion-3"
                         ? "Premium pick \u2014 tankless, hydrogen and chilled"
-                        : "No-plumbing pick \u2014 plugs in"
+                        : product.id === "waterdrop-k19-hg"
+                          ? "No-plumbing pick \u2014 plugs in"
+                          : "Also plugs in \u2014 hot and cold, least water wasted"
               }
             />
           ))}
@@ -559,40 +564,21 @@ export default function BestReverseOsmosisGuide() {
         {/* Detailed reviews */}
         <div className="space-y-8">
           <ProductReview
-            product={zero}
-            heading="Osmio Zero 2.0 — No-plumbing pick"
-            verdict="RO water without a plumber, if you can spare the worktop space."
-            review={`Every other system here has to be plumbed into your cold feed, which rules them out if you rent or do not fancy drilling the worktop. The Osmio Zero 2.0 is the exception: it stands on the counter, plugs into a socket, and you pour water into a 5-litre tank at the top. It produces up to 190 litres a day and dispenses anywhere from cold through to near-boiling, so it doubles as the kettle. It is also the most water-efficient system on this page, wasting one litre for every five it produces, where a typical under-sink RO wastes closer to one in three. The trade-offs are real. Osmio state no NSF or WRAS certification for it, and they do not publish a filter replacement interval, so unlike the others you cannot work out the yearly running cost before you buy. It is 38cm tall and 7kg, which is a genuine chunk of worktop. And at £${zero.priceGbp} it costs £${zeroOverFrizzlife} more than the Frizzlife PD600, which fits under the sink and is NSF certified. Buy it because it needs no plumbing, not because it filters better.`}
+            product={k19}
+            heading="Waterdrop K19-HG — No-plumbing pick"
+            verdict="Certified reverse osmosis that stands on the worktop and plugs in."
+            review={`Most systems here have to be plumbed into your cold feed, which rules them out if you rent or do not fancy drilling the worktop. The Waterdrop K19-HG stands on the counter and plugs into a socket: you fill the 5-litre tank and it does the rest. It is certified to NSF/ANSI 58, the reverse osmosis standard, which the other plug-in unit here is not, and Waterdrop list it for lead, fluoride, arsenic and nitrate. It dispenses from room temperature up to 95°C, so it can stand in for the kettle, and it puts minerals back after filtering. One filter does the whole job and is rated for twelve months, so the yearly cost is known before you buy: about £${k19.annualCost}. The trade-offs: you refill the tank by hand, it is 41.5cm tall and 7.3kg, and Waterdrop's UK page does not list it for PFAS, so if PFAS is your reason for buying, the under-sink G3P600 below is the one. At £${k19.priceGbp} it is £${zeroOverK19} less than the Osmio Zero.`}
             pros={[
-              "Plugs into a socket — the only system here needing no plumbing at all",
-              "Wastes 1 litre per 5 produced, roughly half the waste of a typical under-sink RO",
-              "Dispenses up to near-boiling, so it replaces the kettle as well",
+              "Plugs into a socket: no plumbing at all",
+              "Certified to NSF/ANSI 58, the reverse osmosis standard",
+              "One filter a year, so the running cost is known up front",
             ]}
             cons={[
-              "No NSF or WRAS certification stated",
-              "No published filter replacement interval, so yearly cost is unknown",
-              "38cm tall and 7kg — it takes real worktop space",
-              `£${zeroOverFrizzlife} more than the Frizzlife PD600, a certified under-sink system`,
+              "The 5 litre tank is refilled by hand",
+              "41.5cm tall and 7.3kg: it takes real worktop space",
+              "Not listed for PFAS on Waterdrop's UK page",
             ]}
-            ctaLabel="View on Osmio"
-          />
-
-          <ProductReview
-            product={fusion2}
-            heading="Osmio Fusion 2.0 — UK supplier pick"
-            verdict="Puts minerals back after RO, from a UK supplier with UK spares."
-            review={`Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that puts minerals back and lifts the pH, something the Waterdrop does not do. It is not the only one: the Frizzlife PD600 puts minerals back too, for £${fusion2OverFrizzlife} less. So the case for the Fusion is the company behind it and the list of what it removes. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while the certified Frizzlife PD600 costs £${fusion2OverFrizzlife} less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £${fusion2.priceGbp} it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install.`}
-            pros={[
-              "Bioceramic stage puts minerals back and raises pH, which the Waterdrop does not",
-              "Widest contaminant list here, covering fluoride and nitrates as well as lead",
-              "UK company, so spares and support do not ship from overseas",
-            ]}
-            cons={[
-              "No NSF or WRAS certification stated for this system",
-              "£62.90 filter set every 6 months, roughly £126/year",
-              "Needs plumbing into the cold feed — not a realistic DIY job",
-            ]}
-            ctaLabel="View on Osmio"
+            ctaLabel="View at Waterdrop"
           />
 
           <ProductReview
@@ -632,6 +618,43 @@ export default function BestReverseOsmosisGuide() {
               "Needs plumbing in and a hole for its own tap, like the Waterdrop",
             ]}
             ctaLabel="View on Frizzlife"
+          />
+
+          <ProductReview
+            product={zero}
+            heading="Osmio Zero 2.0 — Also plugs in"
+            verdict="The other plug-in unit: hot and cold, and the least water wasted."
+            review={`Like the Waterdrop K19-HG above, the Osmio Zero 2.0 needs no plumbing: it stands on the counter, plugs into a socket, and you pour water into a 5-litre tank at the top. It produces up to 190 litres a day and dispenses anywhere from cold through to near-boiling, so it doubles as the kettle. It is also the most water-efficient system on this page, wasting one litre for every five it produces, where a typical under-sink RO wastes closer to one in three. The trade-offs are real. Osmio state no NSF or WRAS certification for it, and they do not publish a filter replacement interval, so unlike the others you cannot work out the yearly running cost before you buy. It is 38cm tall and 7kg, which is a genuine chunk of worktop. And at £${zero.priceGbp} it costs £${zeroOverFrizzlife} more than the Frizzlife PD600, which fits under the sink and is NSF certified. Buy it because it needs no plumbing, not because it filters better.`}
+            pros={[
+              "Plugs into a socket and needs no plumbing",
+              "Wastes 1 litre per 5 produced, roughly half the waste of a typical under-sink RO",
+              "Dispenses up to near-boiling, so it replaces the kettle as well",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated",
+              "No published filter replacement interval, so yearly cost is unknown",
+              "38cm tall and 7kg — it takes real worktop space",
+              `£${zeroOverFrizzlife} more than the Frizzlife PD600, a certified under-sink system`,
+            ]}
+            ctaLabel="View on Osmio"
+          />
+
+          <ProductReview
+            product={fusion2}
+            heading="Osmio Fusion 2.0 — UK supplier pick"
+            verdict="Puts minerals back after RO, from a UK supplier with UK spares."
+            review={`Reverse osmosis strips out almost everything, including the calcium and magnesium that give water its taste. The Osmio Fusion 2.0 answers that with a bioceramic third stage that puts minerals back and lifts the pH, something the Waterdrop does not do. It is not the only one: the Frizzlife PD600 puts minerals back too, for £${fusion2OverFrizzlife} less. So the case for the Fusion is the company behind it and the list of what it removes. Osmio list the widest contaminant range of any system on this page: bacteria and E. coli, chlorine, sediment, nitrates, fluoride, limescale, hormones, pharmaceutical residues and heavy metals. Osmio are a UK company, so spares and support do not ship in from overseas. Two things to weigh before buying. Osmio do not state NSF or WRAS certification for this system, while the certified Frizzlife PD600 costs £${fusion2OverFrizzlife} less. And the filter set needs replacing every 6 months at £62.90, so budget roughly £126 a year. At £${fusion2.priceGbp} it sits at the premium end and needs plumbing into the cold feed, so it is not a DIY install.`}
+            pros={[
+              "Bioceramic stage puts minerals back and raises pH, which the Waterdrop does not",
+              "Widest contaminant list here, covering fluoride and nitrates as well as lead",
+              "UK company, so spares and support do not ship from overseas",
+            ]}
+            cons={[
+              "No NSF or WRAS certification stated for this system",
+              "£62.90 filter set every 6 months, roughly £126/year",
+              "Needs plumbing into the cold feed — not a realistic DIY job",
+            ]}
+            ctaLabel="View on Osmio"
           />
 
           <ProductReview
@@ -694,9 +717,11 @@ export default function BestReverseOsmosisGuide() {
         <div className="prose-section">
           <p className="text-base text-body leading-relaxed">
             If you rent, or simply do not want anything plumbed in, the{" "}
-            <strong className="text-ink">Osmio Zero 2.0</strong> is the one to
-            look at first: it stands on the worktop, plugs into a socket, and
-            wastes far less water than an under-sink system. Go in knowing that
+            <strong className="text-ink">Waterdrop K19-HG</strong> is the one to
+            look at first: it stands on the worktop, plugs into a socket, is
+            certified to NSF/ANSI 58 and runs on one filter a year. The{" "}
+            <strong className="text-ink">Osmio Zero 2.0</strong> is the
+            alternative if wasting the least water matters most to you, but
             Osmio state no NSF or WRAS certification and publish no filter
             replacement interval, so you cannot work out the yearly running cost
             before you buy.
@@ -735,16 +760,16 @@ export default function BestReverseOsmosisGuide() {
 
         <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mt-8">
           <AffiliateLink
-            href={zero.affiliateUrl}
+            href={k19.affiliateUrl}
             pageType="best-reverse-osmosis-guide"
             recommendationReason="verdict"
-            productCategory={zero.category}
-            productSlug={zero.slug}
+            productCategory={k19.category}
+            productSlug={k19.slug}
             placement="guide-verdict"
             campaign="best-reverse-osmosis-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
-            Get the Osmio Zero 2.0 (no plumbing)
+            Get the Waterdrop K19-HG (no plumbing)
             <ArrowRight className="w-4 h-4" />
           </AffiliateLink>
           <AffiliateLink

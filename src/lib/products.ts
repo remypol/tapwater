@@ -509,6 +509,47 @@ export const PRODUCTS: FilterProduct[] = [
     filterLife: "Not published by manufacturer",
   },
   {
+    // Added 17 Nov 2026 to take the "no plumbing" slots from the Osmio Zero, whose
+    // programme has recorded no orders (see railScore). Read on waterdropfilter.co.uk
+    // that day: K19-HG £239 on offer, £309 list; 7-stage with UV; "just fill the
+    // tank, plug in"; 5 litre feed tank; room temperature to 95°C; 3:1 pure to
+    // drain; 35 x 20 x 41.5 cm, 7.3 kg; NSF/ANSI 58 and 372; K19RFG filter £89,
+    // 12 months (the filter was out of stock that day, the unit was not); rated
+    // 4.57 from 7 reviews. The plain K19-H is marked discontinued there.
+    // Waterdrop is Awin merchant 117649, joined on 2996923, at 7%.
+    id: "waterdrop-k19-hg",
+    brand: "Waterdrop",
+    model: "K19-HG Countertop RO",
+    slug: "waterdrop-k19-hg",
+    category: "reverse_osmosis",
+    removes: ["Lead", "Fluoride", "Arsenic", "Nitrate"],
+    certifications: ["NSF/ANSI 58", "NSF/ANSI 372"],
+    priceGbp: 309,
+    priceTier: "premium",
+    affiliateUrl:
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=2996923&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Fwaterdrop-k19-hg-instant-hot-water-reverse-osmosis-system",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.07 },
+    affiliateTag: "awin-2996923",
+    imageUrl: "/filters/waterdrop-k19-hg.png",
+    rating: 4.6,
+    badge: "best-value",
+    pros: [
+      "Stands on the worktop and plugs into a socket: no plumbing, so renters can use it",
+      "Certified to NSF/ANSI 58, the reverse osmosis standard",
+      "Dispenses from room temperature up to 95°C, so it can stand in for the kettle",
+    ],
+    cons: [
+      "You refill the 5 litre tank by hand",
+      "Takes up worktop space at 41.5cm tall and 7.3kg",
+      "Not listed for PFAS on Waterdrop's UK page; the under-sink G3P600 is",
+    ],
+    bestFor: "Renters and anyone who wants RO water without a plumber",
+    flowRate: "75 gallons a day",
+    filterLife: "12 months",
+    annualCost: 89,
+  },
+  {
     id: "osmio-zero",
     brand: "Osmio",
     model: "Zero 2.0 Countertop RO",
@@ -535,7 +576,7 @@ export const PRODUCTS: FilterProduct[] = [
     rating: 4.4,
     badge: "best-value",
     pros: [
-      "Plugs into a socket — the only RO here that needs no plumbing, so renters can use it",
+      "Plugs into a socket and needs no plumbing, so renters can use it",
       "Wastes 1 litre for every 5 produced, far less than a typical under-sink RO",
       "Dispenses at drinking temperature through to near-boiling, so it replaces the kettle too",
     ],
@@ -1385,7 +1426,7 @@ export const CATEGORY_META: Record<
     description:
       "The gold standard. RO systems push water through a semi-permeable membrane, removing virtually everything.",
     bestFor: "Households with PFAS, fluoride, or nitrate concerns",
-    priceRange: "£450–£650",
+    priceRange: "£309–£650",
   },
   whole_house: {
     title: "Whole House Filters",
@@ -1489,8 +1530,20 @@ export const CATEGORY_ORDER: ProductCategory[] = [
  * with the one that funds the site first; a clearly worse product still loses.
  */
 export function railScore(product: FilterProduct): number {
-  const earnings = estimatedEarningsGbp(product) ?? 0;
+  const earnings = hasRecordedNoSales(product) ? 0 : (estimatedEarningsGbp(product) ?? 0);
   return product.rating + Math.min(0.8, earnings / 25);
+}
+
+/**
+ * Osmio's own programme promises £5 to £75 a sale, which lifted its seven products
+ * by up to 0.8 of a star. Its dashboard showed 173 visits and no orders in
+ * September 2026 and still showed none on 17 November, after 294 more clicks in
+ * our log. A bounty that has never been paid does not fund the site, so it earns
+ * no lift: the products stay listed and rank on rating alone. Remove this the day
+ * Osmio's dashboard shows an order.
+ */
+export function hasRecordedNoSales(product: FilterProduct): boolean {
+  return product.affiliateTag.startsWith("osmio");
 }
 
 export function rankForRail<T extends FilterProduct>(products: T[]): T[] {

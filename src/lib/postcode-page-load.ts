@@ -16,7 +16,7 @@ import type { PostcodeData } from "./types";
 import { CITIES } from "./cities";
 import { postcodeAreaName } from "./postcode-areas";
 import { districtHighlights, type Highlight } from "./district-highlights";
-import { recommendFilters, HARD_WATER_THRESHOLD } from "./filters";
+import { recommendFilters } from "./filters";
 import { getPfasNearDistrict, type PfasNearbySummary } from "./pfas-data";
 import { getNationalRivers, getRiverForDistrict, type DistrictRiver } from "./river-status-data";
 import { describeRiverStatus, waterBodyNoun, type RiverStatusSummary } from "./river-status";
@@ -93,16 +93,14 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
   const hardnessEstimated = hardness?.estimated ?? false;
   const hardnessArea = hardness?.estimatedFrom ?? null;
 
-  // On this page hard water is answered by the softener quote, which leads whenever the
-  // district is hard. The product slots beside it should answer drinking water, not scale:
-  // with the hardness passed in, the recommender ranked two £500 reverse osmosis units next
-  // to the quote, and 173 Osmio clicks in 60 days produced no orders. Hardness is only
-  // passed when nothing is flagged AND the water is not hard enough for a softener, so a
-  // moderately hard district still gets a filter that touches scale.
-  const softenerLeads = (hardnessValue ?? 0) >= HARD_WATER_THRESHOLD;
-  const recommendations = hasData
-    ? recommendFilters(flaggedNames, 3, softenerLeads ? {} : { hardnessValue })
-    : [];
+  // The product slots answer drinking water, not scale. Hard water is answered by the
+  // softener quote, which leads whenever the district is hard. Hardness is no longer
+  // passed to the recommender at all: the only products that list limescale are the
+  // three Osmio systems, so a moderately hard district with nothing flagged was shown
+  // three £495 to £650 units and nothing else. Those slots took 117 clicks in 90 days
+  // and Osmio's dashboard has never shown an order (checked September and 17 November
+  // 2026). Without the hardness the recommender falls back to its general picks.
+  const recommendations = hasData ? recommendFilters(flaggedNames, 3) : [];
 
   const scoredCount = data.readings.filter((r) => (r.ukLimit ?? r.whoGuideline) !== null).length;
   const plan = buildTankPlan({

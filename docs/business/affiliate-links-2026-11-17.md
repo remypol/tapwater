@@ -85,9 +85,21 @@ What it showed, 90 days:
 - Swapping a cheap product to a better programme is worth almost nothing: a jug or shower filter pays £1 to £2 a sale whoever pays it. Waterdrop's own jug (£15.59, 7%) and Doulton's shower filter (£24.95, 5%) were checked and left out for that reason.
 - What matters is which products sit in the busy slots. The three-product rail on the home page, city pages and two guides (about 5,300 search visits a quarter) said "what readers click most" and showed a shower filter and a countertop unit. It now shows the three that are clicked most: ZeroWater jug, Waterdrop 10UA and Waterdrop G3P600, the last two on Awin at 7%.
 - The lead pipes and microplastics guides (176 search visits) explained which filters work and named none. Each now names two.
-- Osmio takes 294 clicks a quarter and its dashboard showed no orders in September. Its figures cannot be read from here. If it still shows none, its slots should go to Waterdrop's countertop units, which are tracked.
+- Osmio took 294 clicks a quarter and its dashboard showed no orders in September. Remy confirmed on 17 November that it still shows none; see the next section.
 - Boiling tap guides link to Quooker, Qettle and Fohen 21 times for nothing; Fahren and Our Taap are the applications that would change that.
 - Pages with search visits and no shop link at all: /rankings (451), tap water vs bottled (104), rainwater (106), smart water (82).
+
+## Osmio's slots moved, 17 November 2026
+
+Osmio's own programme promises £5 to £75 a sale and has never recorded one: 173 visits and no orders by September, still none on 17 November after 294 more clicks in our log. What changed:
+
+- **New product:** Waterdrop K19-HG, a worktop reverse osmosis unit that plugs into a socket, on Awin at 7%. Read on waterdropfilter.co.uk: £239 on offer (£309 list, which is what we show), NSF/ANSI 58 and 372, 5 litre tank, hot water to 95°C, one filter a year at £89. It is not listed for PFAS there, and the guides say so. The plain K19-H is discontinued.
+- **Reverse osmosis guide:** the K19-HG is the no-plumbing pick and comes first; the Osmio Zero stays as "also plugs in", after the Waterdrop G3P600 and the Frizzlife.
+- **Main filter guide and the hardness pages:** the no-plumbing slot is the K19-HG.
+- **Postcode pages:** a moderately hard district with nothing flagged used to show three Osmio units (117 clicks in 90 days). It now shows the general picks: ZeroWater jug, Waterdrop 10UA, BRITA.
+- **Ranking:** Osmio products no longer get the lift a paying programme earns (`hasRecordedNoSales` in `src/lib/products.ts`). They stay listed and rank on rating alone. Remove that rule the day Osmio's dashboard shows an order.
+
+The Osmio PRO-III whole house filter keeps its place in the whole house guide: nothing on a tracked programme replaces it.
 
 ## Using the tool
 
