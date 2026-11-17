@@ -2,6 +2,23 @@
 
 Written 17 November 2026. Goal: the first two or three approved installers on `/partners`, so the softener requests that arrive every week reach someone.
 
+## Sent so far
+
+17 November 2026, from `partners@tapwater.uk` through Resend, all four shown as delivered:
+
+| Company | Sent to | Areas and figures quoted |
+|---|---|---|
+| Compass Water Softeners | martin@compasswatersofteners.co.uk | RG: 5 in 90 days, 4 open |
+| UK Water Softeners | info@uk-water-softeners.co.uk | RG: 5 in 90 days, 4 open |
+| Silkflow | info@silkflow.co.uk | SL: 4 in 90 days, 3 open; plus the three open NW requests |
+| Friendly Water | info@friendlywater.co.uk | KT and TW: 4 in 90 days, 2 open |
+
+The text was Email 1 below with two changes: the lead is described as carrying "the water hardness for their area" (not "the hardness we measured there", because Thames-area figures are not district readings; see `thames-data-problem-2026-11-17.md`), and the phone line was replaced with "just reply to this email".
+
+Replies arrive at `partners@tapwater.uk`, which forwards to the cc-community inbox. Follow up (Email 2) on or after 24 November with the live open counts.
+
+Not contacted yet: Sterling Softeners and Thames Valley Softeners (phone only), West London Water Softeners (no contact details found).
+
 ## The numbers you can quote
 
 All counted on 17 November 2026, one person per district counted once.
