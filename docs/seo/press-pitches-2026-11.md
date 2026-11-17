@@ -84,8 +84,42 @@ Subject: 12,844 PFAS detections near UK cities, and no public data on what is in
 > Remy
 > TapWater.uk, press@tapwater.uk
 
+## Sent, 17 November 2026
+
+From `press@tapwater.uk` through Resend. Each regional desk got its own city's figures; the two national desks got the national version. Addresses were read on each outlet's own contact page; none was guessed.
+
+| Outlet | City angle | Address used | Result |
+|---|---|---|---|
+| Liverpool Echo | Liverpool | news@liverpool.com | Delivered |
+| The Star | Sheffield | news@thestar.co.uk | Delivered |
+| Derby Telegraph | Derby | newsdesk@derbytelegraph.co.uk | Delivered |
+| Lancashire Telegraph | Blackburn | lt_editorial@nqnw.co.uk | Delivered |
+| Warrington Guardian | Warrington | newsdesk@guardiangrp.co.uk | Delivered |
+| Swindon Advertiser | Swindon | newsdesk@swindonadvertiser.co.uk | Delivered |
+| YorkshireLive / Huddersfield Examiner | Huddersfield | yorkshirelive@reachplc.com | Delivered |
+| Hull Daily Mail | Hull | news@hulldailymail.co.uk | Delivered |
+| Oxford Mail | Oxford | news@nqo.com | Delivered |
+| Reading Chronicle | Reading | news@readingchronicle.co.uk | Delivered |
+| Ipswich Star | Ipswich | suffolkeditors@newsquest.co.uk | Delivered |
+| Lincolnshire Live | Lincoln | news@lincolnshireecho.co.uk | Delivered |
+| Nottingham Post | Nottingham | newsdesk@nottinghampost.com | Delivered |
+| The Press | York | newsdesk@thepress.co.uk | Delivered |
+| Eastern Daily Press / Evening News | Norwich | newsdesknorfolk@newsquest.co.uk | Delivered |
+| MyLondon | London | mylondonnewsdesk@reachplc.com | Delivered |
+| New Scientist | National | newseditors@newscientist.com | Delivered |
+| The Guardian, environment desk | National | environment.desk@theguardian.com | **Bounced.** Not retried |
+
+"Delivered" means the outlet's mail server accepted it, not that anyone has read it.
+
+Not sent:
+- **Bournemouth Echo:** web form only (https://www.bournemouthecho.co.uk/send-us-your-news/).
+- **ENDS Report:** no desk address, only named staff on https://www.endsreport.com/contact (news editor and editor). Worth a personal email from you; it is the specialist title most likely to run this.
+- **The i Paper and PA Media:** contact pages could not be read.
+- **The Guardian:** the address on its contact page bounced. Try its tip form or a named environment reporter.
+
+Replies go to `press@tapwater.uk`, which forwards to the cc-community inbox. If a journalist asks for the full file of readings, it has to be exported from `pfas_detections`; the public download only lists the ten cities with the most detections. A follow-up is reasonable after a week for desks that have not replied, with one new fact, not a repeat.
+
 ## Not done yet
 
-- **No recipient list exists.** The September file names outlets, not people or addresses. Each outlet's published news-desk address has to be looked up; none has been guessed.
 - **Regulatory claims checked against dwi.gov.uk on 17 November 2026:** no statutory PFAS standard in England and Wales; guideline 0.1 µg/L for the sum of 48 named PFAS; updated guidance in March 2025 requires monitoring for a wider range. Our request for area results was refused on cost grounds in July 2026 (ref EIR2026/16348).
-- Nothing has been sent.
+
