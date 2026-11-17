@@ -67,6 +67,54 @@ function hasTapScore(p: PostcodeData): boolean {
   return p.safetyScore >= 0 && p.dataSource !== "ea-only";
 }
 
+/**
+ * How many of a city's scored districts have a reading over its limit.
+ * "fail" is the status scoring gives a value above the legal limit (or above
+ * zero for the zero-tolerance ones); "warning" is close to the limit but under it.
+ */
+function districtsOverLimit(scored: PostcodeData[]): number {
+  return scored.filter((p) => p.readings.some((r) => r.status === "fail")).length;
+}
+
+/** The supplier serving the most districts, or null when we hold no name for it. */
+function primarySupplierName(postcodes: PostcodeData[]): string | null {
+  const counts = new Map<string, number>();
+  for (const p of postcodes) counts.set(p.supplier, (counts.get(p.supplier) ?? 0) + 1);
+  const top = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0];
+  return top && top[0] && top[0] !== "Unknown" ? top[0] : null;
+}
+
+/**
+ * For a city with no tap water scores: what the site does hold for it, so the
+ * description never promises hardness or river data that is not there.
+ */
+async function whatWeHold(postcodes: PostcodeData[]): Promise<{ full: string; short: string }> {
+  const districts = postcodes.map((p) => p.district);
+  const [hardness, rivers] = await Promise.all([
+    Promise.all(districts.map((d) => getHardness(d))),
+    getRiversForDistricts(districts),
+  ]);
+  const hasHardness = hardness.some((h) => h != null);
+  const hasRivers = rivers != null;
+  const have = hasHardness && hasRivers
+    ? "We have hardness and river data"
+    : hasHardness
+      ? "We have hardness data"
+      : hasRivers
+        ? "We have river health data nearby"
+        : null;
+  if (!have) {
+    const none = "We do not have district test scores for it yet.";
+    return { full: none, short: none };
+  }
+  return { full: `${have}, but no district test scores yet.`, short: `${have}, no test scores yet.` };
+}
+
+/** The first candidate within the length limit; the last one if none fits. */
+function firstThatFits(max: number, candidates: string[]): string {
+  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+}
+
 // ── Static generation ──
 
 export async function generateStaticParams() {
@@ -89,34 +137,82 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const year = new Date().getFullYear();
   const contaminantCount = new Set(scored.flatMap(p => p.readings.map(r => r.name))).size;
+  const score = `${avgScore.toFixed(1)}/10`;
+  const areas = `${scored.length} Area${scored.length === 1 ? "" : "s"} Tested`;
+  const districts = `${scored.length} district${scored.length === 1 ? "" : "s"}`;
+  const failed = districtsOverLimit(scored);
+  const supplier = primarySupplierName(postcodes);
+  const suppliedBy = supplier ? ` Supplied by ${supplier}.` : "";
 
-  // Keep title under 45 chars; shorten "Tap Water" → "Water" for long city names
-  const titleFull = `Is ${city.name} Tap Water Safe? (${year})`;
-  const titleShort = `Is ${city.name} Water Safe? (${year})`;
-  const pageTitle = titleFull.length <= 45 ? titleFull : titleShort;
+  // The title answers the question people typed. "Yes" is only printed when the
+  // page's own data backs it: the city has tap water scores and no district has
+  // a reading over its limit. Otherwise the title gives the score and stops.
+  // The 7 is the line at which the page itself opens with "Yes, ... is safe to drink".
+  const answersYes = scored.length > 0 && failed === 0 && avgScore >= 7;
 
-  // Keep description under 155 chars
-  const descFull = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants tested across ${scored.length} postcodes. Free ${year} report.`;
-  const descShort = `Is ${city.name} tap water safe to drink? ${avgScore.toFixed(1)}/10 safety score based on ${contaminantCount} contaminants across ${scored.length} postcodes.`;
-  // With no tap water results the score line would read "0.0/10 based on 0
-  // contaminants across 0 postcodes", which is what Google showed for Edinburgh.
-  const descNoData = `Is ${city.name} tap water safe to drink? ${city.description} What we know so far, with river health and how to check your own postcode.`;
+  // Google cuts a title at roughly 60 characters. Drop the year first, then
+  // shorten the wording.
+  const pageTitle = scored.length === 0
+    ? firstThatFits(62, [
+        `Can You Drink Tap Water in ${city.name}? What We Know`,
+        `Can You Drink ${city.name} Tap Water? What We Know`,
+        `Can You Drink Tap Water in ${city.name}?`,
+      ])
+    : answersYes
+      ? firstThatFits(62, [
+          `Can You Drink Tap Water in ${city.name}? Yes: ${score} (${year})`,
+          `Can You Drink Tap Water in ${city.name}? Yes: ${score}`,
+          `Can You Drink ${city.name} Tap Water? Yes: ${score}`,
+        ])
+      : firstThatFits(62, [
+          `Can You Drink Tap Water in ${city.name}? ${score}, ${areas}`,
+          `Can You Drink ${city.name} Tap Water? ${score}, ${areas}`,
+          `${city.name} Tap Water: ${score}, ${areas}`,
+        ]);
+
+  const held = scored.length === 0 ? await whatWeHold(postcodes) : { full: "", short: "" };
+
+  // The answer first, then the evidence. Under 155 characters (154 at most).
+  // With no tap water results a score line would read "0.0/10 based on 0
+  // contaminants across 0 postcodes", which is what Google showed for Edinburgh,
+  // so those cities get the plain facts and no figure.
   const description = scored.length === 0
-    ? (descNoData.length <= 160 ? descNoData : `Is ${city.name} tap water safe to drink? What we know so far, with river health nearby and how to check your own postcode.`)
-    : descFull.length <= 155 ? descFull : descShort;
+    ? firstThatFits(154, [
+        `${city.name} tap water is held to the same legal standards as the rest of the UK.${suppliedBy} ${held.full}`,
+        `${city.name} tap water is held to the same legal standards as all UK tap water.${suppliedBy} ${held.short}`,
+        `${city.name} tap water is held to UK legal standards.${suppliedBy} ${held.short}`,
+        `${city.name} tap water is held to UK legal standards. ${held.short}`,
+      ])
+    : answersYes
+      ? firstThatFits(154, [
+          `Yes, you can drink tap water in ${city.name}. It scores ${score} across ${districts}, with ${contaminantCount} contaminants tested and none over its limit.${suppliedBy}`,
+          `Yes, you can drink tap water in ${city.name}. It scores ${score} across ${districts}, with ${contaminantCount} contaminants tested.${suppliedBy}`,
+          `Yes, you can drink tap water in ${city.name}. It scores ${score} across ${districts}, with ${contaminantCount} contaminants tested.`,
+        ])
+      : firstThatFits(154, [
+          `${city.name} tap water is regulated and scores ${score}, but ${failed} of ${districts} had a reading over its limit. ${contaminantCount} contaminants tested.${suppliedBy}`,
+          `${city.name} tap water is regulated and scores ${score}, but ${failed} of ${districts} had a reading over its limit.${suppliedBy}`,
+          `${city.name} tap water is regulated and scores ${score}, but ${failed} of ${districts} had a reading over its limit.`,
+        ]);
+
+  const socialTitle = scored.length === 0
+    ? `Can You Drink Tap Water in ${city.name}? What We Know`
+    : answersYes
+      ? `Can You Drink Tap Water in ${city.name}? Yes: ${score} (${year})`
+      : `Can You Drink Tap Water in ${city.name}? ${score}, ${areas}`;
 
   return {
     title: pageTitle,
     description,
     openGraph: {
-      title: `Is ${city.name} Tap Water Safe to Drink? (${year})`,
+      title: socialTitle,
       description,
       url: `https://www.tapwater.uk/city/${city.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Is ${city.name} Tap Water Safe to Drink? (${year})`,
+      title: socialTitle,
       description,
     },
   };
@@ -275,9 +371,14 @@ export default async function CityPage({ params }: Props) {
   const contaminantCount = uniqueContaminants.size;
   const year = new Date().getFullYear();
 
+  // Hotels, rentals and halls: the same mains water, a different building.
+  // No score and no "yes" here, so the answer holds for every city.
+  const hotelsAnswer = `Hotels in ${city.name} take the same mains water as homes${primarySupplier.name !== "Unknown" ? `, supplied by ${primarySupplier.name}` : ""} and tested to the same legal standards. What differs is inside the building: older pipes, storage tanks, and taps that have stood unused. Run the cold tap for a moment before you fill a glass, and where you can, drink from a kitchen cold tap or one marked as drinking water rather than a bathroom tap, which may be fed from a tank.`;
+
   const cityFaqs = [
     { question: `Is ${city.name} tap water safe to drink?`, answer: safetyAnswer },
     { question: `Can you drink tap water in ${city.name}?`, answer: canYouDrinkAnswer },
+    { question: `Is it safe to drink tap water in ${city.name} hotels?`, answer: hotelsAnswer },
     { question: `What is the water quality in ${city.name}?`, answer: contaminantsAnswer },
     { question: `Is ${city.name} water hard or soft?`, answer: hardnessAnswer },
     { question: `Which areas of ${city.name} have the best water?`, answer: bestAreasAnswer },
@@ -396,6 +497,12 @@ export default async function CityPage({ params }: Props) {
                   </ul>
                 </>
               ) : null}
+              <h2 className="wt-h2" style={{ marginTop: 56 }}>In hotels, rentals and student halls</h2>
+              <p className="wt-prose" style={{ marginTop: 16 }}>
+                The water reaching a hotel, a rented flat or a hall of residence in {city.name} is the same mains supply that reaches every home, so the results on this page apply there too.
+                What differs is inside the building: older pipes, storage tanks, and taps that have stood unused for a while.
+                Run the cold tap for a moment before you fill a glass, and use the kitchen cold tap where there is one, since bathroom taps are sometimes fed from a tank.
+              </p>
             </div>
           </section>
 

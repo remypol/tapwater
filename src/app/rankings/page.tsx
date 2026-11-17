@@ -65,19 +65,19 @@ function scoreBgClass(score: number): string {
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `UK Water Quality Rankings (${year})`,
-    description: `Which UK city has the best tap water? See ${year} rankings for all 51 major cities, water companies, and regions. Based on official Environment Agency data.`,
+    title: `Which UK City Has the Best Tap Water? Rankings (${year})`,
+    description: `Which UK city has the best tap water? ${year} rankings of major UK cities, water companies and regions by average water quality score.`,
     openGraph: {
       images: OG_IMAGE,
-      title: `UK Water Quality Rankings ${year}`,
-      description: "Which UK city has the best tap water? Rankings for 51 cities, water companies, and regions.",
+      title: `Which UK City Has the Best Tap Water? Rankings (${year})`,
+      description: "Which UK city has the best tap water? Rankings of major cities, water companies and regions.",
       url: "https://www.tapwater.uk/rankings",
       type: "website",
     },
     twitter: {
       images: OG_IMAGE,
       card: "summary_large_image",
-      title: `UK Water Quality Rankings ${year}`,
+      title: `Which UK City Has the Best Tap Water? Rankings (${year})`,
       description: "Which UK city has the best tap water? See the full rankings.",
     },
   };
@@ -304,6 +304,10 @@ export default async function RankingsPage() {
           <p className="wt-sub wt-nums">
             Based on <strong>{totalPostcodes.toLocaleString()} postcode districts</strong> tested. Last updated <strong>{formattedDate}</strong>.{" "}
             <Link href="/about/methodology/" className="wt-link">How scores are calculated</Link>
+          </p>
+          <p className="wt-sub">
+            These tables rank whole cities, water companies and regions. For individual postcode districts, see the{" "}
+            <Link href="/compare" className="wt-link">best tap water in the UK by area</Link>.
           </p>
           <ul className="wt-ledger wt-nums" style={{ maxWidth: 520, marginTop: 28 }}>
             <li><strong>Cities ranked</strong><b>{cityRankings.length}</b></li>
@@ -544,10 +548,11 @@ export default async function RankingsPage() {
                 <span className="text-right">Areas served</span>
               </div>
 
-              {supplierRankings.map((supplier) => (
+              {/* Districts with no known supplier are grouped as "unknown"; that is not a company to rank or link to. */}
+              {supplierRankings.filter((supplier) => supplier.id && supplier.id !== "unknown").map((supplier) => (
                 <Link
                   key={supplier.id}
-                  href={`/supplier/${supplier.id}/`}
+                  href={`/supplier/${supplier.id}`}
                   className="grid grid-cols-[32px_1fr_auto] sm:grid-cols-[40px_1fr_100px_120px] gap-x-4 gap-y-0.5 items-center px-5 py-4 border-b border-[var(--color-rule)] last:border-b-0 hover:bg-[var(--color-wash)] transition-colors group"
                 >
                   {/* Rank with medal for top 3 */}

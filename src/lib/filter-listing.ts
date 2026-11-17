@@ -52,3 +52,25 @@ export const CATEGORY_LISTING: Partial<Record<ProductCategory, CategoryListing>>
     canonicalToGuide: true,
   },
 };
+
+/**
+ * Categories whose page points its canonical at the buying guide and stays out of
+ * the sitemap.
+ *
+ * boiling_tap came from the October test above. testing_kit and reverse_osmosis
+ * were added on 17 November 2026 on Search Console evidence (90 days to 14 Nov):
+ * "water test kits" split 572 impressions on the guide at position 14.8 against
+ * 232 on the category page at 48.8, and "reverse osmosis systems" split 389 at
+ * 38.2 against 280 at 70.2. All /filters pages together earned 2 clicks from
+ * 6,082 impressions in 28 days.
+ *
+ * Deliberately NOT included: under_sink, whole_house and shower (the October
+ * test keeps them as indexable listings; they overlap their guides on at most 4
+ * terms) and jug, filter_tap and kettle (no evidence of a split). Add a category
+ * here only with the same kind of evidence.
+ */
+export const CANONICAL_TO_GUIDE_CATEGORIES: ReadonlySet<ProductCategory> = new Set<ProductCategory>([
+  "boiling_tap",
+  "testing_kit",
+  "reverse_osmosis",
+]);

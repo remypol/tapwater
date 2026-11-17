@@ -9,6 +9,7 @@ import { isThamesRotationDistrict } from "@/lib/thames-zones";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
+import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
 export const dynamicParams = false;
@@ -107,6 +108,59 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
 
 
 
+/** Longest title a search result shows in full, and the same for a description. */
+const AREA_TITLE_MAX = 62;
+const AREA_DESCRIPTION_MAX = 155;
+
+/** The first candidate that fits, or the last one if none does. */
+function firstThatFits(candidates: string[], max: number): string {
+  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+}
+
+/** "moderately hard" to "Moderately Hard", for a title. */
+function titleCase(label: string): string {
+  return label.replace(/\b[a-z]/g, (c) => c.toUpperCase());
+}
+
+/**
+ * Area pages rank for "is manchester water hard or soft" and "does manchester
+ * have hard water", so the title asks that question and answers it. The band
+ * word is the area summary's own label, the one scale the site uses.
+ */
+function areaTitle(data: NonNullable<Awaited<ReturnType<typeof getHardnessArea>>>): string {
+  const town = postcodeAreaName(data.area);
+  const band = titleCase(data.summary.label);
+  const { median } = data.summary;
+  return firstThatFits(
+    [
+      `Is ${town} Water Hard or Soft? ${band}, ${median} mg/L (${data.area})`,
+      `Is ${town} Water Hard or Soft? ${band} (${data.area})`,
+      `${town} Water Hardness: ${band}, ${median} mg/L (${data.area})`,
+      `${town} Water Hardness: ${band} (${data.area})`,
+    ],
+    AREA_TITLE_MAX,
+  );
+}
+
+/** Whole sentences only: answer, median, range, number of districts. Never cut mid-sentence. */
+function areaDescription(data: NonNullable<Awaited<ReturnType<typeof getHardnessArea>>>): string {
+  const town = postcodeAreaName(data.area);
+  const { label, median, min, max } = data.summary;
+  const count = data.districts.length;
+  const districts = `${count} ${data.area} postcode district${count === 1 ? "" : "s"}`;
+  const spread = min === max ? `across ${districts}` : `and a range of ${min} to ${max} mg/L across ${districts}`;
+  const answer = `${town} tap water is ${label}, with a median of ${median} mg/L ${spread}.`;
+  return firstThatFits(
+    [
+      `${answer} See the reading for your own district.`,
+      `${answer} Find your district.`,
+      answer,
+      `${town} tap water is ${label}: median ${median} mg/L, ${min} to ${max} across ${districts}.`,
+    ],
+    AREA_DESCRIPTION_MAX,
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { area } = await params;
   const found = await findTown(area);
@@ -114,19 +168,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = townTitle(found.town);
     const description = townDescription(found.town);
     const url = `https://www.tapwater.uk/hardness/${found.town.slug}`;
-    return { title, description, alternates: { canonical: url }, openGraph: { title, description, url, type: "article" } };
+    return { title, description, alternates: { canonical: url }, openGraph: { images: OG_IMAGE, title, description, url, type: "article" }, twitter: { images: OG_IMAGE, card: "summary_large_image", title, description } };
   }
   const data = await getHardnessArea(area);
   if (!data) return { title: "Not Found" };
-  const town = postcodeAreaName(data.area);
-  const year = new Date().getFullYear();
-  const title = `Water Hardness in ${town} (${data.area} Postcodes): ${data.summary.median} mg/L, ${data.summary.label}`;
-  const description = `${town}'s tap water is ${data.summary.label} at a median ${data.summary.median} mg/L, ranging from ${data.summary.min} to ${data.summary.max} across ${data.districts.length} ${data.area} districts. Measured from water company tests. Free ${year} report.`;
+  const title = areaTitle(data);
+  const description = areaDescription(data);
   return {
-    title: title.length > 65 ? `Water Hardness in ${town} (${data.area}): ${data.summary.label}` : title,
-    description: description.length > 155 ? description.slice(0, 152).replace(/[\s,;:]+\S*$/, "") + "…" : description,
+    title,
+    description,
     alternates: { canonical: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}` },
-    openGraph: { title, description, url: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}`, type: "article" },
+    openGraph: { images: OG_IMAGE, title, description, url: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}`, type: "article" },
+    twitter: { images: OG_IMAGE, card: "summary_large_image", title, description },
   };
 }
 
@@ -148,8 +201,12 @@ export default async function HardnessAreaPage({ params }: Props) {
 
   const faqs = [
     {
-      question: `Is ${town} a hard water area?`,
+      question: `Does ${town} have hard water?`,
       answer: `${hard ? "Yes" : "No"}. The median hardness across ${data.area} postcode districts is ${summary.median} mg/L calcium carbonate, which is ${summary.label}. ${hardShare}% of the ${districts.length} districts we hold readings for are hard or very hard (180 mg/L and above).`,
+    },
+    {
+      question: `Is ${town} water hard or soft?`,
+      answer: `${summary.label.charAt(0).toUpperCase()}${summary.label.slice(1)}. ${town} tap water has a median of ${summary.median} mg/L calcium carbonate across ${districts.length} ${data.area} postcode district${districts.length === 1 ? "" : "s"}${summary.min === summary.max ? "" : `, from ${summary.min} mg/L in the softest to ${summary.max} in the hardest`}. On the scale water companies use, under 60 mg/L is soft, hard starts at 180 and very hard at 250.`,
     },
     {
       question: `What is the water hardness in ${town}?`,

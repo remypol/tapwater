@@ -236,8 +236,10 @@ export async function generateMetadata({
   if (!config) return {};
 
   const year = new Date().getFullYear();
-  // Keep title under 45 chars by using shortTitle
-  const title = `${config.shortTitle} (${year})`;
+  // The full title says what the page ranks ("UK's Hardest Water Areas by Postcode");
+  // the short one ("Hardest Water") left searchers guessing and ran to 20 characters.
+  const full = `${config.title} (${year})`;
+  const title = full.length <= 62 ? full : `${config.shortTitle} in the UK (${year})`;
   const description = config.description.length > 155
     ? config.description.slice(0, 152) + "..."
     : config.description;

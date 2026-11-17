@@ -281,6 +281,7 @@ export default async function HomePage() {
             ))}
             <p className="wt-fine" style={{ marginTop: 32 }}>
               Data from UK water companies, the Environment Agency and the Drinking Water Inspectorate.{" "}
+              Want to check a sample yourself? Read <Link href="/guides/how-to-test-your-water">how to test water quality at home</Link>.{" "}
               <Link href="/about">About TapWater.uk</Link> · <Link href="/about/methodology">How we score</Link> · <Link href="/about/data-sources">Where the data comes from</Link>
             </p>
           </div>

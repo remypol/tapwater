@@ -33,7 +33,7 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: "What Is Smart Water, Actually? Marketing vs Chemistry",
+    title: "What Is Smart Water? Vapour-Distilled Water With Electrolytes",
     description:
       "What smart water is (vapour-distilled water plus electrolytes for taste), whether it hydrates better, and how its mineral content compares to UK tap water.",
     alternates: {
@@ -115,11 +115,11 @@ export default function SmartWaterGuide() {
 
         <div className="prose-section">
           <p className="text-lg text-body leading-relaxed">
-            Strip the branding and smartwater is a two-step recipe: water is
-            vapour-distilled, which removes everything dissolved in it, and a
-            pinch of electrolytes is added back, calcium chloride, magnesium
-            chloride, and potassium bicarbonate, purely for taste. That is the
-            whole product. No sugar, no vitamins, no caffeine, and no
+            Smart water (sold as Glaceau Smartwater) is vapour-distilled
+            water with a small amount of electrolytes added back for taste.
+            Distilling removes everything dissolved in the water, and the
+            electrolytes added afterwards are calcium chloride, magnesium
+            chloride and potassium bicarbonate. That is the whole product. No sugar, no vitamins, no caffeine, and no
             ingredient your tap cannot match.
           </p>
           <p className="text-base text-body leading-relaxed mt-4">

@@ -95,7 +95,12 @@ function normalizeDeterminand(label: string): string | null {
   // Bacteria excluded — EA monitors raw environmental water, not treated tap water.
   // Coliforms/E.coli in rivers are expected; water treatment removes them completely.
   // Will be re-added in Phase 2 with DWI treated-water data.
-  if (lower.includes("nitrate") && !lower.includes("nitrite")) return "nitrate";
+  // A name with both words is the combined index (nitrate/50 + nitrite/3, limit 1),
+  // published as "Nitrate/Nitrite calculation" or "Nitrite/Nitrate formula". It is a
+  // ratio, not a nitrite concentration: read against nitrite's 0.5 mg/L limit, a
+  // normal 0.55 showed as a failure on almost every Thames Water district.
+  if (lower.includes("nitrate") && lower.includes("nitrite")) return null;
+  if (lower.includes("nitrate")) return "nitrate";
   if (lower.includes("nitrite")) return "nitrite";
   if (lower.includes("nitrogen, total oxidised")) return "nitrate";
   if (lower.includes("copper")) return "copper";

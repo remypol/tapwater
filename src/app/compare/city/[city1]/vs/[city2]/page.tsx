@@ -7,7 +7,7 @@ import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { getPostcodeData, getAllPostcodeDistricts } from "@/lib/data";
 import type { PostcodeData } from "@/lib/types";
 import { getCityBySlug } from "@/lib/cities";
-import { CITY_COMPARISON_PAIRS, canonicalCityPair } from "@/lib/city-comparisons";
+import { CITY_COMPARISON_PAIRS, canonicalCityPair, CITIES_WITHOUT_TAP_SCORES } from "@/lib/city-comparisons";
 import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
@@ -164,6 +164,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${c1.name} vs ${c2.name} Water Quality`,
     description: `Compare tap water quality in ${c1.name} and ${c2.name}. Safety scores, contaminants, and which city has better water.`,
     alternates: { canonical: canonicalUrl },
+    ...(CITIES_WITHOUT_TAP_SCORES.has(c1.slug) || CITIES_WITHOUT_TAP_SCORES.has(c2.slug) ? { robots: "noindex, follow" } : {}),
     openGraph: {
       images: OG_IMAGE,
       title: `${c1.name} vs ${c2.name} Water Quality Comparison`,

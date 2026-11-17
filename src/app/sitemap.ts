@@ -3,14 +3,14 @@ import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList, getHardn
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER, getProductsByCategory } from "@/lib/products";
-import { CATEGORY_LISTING } from "@/lib/filter-listing";
+import { CATEGORY_LISTING, CANONICAL_TO_GUIDE_CATEGORIES } from "@/lib/filter-listing";
 import { WATER_PROBLEMS } from "@/lib/water-problems";
 import { getPfasCitySlugs } from "@/lib/pfas-data";
 import { getNationalRivers } from "@/lib/river-status-data";
 import { getSitemapIncidentCandidates } from "@/lib/incidents";
 import { getIncidentLastModified, isIncidentIndexable } from "@/lib/incident-indexing";
 import { BRAND_COMPARISON_PAIRS } from "@/lib/brand-comparisons";
-import { CITY_COMPARISON_PAIRS } from "@/lib/city-comparisons";
+import { CITY_COMPARISON_PAIRS, CITIES_WITHOUT_TAP_SCORES } from "@/lib/city-comparisons";
 
 const BASE_URL = "https://www.tapwater.uk";
 
@@ -205,27 +205,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // City-vs-city comparisons, canonical direction only. Both directions render and
     // resolve, but the reverse now canonicalises to this one, so listing both would
     // submit a URL that points its canonical elsewhere.
-    ...CITY_COMPARISON_PAIRS.map(([a, b]) => ({
+    ...CITY_COMPARISON_PAIRS.filter(([a, b]) => !CITIES_WITHOUT_TAP_SCORES.has(a) && !CITIES_WITHOUT_TAP_SCORES.has(b)).map(([a, b]) => ({
       url: `${BASE_URL}/compare/city/${a}/vs/${b}`,
       lastModified: latestDataDate,
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),
-    // Brand filter comparison pages (both directions)
-    ...BRAND_COMPARISON_PAIRS.flatMap(([a, b]) => [
-      {
-        url: `${BASE_URL}/compare/filter/${a}/vs/${b}`,
-        lastModified: latestDataDate,
-        changeFrequency: "monthly" as const,
-        priority: 0.75,
-      },
-      {
-        url: `${BASE_URL}/compare/filter/${b}/vs/${a}`,
-        lastModified: latestDataDate,
-        changeFrequency: "monthly" as const,
-        priority: 0.75,
-      },
-    ]),
+    // Brand filter comparison pages, canonical direction only: the reverse order
+    // renders too but points its canonical here, and a sitemap must not list a URL
+    // whose canonical is somewhere else.
+    ...BRAND_COMPARISON_PAIRS.map(([a, b]) => ({
+      url: `${BASE_URL}/compare/filter/${a}/vs/${b}`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
     {
       url: `${BASE_URL}/rivers`,
       lastModified: riversChanged ? new Date(riversChanged) : latestDataDate,
@@ -358,7 +352,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Not listed: an empty category (it redirects to its guide) and a category
     // whose canonical is its guide. A sitemap should only name canonical URLs.
     ...CATEGORY_ORDER.filter(
-      (cat) => getProductsByCategory(cat).length > 0 && !CATEGORY_LISTING[cat]?.canonicalToGuide,
+      (cat) => getProductsByCategory(cat).length > 0 && !CATEGORY_LISTING[cat]?.canonicalToGuide && !CANONICAL_TO_GUIDE_CATEGORIES.has(cat),
     ).map((cat) => ({
       url: `${BASE_URL}/filters/${CATEGORY_META[cat].slug}`,
       lastModified: latestDataDate,

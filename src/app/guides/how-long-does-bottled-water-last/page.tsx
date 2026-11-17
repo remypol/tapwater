@@ -26,6 +26,11 @@ const FAQ_DATA = [
       "Refrigerated and recapped, an opened bottle stays pleasant for around 2 to 3 days. At room temperature the count is more like a day: bacteria from your mouth and the air multiply in standing water, and the taste goes stale well before anything becomes a health issue for a healthy adult. Small sips straight from the bottle shorten all of that, because they inoculate the water directly.",
   },
   {
+    question: "How long does tap water last in a bottle?",
+    answer:
+      "About a day for a bottle you are drinking from, and up to around six months for a clean, sealed bottle stored somewhere cool and dark. There is no single official UK figure. The Drinking Water Inspectorate advises throwing away tap water kept in a jug in the fridge after 24 hours, and the six-month figure is general emergency-storage guidance for clean, sealed containers. Pour it away sooner if it smells, tastes or looks wrong.",
+  },
+  {
     question: "Is it safe to drink bottled water left in a hot car?",
     answer:
       "Occasionally, yes, but do not make a habit of it. Heat accelerates the migration of packaging compounds like antimony from PET plastic into the water, and studies measuring bottles stored at high temperatures for weeks found levels rising toward regulatory limits. One warm bottle is not dangerous; a summer of storing your water supply in the boot is the scenario to avoid.",
@@ -36,7 +41,7 @@ export function generateMetadata(): Metadata {
   return {
     title: "How Long Does Bottled Water Last? (UK)",
     description:
-      "Does bottled water expire? What the UK best-before date really means, how long opened and unopened bottles last, and when heat becomes the real problem.",
+      "Does bottled water expire? What the UK best-before date means, how long tap or bottled water lasts in a bottle once opened, and when heat is the problem.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/how-long-does-bottled-water-last",
     },
@@ -161,6 +166,83 @@ export default function BottledWaterShelfLifeGuide() {
           place to keep your supply. And once opened, treat water like any
           other drink: recap it, refrigerate it, and finish it within a few
           days.
+        </p>
+
+        <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">
+          How long does tap water last in a bottle?
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          Tap water in a bottle is good for about a day once you have opened
+          it or drunk from it, and for up to around six months if the bottle
+          is clean, sealed and stored somewhere cool and dark. There is no
+          single official UK figure for this, so treat these as general
+          guidance, not as a regulation.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          UK tap water leaves the tap with a trace of chlorine in it, which is
+          what keeps it clean on the way through the pipes. That chlorine
+          fades once the water is sitting in a bottle, and it fades faster
+          when the bottle is open or warm. How long the water keeps depends on
+          how clean the bottle was and what has got into it since.
+        </p>
+        <ul className="mt-4 space-y-3 text-base text-body leading-relaxed list-disc pl-5">
+          <li>
+            <strong className="text-ink">A clean, sealed bottle in a cool, dark place:</strong>{" "}
+            up to around six months. This is the usual emergency-storage
+            advice. The US Centers for Disease Control and Prevention, for
+            example, says to{" "}
+            <a
+              href="https://www.cdc.gov/water-emergency/about/how-to-create-and-store-an-emergency-water-supply.html"
+              className="text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              replace water you have stored yourself every six months
+            </a>{" "}
+            and to keep it cool and out of direct sunlight. It assumes a
+            washed, food-safe container that is filled, sealed and not opened
+            again until you need it.
+          </li>
+          <li>
+            <strong className="text-ink">In the fridge:</strong> the Drinking
+            Water Inspectorate, the drinking water regulator for England and
+            Wales, says to{" "}
+            <a
+              href="https://www.dwi.gov.uk/consumers/learn-more-about-your-water/chlorine"
+              className="text-accent hover:underline"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              throw away tap water kept in a jug in the fridge after 24 hours
+            </a>{" "}
+            and to clean the jug regularly. A capped bottle that nobody has
+            drunk from is better protected than an open jug, but there is no
+            official figure for keeping it longer, so a day is the safe rule
+            for everyday drinking water.
+          </li>
+          <li>
+            <strong className="text-ink">A bottle you have drunk from:</strong>{" "}
+            finish it the same day, and sooner if it has been somewhere warm.
+            Every sip puts bacteria from your mouth into the water, and they
+            multiply quickly at room temperature. Empty it at the end of the
+            day and wash the bottle before you refill it.
+          </li>
+          <li>
+            <strong className="text-ink">Plastic, glass or steel:</strong>{" "}
+            glass and stainless steel do not change the taste and are easy to
+            wash properly. Reusable plastic bottles scratch with use, and
+            scratches are harder to get clean. Thin single-use bottles are
+            made to be used once, and water kept in any plastic for a long
+            time can pick up a plastic taste, more so in heat or sunlight.
+          </li>
+        </ul>
+        <p className="text-base text-body leading-relaxed mt-4">
+          Throw the water away if it smells or tastes odd, looks cloudy or has
+          anything floating in it, or if the inside of the bottle feels
+          slimy. Do the same if you cannot remember when you filled it, or if
+          an opened bottle has sat in a warm room or a car for more than a
+          day. Tap water costs very little, so if you are unsure, pour it
+          away and refill.
         </p>
 
         <h2 className="font-display text-2xl italic text-ink mt-12 mb-4">

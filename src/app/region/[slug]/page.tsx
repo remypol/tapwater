@@ -34,29 +34,102 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!region) return { title: "Not Found" };
 
   const year = new Date().getFullYear();
+  const scored = await getScoredForRegion(region.cities);
+  const avgScore = scored.length > 0
+    ? scored.reduce((sum, p) => sum + p.safetyScore, 0) / scored.length
+    : 0;
+  const score = `${avgScore.toFixed(1)}/10`;
+  const districts = `${scored.length} postcode district${scored.length === 1 ? "" : "s"}`;
+  // "fail" is a reading over its limit; "warning" is close to it but under.
+  const failed = scored.filter((p) => p.readings.some((r) => r.status === "fail")).length;
+  const suppliers = [...new Set(scored.map((p) => p.supplier))];
+  const suppliedBy = suppliers.length > 0
+    ? ` Supplied by ${suppliers.slice(0, 2).join(" and ")}${suppliers.length > 2 ? ` and ${suppliers.length - 2} more` : ""}.`
+    : "";
 
-  // Keep title under 60 chars (template adds " | TapWater.uk" = 15 chars)
-  const regionTitle = `${region.name} Water Quality ${year}`;
-  const pageTitle = (regionTitle + " | TapWater.uk").length <= 60
-    ? regionTitle
-    : `${region.name} Water Quality`;
+  // "Yes" only when the page's own data backs it: the region has tap water
+  // scores, the average is in the band the page calls safe (7 and over), and
+  // no district has a reading over its limit.
+  const answersYes = scored.length > 0 && failed === 0 && avgScore >= 7;
 
-  // Keep description under 155 chars
-  const descFull = `Water quality data for ${region.name}. Check safety scores, contaminants, PFAS and supplier info for every postcode. Free ${year} report.`;
-  const descShort = `Water quality data for ${region.name}. Safety scores, contaminants, PFAS and supplier info for every postcode.`;
-  const regionDesc = descFull.length <= 155 ? descFull : descShort;
+  // Google cuts a title at roughly 60 characters. Drop the year first, then
+  // shorten the wording.
+  const pageTitle = scored.length === 0
+    ? firstThatFits(62, [
+        `Is Tap Water Safe to Drink in ${region.name}? What We Know`,
+        `Is ${region.name} Tap Water Safe? What We Know`,
+        `${region.name} Tap Water: What We Know`,
+      ])
+    : answersYes
+      ? firstThatFits(62, [
+          `Is Tap Water Safe to Drink in ${region.name}? Yes: ${score} (${year})`,
+          `Is Tap Water Safe to Drink in ${region.name}? Yes: ${score}`,
+          `Is ${region.name} Tap Water Safe? Yes: ${score} (${year})`,
+          `Is ${region.name} Tap Water Safe? Yes: ${score}`,
+        ])
+      : firstThatFits(62, [
+          `Is Tap Water Safe to Drink in ${region.name}? ${score} (${year})`,
+          `Is Tap Water Safe to Drink in ${region.name}? ${score}`,
+          `Is ${region.name} Tap Water Safe? ${score} (${year})`,
+          `Is ${region.name} Tap Water Safe? ${score}`,
+        ]);
+
+  // The answer first, then the evidence. Under 155 characters (154 at most).
+  const regionDesc = scored.length === 0
+    ? firstThatFits(154, [
+        `Tap water in ${region.name} is held to the same legal standards as the rest of the UK. We do not have district test scores for it yet. ${region.description}`,
+        `Tap water in ${region.name} is held to the same legal standards as the rest of the UK. We do not have district test scores for it yet.`,
+      ])
+    : answersYes
+      ? firstThatFits(154, [
+          `Yes, tap water in ${region.name} is safe to drink. It scores ${score} across ${districts}, with no reading over its limit.${suppliedBy}`,
+          `Yes, tap water in ${region.name} is safe to drink. It scores ${score} across ${districts}.${suppliedBy}`,
+          `Yes, tap water in ${region.name} is safe to drink. It scores ${score} across ${districts}.`,
+        ])
+      : firstThatFits(154, [
+          `Tap water in ${region.name} is regulated and scores ${score} across ${districts}, but ${failed} had a reading over its limit.${suppliedBy}`,
+          `Tap water in ${region.name} is regulated and scores ${score} across ${districts}, but ${failed} had a reading over its limit.`,
+        ]);
 
   return {
     title: pageTitle,
     description: regionDesc,
     openGraph: {
       images: OG_IMAGE,
-      title: `Water Quality in ${region.name} — Is It Safe?`,
-      description: `Water quality data for every postcode in ${region.name}. Check safety scores, contaminants, and supplier info.`,
+      title: pageTitle,
+      description: regionDesc,
       url: `https://www.tapwater.uk/region/${slug}`,
       type: "website",
     },
   };
+}
+
+/** The first candidate within the length limit; the last one if none fits. */
+function firstThatFits(max: number, candidates: string[]): string {
+  return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
+}
+
+/**
+ * The districts behind a region's score, for the title and description. The
+ * same rule as the page body: every city in the region, each district once,
+ * tap water results only (ea-only districts rest on river samples).
+ */
+async function getScoredForRegion(citySlugs: string[]): Promise<PostcodeData[]> {
+  const scored: PostcodeData[] = [];
+  for (const citySlug of citySlugs) {
+    const city = getCityBySlug(citySlug);
+    if (!city) continue;
+    const all = (
+      await Promise.all([city.name, ...city.matches].map((m) => getPostcodesByCity(m)))
+    ).flat();
+    const seen = new Set<string>();
+    for (const p of all) {
+      if (seen.has(p.district)) continue;
+      seen.add(p.district);
+      if (p.safetyScore >= 0 && p.dataSource !== "ea-only") scored.push(p);
+    }
+  }
+  return scored;
 }
 
 export default async function RegionPage({ params }: Props) {

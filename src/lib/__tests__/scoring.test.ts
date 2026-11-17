@@ -2,6 +2,21 @@ import { describe, it, expect } from "vitest";
 import { computeScore } from "../scoring";
 
 describe("computeScore", () => {
+  it("does not read the combined nitrate/nitrite index as a nitrite reading", () => {
+    const result = computeScore([
+      { determinand: "Nitrate as NO3", value: 25.3, unit: "mg/l", date: "2025-12-31" },
+      { determinand: "Nitrate/Nitrite calculation", value: 0.57, unit: "mg/l", date: "2025-12-31" },
+      { determinand: "Nitrite as NO2", value: 0.02, unit: "mg/l", date: "2025-12-31" },
+      { determinand: "Nitrite/Nitrate Formula", value: 0.6, unit: "mg/l", date: "2025-12-31" },
+    ]);
+    const nitrite = result.readings.filter((r) => r.name === "Nitrite");
+    expect(nitrite).toHaveLength(1);
+    expect(nitrite[0].value).toBe(0.02);
+    expect(nitrite[0].status).toBe("pass");
+    expect(result.readings.some((r) => r.status === "fail")).toBe(false);
+    expect(result.readings.find((r) => r.name === "Nitrate")?.value).toBe(25.3);
+  });
+
   it("scores lead correctly", () => {
     const result = computeScore([
       { determinand: "Lead", value: 0.005, unit: "mg/l", date: "2025-01-01" },

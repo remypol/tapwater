@@ -21,7 +21,7 @@ export const revalidate = 86400;
 
 const SLUG = "how-to-test-your-water";
 const URL = `https://www.tapwater.uk/guides/${SLUG}`;
-const TITLE = "How to Test Your Tap Water in the UK: Free, Kit and Lab Tests";
+const TITLE = "How to Test Water Quality at Home (UK): Free, Kit and Lab";
 const DESCRIPTION =
   "Three ways to test tap water in the UK: ask your water company (several test for lead free), use a strip kit (about £10 to £15) or pay a lab (about £70 to £250).";
 
@@ -285,6 +285,10 @@ export default function HowToTestYourWaterPage() {
           headline={`According to TapWater.uk, ${FREE_COMPANIES.length} of the ${WATER_COMPANY_TESTS.length} major UK water companies said on their own websites on ${CHECKED_ON} that they test customers' tap water for lead free of charge.`}
           detail="Home strip kits cost about £10 to £15 and give a colour band, not a figure. Postal laboratory tests cost about £70 to £250."
         />
+
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          How to test water quality at home: the three routes
+        </h2>
 
         <div className="overflow-x-auto -mx-4 px-4">
           <table className="w-full text-sm border-collapse min-w-[560px]">

@@ -12,7 +12,7 @@ import {
   getProductsByCategory,
 } from "@/lib/products";
 import type { ProductCategory } from "@/lib/types";
-import { CATEGORY_LISTING } from "@/lib/filter-listing";
+import { CATEGORY_LISTING, CANONICAL_TO_GUIDE_CATEGORIES } from "@/lib/filter-listing";
 import { OG_IMAGE } from "@/lib/og";
 
 /* ── slug ↔ category mapping ──────────────────────────────────────────── */
@@ -76,6 +76,9 @@ const CATEGORY_GUIDE: Partial<
     href: "/guides/water-softener-salt-guide/",
   },
 };
+
+/** Which categories hand their canonical to the buying guide: see CANONICAL_TO_GUIDE_CATEGORIES for the evidence and the rule. */
+const CANONICAL_TO_GUIDE = CANONICAL_TO_GUIDE_CATEGORIES;
 
 /* ── optional per-category long intro (rendered when present) ─────────── */
 
@@ -273,7 +276,7 @@ export async function generateMetadata({
     descFull.length <= 155 ? descFull : descShort.length <= 155 ? descShort : descMin.slice(0, 155);
   const url = `https://www.tapwater.uk/filters/${meta.slug}`;
   const canonical =
-    listing?.canonicalToGuide && guide
+    (listing?.canonicalToGuide || CANONICAL_TO_GUIDE.has(category)) && guide
       ? `https://www.tapwater.uk${guide.href.replace(/\/$/, "")}`
       : url;
 
@@ -367,27 +370,27 @@ export default async function CategoryPage({
               href={guide.href}
               className="inline-flex items-center gap-1.5 mt-2 text-base font-medium text-accent hover:underline"
             >
-              {guide.title}
+              Our full guide: {guide.title}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </div>
+        )}
+
+        {/* Guide link, straight under the heading */}
+        {guide && !listing && (
+          <Link
+            href={guide.href}
+            className="inline-flex items-center gap-1.5 mt-4 text-base font-medium text-accent hover:underline"
+          >
+            Our full guide: {guide.title}
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+          </Link>
         )}
 
         <p className="text-body mt-3 max-w-2xl text-lg">{meta.description}</p>
         <p className="text-sm text-muted mt-2">
           Best for: {meta.bestFor} &middot; {meta.priceRange}
         </p>
-
-        {/* Guide link */}
-        {guide && !listing && (
-          <Link
-            href={guide.href}
-            className="inline-flex items-center gap-1.5 mt-4 text-sm text-accent hover:underline"
-          >
-            Read our full guide: {guide.title}
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        )}
 
         {/* Long intro (only categories that define one) */}
         {intro.length > 0 && (

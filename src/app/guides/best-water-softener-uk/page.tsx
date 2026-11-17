@@ -18,6 +18,7 @@ import {
 } from "@/components/guide-chrome";
 import { getProductsByCategory } from "@/lib/products";
 import { OG_IMAGE } from "@/lib/og";
+import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
 
 export const revalidate = 86400;
 
@@ -255,6 +256,35 @@ export default function BestWaterSoftenerGuide() {
           heading="Get softener quotes for your postcode"
           intro="Softeners are sold installed, so the real price is a quote, not a sticker. Tell us where you live and we will match you with installers who cover your area. Compare two or three before you decide."
         />
+
+        {/* ── How they work and what they cost ────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Home water softeners: how they work and what they cost
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          A home water softener is plumbed into the rising main, usually under
+          the kitchen sink, so that all the water in the house passes through
+          it. Inside is a cylinder of resin beads. As hard water flows over
+          them, the beads hold on to the calcium and magnesium that form
+          limescale and release a small amount of sodium in exchange. This is
+          ion exchange. Every so often the softener rinses the beads with salt
+          water to recharge them, which is why it needs topping up with salt.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          A softener removes hardness and nothing else. It stops new limescale
+          forming, but it does not take out chlorine, lead, nitrate or PFAS,
+          and it is not a drinking water filter. It is usual to leave one
+          kitchen tap on unsoftened water for drinking.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          Supplied and fitted, a home water softener costs{" "}
+          {formatPriceRange(installedPriceRange())} at the prices companies
+          publish. Our{" "}
+          <Link href="/guides/water-softener-cost-uk/" className="text-accent hover:underline">
+            water softener cost guide
+          </Link>{" "}
+          lists each of those prices with its source.
+        </p>
 
         {/* ── Do you need one ─────────────────────────────────────── */}
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">

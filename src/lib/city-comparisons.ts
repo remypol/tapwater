@@ -47,3 +47,10 @@ export function cityLabel(slug: string): string {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 }
+
+/**
+ * Cities we hold no tap-water scores for (Scottish Water publishes differently).
+ * A comparison involving one of them has nothing to compare, so those pages stay
+ * reachable but are kept out of the sitemap and marked noindex until scores exist.
+ */
+export const CITIES_WITHOUT_TAP_SCORES = new Set(["glasgow", "edinburgh"]);

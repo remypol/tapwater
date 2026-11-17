@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
+    canonical: "https://www.tapwater.uk/news",
     types: {
       "application/rss+xml": "https://www.tapwater.uk/news/rss.xml",
     },

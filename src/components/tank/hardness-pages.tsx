@@ -105,6 +105,7 @@ export function HardnessHub({ areas, towns = [], year, dateModified }: { areas: 
           </p>
           <p className="wt-sub" style={{ marginTop: 28 }}>
             Enter your postcode to see the exact hardness reading for your supply zone, pulled from your water company&apos;s published compliance data.
+            To see the whole country at once, open the <Link className="wt-link" href="/guides/water-hardness-map/">UK water hardness map</Link>.
           </p>
           <div style={{ marginTop: 24 }}><TankSearch hash="wt-hardness" /></div>
           <HardnessScale caption="Hardness in mg/L as calcium carbonate, the scale UK water companies report in." />
@@ -640,7 +641,8 @@ export function HardnessMapGuide({ districts, hardest, softest, veryHardShare, y
           <p className="wt-sub" style={{ marginTop: 28 }}>
             This is not a drawing of regions. Each dot is a postcode district placed at its real coordinates and coloured by the hardness its water company reported, so the
             chalk of the south-east and the granite of the north and west show up as the country&rsquo;s own shape.
-            {veryHardShare > 0 ? <> Across the map, <strong>{veryHardShare}% of districts</strong> are hard or very hard.</> : null}
+            {veryHardShare > 0 ? <> Across the map, <strong>{veryHardShare}% of districts</strong> are hard or very hard.</> : null}{" "}
+            For the reading at one address, look up your <Link className="wt-link" href="/hardness">water hardness by postcode</Link>.
           </p>
           <div id="map"><HardnessMap districts={districts} /></div>
         </div>
@@ -672,7 +674,7 @@ export function HardnessMapGuide({ districts, hardest, softest, veryHardShare, y
         <section className="wt-band wt-band--foam">
           <div className="wt-inner">
             <h2 className="wt-h2" id="hardest-and-softest">The hardest and softest water areas</h2>
-            <p className="wt-sub">Ranked by the median of the measured districts in each postcode area. The range shows how much hardness varies inside the area, which is why a postcode check beats any map.</p>
+            <p className="wt-sub">Ranked by the median of the measured districts in each postcode area. The range shows how much hardness varies inside the area, which is why <Link className="wt-link" href="/hardness">a postcode check</Link> beats any map.</p>
             <div className="wt-twocol" style={{ marginTop: 32 }}>
               <AreaTable title="Hardest water" areas={hardest} />
               <AreaTable title="Softest water" areas={softest} />

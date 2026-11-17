@@ -5,14 +5,14 @@ import { TankSearch } from "@/components/tank/tank-search";
 import "@/components/tank/tank.css";
 import { BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { ProductCard } from "@/components/product-card";
-import { PRODUCTS } from "@/lib/products";
+import { CATEGORY_META, PRODUCTS } from "@/lib/products";
 import {
   BRAND_COMPARISONS,
   BRAND_COMPARISON_PAIRS,
   getBrandComparison,
   type BrandComparison,
 } from "@/lib/brand-comparisons";
-import type { FilterProduct } from "@/lib/types";
+import type { FilterProduct, ProductCategory } from "@/lib/types";
 import { OG_IMAGE } from "@/lib/og";
 
 export const revalidate = 86400;
@@ -47,8 +47,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [a, b] = [comparison.brand1Label, comparison.brand2Label];
   const canonical = getCanonicalUrl(comparison);
 
-  const title = `${a} vs ${b} UK (2026): Which Is Better?`;
-  const description = `${a} vs ${b}: independent comparison covering filtration, certifications, running costs, and which is right for your home.`;
+  // "frizzlife alternatives" lands on this page (Search Console, 90 days to
+  // 17 Nov 2026), so the title says so when there is room for it.
+  const withAlternatives = `${a} vs ${b} UK (2026) and ${b} Alternatives`;
+  const title =
+    withAlternatives.length <= 65 ? withAlternatives : `${a} vs ${b} UK (2026): Which Is Better?`;
+  const description = `${a} vs ${b} compared on filtration, certifications and running costs, with ${a} and ${b} alternatives you can buy in the UK.`;
 
   return {
     title,
@@ -77,6 +81,69 @@ function getCanonicalUrl(
 ): string {
   // Canonical is always brand1Slug/vs/brand2Slug as defined in config
   return `https://www.tapwater.uk/compare/filter/${comparison.brand1Slug}/vs/${comparison.brand2Slug}`;
+}
+
+/** The buying guide for each kind of filter that appears in a comparison. */
+const CATEGORY_GUIDE: Partial<Record<ProductCategory, { label: string; href: string }>> = {
+  jug: { label: "best water filter jugs in the UK", href: "/guides/best-water-filter-jug-uk" },
+  countertop: { label: "best water filter taps in the UK", href: "/guides/best-water-filter-tap-uk" },
+  under_sink: { label: "best under-sink water filters in the UK", href: "/guides/best-under-sink-water-filter-uk" },
+  reverse_osmosis: { label: "best reverse osmosis systems in the UK", href: "/guides/best-reverse-osmosis-system-uk" },
+};
+
+/** "Under-Sink Filters" for a product's category, as the filters pages name it. */
+function categoryName(product: FilterProduct): string {
+  return CATEGORY_META[product.category].title;
+}
+
+/**
+ * "{brand} alternatives in the UK": the other product on this page, described
+ * only with figures the page already shows, plus the buying guides for more.
+ */
+function Alternatives({
+  brand,
+  own,
+  other,
+  otherBestFor,
+}: {
+  brand: string;
+  own: FilterProduct;
+  other: FilterProduct;
+  otherBestFor: string;
+}) {
+  const sameKind = own.category === other.category;
+  const guides = [CATEGORY_GUIDE[own.category], sameKind ? undefined : CATEGORY_GUIDE[other.category]].filter(
+    (g): g is { label: string; href: string } => g !== undefined,
+  );
+  return (
+    <div>
+      <h2 className="wt-h2">{brand} alternatives in the UK</h2>
+      <p className="wt-sub">
+        The alternative to the {own.brand} {own.model} that we have compared it with directly is the {other.brand} {other.model}. It costs £
+        {other.priceGbp} against £{own.priceGbp}
+        {other.annualCost != null && own.annualCost != null
+          ? `, and about £${other.annualCost} a year in replacement filters against about £${own.annualCost}`
+          : ""}
+        .{" "}
+        {sameKind
+          ? `Both are listed under ${categoryName(own)}.`
+          : `They are different kinds of filter: the ${other.brand} is listed under ${categoryName(other)} and the ${own.brand} under ${categoryName(own)}.`}{" "}
+        We rate the {other.brand} best for: {otherBestFor}.
+      </p>
+      {guides.length > 0 ? (
+        <p className="wt-sub">
+          For more options, see our guide to the{" "}
+          {guides.map((g, i) => (
+            <span key={g.href}>
+              {i > 0 ? " and the " : ""}
+              <Link href={g.href}>{g.label}</Link>
+            </span>
+          ))}
+          .
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 function getProductById(id: string): FilterProduct | undefined {
@@ -228,6 +295,23 @@ export default async function FilterBrandComparisonPage({ params }: Props) {
             <ProductCard product={displayProduct1} highlight={displayComparison.brand1BestFor} pageType="brand-compare" />
             <ProductCard product={displayProduct2} highlight={displayComparison.brand2BestFor} pageType="brand-compare" />
           </div>
+        </div>
+      </section>
+
+      <section className="wt-band wt-band--foam">
+        <div className="wt-inner wt-twocol">
+          <Alternatives
+            brand={displayComparison.brand2Label}
+            own={displayProduct2}
+            other={displayProduct1}
+            otherBestFor={displayComparison.brand1BestFor}
+          />
+          <Alternatives
+            brand={displayComparison.brand1Label}
+            own={displayProduct1}
+            other={displayProduct2}
+            otherBestFor={displayComparison.brand2BestFor}
+          />
         </div>
       </section>
 
