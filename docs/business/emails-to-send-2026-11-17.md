@@ -1,6 +1,6 @@
 # Emails to send, 17 November 2026
 
-Nothing here has been sent.
+Status, 17 November 2026: emails 1 and 2 were sent from `hello@tapwater.uk` and show as delivered. LPRS received pilot key #2 (1,000 lookups a month), tested against the live API before sending. Email 3 (Harvey) has not been sent: no address is published.
 
 ## 1. Reply to LPRS Connected Solutions
 
