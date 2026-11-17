@@ -65,7 +65,7 @@ const FAQ_DATA = [
   {
     question: "What is the best water filter system for a home?",
     answer:
-      "It depends on how many taps you want treated. For drinking water at the kitchen sink, an under-sink filter such as the Doulton HIP Ultracarb (NSF/ANSI 42 and 53, around £120) or a reverse osmosis system such as the Waterdrop G3P600 gives the best result per litre. For every tap, shower and appliance, a whole house filter fitted on the incoming main is the route: the Osmio PRO-III Ultimate (around £499) is the one we rate, with the BWT E1 (around £250) as the value pick for sediment. No whole house filter in our catalogue softens water, so a hard water home usually adds a softener alongside it.",
+      "It depends on how many taps you want treated. For drinking water at the kitchen sink, an under-sink filter such as the Doulton HIS with Biotect Ultra (cartridge certified to NSF/ANSI 42, 53 and 401, around £285) or a reverse osmosis system such as the Waterdrop G3P600 gives the best result per litre. For every tap, shower and appliance, a whole house filter fitted on the incoming main is the route: the Osmio PRO-III Ultimate (around £499) is the one we rate, with the BWT E1 (around £250) as the value pick for sediment. No whole house filter in our catalogue softens water, so a hard water home usually adds a softener alongside it.",
   },
   {
     question: "Do I need a water filter in the UK?",
@@ -80,7 +80,7 @@ const FAQ_DATA = [
   {
     question: "Which water filter removes the most contaminants?",
     answer:
-      "Reverse osmosis. Of everything in our catalogue, the Waterdrop G3P600 lists the most contaminants at 12, including PFAS, fluoride, lead, arsenic, nitrate, chlorine, trihalomethanes, mercury, cadmium, chromium, copper and nickel, and it is certified to NSF/ANSI 58. The Osmio Fusion and Zero units list a similar spread including bacteria and limescale, but without a stated NSF or WRAS certification. Among jugs, the ZeroWater 12-Cup lists eight contaminants including PFAS and fluoride, certified to NSF/ANSI 53 and 401.",
+      "Reverse osmosis. Of everything in our catalogue, the Waterdrop G3P600 lists the most contaminants at 12, including PFAS, fluoride, lead, arsenic, nitrate, chlorine, trihalomethanes, mercury, cadmium, chromium, copper and nickel, and it is certified to NSF/ANSI 58. The Osmio Fusion and Zero units list a similar spread including bacteria and limescale, but without a stated NSF or WRAS certification. Among jugs, the ZeroWater 10-Cup lists eight contaminants including PFAS and fluoride, certified to NSF/ANSI 53 and 401.",
   },
   {
     question: "Are water filters worth it in the UK?",
@@ -95,7 +95,7 @@ const FAQ_DATA = [
   {
     question: "How much does a home water filter system cost in the UK?",
     answer:
-      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £120 with £30 to £80 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £107 to £144 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
+      "From our catalogue: water filter jugs cost £20 to £40 with cartridges of £36 to £120 a year; tap-mounted filters £30 to £60; under-sink filters £70 to £285 with £30 to £59 a year in cartridges; reverse osmosis systems £450 to £650 for the unit, with the Waterdrop G3P600 at around £550, and £107 to £144 a year in filters; whole house filters £250 to £499 plus fitting, with running costs from nothing (the BWT E1 backwashes itself) to around £188 a year; shower filters £25 to £85. A water softener is a different product at £800 to £3,000 installed.",
   },
 ];
 
@@ -128,7 +128,7 @@ const NEEDS: NeedPick[] = [
   {
     need: "Best for PFAS",
     slug: "waterdrop-g3p600",
-    why: "NSF/ANSI 58 reverse osmosis is the certified route for PFAS. The ZeroWater 12-Cup jug is the cheapest certified option, at NSF/ANSI 53 and 401.",
+    why: "NSF/ANSI 58 reverse osmosis is the certified route for PFAS. The ZeroWater 10-Cup jug is the cheapest certified option, at NSF/ANSI 53 and 401.",
     guide: { href: "/guides/best-water-filter-pfas", label: "PFAS filter guide" },
   },
   {
@@ -140,7 +140,7 @@ const NEEDS: NeedPick[] = [
   {
     need: "Best under sink",
     slug: "doulton-hip-ultracarb",
-    why: "British-made ceramic with NSF/ANSI 42 and 53 certification, listed for bacteria, lead, chlorine and microplastics. The Waterdrop 10UA is the £70 budget route.",
+    why: "British-made ceramic with a cartridge certified to NSF/ANSI 42, 53 and 401, listed for bacteria, lead, chlorine and microplastics. The Waterdrop 10UA is the £70 budget route.",
     guide: { href: "/guides/best-under-sink-water-filter-uk", label: "Under sink filter guide" },
   },
   {

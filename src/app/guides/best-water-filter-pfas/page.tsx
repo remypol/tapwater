@@ -583,7 +583,7 @@ export default function BestWaterFilterPfasGuide() {
 
           <ProductReview
             product={zerowater}
-            heading="ZeroWater 12-Cup — Budget PFAS removal"
+            heading="ZeroWater 10-Cup — Budget PFAS removal"
             verdict="The cheapest way to remove PFAS. NSF 53 and 401 certified in a simple jug."
             review={`If you cannot install an under-sink system — or you want PFAS removal for £${zerowater.priceGbp} instead of £${frizzlife.priceGbp} — the ZeroWater is the answer. It is the only jug filter certified to NSF/ANSI 53 and 401 for PFAS removal. The 5-stage filtration also removes lead, chromium, mercury, fluoride, arsenic, and nitrate. The included TDS meter lets you check when the filter is spent. The catch: ZeroWater filters deplete fast, especially in hard water areas (2–3 weeks per filter). At £${zerowater.annualCost}/year in replacement filters, it costs more to run than the Frizzlife RO system. But as a starting point for PFAS removal, nothing else comes close at this price.`}
             pros={[
@@ -654,7 +654,7 @@ export default function BestWaterFilterPfasGuide() {
           </p>
           <p className="text-base text-body leading-relaxed mt-4">
             If you cannot install an under-sink system, the{" "}
-            <strong className="text-ink">ZeroWater 12-Cup jug</strong> at
+            <strong className="text-ink">ZeroWater 10-Cup jug</strong> at
             &pound;40 is the only jug with certified PFAS removal. Higher
             running costs, but the lowest possible entry point.
           </p>

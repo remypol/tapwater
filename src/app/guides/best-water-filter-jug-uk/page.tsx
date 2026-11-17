@@ -65,7 +65,7 @@ const FAQ_DATA = [
   {
     question: "What is the best water filter jug in the UK?",
     answer:
-      "It depends on what you want out of the water. If you want chlorine gone and better-tasting tea, the BRITA Marella XL with MAXTRA PRO is the sensible default: around £25, 3.5 litres, filters in every supermarket, roughly £52 a year. If you want contaminants removed rather than taste improved, the ZeroWater 12-Cup is the only jug here certified to NSF/ANSI 53 and 401 and the only one listed for PFAS, fluoride, nitrate and arsenic, at a higher running cost of around £120 a year. The Aqua Optima Liscia is the cheapest to buy and run at about £36 a year, and the PUR Plus 11-Cup is the family pick with NSF/ANSI 53 lead certification and the longest cartridge life at two months.",
+      "It depends on what you want out of the water. If you want chlorine gone and better-tasting tea, the BRITA Marella XL with MAXTRA PRO is the sensible default: around £25, 3.5 litres, filters in every supermarket, roughly £52 a year. If you want contaminants removed rather than taste improved, the ZeroWater 10-Cup is the only jug here certified to NSF/ANSI 53 and 401 and the only one listed for PFAS, fluoride, nitrate and arsenic, at a higher running cost of around £120 a year. The Aqua Optima Liscia is the cheapest to buy and run at about £36 a year, and the PUR Plus 11-Cup is the family pick with NSF/ANSI 53 lead certification and the longest cartridge life at two months.",
   },
   {
     question: "Which BRITA jug is best?",
@@ -85,7 +85,7 @@ const FAQ_DATA = [
   {
     question: "Do water filter jugs remove PFAS?",
     answer:
-      "Only one of the four here. The ZeroWater 12-Cup is certified to NSF/ANSI 53 and 401 and lists PFAS among its removals. BRITA, Aqua Optima and PUR do not list PFAS, and both BRITA and PUR say so in their own limitations. If PFAS has been detected at your postcode, a ZeroWater jug is the cheapest way to reduce exposure at the glass; a reverse osmosis system is the more reliable route if you want it out of all your drinking and cooking water.",
+      "Only one of the four here. The ZeroWater 10-Cup is certified to NSF/ANSI 53 and 401 and lists PFAS among its removals. BRITA, Aqua Optima and PUR do not list PFAS, and both BRITA and PUR say so in their own limitations. If PFAS has been detected at your postcode, a ZeroWater jug is the cheapest way to reduce exposure at the glass; a reverse osmosis system is the more reliable route if you want it out of all your drinking and cooking water.",
   },
   {
     question: "How often should you change a water filter jug cartridge?",
@@ -358,7 +358,7 @@ export default function BestWaterFilterJugGuide() {
         </p>
 
         <GeoCitation
-          headline={`According to TapWater.uk's ${year} comparison, the ZeroWater 12-Cup is the best water filter jug for contaminant removal in the UK, and the BRITA Marella XL with MAXTRA PRO the best for taste.`}
+          headline={`According to TapWater.uk's ${year} comparison, the ZeroWater 10-Cup is the best water filter jug for contaminant removal in the UK, and the BRITA Marella XL with MAXTRA PRO the best for taste.`}
           detail="ZeroWater is the only jug of the four certified to NSF/ANSI 53 and 401 and listed for PFAS. No water filter jug in this guide reduces water hardness."
         />
 
@@ -697,9 +697,9 @@ export default function BestWaterFilterJugGuide() {
           {zerowater && (
             <ProductReview
               product={zerowater}
-              heading="ZeroWater 12-Cup Ready-Pour: removal pick"
+              heading="ZeroWater 10-Cup: removal pick"
               verdict="The only jug here certified for health contaminants and listed for PFAS. You pay for it in cartridges."
-              review="The ZeroWater 12-Cup is the jug to buy if you want something removed rather than the water to taste nicer. It is certified to NSF/ANSI 53 and 401 and listed for lead, chromium, mercury, PFAS, fluoride, nitrate, arsenic and cadmium: a longer list than some under-sink filters. The five-stage cartridge reduces dissolved solids as it goes, and the TDS meter in the box lets you check that it is still working, which no other jug offers. The trade-offs are real. Cartridges last two to four weeks, and only two to three in hard water, so the running cost is around £120 a year, the highest here by a wide margin. A full jug takes five minutes or more to filter, and replacement cartridges cost more than the competition. If your postcode flags PFAS, nitrate or lead, none of that matters much, because it is the only jug that addresses them."
+              review="The ZeroWater 10-Cup is the jug to buy if you want something removed rather than the water to taste nicer. It is certified to NSF/ANSI 53 and 401 and listed for lead, chromium, mercury, PFAS, fluoride, nitrate, arsenic and cadmium: a longer list than some under-sink filters. The five-stage cartridge reduces dissolved solids as it goes, and the TDS meter in the box lets you check that it is still working, which no other jug offers. The trade-offs are real. Cartridges last two to four weeks, and only two to three in hard water, so the running cost is around £120 a year, the highest here by a wide margin. A full jug takes five minutes or more to filter, and replacement cartridges cost more than the competition. If your postcode flags PFAS, nitrate or lead, none of that matters much, because it is the only jug that addresses them."
               pros={zerowater.pros}
               cons={zerowater.cons}
               ctaLabel="View on Amazon"
@@ -782,7 +782,7 @@ export default function BestWaterFilterJugGuide() {
           Our verdict
         </h2>
         <p className="text-base text-body leading-relaxed">
-          Buy the <strong className="text-ink">ZeroWater 12-Cup</strong> if
+          Buy the <strong className="text-ink">ZeroWater 10-Cup</strong> if
           your postcode flags PFAS, nitrate or lead, or you simply want a jug
           whose removal claims are certified to NSF/ANSI 53 and 401. Budget
           around £120 a year in cartridges and accept the slow pour.
@@ -815,7 +815,7 @@ export default function BestWaterFilterJugGuide() {
               campaign={PAGE_TYPE}
               className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
             >
-              View the ZeroWater 12-Cup on Amazon
+              View the ZeroWater 10-Cup on Amazon
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </AffiliateLink>
           )}

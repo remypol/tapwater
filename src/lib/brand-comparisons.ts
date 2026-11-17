@@ -200,7 +200,7 @@ export const BRAND_COMPARISONS: BrandComparison[] = [
       },
       {
         category: "Convenience",
-        brand1: "Jug format — 12-cup capacity, slow pour, needs pre-filling",
+        brand1: "Jug format — 10-cup (2.4 litre) capacity, slow pour, needs pre-filling",
         brand2: "Tap-mounted — instant filtered water on demand at full flow",
         winner: 2,
       },

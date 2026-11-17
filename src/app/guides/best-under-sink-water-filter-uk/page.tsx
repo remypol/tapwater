@@ -31,12 +31,12 @@ const FAQ_DATA = [
   {
     question: "Do under sink water filters remove PFAS or limescale?",
     answer:
-      "It depends on the technology. Standard carbon and ceramic cartridges do not meaningfully reduce PFAS: of the two filters in this guide, the Waterdrop 10UA carries a total PFAS reduction claim while the Doulton Ultracarb does not, and neither reduces water hardness, so limescale stays. For verified PFAS and fluoride removal the reliable route is an under-sink reverse osmosis system, and for limescale the answer is a water softener, not a drinking-water filter.",
+      "It depends on the technology. Standard carbon and ceramic cartridges do not meaningfully reduce PFAS: of the two filters in this guide, the Waterdrop 10UA carries a total PFAS reduction claim while the Doulton Biotect Ultra does not, and neither reduces water hardness, so limescale stays. For verified PFAS and fluoride removal the reliable route is an under-sink reverse osmosis system, and for limescale the answer is a water softener, not a drinking-water filter.",
   },
   {
     question: "How often do under sink filter cartridges need replacing?",
     answer:
-      "Check the rated capacity rather than the marketing headline. The Waterdrop 10UA is rated for roughly 11,000 gallons or twelve months, whichever comes first, which is why its running cost stays low. The Doulton Ultracarb ceramic element is a six-month cartridge, though the ceramic shell can be scrubbed clean several times within that window to restore flow. Hard water areas clog cartridges faster, so expect the shorter end of any range if your postcode reads hard.",
+      "Check the rated capacity rather than the marketing headline. The Waterdrop 10UA is rated for roughly 11,000 gallons or twelve months, whichever comes first, which is why its running cost stays low. The Doulton Biotect Ultra ceramic element is a six-month cartridge, though the ceramic shell can be scrubbed clean several times within that window to restore flow. Hard water areas clog cartridges faster, so expect the shorter end of any range if your postcode reads hard.",
   },
 ];
 
@@ -309,8 +309,8 @@ export default function BestUnderSinkFilterGuide() {
         </div>
 
         <GeoCitation
-          headline={`According to TapWater.uk's comparison of certified under sink water filters, the Doulton HIP Ultracarb is the pick for most UK households in ${year}.`}
-          detail={`It carries NSF/ANSI 42 and 53 verification for its removal claims; the Waterdrop 10UA is the £${waterdrop.priceGbp} budget route with the lowest running cost.`}
+          headline={`According to TapWater.uk's comparison of certified under sink water filters, the Doulton HIS with Biotect Ultra is the pick for most UK households in ${year}.`}
+          detail={`Its Biotect Ultra cartridge is certified by NSF to standards 42, 53 and 401; the Waterdrop 10UA is the £${waterdrop.priceGbp} budget route with the lowest running cost.`}
         />
 
         {/* ── Affiliate disclosure ─────────────────────────────────── */}
@@ -381,7 +381,7 @@ export default function BestUnderSinkFilterGuide() {
             <p className="text-base text-body leading-relaxed">
               Carbon block cartridges (like the Waterdrop 10UA) target chlorine,
               taste, and lead at a low running cost. Ceramic elements (like the
-              Doulton Ultracarb) add bacteria and microplastics removal, and the
+              Doulton Biotect Ultra) add bacteria and microplastics removal, and the
               shell can be cleaned to extend its life. Neither touches fluoride,
               and hardness passes straight through both. If your priority is
               PFAS or fluoride, skip both and go straight to an under-sink
@@ -400,7 +400,8 @@ export default function BestUnderSinkFilterGuide() {
             <p className="text-base text-body leading-relaxed">
               NSF/ANSI 42 covers taste and chlorine; NSF/ANSI 53 covers health
               contaminants like lead and cysts. A filter listing both, as the
-              Doulton does, has had its removal claims independently verified.
+              Doulton's Biotect Ultra cartridge does, has had its removal claims
+              independently verified.
               Treat any water filter under sink unit without certifications as
               an unverified claim, whatever the listing promises.
             </p>
@@ -468,12 +469,12 @@ export default function BestUnderSinkFilterGuide() {
         <div className="space-y-8">
           <ProductReview
             product={doulton}
-            heading="Doulton HIP Ultracarb — Top pick"
+            heading="Doulton HIS with Biotect Ultra — Top pick"
             verdict="Certified British ceramic filtration for families who want bacteria and lead handled."
-            review="Doulton has made ceramic water filters in Staffordshire for longer than the NSF has existed, and the Ultracarb is the configuration we rate for UK kitchens. The ceramic shell physically blocks bacteria and microplastics while the carbon core inside it handles chlorine and lead, and the combination carries both NSF/ANSI 42 and 53 certification, so those claims are independently verified rather than promised. The shell can be taken out and scrubbed several times across its six-month life to restore flow, which no carbon-only cartridge offers. The honest limits: it does not reduce PFAS or fluoride, the 2 litres per minute flow suits filling glasses and kettles rather than pans in a hurry, and at roughly £80 a year in cartridges it costs more to run than the Waterdrop."
+            review="Doulton has made ceramic water filters in Staffordshire for longer than the NSF has existed, and the HIS with the Biotect Ultra cartridge is the single-cartridge system it sells for UK kitchens today. The ceramic shell physically blocks bacteria, cysts and microplastics while the carbon core inside it handles chlorine and heavy metals such as lead, and the cartridge is certified by NSF to standards 42, 53 and 401, so those claims are independently verified rather than promised. The housing is stainless steel with push-fit connections, and the shell can be taken out and scrubbed across its six-month life to restore flow, which no carbon-only cartridge offers. The honest limits: it does not reduce PFAS or fluoride, it costs around £285 before you add a tap, and at roughly £59 a year in cartridges it costs more to run than the Waterdrop."
             pros={doulton.pros}
             cons={doulton.cons}
-            ctaLabel="View on Amazon"
+            ctaLabel="View at Doulton"
           />
 
           <ProductReview
@@ -541,9 +542,9 @@ export default function BestUnderSinkFilterGuide() {
         </h2>
         <div className="prose-section">
           <p className="text-base text-body leading-relaxed">
-            The <strong className="text-ink">Doulton HIP Ultracarb</strong> is
-            the under sink filter we recommend for most UK households. Dual NSF
-            certification, bacteria and microplastics removal that carbon-only
+            The <strong className="text-ink">Doulton HIS with Biotect Ultra</strong> is
+            the under sink filter we recommend for most UK households. An
+            NSF-certified cartridge, bacteria and microplastics removal that carbon-only
             units cannot offer, and a cleanable ceramic element from a British
             maker with real heritage.
           </p>
@@ -566,7 +567,7 @@ export default function BestUnderSinkFilterGuide() {
             campaign="best-under-sink-guide"
             className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-btn-hover transition-colors"
           >
-            Get the Doulton HIP Ultracarb
+            Get the Doulton HIS
             <ArrowRight className="w-4 h-4" />
           </AffiliateLink>
           <AffiliateLink

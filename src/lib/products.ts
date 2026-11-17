@@ -17,6 +17,9 @@ export const PRODUCTS: FilterProduct[] = [
   {
     id: "brita-maxtra-pro",
     brand: "BRITA",
+    // Was B0BT1HTR9Q, which is the standard 2.4 litre Marella with three cartridges.
+    // B0BSXFVB6M is the 3.5 litre Marella XL this entry describes (white, one
+    // MAXTRA PRO cartridge, an Amazon best seller on 17 Nov 2026).
     model: "Marella XL + MAXTRA PRO",
     slug: "brita-marella-xl",
     category: "jug",
@@ -24,7 +27,7 @@ export const PRODUCTS: FilterProduct[] = [
     certifications: ["TUV SUD"],
     priceGbp: 25,
     priceTier: "budget",
-    affiliateUrl: "https://www.amazon.co.uk/dp/B0BT1HTR9Q?tag=tapwater2107-21",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0BSXFVB6M?tag=tapwater2107-21",
     affiliateProgram: "amazon",
     commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
@@ -48,7 +51,11 @@ export const PRODUCTS: FilterProduct[] = [
   {
     id: "zerowater-12cup",
     brand: "ZeroWater",
-    model: "12-Cup Ready-Pour",
+    // Was B07J2HJMKQ, which Amazon now shows as "Currently unavailable" while it took
+    // about 330 clicks a quarter. B0073PZ6O0 is ZeroWater's main UK listing (27,000
+    // ratings, in stock on 17 Nov 2026): the 10-cup, 2.4 litre jug with the meter.
+    // The slug keeps its old "12-cup" wording so the click history stays in one piece.
+    model: "10-Cup Jug",
     slug: "zerowater-12-cup",
     category: "jug",
     removes: [
@@ -64,7 +71,7 @@ export const PRODUCTS: FilterProduct[] = [
     certifications: ["NSF/ANSI 53", "NSF/ANSI 401"],
     priceGbp: 40,
     priceTier: "mid",
-    affiliateUrl: "https://www.amazon.co.uk/dp/B07J2HJMKQ?tag=tapwater2107-21",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B0073PZ6O0?tag=tapwater2107-21",
     affiliateProgram: "amazon",
     commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
@@ -259,36 +266,44 @@ export const PRODUCTS: FilterProduct[] = [
     flowRate: "3.8 L/min",
   },
   {
+    // id and slug are kept from the HIP Ultracarb this entry used to describe, so
+    // the click history and guide references stay joined up. That product was an
+    // Amazon listing (B01LWRZBC6) that Amazon now shows as "Currently unavailable",
+    // while it took about 170 clicks a quarter. Doulton's own shop does not sell a
+    // HIP + Ultracarb kit any more; its single-cartridge under-sink system is the
+    // HIS with the Biotect Ultra, read on doulton.com on 17 Nov 2026: £284.95,
+    // replacement Biotect Ultra (2501) £29.45, "replace every 6 months".
+    // Doulton is Awin merchant 69790, joined on 2996923, at 5%.
     id: "doulton-hip-ultracarb",
     brand: "Doulton",
-    model: "HIP Ultracarb",
+    model: "HIS Push-fit with Biotect Ultra",
     slug: "doulton-hip-ultracarb",
     category: "under_sink",
-    removes: ["Chlorine", "Lead", "Bacteria", "Microplastics", "Copper"],
-    certifications: ["NSF/ANSI 42", "NSF/ANSI 53"],
-    priceGbp: 120,
+    removes: ["Chlorine", "Lead", "Bacteria", "Microplastics", "Mercury", "Cadmium"],
+    certifications: ["WRAS approved", "Cartridge: NSF/ANSI 42, 53 and 401"],
+    priceGbp: 285,
     priceTier: "mid",
-    affiliateUrl: "https://www.amazon.co.uk/dp/B01LWRZBC6?tag=tapwater2107-21",
-    affiliateProgram: "amazon",
-    commission: { type: "percent", rate: 0.03 },
-    affiliateTag: "tapwater2107-21",
-    imageUrl: "/filters/doulton-hip-ultracarb.jpg",
+    affiliateUrl:
+      "https://www.awin1.com/cread.php?awinmid=69790&awinaffid=2996923&ued=https%3A%2F%2Fdoulton.com%2Fproducts%2Fdoulton-his-push-fit-undersink-water-filter-with-biotect-ultra",
+    affiliateProgram: "awin",
+    commission: { type: "percent", rate: 0.05 },
+    affiliateTag: "awin-2996923",
+    imageUrl: "/filters/doulton-his-biotect-ultra.jpg",
     rating: 4.6,
     badge: "best-match",
     pros: [
-      "Ceramic element removes 99.99% of bacteria",
-      "British-made with over 190 years of heritage",
-      "NSF 42 + 53 dual certification for lead and cysts",
+      "Ceramic filter that Doulton rates for up to 99.99% of bacteria and cysts",
+      "Made in Britain, with push-fit connections and a stainless steel housing",
+      "Its Biotect Ultra cartridge is NSF certified to standards 42, 53 and 401 in Doulton's Kingfisher system",
     ],
     cons: [
-      "Higher upfront cost than basic carbon filters",
-      "Flow rate drops as ceramic element loads — needs periodic cleaning",
+      "Costs more to buy than a basic carbon filter, and the tap is sold separately",
+      "Flow slows as the ceramic loads up, so it needs an occasional scrub",
       "Does not remove PFAS or fluoride",
     ],
     bestFor: "Families wanting bacteria and lead removal from a trusted UK brand",
     filterLife: "6 months",
-    annualCost: 80,
-    flowRate: "2.0 L/min",
+    annualCost: 59,
   },
 
   // ─── REVERSE OSMOSIS ───────────────────────────────────────────────
@@ -645,6 +660,8 @@ export const PRODUCTS: FilterProduct[] = [
   {
     id: "aquabliss-sf220",
     brand: "AquaBliss",
+    // Was B01MUBU0YC, which Amazon now redirects to the SF100. B01G7AZB96 is the
+    // SF220 itself (chrome, 10,000 ratings, in stock on 17 Nov 2026).
     model: "SF220 Shower Filter",
     slug: "aquabliss-sf220",
     category: "shower",
@@ -652,7 +669,7 @@ export const PRODUCTS: FilterProduct[] = [
     certifications: [],
     priceGbp: 25,
     priceTier: "budget",
-    affiliateUrl: "https://www.amazon.co.uk/dp/B01MUBU0YC?tag=tapwater2107-21",
+    affiliateUrl: "https://www.amazon.co.uk/dp/B01G7AZB96?tag=tapwater2107-21",
     affiliateProgram: "amazon",
     commission: { type: "percent", rate: 0.03 },
     affiliateTag: "tapwater2107-21",
@@ -1360,7 +1377,7 @@ export const CATEGORY_META: Record<
     description:
       "Hidden under your kitchen sink, these filters provide high-capacity filtration without cluttering your counter.",
     bestFor: "Homeowners wanting set-and-forget filtration with high capacity",
-    priceRange: "£70–£120",
+    priceRange: "£70–£285",
   },
   reverse_osmosis: {
     title: "Reverse Osmosis Systems",
