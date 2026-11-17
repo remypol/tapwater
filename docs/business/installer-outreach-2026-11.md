@@ -130,7 +130,7 @@ If they say yes, send Email 1 to the address they give, with the first paragraph
 
 1. You get an email titled "New installer to approve". Check they are real (website, Companies House), then open the link and press the button.
 2. They immediately receive the open requests in their areas, up to their three free leads, and each homeowner is told who will call.
-3. Card top-ups do not work until Stripe is connected. Until then the installer's account page tells them to email partners@tapwater.uk for a payment link, so the first paid top-up is a manual invoice or a Stripe payment link from you.
+3. Card top-ups work since 17 November 2026: "Add leads" on the installer's account page opens a Stripe payment page for £175 in TapWater.uk's name, and the five leads are added when it is paid. The money arrives in the shared "SFM Studios" Stripe account (the one Invoice Navigator and ChemTracker use), marked "TapWater.uk installer leads".
 
 ## Sources
 
