@@ -2,10 +2,15 @@
  * Awin, from the command line: which programmes we are really joined to, what
  * they have paid, and tracking links built by Awin itself.
  *
- * Why this exists: until 22 September 2026 every Awin link carried a publisher
- * id that was not joined to Waterdrop. Awin redirects any live id, so the links
- * "worked" and about 153 clicks earned nothing. The only proof a link earns is
- * the programme's status on the account, and that is what `check` reads.
+ * Why this exists: we own two Awin publisher accounts, 2996923 (CCC Impact B.V.,
+ * joined to Waterdrop, Frizzlife and Doulton) and 3091503 (CCC Impact BV, joined
+ * to nothing). On 22 September 2026 every link was moved to 3091503 on a reading
+ * of the dashboard. Awin redirects any live id, so the links "worked", and for
+ * eight weeks Awin recorded no clicks and no sales. The only proof a link earns
+ * is what Awin's API says about the account in the link, and that is what `check`
+ * reads: it asks Awin which of our accounts has joined each programme and whether
+ * Awin is recording the clicks we log. AWIN_PUBLISHER_ID picks the account for
+ * the other commands.
  *
  * Setup: create a token at https://ui.awin.com/awin-api (signed in as the
  * publisher account) and add it to .env.local as AWIN_API_TOKEN. Read access is
@@ -31,8 +36,8 @@ import { PRODUCTS } from "../src/lib/products";
 config({ path: ".env.local" });
 
 const BASE = "https://api.awin.com";
-/** The account that holds the approvals (CCC Impact BV). Also the awinaffid in every link. */
-const PUBLISHER_ID = Number(process.env.AWIN_PUBLISHER_ID ?? 3091503);
+/** The account that holds the approvals (CCC Impact B.V.). Also the awinaffid in every link. */
+const PUBLISHER_ID = Number(process.env.AWIN_PUBLISHER_ID ?? 2996923);
 const TOKEN = (process.env.AWIN_API_TOKEN ?? "").trim();
 const PAUSE_MS = 3200; // 20 calls a minute
 
@@ -107,20 +112,63 @@ async function cmdProgrammes(relationship: string) {
   if (list[0]) console.log(`\nFields returned: ${Object.keys(list[0]).join(", ")}`);
 }
 
+async function joinedOn(publisherId: number): Promise<Map<number, string>> {
+  // No country filter: Frizzlife is registered in the US and also covers frizzlife.co.uk.
+  const data = await awin(`/publishers/${publisherId}/programmes?relationship=joined`);
+  return new Map((Array.isArray(data) ? (data as Json[]) : []).map((p) => [num(pick(p, "id", "advertiserId")), String(p.name ?? "")]));
+}
+
+/**
+ * Three questions per link, all answered by Awin and none by a constant in this
+ * file: has the account in the link joined the programme, would another of our
+ * accounts have been the right one, and is Awin recording the clicks we log.
+ * The last one is what catches a link that redirects fine and pays nobody.
+ */
 async function cmdCheck() {
   const links = awinLinksInProducts();
-  const joined = new Map((await programmes("joined")).map((p) => [num(pick(p, "id", "advertiserId")), String(p.name ?? "")]));
-  const pending = new Map((await programmes("pending")).map((p) => [num(pick(p, "id", "advertiserId")), String(p.name ?? "")]));
+  const accounts = (((await awin("/accounts")) as Json).accounts as Json[] | undefined ?? []).filter((a) => a.accountType === "publisher");
+  const ours = new Map<number, Map<number, string>>();
+  for (const a of accounts) ours.set(num(a.accountId), await joinedOn(num(a.accountId)));
+  console.log(`${links.length} Awin links in products.ts. Our publisher accounts: ${[...ours].map(([id, j]) => `${id} (${j.size} joined)`).join(", ")}.\n`);
+
   let bad = 0;
-  console.log(`${links.length} Awin links in products.ts, publisher ${PUBLISHER_ID}, ${joined.size} joined programmes.\n`);
   for (const l of links) {
     const problems: string[] = [];
-    if (l.publisherId !== PUBLISHER_ID) problems.push(`carries publisher ${l.publisherId}, not ${PUBLISHER_ID}`);
-    if (!joined.has(l.advertiserId)) problems.push(pending.has(l.advertiserId) ? "programme is still PENDING: clicks earn nothing" : "programme is NOT JOINED: clicks earn nothing");
+    const joined = ours.get(l.publisherId);
+    if (!joined) problems.push(`publisher ${l.publisherId} is not one of our accounts`);
+    else if (!joined.has(l.advertiserId)) {
+      const right = [...ours].find(([, j]) => j.has(l.advertiserId))?.[0];
+      problems.push(right ? `account ${l.publisherId} has NOT joined this programme; account ${right} has. Clicks earn nothing until the link carries ${right}` : `none of our accounts has joined advertiser ${l.advertiserId}: clicks earn nothing`);
+    }
     if (problems.length > 0) bad++;
-    console.log(`${problems.length ? "PROBLEM" : "ok     "} ${l.id.padEnd(34)} advertiser ${l.advertiserId} ${joined.get(l.advertiserId) ?? pending.get(l.advertiserId) ?? ""}${problems.length ? "  <- " + problems.join("; ") : ""}`);
+    const name = [...ours.values()].map((j) => j.get(l.advertiserId)).find(Boolean) ?? "";
+    console.log(`${problems.length ? "PROBLEM" : "ok     "} ${l.id.padEnd(26)} publisher ${l.publisherId}  advertiser ${l.advertiserId} ${name}${problems.length ? "\n         <- " + problems.join("; ") : ""}`);
   }
-  console.log(bad === 0 ? "\nEvery Awin link points at a joined programme under the right publisher id." : `\n${bad} link(s) need fixing.`);
+
+  // Is Awin seeing the clicks? Our log counts every click on a link, bots included,
+  // so the numbers never match; what matters is Awin recording none at all.
+  const DAYS = 14;
+  const end = new Date();
+  const start = new Date(end.getTime() - DAYS * 86_400_000);
+  const logged = new Map<number, number>();
+  for (const row of await clickLog(DAYS)) {
+    const link = links.find((l) => l.id === row.product_slug);
+    if (link) logged.set(link.advertiserId, (logged.get(link.advertiserId) ?? 0) + 1);
+  }
+  const seen = new Map<number, number>();
+  for (const pub of new Set(links.map((l) => l.publisherId))) {
+    if (!ours.has(pub)) continue;
+    const data = await awin(`/publishers/${pub}/reports/advertiser?startDate=${start.toISOString().slice(0, 10)}&endDate=${end.toISOString().slice(0, 10)}&region=GB&timezone=UTC`);
+    for (const r of Array.isArray(data) ? (data as Json[]) : []) seen.set(num(r.advertiserId), (seen.get(num(r.advertiserId)) ?? 0) + num(r.clicks));
+  }
+  console.log(`\nClicks in the last ${DAYS} days, our log against Awin's count:`);
+  for (const [adv, n] of logged) {
+    const awinClicks = seen.get(adv) ?? 0;
+    const silent = n >= 20 && awinClicks === 0;
+    if (silent) bad++;
+    console.log(`${silent ? "PROBLEM" : "ok     "} advertiser ${adv}: we logged ${n}, Awin recorded ${awinClicks}${silent ? "  <- Awin is not recording these clicks" : ""}`);
+  }
+  console.log(bad === 0 ? "\nEvery Awin link carries an account that has joined its programme." : `\n${bad} problem(s) need fixing.`);
   process.exitCode = bad === 0 ? 0 : 2;
 }
 

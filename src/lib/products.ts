@@ -229,15 +229,17 @@ export const PRODUCTS: FilterProduct[] = [
     priceGbp: 70,
     priceTier: "budget",
     // Waterdrop's own UK programme via Awin pays 7%, where the Amazon listing paid 3%.
-    // Publisher id is 3091503 (CCC Impact BV), the account Waterdrop is joined on.
-    // Until 22 Sept these links carried 2996923, an account that is not joined to
-    // Waterdrop. Awin redirects any live publisher id, joined or not, so the link
-    // worked for visitors while crediting nobody we can see.
+    // Publisher id is 2996923 (CCC Impact B.V.), the account that has joined
+    // Waterdrop, Frizzlife and Doulton. Confirmed through Awin's API on 17 Nov 2026.
+    // From 22 Sept to 17 Nov these links carried 3091503, our second Awin account,
+    // which has joined nothing: Awin redirected visitors as normal and recorded no
+    // clicks and no sales. Do not change the id by reading the Awin dashboard;
+    // run `npx tsx scripts/awin.ts check`, which asks Awin which account is joined.
     affiliateUrl:
-      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=3091503&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Funder-sink-water-filter-direct-connect-filtration-system",
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=2996923&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Funder-sink-water-filter-direct-connect-filtration-system",
     affiliateProgram: "awin",
     commission: { type: "percent", rate: 0.07 },
-    affiliateTag: "awin-3091503",
+    affiliateTag: "awin-2996923",
     imageUrl: "/filters/waterdrop-10ua.png",
     rating: 4.4,
     badge: "budget",
@@ -314,8 +316,8 @@ export const PRODUCTS: FilterProduct[] = [
     // Was an Impact link on publisher 5514161 — not our account. Ours (CCC Impact,
     // 6413869) was declined by Impact in January for not meeting their partner
     // standards, so nothing here was ever going to reach us. Waterdrop is Awin
-    // merchant 117649, joined on our account 3091503 (CCC Impact BV), at 7%. See
-    // the 10UA above for why the publisher id changed on 22 Sept.
+    // merchant 117649, joined on our account 2996923 (CCC Impact B.V.), at 7%. See
+    // the 10UA above for the publisher id.
     //
     // Price corrected at source: the old £399 matched neither store. waterdropfilter
     // .co.uk lists £549.98 and the .eu store the old link pointed at lists €549.99.
@@ -323,10 +325,10 @@ export const PRODUCTS: FilterProduct[] = [
     priceGbp: 550,
     priceTier: "premium",
     affiliateUrl:
-      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=3091503&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Fwaterdrop-reverse-osmosis-water-filtration-system",
+      "https://www.awin1.com/cread.php?awinmid=117649&awinaffid=2996923&ued=https%3A%2F%2Fwww.waterdropfilter.co.uk%2Fproducts%2Fwaterdrop-reverse-osmosis-water-filtration-system",
     affiliateProgram: "awin",
     commission: { type: "percent", rate: 0.07 },
-    affiliateTag: "awin-3091503",
+    affiliateTag: "awin-2996923",
     imageUrl: "/filters/waterdrop-g3p600.png",
     rating: 4.6,
     badge: "best-match",
@@ -374,7 +376,7 @@ export const PRODUCTS: FilterProduct[] = [
     // before the link moved to Frizzlife's own shop, where visitors now land.
     priceGbp: 450,
     priceTier: "premium",
-    affiliateUrl: "https://www.awin1.com/cread.php?awinmid=117015&awinaffid=3091503&ued=https%3A%2F%2Fwww.frizzlife.co.uk%2Fproducts%2Fpd600tam3",
+    affiliateUrl: "https://www.awin1.com/cread.php?awinmid=117015&awinaffid=2996923&ued=https%3A%2F%2Fwww.frizzlife.co.uk%2Fproducts%2Fpd600tam3",
     affiliateProgram: "awin",
     commission: { type: "percent", rate: 0.10 },
     affiliateTag: "awin-frizzlife-117015",

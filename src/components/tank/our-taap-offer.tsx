@@ -17,7 +17,7 @@ const MONTHLY_GBP = 35.99;
 const MONTHS = 24;
 const OUTRIGHT_GBP = 499.98;
 const URL =
-  "https://www.awin1.com/cread.php?awinmid=122454&awinaffid=3091503&ued=https%3A%2F%2Fourtaap.com%2Fsubscription-home-water-system-ii";
+  "https://www.awin1.com/cread.php?awinmid=122454&awinaffid=2996923&ued=https%3A%2F%2Fourtaap.com%2Fsubscription-home-water-system-ii";
 
 /** Shown on districts where hardness is not the problem, so taste is what a filter is for. */
 export function OurTaapOffer({ district }: { district: string }) {
