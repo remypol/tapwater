@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList, getHardnessAreaCodes } from "@/lib/data";
+import { getScoredPostcodeDistricts, getPostcodeData, getSuppliersList, getHardnessAreaCodes, getHardnessTowns } from "@/lib/data";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { CATEGORY_META, CATEGORY_ORDER, getProductsByCategory } from "@/lib/products";
@@ -96,6 +96,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestDataDate = await getLatestDataDate();
   const riversChanged = (await getNationalRivers())?.lastChanged ?? null;
   const hardnessAreas = await getHardnessAreaCodes();
+  const hardnessTowns = await getHardnessTowns();
   // Only include scored postcodes in sitemap — thin pages (no data) are
   // noindexed and should not waste crawl budget or dilute quality signals.
   const scoredDistricts = await getScoredPostcodeDistricts();
@@ -242,6 +243,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: latestDataDate,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    ...hardnessTowns.map((town) => ({
+      url: `${BASE_URL}/hardness/${town.slug}`,
+      lastModified: latestDataDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     {
       url: `${BASE_URL}/pfas`,

@@ -1,351 +1,687 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { FlaskConical } from "lucide-react"
-import { PostcodeSearch } from "@/components/postcode-search"
-import { ArticleSchema } from "@/components/json-ld"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight, Search } from "lucide-react";
+import { PostcodeSearch } from "@/components/postcode-search";
+import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
+import { GeoCitation } from "@/components/geo-citation";
+import {
+  GuideBreadcrumb,
+  GuideByline,
+  GuideFaq,
+  GuideFooter,
+} from "@/components/guide-chrome";
+import {
+  WATER_COMPANY_TESTS,
+  WATER_COMPANY_TESTS_CHECKED,
+  confirmedTestOffers,
+} from "@/lib/water-company-tests";
 import { OG_IMAGE } from "@/lib/og";
 
+export const revalidate = 86400;
+
+const SLUG = "how-to-test-your-water";
+const URL = `https://www.tapwater.uk/guides/${SLUG}`;
+const TITLE = "How to Test Your Tap Water in the UK: Free, Kit and Lab Tests";
+const DESCRIPTION =
+  "Three ways to test tap water in the UK: ask your water company (several test for lead free), use a strip kit (about £10 to £15) or pay a lab (about £70 to £250).";
+
+/** "2026-11-17" -> "17 November 2026" */
+const CHECKED_ON = new Date(`${WATER_COMPANY_TESTS_CHECKED}T00:00:00Z`).toLocaleDateString(
+  "en-GB",
+  { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+);
+
+const CONFIRMED = confirmedTestOffers();
+const FREE_COMPANIES = CONFIRMED.filter((row) => row.free).map((row) => row.company);
+const FREE_COMPANY_LIST =
+  FREE_COMPANIES.length > 1
+    ? `${FREE_COMPANIES.slice(0, -1).join(", ")} and ${FREE_COMPANIES[FREE_COMPANIES.length - 1]}`
+    : FREE_COMPANIES.join("");
+
 export function generateMetadata(): Metadata {
-  const year = new Date().getFullYear()
   return {
-    title: `How to Test Your Tap Water (${year})`,
-    description:
-      "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
+    title: TITLE,
+    description: DESCRIPTION,
+    alternates: { canonical: URL },
     openGraph: {
       images: OG_IMAGE,
-      title: `How to Test Your Tap Water (${year})`,
-      description:
-        "Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis.",
-      url: "https://www.tapwater.uk/guides/how-to-test-your-water",
+      title: TITLE,
+      description: DESCRIPTION,
+      url: URL,
       type: "article",
     },
-  }
+    twitter: {
+      images: OG_IMAGE,
+      card: "summary_large_image",
+      title: TITLE,
+      description: DESCRIPTION,
+    },
+  };
 }
+
+/* ── Sources ─────────────────────────────────────────────────────────── */
+
+const SOURCES = {
+  manomanoStrips:
+    "https://www.manomano.co.uk/p/16-in-1-drinking-water-test-kit-water-quality-test-strips-quick-and-easy-testing-100-pieces-easy-100-224843419",
+  ivario: "https://www.ivario-lab.co.uk/",
+  feedwaterMicro: "https://feedwater.co.uk/product/microbial-potability-tvc-analysis/",
+  feedwaterMetals: "https://feedwater.co.uk/product/potable-water-metals-analysis-including-heavy/",
+  acceptaMicro:
+    "https://accepta.com/product/laboratory-analysis-services/microbiological-laboratory-water-analysis/ecoli-coliforms-tvc-water-analysis",
+  ukasSearch: "https://www.ukas.com/find-an-organisation/",
+  dwiPrivate: "https://www.dwi.gov.uk/private-water-supplies/customers-receiving-pws/",
+  dwiSingleDwelling:
+    "https://www.dwi.gov.uk/private-water-supplies/customers-receiving-pws/single-dwelling-supplies-2/",
+  dwiWhatArePrivate: "https://www.dwi.gov.uk/private-water-supplies/what-are-private-supplies/",
+} as const;
+
+/* ── Content ─────────────────────────────────────────────────────────── */
+
+const ROUTES: { route: string; cost: string; bestFor: string; limits: string }[] = [
+  {
+    route: "Ask your water company",
+    cost: "Often free for lead. Check the table below.",
+    bestFor: "Lead in an older home, or water that has changed in taste, smell or colour.",
+    limits: "They test for what you report, not for everything.",
+  },
+  {
+    route: "Home strip kit",
+    cost: "About £10 to £15.",
+    bestFor: "A quick check of hardness, pH and chlorine at your own tap.",
+    limits: "Gives a colour band, not a figure. Cannot measure lead against the legal limit.",
+  },
+  {
+    route: "Accredited laboratory",
+    cost: "About £70 to £250, depending on what is tested.",
+    bestFor: "Private supplies, house purchases, and any result you need in writing.",
+    limits: "Costs the most and takes days, not minutes.",
+  },
+];
+
+const LAB_PRICES: {
+  lab: string;
+  test: string;
+  price: string;
+  turnaround: string;
+  accreditation: string;
+  href: string;
+}[] = [
+  {
+    lab: "IVARIO",
+    test: "Water test kits, from 8 substances (Basic) to 50 (Premium)",
+    price: "£69.90 to £249.90",
+    turnaround: "About 5 to 7 days after the sample reaches the lab",
+    accreditation:
+      "The page says accredited laboratories but does not name UKAS. The company is based in Hamburg.",
+    href: SOURCES.ivario,
+  },
+  {
+    lab: "Feedwater",
+    test: "E. coli, coliforms and total bacteria count",
+    price: "£82.68 before VAT",
+    turnaround: "About 3 days",
+    accreditation: "The page says UKAS testing covers these three tests in drinking water.",
+    href: SOURCES.feedwaterMicro,
+  },
+  {
+    lab: "Feedwater",
+    test: "14 metals, including lead",
+    price: "£206.70 before VAT",
+    turnaround: "Up to 12 working days",
+    accreditation: "The page does not state UKAS accreditation for this test.",
+    href: SOURCES.feedwaterMetals,
+  },
+  {
+    lab: "Accepta",
+    test: "E. coli, coliforms and total bacteria count",
+    price: "£82.68 before VAT",
+    turnaround: "About 3 days",
+    accreditation: "The page says UKAS accredited from a partner lab.",
+    href: SOURCES.acceptaMicro,
+  },
+];
+
+const DECISIONS: { situation: string; action: string; href?: string; linkLabel?: string }[] = [
+  {
+    situation: "You are worried about lead in an older house",
+    action:
+      "Homes built before 1970 may still have lead pipes. Ask your water company first, because several test for lead free. If your company does not offer a test, pay a lab for a lead test and follow its sampling instructions exactly.",
+    href: "/guides/lead-pipes-uk",
+    linkLabel: "How to check for lead pipes",
+  },
+  {
+    situation: "Your water tastes or smells odd, or looks different",
+    action:
+      "Report it to your water company before you buy anything. A change in taste, smell or colour is theirs to investigate, and they can tell you if there is a known problem in your area. A strip kit will not find the cause.",
+  },
+  {
+    situation: "You are buying a house",
+    action:
+      "Check the postcode on this site for the area results and the hardness. If the house was built before 1970, ask the seller whether the lead supply pipe has been replaced. If the house has a private supply, ask for recent lab results and speak to the local council before you exchange.",
+    href: "/guides/moving-house-water-check",
+    linkLabel: "Water checks when moving house",
+  },
+  {
+    situation: "You have a baby in the home",
+    action:
+      "Mains tap water in the UK is tested to legal standards, so most homes need no extra test. The two things worth checking are lead pipes in an older home, through your water company, and nitrate if you are on a private supply, through a lab.",
+    href: "/guides/water-quality-pregnancy",
+    linkLabel: "Water quality in pregnancy and for babies",
+  },
+  {
+    situation: "You are on a private supply (well, borehole or spring)",
+    action:
+      "Nobody tests this water unless you arrange it. Contact your local council environmental health team, and use an accredited lab for bacteria, nitrate and metals. Strips are only useful between lab tests.",
+  },
+];
+
+const FAQ_DATA = [
+  {
+    question: "How do I get my tap water tested in the UK?",
+    answer:
+      "There are three routes. Ask your water company, which costs nothing to ask and is often free if your worry is lead. Use a home strip kit, which costs about £10 to £15 and gives a rough reading in a few minutes. Or pay a laboratory, which costs about £70 to £250 and gives a figure for each substance. Start with your water company if you are on mains water, and with a laboratory if you are on a private supply.",
+  },
+  {
+    question: "Will my water company test my tap water for free?",
+    answer: `It depends on the company and on what you are worried about. When we checked each company's own website on ${CHECKED_ON}, ${FREE_COMPANIES.length} of the ${WATER_COMPANY_TESTS.length} major UK water companies said they test for lead free: ${FREE_COMPANY_LIST}. Thames Water and South West Water said they will sample for lead but did not state a price. For the others we could not confirm an offer, so contact them and ask. The table in this guide links to each company's page.`,
+  },
+  {
+    question: "Is there water testing near me?",
+    answer:
+      "You do not usually need to travel. Water companies that offer a lead test send someone to your home to take the sample. Laboratories post you a sample bottle and you post it back, so the location of the lab matters less than its accreditation. If you are on a private supply, your local council environmental health team is the local contact.",
+  },
+  {
+    question: "How much does a tap water test kit cost?",
+    answer: `Strip kits cost about £10 to £15. A 100-strip, 16-in-1 kit was listed at £10.89 on ManoMano on ${CHECKED_ON}. Postal laboratory kits cost more: IVARIO listed kits from £69.90 to £249.90 on the same date, and Feedwater listed a metals test that includes lead at £206.70 before VAT.`,
+  },
+  {
+    question: "Can a home test kit tell me if my water is safe to drink?",
+    answer:
+      "No. A strip kit shows a colour band for a few things such as hardness, pH and chlorine. It cannot give a figure for lead that you can compare with the UK limit of 10 micrograms per litre, and it cannot detect PFAS. If you need to know whether water meets the legal standards, you need a laboratory result or the results your water company already publishes.",
+  },
+  {
+    question: "What does UKAS accredited mean for a water test?",
+    answer:
+      "UKAS is the United Kingdom Accreditation Service. It checks that a laboratory can carry out specific tests to a recognised standard. Accreditation applies test by test, so a lab can be accredited for bacteria but not for metals. Ask which of the tests you are paying for are covered, or look the lab up on the UKAS website.",
+  },
+  {
+    question: "Who tests a private water supply?",
+    answer:
+      "Local councils regulate private water supplies. In England and Wales, a supply to a single home that is not rented out or used for a business does not have to be monitored, but the council will test it if the owner or occupier asks, and it can charge for the visit and the analysis. Shared, rented and commercial supplies must be risk assessed and monitored by the council.",
+  },
+  {
+    question: "Can I check my water quality without testing it?",
+    answer:
+      "Yes, if you are on mains water. Water companies test their supply zones and publish the results. Enter your postcode on TapWater.uk to see the latest published results for your area, including hardness. These results describe the water in your area, not the pipes in your home, so they will not show lead from your own plumbing.",
+  },
+];
+
+/* ── Helpers ─────────────────────────────────────────────────────────── */
+
+function Ext({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-accent hover:underline"
+    >
+      {children}
+    </a>
+  );
+}
+
+function hostOf(url: string): string {
+  return url.replace(/^https:\/\/(www\.)?/, "").split("/")[0];
+}
+
+/* ── Page ────────────────────────────────────────────────────────────── */
 
 export default function HowToTestYourWaterPage() {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-14">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Guides", url: "https://www.tapwater.uk/guides" },
+          { name: "How to Test Your Tap Water", url: URL },
+        ]}
+      />
+      <ArticleSchema
+        headline={TITLE}
+        description={DESCRIPTION}
+        url={URL}
+        datePublished="2026-04-01"
+        dateModified={WATER_COMPANY_TESTS_CHECKED}
+        authorName="TapWater.uk Research"
+        authorUrl="https://www.tapwater.uk/about"
+      />
+      <FAQSchema faqs={FAQ_DATA} />
+
       <div className="max-w-3xl mx-auto">
+        <GuideBreadcrumb title="How to Test Your Water" />
 
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-muted mb-8">
-          <Link href="/" className="hover:text-ink transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/guides" className="hover:text-ink transition-colors">Guides</Link>
-          <span>/</span>
-          <span className="text-body">How to Test Your Water</span>
-        </nav>
+        <h1 className="font-display text-3xl lg:text-4xl italic text-ink tracking-tight">
+          How to test your tap water in the UK
+        </h1>
+        <GuideByline updated="November 2026" />
 
-        <ArticleSchema
-          headline={`How to Test Your Tap Water at Home (${new Date().getFullYear()} Guide)`}
-          description="Want to know exactly what's in your tap water? Here's how to test it yourself — from DIY test strips to professional lab analysis."
-          url="https://www.tapwater.uk/guides/how-to-test-your-water"
-          datePublished="2026-04-01"
-          dateModified={new Date().toISOString().split("T")[0]}
-          authorName="TapWater.uk Research"
-          authorUrl="https://www.tapwater.uk/about"
+        <p className="text-lg text-body leading-relaxed">
+          There are three ways to get tap water tested in the UK. You can ask
+          your water company, which is often free if you are worried about
+          lead. You can use a home strip kit for about £10 to £15. Or you can
+          pay an accredited laboratory, which costs about £70 to £250
+          depending on what is tested.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          Ask your water company first if you are on mains water. Use a strip
+          kit only for a rough check of hardness, pH or chlorine. Pay a
+          laboratory if you are on a private supply, or if you need a result
+          in writing.
+        </p>
+
+        <GeoCitation
+          headline={`According to TapWater.uk, ${FREE_COMPANIES.length} of the ${WATER_COMPANY_TESTS.length} major UK water companies said on their own websites on ${CHECKED_ON} that they test customers' tap water for lead free of charge.`}
+          detail="Home strip kits cost about £10 to £15 and give a colour band, not a figure. Postal laboratory tests cost about £70 to £250."
         />
 
-        <h1 className="font-display text-3xl lg:text-4xl italic text-ink mb-4 leading-tight">
-          How to Test Your Tap Water at Home ({new Date().getFullYear()} Guide)
-        </h1>
-        <div className="flex items-center gap-2 mt-3 mb-8 text-sm text-muted">
-          <span>By <span className="text-ink font-medium">TapWater.uk Research</span></span>
-          <span>·</span>
-          <time dateTime={new Date().toISOString().split("T")[0]}>Updated {new Date().toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</time>
-          <span>·</span>
-          <span>Independent research</span>
+        <div className="overflow-x-auto -mx-4 px-4">
+          <table className="w-full text-sm border-collapse min-w-[560px]">
+            <caption className="sr-only">
+              The three ways to test tap water in the UK, with cost and best use
+            </caption>
+            <thead>
+              <tr className="border-b border-rule text-left">
+                <th className="py-2.5 pr-3 text-xs font-medium text-muted">Route</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">Rough cost</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">Best for</th>
+                <th className="py-2.5 pl-3 text-xs font-medium text-muted">Limits</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rule">
+              {ROUTES.map((row) => (
+                <tr key={row.route}>
+                  <td className="py-3 pr-3 font-medium text-ink align-top">{row.route}</td>
+                  <td className="py-3 px-3 text-body align-top">{row.cost}</td>
+                  <td className="py-3 px-3 text-body align-top">{row.bestFor}</td>
+                  <td className="py-3 pl-3 text-body align-top">{row.limits}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        <p className="text-base text-body leading-relaxed mb-4">
-          The Drinking Water Inspectorate monitors tap water quality at thousands of points across
-          England and Wales every year. Water companies carry out millions of individual tests
-          on their supplies. The data is comprehensive by any international standard, and the vast
-          majority of it is publicly available &mdash; which is the premise that TapWater.uk is
-          built on.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-8">
-          But regulatory monitoring has a structural limitation: it measures water quality within
-          supply zones and at treatment works, not necessarily at your specific tap. Water travels
-          through kilometres of distribution mains, then through smaller communication pipes, then
-          through your property&apos;s own internal plumbing, before it reaches you. What happens
-          along that last stretch &mdash; particularly in older buildings with old pipes &mdash;
-          is largely invisible to the regulatory data. If you want to know what is actually
-          coming out of your kitchen tap, rather than what is leaving the treatment works serving
-          your area, independent testing is the only way to find out.
+        <p className="text-xs text-faint mt-3">
+          Costs are from the retailer and laboratory pages named further down
+          this guide, checked on {CHECKED_ON}.
         </p>
 
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Why test your own water?</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          There are four main situations where home water testing makes practical sense.
+        {/* ── Water company ───────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Ask your water company first
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          Your water company already tests the water in your area, and it is
+          the first place to report a problem. If your water has changed
+          in taste, smell or colour, report it to them before you pay for
+          anything. They can tell you whether there is a known problem nearby,
+          and some will send someone to take a sample.
         </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">Old pipework and lead risk.</strong> Lead water pipes were
-          commonly used in UK domestic plumbing until they were phased out in the 1970s. Properties
-          built before around 1970 may still have lead supply pipes, lead solder on copper joints,
-          or lead in the internal plumbing. The DWI&apos;s own data shows that lead exceedances in
-          England and Wales are almost entirely a plumbing problem, not a treatment problem &mdash;
-          the water leaves the treatment works compliant, but picks up lead on the way to the tap
-          in properties with old pipes. If you live in a pre-1970 home and have never had your
-          water tested for lead, this is the most evidence-based reason to do so.
+        <p className="text-base text-body leading-relaxed mt-4">
+          Lead is the test most companies offer to households. Lead does not
+          come from the mains. It comes from old pipes between the street and
+          your kitchen tap, mostly in homes built before 1970. That is why the
+          company has to sample at your tap to find it.
         </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">Private water supplies.</strong> Approximately 1.7 percent
-          of properties in England and Wales &mdash; around 600,000 people &mdash; are served by
-          private water supplies: boreholes, springs, streams, and wells. These are not covered
-          by DWI regulation in the same way as mains supplies. Local authorities are responsible
-          for inspecting private supplies, but the intervals between inspections can be long, and
-          many private supply owners have no recent quality data at all. If you rely on a private
-          supply, regular testing is not optional &mdash; it is the only way to know whether
-          your water is safe.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">Taste, smell, or appearance concerns.</strong> If your
-          water has developed a noticeable taste, smell, or discolouration that you have not
-          been able to resolve with your water company, testing can help diagnose the cause.
-          Chlorine taste is usually a treatment or distribution issue; a metallic taste might
-          indicate elevated copper or zinc from pipework; an earthy or musty smell can suggest
-          microbial activity or organic compounds. A water test will not always identify the
-          source of the problem, but it narrows down the possibilities.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">Reassurance after an incident.</strong> If your area has
-          recently experienced a boil water notice, a supply contamination event, or major
-          maintenance work on local infrastructure, and you want confirmation that your tap
-          water is back to normal before you stop boiling, a post-incident test provides
-          documented evidence rather than just a water company&apos;s assurance.
+        <p className="text-base text-body leading-relaxed mt-4">
+          We read the website of each major UK water company on {CHECKED_ON}{" "}
+          and recorded what it says it offers. {CONFIRMED.length} of the{" "}
+          {WATER_COMPANY_TESTS.length} describe a test on their own page, and{" "}
+          {FREE_COMPANIES.length} of those say it is free. Where a company
+          does not describe a test, the table says so and gives the link. We
+          have not guessed.
         </p>
 
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Types of water testing</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          Home water testing spans a wide range of methods, from inexpensive dip-and-read
-          strips to full laboratory analysis with certified results. Understanding what each
-          tier can and cannot tell you is essential before you spend money on testing.
-        </p>
-
-        <div className="space-y-4 mb-8">
-
-          <div className="card p-5">
-            <div className="flex items-start gap-3">
-              <FlaskConical className="w-5 h-5 text-muted mt-0.5 shrink-0" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-sans font-semibold text-ink">DIY test strips</h3>
-                  <span className="text-xs font-data text-muted bg-wash border border-rule rounded px-2 py-0.5">&pound;10&ndash;&pound;20</span>
-                </div>
-                <p className="text-base text-body leading-relaxed">
-                  Colour-change indicator strips that you dip in a water sample and read
-                  against a colour chart. The better consumer kits test for pH, total hardness,
-                  chlorine, nitrate, nitrite, and sometimes iron or lead. They are quick,
-                  require no equipment, and give a rough answer in two minutes. The major
-                  limitation is precision: the colour gradations are broad, the sensitivity
-                  thresholds are not fine enough to detect, say, 8 &mu;g/L lead versus 3 &mu;g/L
-                  lead, and results are highly dependent on lighting conditions and user
-                  interpretation. For a quick sanity check &mdash; confirming that chlorine is
-                  present, that pH is in a normal range, that hardness is broadly as expected
-                  &mdash; test strips are adequate. For identifying a potential health concern,
-                  they are not.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="card p-5">
-            <div className="flex items-start gap-3">
-              <FlaskConical className="w-5 h-5 text-muted mt-0.5 shrink-0" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-sans font-semibold text-ink">Mail-in home test kits</h3>
-                  <span className="text-xs font-data text-muted bg-wash border border-rule rounded px-2 py-0.5">&pound;25&ndash;&pound;50</span>
-                </div>
-                <p className="text-base text-body leading-relaxed">
-                  These kits provide a pre-labelled sample container and return packaging.
-                  You collect the sample following the included instructions, post it to the
-                  company&apos;s laboratory, and receive results by email within a few days.
-                  A typical mid-range kit analyses five to ten parameters: commonly lead,
-                  bacteria (total and coliform), pH, hardness, nitrate, and chlorine. The
-                  results are laboratory-measured rather than colour-chart estimates, and the
-                  precision is sufficient to identify a lead problem. The limitation is scope:
-                  a kit testing ten parameters will not tell you about pesticides, PFAS,
-                  arsenic, or the other 38 regulated parameters unless you select a broader
-                  panel. Most providers offer multiple tiers at different price points.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="card p-5">
-            <div className="flex items-start gap-3">
-              <FlaskConical className="w-5 h-5 text-muted mt-0.5 shrink-0" />
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-sans font-semibold text-ink">Professional laboratory analysis</h3>
-                  <span className="text-xs font-data text-muted bg-wash border border-rule rounded px-2 py-0.5">&pound;50&ndash;&pound;150+</span>
-                </div>
-                <p className="text-base text-body leading-relaxed">
-                  UKAS-accredited laboratory testing covers the full range of regulated parameters
-                  and beyond, typically including 20 or more substances tested by inductively
-                  coupled plasma mass spectrometry (ICP-MS) for metals, ion chromatography for
-                  anions, and microbiological culture for bacteria. The results carry documentary
-                  weight: they can be used in a property transaction, a landlord-tenant dispute,
-                  or as evidence in a complaint to a water company or regulator. For private supply
-                  owners, UKAS-accredited results are often required by local authorities as part
-                  of compliance obligations. Professional testing is also the only way to get a
-                  reliable private measurement for PFAS, which requires specialist analytical
-                  equipment and is not available from most consumer-facing test providers.
-                </p>
-              </div>
-            </div>
-          </div>
-
+        <div className="overflow-x-auto -mx-4 px-4 mt-6">
+          <table className="w-full text-sm border-collapse min-w-[640px]">
+            <caption className="sr-only">
+              What each major UK water company says it offers for testing tap
+              water, checked on {CHECKED_ON}
+            </caption>
+            <thead>
+              <tr className="border-b border-rule text-left">
+                <th className="py-2.5 pr-3 text-xs font-medium text-muted">Water company</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">What it offers</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">How to ask</th>
+                <th className="py-2.5 pl-3 text-xs font-medium text-muted">Source</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rule">
+              {WATER_COMPANY_TESTS.map((row) => (
+                <tr key={row.company}>
+                  <td className="py-3 pr-3 font-medium text-ink align-top">{row.company}</td>
+                  <td className={`py-3 px-3 align-top ${row.confirmed ? "text-body" : "text-muted"}`}>
+                    {row.offer}
+                  </td>
+                  <td className="py-3 px-3 text-body align-top">{row.howToAsk}</td>
+                  <td className="py-3 pl-3 align-top whitespace-nowrap">
+                    <Ext href={row.sourceUrl}>{hostOf(row.sourceUrl)}</Ext>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">What to test for</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          The right test panel depends on what you are trying to find out. Rather than defaulting
-          to the most comprehensive (and most expensive) option, it is worth matching the test
-          to the specific concern.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">For lead:</strong> any mail-in kit that includes ICP-MS
-          metal analysis will give you a reliable lead measurement. Ensure the kit instructions
-          tell you whether to collect a first-flush sample (the water that has been sitting in
-          your pipes, which will show the highest potential lead concentration) or a flushed
-          sample (after running the tap, which shows what you would normally drink). Both are
-          informative but measure different things.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">For bacteria:</strong> microbiological testing requires
-          a sterile sample container and prompt dispatch &mdash; samples must typically reach the
-          lab within 12 to 24 hours of collection. A basic test covers <em>E. coli</em> and total
-          coliforms; more comprehensive panels add Enterococcus and heterotrophic plate counts.
-          This is essential for private supply owners and relevant for anyone investigating an
-          unexplained gastrointestinal illness.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">For hardness:</strong> DIY test strips or a basic mail-in
-          kit are sufficient. Hardness is easy and cheap to measure accurately. If your concern
-          is limescale and appliance protection, there is no need for a comprehensive multi-parameter
-          analysis.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          <strong className="text-ink">For PFAS:</strong> this is expensive to test privately
-          (typically &pound;100 or above as a standalone panel) because it requires liquid
-          chromatography-tandem mass spectrometry (LC-MS/MS) analysis, which is not available
-          from most consumer-facing providers. For most mains water users, the better approach
-          is to check the TapWater.uk PFAS data for your supply zone, which is based on
-          monitoring carried out under the DWI&apos;s national PFAS programme. Private
-          testing for PFAS makes most sense for private supply owners near known
-          contamination sites &mdash; military airfields, fire training sites, or industrial
-          facilities that used AFFF firefighting foam.
+        <p className="text-xs text-faint mt-3">
+          Source: the web page of each company, linked in the last column,
+          read on {CHECKED_ON}. Offers and phone numbers change, so check the
+          company page before you call. If your supplier is not listed, ask it
+          the same question.
         </p>
 
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">How to take a sample</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          Sample quality is as important as the quality of the analysis. A poorly collected
-          sample can produce misleading results regardless of how good the laboratory is.
-          Follow the instructions supplied with your test kit carefully; the guidance below
-          applies as general principles.
+        {/* ── Home kits ───────────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Home test kits
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          A home kit is usually a tub of paper strips. You dip a strip in a
+          glass of tap water, wait a minute or two, and match the coloured
+          pads to a chart. It is quick and cheap, and you get an answer the
+          same day.
+        </p>
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">What a strip kit can tell you</h3>
+        <ul className="list-disc pl-6 space-y-2 text-base text-body leading-relaxed">
+          <li>Roughly how hard your water is.</li>
+          <li>Whether the pH is in the normal range.</li>
+          <li>Whether chlorine is present.</li>
+          <li>Whether a filter or softener is making a difference, if you test before and after.</li>
+        </ul>
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">What a strip kit cannot tell you</h3>
+        <ul className="list-disc pl-6 space-y-2 text-base text-body leading-relaxed">
+          <li>
+            Whether lead is above or below the UK limit of 10 micrograms per
+            litre. The colour bands are too wide.
+          </li>
+          <li>Whether PFAS or pesticides are present. No strip detects them.</li>
+          <li>
+            A figure you can show to a landlord, a buyer or a council. The
+            result depends on your eye and your lighting.
+          </li>
+        </ul>
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">Typical price</h3>
+        <p className="text-base text-body leading-relaxed">
+          Expect to pay about £10 to £15. A 100-strip, 16-in-1 kit was listed
+          at £10.89 on <Ext href={SOURCES.manomanoStrips}>ManoMano</Ext> when
+          we checked on {CHECKED_ON}. The two strip kits in our kit guide are
+          listed there at about £13 and about £15. Prices on marketplaces move
+          often, so treat these as a guide.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          For which kits are worth buying and how to read the colour chart,
+          see our guide to the{" "}
+          <Link href="/guides/best-water-testing-kit-uk" className="text-accent hover:underline">
+            best water testing kits in the UK
+          </Link>
+          .
         </p>
 
-        <ol className="list-decimal pl-6 space-y-3 text-base text-body leading-relaxed mb-6">
+        {/* ── Labs ────────────────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Laboratory tests
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          A laboratory test gives you a figure for each substance, which you
+          can compare with the legal limit. It is worth paying for when:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-base text-body leading-relaxed mt-4">
+          <li>you are on a private supply, such as a well, borehole or spring;</li>
+          <li>your water company does not offer a lead test and your home was built before 1970;</li>
+          <li>you are buying a house and want a result in writing;</li>
+          <li>you need evidence for a landlord, a council or a complaint.</li>
+        </ul>
+        <p className="text-base text-body leading-relaxed mt-4">
+          If you are on mains water, have no old pipes and the water tastes
+          normal, a laboratory test is unlikely to tell you anything the
+          published results do not.
+        </p>
+
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">
+          What UKAS and the Drinking Water Inspectorate mean here
+        </h3>
+        <p className="text-base text-body leading-relaxed">
+          UKAS is the United Kingdom Accreditation Service. It checks that a
+          laboratory can carry out a specific test to a recognised standard.
+          Accreditation is given test by test. A lab can be accredited for
+          bacteria and not for metals, so ask which of the tests you are
+          buying are covered. You can look a lab up on the{" "}
+          <Ext href={SOURCES.ukasSearch}>UKAS search page</Ext>.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          The Drinking Water Inspectorate is the regulator for public water
+          supplies in England and Wales. It checks the water companies. It
+          does not test water for households, and it does not approve home
+          test kits. Scotland and Northern Ireland have their own regulators.
+        </p>
+
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">What it costs</h3>
+        <p className="text-base text-body leading-relaxed mb-6">
+          These are prices from the product pages of each seller on {CHECKED_ON}.
+          They are examples, not recommendations. We have no arrangement with
+          any laboratory and have not used these services.
+        </p>
+        <div className="overflow-x-auto -mx-4 px-4">
+          <table className="w-full text-sm border-collapse min-w-[640px]">
+            <caption className="sr-only">
+              Example UK laboratory water test prices, checked on {CHECKED_ON}
+            </caption>
+            <thead>
+              <tr className="border-b border-rule text-left">
+                <th className="py-2.5 pr-3 text-xs font-medium text-muted">Seller</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">Test</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted whitespace-nowrap">Listed price</th>
+                <th className="py-2.5 px-3 text-xs font-medium text-muted">Results</th>
+                <th className="py-2.5 pl-3 text-xs font-medium text-muted">Accreditation stated</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rule">
+              {LAB_PRICES.map((row) => (
+                <tr key={`${row.lab}-${row.test}`}>
+                  <td className="py-3 pr-3 font-medium text-ink align-top">
+                    <Ext href={row.href}>{row.lab}</Ext>
+                  </td>
+                  <td className="py-3 px-3 text-body align-top">{row.test}</td>
+                  <td className="py-3 px-3 font-data text-ink align-top whitespace-nowrap">{row.price}</td>
+                  <td className="py-3 px-3 text-body align-top">{row.turnaround}</td>
+                  <td className="py-3 pl-3 text-body align-top">{row.accreditation}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-faint mt-3">
+          Source: the product page of each seller, linked from its name,
+          read on {CHECKED_ON}. Prices shown before VAT will be 20% higher at
+          the checkout.
+        </p>
+
+        <h3 className="font-semibold text-ink text-lg mt-8 mb-2">How sampling and results work</h3>
+        <ol className="list-decimal pl-6 space-y-3 text-base text-body leading-relaxed">
           <li>
-            <strong className="text-ink">Decide whether you want a first-flush or flushed
-            sample.</strong> A first-flush sample is collected without running the tap first
-            and represents the water that has been sitting in your pipes, potentially leaching
-            lead or other metals from plumbing materials. This gives the worst-case picture. A
-            flushed sample &mdash; collected after running the tap for 30 to 60 seconds &mdash; is
-            more representative of what you normally drink. Most health-focused tests for lead
-            recommend the first-flush approach.
+            You order online. The lab posts you a sample bottle, instructions
+            and return packaging.
           </li>
           <li>
-            <strong className="text-ink">Use the container provided with your kit.</strong> Do not
-            substitute your own bottle, even a clean one. Test containers are pre-treated for the
-            specific analysis: microbiological containers are sterilised and may contain sodium
-            thiosulphate to neutralise residual chlorine; metal analysis containers may be
-            acid-washed to prevent contamination. Using the wrong container invalidates the result.
+            You fill the bottle at the cold kitchen tap. Use the bottle the
+            lab sends, and do not touch the inside of the bottle or the lid.
           </li>
           <li>
-            <strong className="text-ink">Do not touch the inside of the container or lid.</strong>{" "}
-            Hold the container from the outside, and collect the sample by holding it directly
-            under the flowing tap rather than pouring it in from another vessel. Even trace amounts
-            of contaminant from your hands can affect microbiological results.
+            Follow the lab instructions on timing. For lead, labs often ask
+            for the first water out of the tap in the morning, because water
+            that has stood in the pipes overnight shows the highest level.
           </li>
           <li>
-            <strong className="text-ink">Fill to the correct level.</strong> Some analyses require
-            an exact volume; most containers are marked with a fill line. Overfilling a
-            microbiological container can displace the preservative agent.
+            Post it back the same day. Bacteria samples have to reach the lab
+            within about 24 hours. Feedwater, for example, asks customers to
+            sample only from Monday to Thursday so the bottle does not sit in
+            the post over a weekend.
           </li>
           <li>
-            <strong className="text-ink">Label and dispatch promptly.</strong> Most kits include
-            a pre-addressed return envelope or courier bag. For microbiological samples, post
-            on the same day, preferably on a day when the sample will arrive at the lab within
-            24 hours. Avoid posting on a Friday if the lab is closed over the weekend.
-          </li>
-          <li>
-            <strong className="text-ink">Note the conditions.</strong> Record the date, time,
-            whether the water had been standing in the pipes, whether you flushed the tap first,
-            and anything unusual about the water (colour, smell, taste). This context is useful
-            when interpreting results and when discussing them with the testing company.
+            Results come by email or online. On the pages we checked this took
+            from about 3 days for bacteria to up to 12 working days for
+            metals.
           </li>
         </ol>
-
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">UK water testing services</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          Two broad categories of provider offer water testing services to UK households and
-          businesses. Independent consumer-facing services offer packaged kits at set price
-          points, typically with simple result interpretation and customer support. They are
-          well suited to first-time testers, lead checks in domestic properties, and routine
-          private supply monitoring.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          UKAS-accredited analytical laboratories offer the highest standard of precision and
-          produce results that carry formal documentary weight. They are the right choice for
-          private supply compliance testing, landlord obligations, property transactions, or
-          any situation where the results may need to be presented to a local authority,
-          regulator, or court. UKAS (the United Kingdom Accreditation Service) maintains
-          a publicly searchable register of accredited laboratories at ukas.com, where you
-          can search for providers accredited for drinking water analysis under ISO 17025.
-        </p>
-        <p className="text-base text-body leading-relaxed mb-4">
-          When selecting a provider, confirm which parameters are included in your chosen
-          panel, whether the laboratory holds UKAS accreditation for those specific tests,
-          and what the turnaround time is. Also check whether the kit includes sampling
-          containers for all the analyses you need: metal and chemical analysis, microbiological
-          analysis, and physical parameters often require separate containers with different
-          preservation requirements.
+        <p className="text-base text-body leading-relaxed mt-4">
+          When a water company tests for lead, it does the sampling for you.
+          Anglian Water, for example, says its technician takes three samples
+          from the kitchen tap and that results can take up to 10 working
+          days.
         </p>
 
-        <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">Check what we already know</h2>
-        <p className="text-base text-body leading-relaxed mb-4">
-          Before commissioning a test, it is worth checking whether the data you need already
-          exists. TapWater.uk aggregates DWI compliance data, Environment Agency monitoring
-          results, and water company zone-level readings. For many concerns &mdash; especially
-          for households on mains supplies in modern properties without old pipework &mdash;
-          the existing regulatory data is sufficient to answer the question.
+        {/* ── Private supplies ────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Private water supplies
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          A private supply is any water supply that does not come from a water
+          company. Wells, boreholes and springs are the common ones. No water
+          company tests this water, so the checks above do not apply.
         </p>
-        <p className="text-base text-body leading-relaxed mb-6">
-          Enter your postcode below to see the most recent quality data for your supply zone.
-          If the data shows a parameter of concern, or if your property has characteristics
-          that the zone-level data cannot capture &mdash; old pipework, a private supply,
-          a recent incident nearby &mdash; that is the point at which personal testing
-          adds genuine value.
+        <p className="text-base text-body leading-relaxed mt-4">
+          Local councils regulate private supplies. The Drinking Water
+          Inspectorate advises councils but does not deal with owners
+          directly. Its guidance for{" "}
+          <Ext href={SOURCES.dwiPrivate}>people who receive a private supply</Ext>{" "}
+          explains the rules for England and Wales:
+        </p>
+        <ul className="list-disc pl-6 space-y-2 text-base text-body leading-relaxed mt-4">
+          <li>
+            If the supply serves one home that is not rented out or used for a
+            business, the council does not have to monitor it. It will carry
+            out a test or a risk assessment if the owner or occupier asks, and
+            it can charge for the visit and the analysis. See the guidance on{" "}
+            <Ext href={SOURCES.dwiSingleDwelling}>single dwelling supplies</Ext>.
+          </li>
+          <li>
+            If the supply is shared, rented out or used for a business, the
+            council must risk assess and monitor it.
+          </li>
+          <li>
+            The Inspectorate strongly advises registering a private supply
+            with the council.
+          </li>
+        </ul>
+        <p className="text-base text-body leading-relaxed mt-4">
+          So the first step is to contact the environmental health team at
+          your local council. Ask what it holds on your supply, what a test
+          costs, and which laboratory it uses. If you arrange your own test,
+          use a laboratory that is accredited for the tests you need. Scotland
+          and Northern Ireland have their own rules and regulators. The
+          Inspectorate also explains{" "}
+          <Ext href={SOURCES.dwiWhatArePrivate}>what counts as a private supply</Ext>.
         </p>
 
-        <PostcodeSearch size="sm" />
+        {/* ── Free check ──────────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          What you can check free right now
+        </h2>
+        <p className="text-base text-body leading-relaxed">
+          If you are on mains water, results for your area already exist.
+          Water companies test their supply zones and publish what they find.
+          Our <Link href="/" className="text-accent hover:underline">postcode lookup</Link>{" "}
+          shows the latest published results for your area. Our{" "}
+          <Link href="/hardness" className="text-accent hover:underline">water hardness checker</Link>{" "}
+          shows how hard your water is.
+        </p>
+        <p className="text-base text-body leading-relaxed mt-4">
+          These results describe the water in your area, not the pipes in your
+          home. They will not show lead from your own plumbing, and they do
+          not cover private supplies. We publish these results. We do not test
+          water ourselves.
+        </p>
 
-        <div className="card p-5 mt-8">
-          <p className="text-sm text-body leading-relaxed">
-            <strong className="text-ink">Note:</strong> TapWater.uk presents regulatory monitoring data
-            collected by the Drinking Water Inspectorate, Environment Agency, and water companies.
-            This data covers supply zones, not individual properties. It is informative but not a
-            substitute for tap-level testing in properties with old lead plumbing or private water
-            supplies. Nothing on this site constitutes health advice. If you have specific concerns,
-            contact your water company or a qualified water testing laboratory.
+        <div className="mt-8 card-elevated p-8 text-center rounded-2xl">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center">
+              <Search className="w-6 h-6 text-accent" aria-hidden="true" />
+            </div>
+          </div>
+          <h3 className="font-display text-xl italic text-ink">
+            See the latest published results for your postcode
+          </h3>
+          <p className="text-base text-muted mt-2 max-w-md mx-auto">
+            Hardness, chlorine, lead, nitrate and more for your area, next to
+            the UK limits. Free to use.
           </p>
+          <div className="mt-6 max-w-sm mx-auto">
+            <PostcodeSearch />
+          </div>
         </div>
 
+        {/* ── Decision list ───────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Which should I do?
+        </h2>
+        <dl className="border-y border-rule divide-y divide-rule">
+          {DECISIONS.map((row) => (
+            <div
+              key={row.situation}
+              className="py-4 sm:grid sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-6"
+            >
+              <dt className="text-base font-medium text-ink">{row.situation}</dt>
+              <dd className="text-base text-body leading-relaxed mt-1 sm:mt-0">
+                {row.action}
+                {row.href && row.linkLabel ? (
+                  <>
+                    {" "}
+                    <Link href={row.href} className="text-accent hover:underline">
+                      {row.linkLabel}
+                    </Link>
+                    .
+                  </>
+                ) : null}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className="text-sm text-muted mt-4">
+          This guide is general information, not medical advice. If you are
+          worried about your health, speak to your GP or call NHS 111.
+        </p>
+
+        <GuideFaq faqs={FAQ_DATA} />
+
+        {/* ── Related ─────────────────────────────────────────────── */}
+        <h2 className="font-display text-2xl italic text-ink mt-14 mb-4">
+          Related guides
+        </h2>
+        <ul className="space-y-2">
+          {[
+            ["/guides/best-water-testing-kit-uk", "Best water testing kits in the UK"],
+            ["/guides/lead-pipes-uk", "Lead pipes in UK homes"],
+            ["/contaminant/lead", "Lead in UK tap water: the limit and the results"],
+            ["/guides/is-uk-tap-water-safe", "Is UK tap water safe?"],
+            ["/guides/understanding-your-water-supplier", "Understanding your water supplier"],
+          ].map(([href, label]) => (
+            <li key={href}>
+              <Link
+                href={href}
+                className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline"
+              >
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <GuideFooter reviewed="November 2026">
+          Water company offers, kit prices and laboratory prices were read
+          from the linked pages on {CHECKED_ON} and may have changed since. We
+          have no commercial arrangement with any water company or laboratory
+          named here.{" "}
+        </GuideFooter>
       </div>
     </div>
-  )
+  );
 }

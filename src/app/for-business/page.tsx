@@ -65,8 +65,8 @@ const USE_CASES = [
 
 const PLANS = [
   { name: "Pilot", price: "Free", period: "90 days", lookups: "1,000 lookups a month", detail: "Full report API. Attribution required. For evaluating against your own addresses.", cta: "Start with this" },
-  { name: "Starter", price: "£99", period: "a month", lookups: "5,000 lookups a month", detail: "Report API and embeddable widget. Email support. Attribution optional." },
-  { name: "Growth", price: "£249", period: "a month", lookups: "50,000 lookups a month", detail: "Everything in Starter, plus a monthly bulk CSV of every district for offline use." },
+  { name: "Starter", price: "£199", period: "a month", lookups: "5,000 lookups a month", detail: "Report API and embeddable widget. Email support. Attribution optional." },
+  { name: "Growth", price: "£499", period: "a month", lookups: "50,000 lookups a month", detail: "Everything in Starter, plus a monthly bulk CSV of every district for offline use." },
   { name: "Enterprise", price: "Custom", period: "", lookups: "Unlimited", detail: "Bulk delivery, custom fields, uptime commitment, invoicing. For portals and report providers at scale." },
 ];
 

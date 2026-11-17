@@ -16,6 +16,30 @@ import { checkIncidentAtSource } from "@/lib/incident-parsers/water-companies";
 import { checkEAIncidentAtSource } from "@/lib/incident-parsers/environment-agency";
 import { partitionStale, type SourceCheckOutcome } from "@/lib/incident-staleness";
 import type { Incident } from "@/lib/incidents-types";
+import { incidentAlertEmail, subscribersForIncident, type AlertSubscriber } from "@/lib/incident-alerts";
+
+/** Email confirmed subscribers in the incident's districts. Returns how many were sent. */
+async function alertSubscribers(incident: Incident): Promise<number> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key || incident.affected_postcodes.length === 0) return 0;
+  const { data } = await getSupabase()
+    .from("subscribers")
+    .select("id, email, postcode_district, verified, unsubscribed, unsubscribe_token")
+    .eq("verified", true)
+    .eq("unsubscribed", false)
+    .in("postcode_district", incident.affected_postcodes.map((d) => d.toUpperCase()));
+  const recipients = subscribersForIncident(incident, (data ?? []) as AlertSubscriber[]);
+  if (recipients.length === 0) return 0;
+  const resend = new Resend(key);
+  let sent = 0;
+  // A cap, so one incident covering half the country cannot run the function out of time.
+  for (const sub of recipients.slice(0, 200)) {
+    const mail = incidentAlertEmail(incident, sub);
+    const { error } = await resend.emails.send({ from: "TapWater.uk Alerts <alerts@tapwater.uk>", to: sub.email, subject: mail.subject, html: mail.html });
+    if (!error) sent++;
+  }
+  return sent;
+}
 
 // ── Config ──────────────────────────────────────────────────────────────────
 
@@ -126,6 +150,18 @@ export async function GET(request: NextRequest) {
       await logIncidentAction(incident.id, "detected");
       newIncidents++;
       log.push(`[${raw.source_hash}] Published as ${incident.slug}`);
+
+      // Tell the people who asked to hear about this district. Done once, at the
+      // moment the incident is first published, so nobody is emailed twice.
+      try {
+        const alerted = await alertSubscribers(incident);
+        if (alerted > 0) {
+          await logIncidentAction(incident.id, "updated", { subscribers_alerted: alerted });
+          log.push(`[${raw.source_hash}] Alerted ${alerted} subscriber(s)`);
+        }
+      } catch (err) {
+        errors.push(`Subscriber alerts failed for ${incident.slug}: ${err instanceof Error ? err.message : String(err)}`);
+      }
 
       // Revalidate affected pages
       revalidatedPaths.add("/news");

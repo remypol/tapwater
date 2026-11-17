@@ -8,6 +8,7 @@ export const SOFTENER_LEAD_SOURCES = [
   "hardness_page",
   "hardness_map",
   "hardness_area",
+  "hardness_town",
   "softener_guide",
   "city_page",
   "region_page",

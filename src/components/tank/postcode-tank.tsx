@@ -7,7 +7,8 @@ import { BubbleColumn } from "./bubble-column";
 import { SoftenerButton, StickyAction } from "./tank-actions";
 import { AffiliateLink } from "@/components/affiliate-link";
 import { SoftenerLeadForm } from "@/components/softener-lead-form";
-import { EmailCapture } from "@/components/email-capture";
+import { ReportLink, TankSignup } from "./keep-informed";
+import { OurTaapOffer } from "./our-taap-offer";
 import { CONTAMINANT_SLUG_MAP } from "@/lib/contaminant-slugs";
 import { softenerPartnerEnabled, SOFTENER_PARTNER_NAME } from "@/lib/softener-partner";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
@@ -221,6 +222,24 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
           </div>
         </section>
       ) : null}
+
+      {/* ── 2b. Keep in touch: alerts, and the paid report we are testing demand for ── */}
+      <section className="wt-keep" aria-labelledby="wt-keep-h">
+        <div className="wt-inner">
+          <div>
+            <h2 id="wt-keep-h">Hear about it if {district}&rsquo;s water changes</h2>
+            <p>We check for supply incidents every fifteen minutes. If one affects {district}, you get an email the same day. You also get five short emails about your water over the first month.</p>
+            <TankSignup district={district} purpose="alerts" />
+          </div>
+          <div className="wt-keep-report">
+            <h2>Want this as a document?</h2>
+            <p>Every result, the limits, hardness and what to do, as a PDF to keep with the house papers or send to a buyer or landlord. £19.99.</p>
+            <ReportLink district={district} placement="postcode-band">See the full report for {district}</ReportLink>
+          </div>
+        </div>
+      </section>
+
+      {!isHard ? <OurTaapOffer district={district} /> : null}
 
       {/* ── 3. What's in the glass ── */}
       <section className="wt-bubbles" id="wt-glass" aria-labelledby="wt-glass-h">
@@ -521,11 +540,6 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
         </div>
       </section>
 
-      <section className="wt-next" style={{ paddingBlock: "56px" }}>
-        <div className="wt-inner">
-          <EmailCapture postcode={district} />
-        </div>
-      </section>
 
       <footer className="wt-foot">
         <div className="wt-inner">

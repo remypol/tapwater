@@ -1,7 +1,10 @@
-import { HardnessArea } from "@/components/tank/hardness-pages";
+import { HardnessArea, HardnessTownPage } from "@/components/tank/hardness-pages";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getHardnessArea, getHardnessAreaCodes } from "@/lib/data";
+import { getHardnessArea, getHardnessAreaCodes, getHardnessTowns, getPostcodeData } from "@/lib/data";
+import { nearbyTowns, type HardnessTown } from "@/lib/hardness-towns";
+import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
+import { formatSampleDate } from "@/lib/tank-plan";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { FAQSchema, BreadcrumbSchema } from "@/components/json-ld";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
@@ -14,14 +17,101 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const codes = await getHardnessAreaCodes();
-  return codes.map((area) => ({ area: area.toLowerCase() }));
+  const [codes, towns] = await Promise.all([getHardnessAreaCodes(), getHardnessTowns()]);
+  return [...codes.map((area) => ({ area: area.toLowerCase() })), ...towns.map((t) => ({ area: t.slug }))];
+}
+
+/**
+ * This segment serves two kinds of page: a postcode area ("rg") and a town
+ * ("wokingham"). Area codes are one or two letters and town slugs are always
+ * longer, so the two can never collide.
+ */
+async function findTown(slug: string): Promise<{ town: HardnessTown; all: HardnessTown[] } | null> {
+  if (slug.length <= 2) return null;
+  const all = await getHardnessTowns();
+  const town = all.find((t) => t.slug === slug.toLowerCase());
+  return town ? { town, all } : null;
+}
+
+function townTitle(town: HardnessTown): string {
+  const full = `Water Hardness in ${town.name}: ${town.median} mg/L, ${town.median >= 250 ? "Very Hard" : "Hard"}`;
+  return full.length > 65 ? `Water Hardness in ${town.town}: ${town.median} mg/L` : full;
+}
+
+function townDescription(town: HardnessTown): string {
+  const range = town.measuredCount > 1 ? `, from ${town.min} to ${town.max} mg/L across ${town.measuredCount} measured districts` : ` in ${town.districts.find((d) => d.measured)?.district}`;
+  return `${town.town} tap water is ${town.median >= 250 ? "very hard" : "hard"} at ${town.median} mg/L${range}. District table, what it costs you and softener quotes.`;
+}
+
+async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[] }) {
+  const measured = town.districts.filter((d) => d.measured);
+  const [records, area] = await Promise.all([
+    Promise.all(measured.slice(0, 6).map((d) => getPostcodeData(d.district))),
+    getHardnessArea(town.area),
+  ]);
+  const suppliers = [...new Set(records.map((r) => r?.supplier).filter((s): s is string => Boolean(s)))];
+  const newest = records.map((r) => r?.lastSampleDate).filter((d): d is string => Boolean(d)).sort().pop();
+  const softenerPrice = formatPriceRange(installedPriceRange());
+  const veryHard = town.median >= 250;
+  const hardest = measured[0];
+
+  const faqs = [
+    {
+      question: `Is ${town.town} a hard water area?`,
+      answer: `Yes. ${town.measuredCount === 1 ? `The reading for ${hardest.district} is ${hardest.value} mg/L calcium carbonate` : `The median across ${town.measuredCount} measured ${town.town} districts is ${town.median} mg/L calcium carbonate`}, which is ${veryHard ? "very hard" : "hard"}. Hard starts at 180 mg/L and very hard at 250.`,
+    },
+    {
+      question: `What is the water hardness in ${town.town} in other units?`,
+      answer: `${town.median} mg/L calcium carbonate is about ${(town.median / 14.25).toFixed(1)} degrees Clark, ${(town.median / 17.8).toFixed(1)} German degrees and ${(town.median / 10).toFixed(1)} French degrees. Dishwashers and washing machines usually ask for one of these.`,
+    },
+    {
+      question: `Do I need a water softener in ${town.town}?`,
+      answer: `At ${town.median} mg/L a softener pays for itself in most homes, because kettles, boilers and showers scale up quickly. Fitted, one typically costs ${softenerPrice}. Check your own postcode first${town.measuredCount > 1 ? `, because ${town.town} districts range from ${town.min} to ${town.max} mg/L` : ""}.`,
+    },
+    ...(suppliers.length > 0
+      ? [{
+          question: `Who supplies water in ${town.town}?`,
+          answer: `${suppliers.join(" and ")}. The hardness comes from the rock the water is drawn through, so it changes little from year to year.`,
+        }]
+      : []),
+  ];
+
+  const url = `https://www.tapwater.uk/hardness/${town.slug}`;
+  return (
+    <>
+      <FAQSchema faqs={faqs} />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.tapwater.uk" },
+          { name: "Water hardness", url: "https://www.tapwater.uk/hardness" },
+          { name: postcodeAreaName(town.area), url: `https://www.tapwater.uk/hardness/${town.area.toLowerCase()}` },
+          { name: town.town, url },
+        ]}
+      />
+      <HardnessTownPage
+        town={town}
+        nearby={nearbyTowns(town, all)}
+        areaMedian={area?.summary.median ?? null}
+        suppliers={suppliers}
+        sampled={newest ? formatSampleDate(newest) : null}
+        softenerPrice={softenerPrice}
+        faqs={faqs}
+      />
+    </>
+  );
 }
 
 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { area } = await params;
+  const found = await findTown(area);
+  if (found) {
+    const title = townTitle(found.town);
+    const description = townDescription(found.town);
+    const url = `https://www.tapwater.uk/hardness/${found.town.slug}`;
+    return { title, description, alternates: { canonical: url }, openGraph: { title, description, url, type: "article" } };
+  }
   const data = await getHardnessArea(area);
   if (!data) return { title: "Not Found" };
   const town = postcodeAreaName(data.area);
@@ -37,6 +127,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function HardnessAreaPage({ params }: Props) {
   const { area } = await params;
+  const found = await findTown(area);
+  if (found) return <TownRoute town={found.town} all={found.all} />;
   const data = await getHardnessArea(area);
   if (!data) notFound();
   const { summary, districts } = data;
@@ -76,7 +168,7 @@ export default async function HardnessAreaPage({ params }: Props) {
           { name: town, url: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}` },
         ]}
       />
-      <HardnessArea data={data} faqs={faqs} />
+      <HardnessArea data={data} faqs={faqs} towns={(await getHardnessTowns()).filter((t) => t.area === data.area)} />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import type { HardnessTown } from "@/lib/hardness-towns";
 import Link from "next/link";
 import { ProductCard } from "@/components/product-card";
 import { AffiliateNote } from "@/components/commerce";
@@ -268,7 +269,7 @@ function bandWord(v: number): string {
   return v < 60 ? "soft" : v < 120 ? "moderately soft" : v < 180 ? "moderately hard" : v < 250 ? "hard" : "very hard";
 }
 
-export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[] }) {
+export function HardnessArea({ data, faqs, towns = [] }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[]; towns?: HardnessTown[] }) {
   const { summary, districts, nearby } = data;
   const town = postcodeAreaName(data.area);
   const hard = summary.median >= HARD_WATER_THRESHOLD;
@@ -381,6 +382,20 @@ export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { q
         </section>
       ) : null}
 
+      {towns.length > 0 ? (
+        <section className="wt-band wt-band--foam">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Hard-water towns in the {data.area} area</h2>
+            <p className="wt-sub">Each town has its own page with a reading for every district.</p>
+            <div className="wt-pills">
+              {towns.map((t) => (
+                <Link key={t.slug} href={`/hardness/${t.slug}`}>{t.town} <span className="wt-nums" style={{ opacity: 0.65 }}>{t.median}</span></Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {hard ? (
         <StickyAction heroId="wt-hardness" title={`${summary.median} mg/L in ${town}`} note="Compare softener quotes">
           <SoftenerButton district={data.area} label="Get quotes" paint="sun" placement="sticky" />
@@ -395,6 +410,168 @@ export function HardnessArea({ data, faqs }: { data: HardnessAreaPage; faqs: { q
           ))}
           <p className="wt-fine" style={{ marginTop: 32 }}>
             Hardness as mg/L calcium carbonate from water company drinking-water tests and postcode checkers. See the <Link href="/guides/water-hardness-map">UK hardness map</Link> for every area.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ── /hardness/[town] ──────────────────────────────────────────────────────────
+
+export interface HardnessTownView {
+  town: HardnessTown;
+  nearby: HardnessTown[];
+  /** Median for the whole postcode area, to set the town against. */
+  areaMedian: number | null;
+  /** Water companies supplying the town's districts. */
+  suppliers: string[];
+  /** Newest sample date among the town's districts, already formatted. */
+  sampled: string | null;
+  /** "£1,195 to £2,900": what a fitted softener costs, from the cost guide's sources. */
+  softenerPrice: string;
+  faqs: { question: string; answer: string }[];
+}
+
+export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled, softenerPrice, faqs }: HardnessTownView) {
+  const areaTown = postcodeAreaName(town.area);
+  const measured = town.districts.filter((d) => d.measured);
+  const estimated = town.districts.length - measured.length;
+  const hardest = measured[0];
+  const softest = measured[measured.length - 1];
+  const single = measured.length === 1;
+  const supplierText = suppliers.length === 0 ? null : suppliers.length === 1 ? suppliers[0] : `${suppliers.slice(0, -1).join(", ")} and ${suppliers[suppliers.length - 1]}`;
+
+  return (
+    <div className="wt">
+      <Crumbs items={[{ label: "Home", href: "/" }, { label: "Water hardness", href: "/hardness" }, { label: areaTown, href: `/hardness/${town.area.toLowerCase()}` }, { label: town.town }]} />
+
+      <section className="wt-chalk" id="wt-hardness">
+        <div className="wt-inner">
+          <div className="wt-chalk-grid">
+            <p className="wt-n wt-nums">
+              {town.median}
+              <small>
+                mg of limescale minerals in every litre{single ? `, measured for ${hardest.district}` : `, the median of ${measured.length} ${town.town} districts`}
+              </small>
+            </p>
+            <div>
+              <h1 className="wt-h2">Water hardness in {town.name}</h1>
+              <p style={{ marginTop: 16 }}>
+                Tap water in {town.town} is <strong>{bandSentence(town.median)}</strong>
+                {single ? (
+                  <>: {hardest.value} mg/L calcium carbonate in <Link className="wt-link" href={`/postcode/${hardest.district}`}>{hardest.district}</Link>.</>
+                ) : (
+                  <>
+                    , from {softest.value} mg/L in <Link className="wt-link" href={`/postcode/${softest.district}`}>{softest.district}</Link> to {hardest.value} mg/L in{" "}
+                    <Link className="wt-link" href={`/postcode/${hardest.district}`}>{hardest.district}</Link>.
+                  </>
+                )}
+                {supplierText ? <> The water is supplied by {supplierText}.</> : null}
+                {sampled ? <> Latest sample: {sampled}.</> : null}
+              </p>
+              <HardnessScale value={town.median} />
+              <div className="wt-heroacts">
+                <SoftenerButton district={town.districts[0].district} label={`Get softener quotes in ${town.town}`} paint="ink" placement="hero" />
+                <a href="#districts" className="wt-link">Find your district</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="wt-band wt-band--white">
+        <div className="wt-inner">
+          <h2 className="wt-h2" id="districts">Hardness by {town.town} postcode district</h2>
+          <p className="wt-sub">
+            {estimated > 0
+              ? `Districts marked with an asterisk have no reading of their own and take the ${town.area} postcode area's median.`
+              : "Every figure is a water company reading for that district."}{" "}
+            Hard starts at 180 mg/L, very hard at 250.
+          </p>
+          <div className="wt-tablewrap" style={{ marginTop: 28 }}>
+            <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 520 }}>
+              <thead><tr><th scope="col">District</th><th scope="col">Area</th><th scope="col" style={{ textAlign: "right" }}>mg/L</th><th scope="col">Hardness</th></tr></thead>
+              <tbody>
+                {town.districts.map((d) => (
+                  <tr key={d.district}>
+                    <td><span className="wt-dot" style={{ background: hardnessColour(d.value) }} aria-hidden="true" /><Link href={`/postcode/${d.district}`}>{d.district}</Link>{!d.measured ? <span title="Postcode-area estimate">*</span> : null}</td>
+                    <td style={{ opacity: 0.7 }}>{d.areaName}</td>
+                    <td style={{ textAlign: "right" }}>{d.value}</td>
+                    <td style={{ textTransform: "capitalize" }}>{bandWord(d.value)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {areaMedian != null ? (
+            <p style={{ marginTop: 24, maxWidth: "62ch" }}>
+              For comparison, the median across the whole {town.area} postcode area is {Math.round(areaMedian)} mg/L.{" "}
+              <Link className="wt-link" href={`/hardness/${town.area.toLowerCase()}`}>Hardness across {areaTown} ({town.area})</Link>
+            </p>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="wt-chalk">
+        <div className="wt-inner">
+          <h2 className="wt-h2">What to do about it</h2>
+          <div className="wt-do-grid" style={{ marginTop: 32 }}>
+            <SoftenerPanel
+              hardness={town.median}
+              heading={`Softener quotes in ${town.town}`}
+              intro={`At ${town.median} mg/L a softener is the only thing that stops limescale; a filter does not. Fitted, one typically costs ${softenerPrice}.`}
+            />
+            <div className="wt-side">
+              <div className="wt-second">
+                <h3>Check your own postcode first</h3>
+                <p>{single ? "Hardness can differ from one street's supply to the next." : `${town.town} districts run from ${town.min} to ${town.max} mg/L.`} Your postcode page has the full test results too.</p>
+                <TankSearch hash="wt-hardness" id="wt-postcode-town" />
+              </div>
+            </div>
+          </div>
+          <div className="wt-form">
+            <SoftenerLeadForm
+              hardnessValue={town.median}
+              hardnessLabel={bandWord(town.median)}
+              source="hardness_town"
+              heading={`Softener quotes for ${town.town}`}
+              intro={`At ${town.median} mg/L most homes in ${town.town} get their money back on a softener within a few years. Free quotes from installers who cover your postcode.`}
+            />
+          </div>
+          <h2 className="wt-h2" style={{ marginTop: 56 }}>Before you buy</h2>
+          <p style={{ marginTop: 16 }}><GuideLink href="/guides/do-i-need-a-water-softener">Do I need a water softener?</GuideLink></p>
+          <p><GuideLink href="/guides/water-softener-cost-uk">What a softener costs, with the source for every price</GuideLink></p>
+          <p><GuideLink href="/guides/best-kettle-for-hard-water-uk">Kettles that cope with hard water</GuideLink></p>
+        </div>
+      </section>
+
+      {nearby.length > 0 ? (
+        <section className="wt-band wt-band--white">
+          <div className="wt-inner">
+            <h2 className="wt-h2">Other towns in the {town.area} area</h2>
+            <div className="wt-pills">
+              {nearby.map((t) => (
+                <Link key={t.slug} href={`/hardness/${t.slug}`}>{t.town} <span className="wt-nums" style={{ opacity: 0.65 }}>{t.median}</span></Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <StickyAction heroId="wt-hardness" title={`${town.median} mg/L in ${town.town}`} note="Compare softener quotes">
+        <SoftenerButton district={town.districts[0].district} label="Get quotes" paint="sun" placement="sticky" />
+      </StickyAction>
+
+      <section className="wt-faq">
+        <div className="wt-inner">
+          <h2 className="wt-h2">Questions about {town.town} water</h2>
+          {faqs.map((f, i) => (
+            <details key={f.question} open={i === 0}><summary>{f.question}</summary><p>{f.answer}</p></details>
+          ))}
+          <p className="wt-fine" style={{ marginTop: 32 }}>
+            Hardness as mg/L calcium carbonate from water company drinking-water tests and postcode checkers. Districts are grouped by Royal Mail post town. See the{" "}
+            <Link href="/guides/water-hardness-map">UK hardness map</Link> for every area.
           </p>
         </div>
       </section>

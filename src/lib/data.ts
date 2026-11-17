@@ -5,6 +5,8 @@
  * All functions are async — pages must await them.
  */
 
+import { POST_TOWNS } from "@/data/post-towns";
+import { buildHardnessTowns, type HardnessTown } from "./hardness-towns";
 import { supabase } from "./supabase";
 import { getSupplier } from "./suppliers";
 import { computeScore, type ScoreResult } from "./scoring";
@@ -562,6 +564,21 @@ export async function getHardnessArea(areaCode: string): Promise<HardnessAreaPag
 export async function getHardnessAreaCodes(): Promise<string[]> {
   const { areas } = await getHardnessMap();
   return areas.filter((a) => a.measured >= 2).map((a) => a.area).sort();
+}
+
+/** mg/L calcium carbonate at which water counts as hard; the same line the softener funnel uses. */
+const HARD_TOWN_THRESHOLD = 180;
+
+let hardnessTownsCache: Promise<HardnessTown[]> | null = null;
+
+/** Every town that gets a hardness page. One build per process; the inputs are already cached. */
+export async function getHardnessTowns(): Promise<HardnessTown[]> {
+  // Hard-water towns only. A page that says "no, not hard" has nothing to offer
+  // the reader beyond the area page, and a wrong "soft" reading is worse than none.
+  hardnessTownsCache ??= getHardnessMap().then(({ districts }) =>
+    buildHardnessTowns(POST_TOWNS, districts).filter((t) => t.median >= HARD_TOWN_THRESHOLD),
+  );
+  return hardnessTownsCache;
 }
 
 /**

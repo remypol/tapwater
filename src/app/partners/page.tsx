@@ -56,6 +56,14 @@ const FAQS = [
     a: "Reply to the lead email within seven days and we put the lead back on your account.",
   },
   {
+    q: "Do leads I have paid for expire?",
+    a: "No. Leads stay on your account until they are used, however long that takes.",
+  },
+  {
+    q: "Is VAT added to the price?",
+    a: `No. ${formatGbp(PRICE_PER_LEAD_GBP)} a lead is what you pay. TapWater.uk is run from the Netherlands, so the invoice carries no UK VAT.`,
+  },
+  {
     q: "Is there a contract or a monthly fee?",
     a: `No. After your ${FREE_LEADS} free leads you buy ${PACK_LEADS} at a time by card, and they stay on your account until they are used. Stop whenever you like by not topping up.`,
   },
@@ -101,7 +109,7 @@ export default async function PartnersPage() {
                 go to installers who cover the postcode area{busiest.length > 0 ? `; the busiest right now are ${busiest.map((a) => a.town).join(", ")}` : ""}.
               </p>
               <p>
-                <strong>Your first {FREE_LEADS} leads are free.</strong> After that they are {formatGbp(PRICE_PER_LEAD_GBP)} each, with no contract.
+                <strong>Your first {FREE_LEADS} leads are free.</strong> After that they are {formatGbp(PRICE_PER_LEAD_GBP)} each, with no contract, no VAT added and no expiry date on what you have bought.
               </p>
               <p style={{ marginTop: 28 }}>
                 <a href="#join" className="wt-btn wt-btn--ink">Pick your areas</a>

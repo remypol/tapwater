@@ -65,11 +65,16 @@ async function main() {
   since.setUTCDate(since.getUTCDate() - 7 * (WEEKS - 1));
   const sinceIso = since.toISOString();
 
-  const [clicks, leads, subs] = await Promise.all([
+  const [allClicks, leads, subs] = await Promise.all([
     all<Click>("affiliate_clicks", "clicked_at,partner,page,product_slug", "clicked_at", sinceIso),
     all<Lead>("softener_leads", "created_at,status,postcode_district,forwarded_at", "created_at", "2000-01-01"),
     all<Sub>("subscribers", "created_at", "created_at", "2000-01-01"),
   ]);
+  // The paid-report demand test logs to the same table; it is not an affiliate click.
+  const reportEvents = allClicks.filter((c) => c.product_slug?.startsWith("full-report-"));
+  const clicks = allClicks.filter((c) => !c.product_slug?.startsWith("full-report-"));
+  const reportInterest = reportEvents.filter((c) => c.product_slug === "full-report-interest").length;
+  const reportWaitlist = reportEvents.filter((c) => c.product_slug === "full-report-waitlist").length;
   const { count: activeIncidents } = await supabase.from("incidents").select("*", { count: "exact", head: true }).eq("status", "active");
   const { count: pfasRows } = await supabase.from("pfas_detections").select("*", { count: "exact", head: true });
 
@@ -136,6 +141,7 @@ async function main() {
   }
   lines.push("");
   lines.push(`Softener leads waiting (status new, never forwarded): **${waiting}** of ${leads.length} total.`);
+  lines.push(`Paid report test, whole period shown: ${reportInterest} clicks on "See the full report", ${reportWaitlist} waiting-list signups.`);
   lines.push(`Subscribers: ${subs.length}. Active incidents: ${activeIncidents ?? "?"}. PFAS rows: ${pfasRows?.toLocaleString("en-GB") ?? "?"}.`);
   if (gscNote) lines.push(gscNote);
   lines.push("");

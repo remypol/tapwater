@@ -7,6 +7,10 @@ import { events } from "@/lib/analytics";
 import { softenerPartnerEnabled } from "@/lib/softener-partner";
 import type { SoftenerLeadSource } from "@/lib/softener-lead-source";
 import { SoftenerPartnerCta } from "./softener-partner-cta";
+import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
+
+/** "£1,195 to £2,900": Harvey hides its prices, so the range sits right beside the form. */
+const SOFTENER_PRICE = formatPriceRange(installedPriceRange());
 
 interface SoftenerLeadFormProps {
   postcode?: string;
@@ -142,7 +146,11 @@ function SoftenerLeadFormFallback({
                 </p>
               )}
               <p className="text-xs text-muted mt-1">
-                Request a free assessment and we&apos;ll come back to you with local installer options for your area.
+                A fitted softener typically costs {SOFTENER_PRICE}.{" "}
+                <Link href="/guides/water-softener-cost-uk/" className="underline underline-offset-2 hover:text-ink">
+                  Prices by brand, with sources
+                </Link>
+                . Request a free assessment and we&apos;ll come back to you with local installer options for your area.
               </p>
             </div>
           </div>
