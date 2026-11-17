@@ -134,6 +134,25 @@ export function describeSoftenerLeadBacklog(backlog: SoftenerLeadBacklog): strin
   return `${backlog.newCount} softener quote ${noun} waiting to be forwarded, ${age}`;
 }
 
+/**
+ * Every row of a query, a thousand at a time. The API returns at most a
+ * thousand rows whatever limit is asked for, so the report used to count the
+ * first thousand districts of 2,782 and call that the total.
+ */
+async function selectAll<T>(
+  page: (from: number, to: number) => PromiseLike<{ data: unknown[] | null; error?: unknown }>,
+): Promise<{ data: T[] }> {
+  const out: T[] = [];
+  const PAGE = 1000;
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await page(from, from + PAGE - 1);
+    if (error || !data) break;
+    out.push(...(data as T[]));
+    if (data.length < PAGE) break;
+  }
+  return { data: out };
+}
+
 // ── Health report ─────────────────────────────────────────────────────────────
 
 export async function getHealthReport(): Promise<HealthReport> {
@@ -155,7 +174,9 @@ export async function getHealthReport(): Promise<HealthReport> {
     pfasRunData,
   ] = await Promise.all([
     // All page_data rows with data_source for breakdown
-    db.from("page_data").select("data_source"),
+    selectAll<{ data_source: string | null }>((from, to) =>
+      db.from("page_data").select("data_source").order("postcode_district").range(from, to),
+    ),
 
     // safety_score = -1 (insufficient data)
     db
@@ -194,9 +215,9 @@ export async function getHealthReport(): Promise<HealthReport> {
       .limit(100),
 
     // Supplier coverage from postcode_districts
-    db
-      .from("postcode_districts")
-      .select("supplier_id"),
+    selectAll<{ supplier_id: string | null }>((from, to) =>
+      db.from("postcode_districts").select("supplier_id").order("id").range(from, to),
+    ),
 
     // Softener quote requests not yet forwarded: exact count plus the oldest row
     db
@@ -289,11 +310,18 @@ export async function getHealthReport(): Promise<HealthReport> {
   }
 
   // Newest sample per supplier, from date_range_to rather than last_data_update.
-  const { data: freshnessRows } = await db
-    .from("page_data")
-    .select("date_range_to, postcode_districts!inner(supplier_id)")
-    .gte("safety_score", 0)
-    .limit(5000);
+  // Only districts with tap results: South East Water, Wessex Water and Bristol
+  // Water publish none, and would otherwise be reported every week as having
+  // "no sample dates at all".
+  const { data: freshnessRows } = await selectAll<unknown>((from, to) =>
+    db
+      .from("page_data")
+      .select("date_range_to, postcode_districts!inner(supplier_id)")
+      .gte("safety_score", 0)
+      .eq("data_source", "stream")
+      .order("postcode_district")
+      .range(from, to),
+  );
   const newestBySupplier = new Map<string, { newest: string | null; districts: number }>();
   type FreshnessRow = { date_range_to: string | null; postcode_districts: { supplier_id: string | null } | { supplier_id: string | null }[] };
   for (const row of (freshnessRows ?? []) as unknown as FreshnessRow[]) {
