@@ -2,7 +2,7 @@ import { NextRequest, NextResponse, after } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
-import { writePostcodeData } from "@/lib/db-writer";
+import { writePostcodeData, getImportedReadings } from "@/lib/db-writer";
 import type { StreamRecord } from "@/lib/stream-api";
 import { getStreamSource } from "@/lib/stream-sources";
 import { fetchStreamData } from "@/lib/stream-api";
@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
 
         // Fetch Stream tap water data
         let streamRecords: StreamRecord[] = [];
+        let fromStore = false;
         try {
           if (seedData) {
             const supplier = getSupplierFor(seedData.district, seedData.city);
@@ -67,6 +68,14 @@ export async function POST(request: NextRequest) {
                 console.log(`  → ${district}: ${streamRecords.length} Stream records from ${lsoas.length} LSOAs`);
               }
             }
+            // No live source, or it returned nothing: use readings a script imported.
+            if (streamRecords.length === 0) {
+              const imported = await getImportedReadings(district, supplier.id);
+              if (imported) {
+                streamRecords = imported;
+                fromStore = true;
+              }
+            }
           }
         } catch (err) {
           console.error(`  ⚠ ${district} Stream fetch error:`, err);
@@ -74,7 +83,7 @@ export async function POST(request: NextRequest) {
         }
 
         if (seedData) {
-          await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined);
+          await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined, fromStore);
           console.log(`  ✓ ${district}`);
         } else {
           console.log(`  ✗ ${district} — no data from EA/postcodes.io`);

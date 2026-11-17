@@ -6,13 +6,15 @@
  *
  * Usage:
  *   export $(grep -E "^(NEXT_PUBLIC_SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY)=" .env.local | xargs)
- *   npx tsx scripts/import-scottish-water.ts
+ *   npx tsx scripts/import-scottish-water.ts            # download every zone report and import
+ *   npx tsx scripts/import-scottish-water.ts --stored   # import again from the reports parsed last time
  */
 
 import { createClient } from "@supabase/supabase-js";
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "fs";
 import { parseScottishZonePdf } from "../src/lib/scottish-pdf-parser";
-import { computeScore } from "../src/lib/scoring";
+import { rebuildPageFromRecords } from "../src/lib/db-writer";
+import { scottishZoneReadings } from "../src/lib/scottish-zone-readings";
 import { SCOTTISH_ZONE_POSTCODES, SCOTTISH_ZONE_SLUGS } from "../src/lib/scottish-zones";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -40,6 +42,8 @@ const HEADERS = {
 const DATA_DIR = "data/scottish-water/zones";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+/** --stored: write the figures again from the reports parsed last time, without downloading. */
+const stored = process.argv.includes("--stored");
 
 async function downloadZonePdf(slug: string): Promise<Buffer | null> {
   // Check local cache first
@@ -90,7 +94,11 @@ async function main() {
   let downloadFailed = 0;
   let parseFailed = 0;
 
-  for (let i = 0; i < uniqueSlugs.length; i++) {
+  if (stored) {
+    // Reuse the reports parsed last time; nothing is downloaded.
+    for (const z of JSON.parse(readFileSync("data/scottish-water/all-zones.json", "utf-8")) as NonNullable<ParsedZone>[]) parsedZones.set(z.zone_slug, z);
+  }
+  for (let i = 0; !stored && i < uniqueSlugs.length; i++) {
     const slug = uniqueSlugs[i];
 
     const buffer = await downloadZonePdf(slug);
@@ -122,11 +130,10 @@ async function main() {
 
   // Save all-zones.json for reference
   const allZones = Array.from(parsedZones.values());
-  writeFileSync(
-    "data/scottish-water/all-zones.json",
-    JSON.stringify(allZones, null, 2),
-  );
-  console.log(`Saved ${allZones.length} zones to data/scottish-water/all-zones.json`);
+  if (!stored) {
+    writeFileSync("data/scottish-water/all-zones.json", JSON.stringify(allZones, null, 2));
+    console.log(`Saved ${allZones.length} zones to data/scottish-water/all-zones.json`);
+  }
 
   // ── Step 2: Import to database ───────────────────────────────────────────
   console.log("\nImporting to Supabase...");
@@ -144,84 +151,37 @@ async function main() {
       continue;
     }
 
+    const figures = scottishZoneReadings(zone);
+    const sampleDate = zone.date_to || `${zone.year}-12-31`;
     for (const district of postcodes) {
-      // Build observations for scoring
-      const observations = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => {
-          const val = p.mean ?? p.max;
-          return {
-            determinand: p.parameter,
-            value: val?.value ?? 0,
-            unit: p.unit,
-            date: zone.date_to || `${zone.year}-12-31`,
-          };
-        });
-
-      const score = computeScore(observations, "drinking");
-
-      // Build DB rows
-      const readings = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => ({
-          postcode_district: district,
-          supplier_id: "scottish-water",
-          supply_zone: zone.zone_name,
-          determinand: p.parameter,
-          value: p.mean?.value ?? p.max?.value ?? 0,
-          unit: p.unit,
-          uk_limit: p.regulatory_limit ? parseFloat(p.regulatory_limit) || null : null,
-          who_guideline: null,
-          sample_date: zone.date_to || `${zone.year}-12-31`,
-          source: "scottish_water_zone" as const,
-          source_ref: `sw-zone:${zone.zone_slug}`,
-        }));
+      const readings = figures.map((r) => ({
+        postcode_district: district,
+        supplier_id: "scottish-water",
+        supply_zone: zone.zone_name,
+        determinand: r.determinand,
+        value: r.value,
+        unit: r.unit,
+        uk_limit: r.ukLimit,
+        who_guideline: null,
+        sample_date: sampleDate,
+        source: "scottish_water_zone" as const,
+        source_ref: `sw-zone:${zone.zone_slug}`,
+      }));
+      if (readings.length === 0) continue;
 
       // Delete existing Scottish Water data for this district
-      await db
-        .from("drinking_water_readings")
-        .delete()
-        .eq("postcode_district", district)
-        .eq("source", "scottish_water_zone");
-
-      // Insert readings in batches
-      if (readings.length > 0) {
-        for (let j = 0; j < readings.length; j += 500) {
-          const chunk = readings.slice(j, j + 500);
-          const { error } = await db.from("drinking_water_readings").insert(chunk);
-          if (error) {
-            console.error(`  Error inserting readings for ${district}:`, error.message);
-          }
-        }
+      await db.from("drinking_water_readings").delete().eq("postcode_district", district).eq("source", "scottish_water_zone");
+      for (let j = 0; j < readings.length; j += 500) {
+        const { error } = await db.from("drinking_water_readings").insert(readings.slice(j, j + 500));
+        if (error) console.error(`  Error inserting readings for ${district}:`, error.message);
       }
 
-      // Update page_data
-      const { error: upsertError } = await db.from("page_data").upsert(
-        {
-          postcode_district: district,
-          safety_score: score.safetyScore,
-          score_grade: score.scoreGrade,
-          contaminants_tested: score.contaminantsTested,
-          contaminants_flagged: score.contaminantsFlagged,
-          pfas_detected: score.pfasDetected,
-          pfas_level: score.pfasLevel,
-          pfas_source: score.pfasDetected ? "drinking" : null,
-          drinking_water_readings: score.readings,
-          data_source: "stream",
-          sample_count: zone.parameters.reduce(
-            (sum, p) => sum + (p.total_samples ?? 0),
-            0,
-          ),
-          date_range_from: zone.date_from || `${zone.year}-01-01`,
-          date_range_to: zone.date_to || `${zone.year}-12-31`,
-          last_data_update: zone.date_to || `${zone.year}-12-31`,
-        },
-        { onConflict: "postcode_district" },
+      // The page figures, built the way the refresh job builds them.
+      await rebuildPageFromRecords(
+        district,
+        figures.map((r) => ({ sampleId: `sw-zone:${zone.zone_slug}`, sampleDate, determinand: r.determinand, dwiCode: "", unit: r.unit, belowDetectionLimit: false, value: r.value, lsoa: "" })),
       );
-
-      if (upsertError) {
-        console.error(`  Error upserting page_data for ${district}:`, upsertError.message);
-      }
+      await db.from("postcode_districts").update({ supply_zone: zone.zone_name }).eq("id", district);
 
       totalReadings += readings.length;
       totalPostcodes++;

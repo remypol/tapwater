@@ -214,42 +214,105 @@ export async function upsertPageData(
 }
 
 /**
- * Check if Thames Water zone data exists in drinking_water_readings
- * for a given postcode district. Returns the records if they exist.
+ * Readings that a script imported, for companies we cannot fetch on each pass:
+ * Thames Water and Scottish Water publish reports per supply zone, and NI
+ * Water's samples come from its own yearly file.
+ *
+ * The refresh job must use these when a company has no live source. Until
+ * November 2026 it only did so for Thames, so every pass rewrote the 522
+ * Scottish and Northern Irish districts as "no tap-water results" although the
+ * table held 92,000 readings for them.
  */
-export async function getThamesReadings(
-  district: string,
-): Promise<{ determinand: string; value: number; unit: string; sampleDate: string }[] | null> {
+const IMPORTED_BY_SUPPLIER: Record<string, string> = {
+  "thames-water": "thames_water_zone",
+  "scottish-water": "scottish_water_zone",
+  // NI Water's rows were stored under the portal's label by its import script.
+  "ni-water": "stream_portal",
+};
+
+export async function getImportedReadings(district: string, supplierId: string): Promise<StreamRecord[] | null> {
+  const source = IMPORTED_BY_SUPPLIER[supplierId];
+  if (!source) return null;
+
   const db = getSupabase();
-  const { data, error } = await db
-    .from("drinking_water_readings")
-    .select("determinand, value, unit, sample_date")
-    .eq("postcode_district", district)
-    .eq("source", "thames_water_zone")
-    .order("sample_date", { ascending: false })
-    .limit(100);
+  const records: StreamRecord[] = [];
+  const PAGE = 1000;
+  for (let offset = 0; ; offset += PAGE) {
+    const { data, error } = await db
+      .from("drinking_water_readings")
+      .select("id, determinand, value, unit, sample_date, source_ref")
+      .eq("postcode_district", district)
+      .eq("supplier_id", supplierId)
+      .eq("source", source)
+      .order("id", { ascending: true })
+      .range(offset, offset + PAGE - 1);
+    if (error) return null;
+    for (const r of data ?? []) {
+      records.push({
+        sampleId: r.source_ref ?? "",
+        sampleDate: r.sample_date,
+        determinand: r.determinand,
+        dwiCode: "",
+        unit: r.unit ?? "",
+        belowDetectionLimit: false,
+        value: Number(r.value),
+        lsoa: "",
+      });
+    }
+    if (!data || data.length < PAGE) break;
+  }
+  return records.length > 0 ? records : null;
+}
 
-  if (error || !data || data.length === 0) return null;
-
-  return data.map((r) => ({
-    determinand: r.determinand,
-    value: r.value,
-    unit: r.unit,
-    sampleDate: r.sample_date,
-  }));
+/**
+ * Rebuild one district's page figures from tap-water records, keeping the
+ * Environment Agency layer the page already has. For import scripts, which
+ * know the readings and must not fetch the river layer again. Pass no records
+ * to leave the page on the river and groundwater layer alone. Returns false
+ * when the district has no row.
+ */
+export async function rebuildPageFromRecords(district: string, records?: StreamRecord[]): Promise<boolean> {
+  const db = getSupabase();
+  const { data: row } = await db
+    .from("postcode_districts")
+    .select("area_name, city, region, latitude, longitude")
+    .eq("id", district)
+    .maybeSingle();
+  if (!row) return false;
+  const { data: page } = await db.from("page_data").select("environmental_context").eq("postcode_district", district).maybeSingle();
+  const ctx = (page?.environmental_context ?? {}) as Partial<PostcodeSeedData>;
+  await upsertPageData(
+    {
+      district,
+      areaName: row.area_name,
+      city: row.city,
+      region: row.region,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      samplingPointCount: ctx.samplingPointCount ?? 0,
+      recentObservations: ctx.recentObservations ?? 0,
+      pfasDetected: false,
+      topReadings: ctx.topReadings ?? [],
+    },
+    records && records.length > 0 ? records : undefined,
+  );
+  return true;
 }
 
 /**
  * Process and store a single postcode's data.
- * Calls upsertPostcodeDistrict then upsertPageData in sequence.
+ * Calls upsertPostcodeDistrict then upsertPageData in sequence. Fetched
+ * records are stored first; imported ones are only used for the page figures.
  */
 export async function writePostcodeData(
   seedData: PostcodeSeedData,
   streamRecords?: StreamRecord[],
+  /** True when the records came from getImportedReadings: they are already stored and must not be written again. */
+  alreadyStored = false,
 ): Promise<void> {
   await upsertPostcodeDistrict(seedData);
 
-  if (streamRecords && streamRecords.length > 0) {
+  if (streamRecords && streamRecords.length > 0 && !alreadyStored) {
     const supplier = getSupplierFor(seedData.district, seedData.city);
     await writeStreamReadings(seedData.district, supplier.id, streamRecords);
   }

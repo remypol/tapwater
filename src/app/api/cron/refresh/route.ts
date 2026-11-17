@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/nextjs";
 import { getSupabase } from "@/lib/supabase";
 import { TARGET_POSTCODES } from "@/lib/postcodes";
 import { processPostcode } from "@/lib/ea-fetcher";
-import { writePostcodeData, getThamesReadings } from "@/lib/db-writer";
+import { writePostcodeData, getImportedReadings } from "@/lib/db-writer";
 import type { StreamRecord } from "@/lib/stream-api";
 import { getStreamSource } from "@/lib/stream-sources";
 import { fetchStreamData } from "@/lib/stream-api";
@@ -142,6 +142,7 @@ export async function GET(request: NextRequest) {
       const seedData = await processPostcode(district);
 
       let streamRecords: StreamRecord[] = [];
+      let fromStore = false;
       try {
         if (seedData) {
           const supplier = getSupplierFor(seedData.district, seedData.city);
@@ -153,20 +154,13 @@ export async function GET(request: NextRequest) {
             }
           }
 
-          // Thames Water fallback: if no Stream data, check for pre-imported zone data
-          if (streamRecords.length === 0 && supplier.id === "thames-water") {
-            const thamesData = await getThamesReadings(district);
-            if (thamesData) {
-              streamRecords = thamesData.map((r) => ({
-                sampleId: `thames-zone-${district}`,
-                sampleDate: r.sampleDate,
-                determinand: r.determinand,
-                dwiCode: "",
-                unit: r.unit,
-                belowDetectionLimit: false,
-                value: r.value,
-                lsoa: "",
-              }));
+          // No live source, or it returned nothing: use readings a script imported
+          // (Thames and Scottish zone reports, NI Water's yearly file).
+          if (streamRecords.length === 0) {
+            const imported = await getImportedReadings(district, supplier.id);
+            if (imported) {
+              streamRecords = imported;
+              fromStore = true;
             }
           }
         }
@@ -176,8 +170,8 @@ export async function GET(request: NextRequest) {
       }
 
       if (seedData) {
-        await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined);
-        console.log(`  ✓ ${district}${streamRecords.length > 0 ? ` (${streamRecords.length} Stream records)` : ""}`);
+        await writePostcodeData(seedData, streamRecords.length > 0 ? streamRecords : undefined, fromStore);
+        console.log(`  ✓ ${district}${streamRecords.length > 0 ? ` (${streamRecords.length} ${fromStore ? "imported" : "Stream"} records)` : ""}`);
       } else {
         console.warn(`  ✗ ${district} — EA returned no data (postcodes.io may have failed)`);
       }

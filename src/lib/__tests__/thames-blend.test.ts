@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blendZones, zoneLabel, type ZoneReport, type ZoneReportParameter } from "../thames-blend";
+import { blendZones, zoneFigure, zoneLabel, type ZoneReport, type ZoneReportParameter } from "../thames-blend";
 
 function param(parameter: string, mean: number | null, extra: Partial<ZoneReportParameter> = {}): ZoneReportParameter {
   return {
@@ -130,6 +130,29 @@ describe("blendZones", () => {
       ["B", zone("B", [param("PFOS", 0.0005)])],
     ]);
     expect(blendZones(reports, { A: 1, B: 2 })?.readings[0].value).toBe(0.0004667);
+  });
+});
+
+describe("zoneFigure", () => {
+  it("reads a bacteria count with a tiny yearly mean as a clean typical sample", () => {
+    // Scottish Water, Mannofield East 2025: 156 samples, one positive, mean 0.01.
+    const coliform = param("Coliform Bacteria", 0.01, {
+      unit: "no./100ml",
+      regulatory_limit: "0",
+      min: { value: 0, below_limit: false },
+      max: { value: 1, below_limit: false },
+      total_samples: 156,
+      contraventions: 1,
+    });
+    expect(zoneFigure(coliform)).toBe(0);
+  });
+
+  it("keeps the mean for an ordinary parameter", () => {
+    expect(zoneFigure(param("Nitrate", 30, { regulatory_limit: "50", min: { value: 20, below_limit: false }, max: { value: 41, below_limit: false } }))).toBe(30);
+  });
+
+  it("returns null when a report gives no value at all", () => {
+    expect(zoneFigure(param("Tritium", null))).toBeNull();
   });
 });
 

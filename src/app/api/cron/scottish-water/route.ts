@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { parseScottishZonePdf } from "@/lib/scottish-pdf-parser";
 import { computeScore } from "@/lib/scoring";
+import { scottishZoneReadings } from "@/lib/scottish-zone-readings";
 import { SCOTTISH_ZONE_POSTCODES, SCOTTISH_ZONE_SLUGS } from "@/lib/scottish-zones";
 
 export const maxDuration = 300;
@@ -145,32 +146,27 @@ export async function GET(request: NextRequest) {
     }
 
     for (const district of postcodes) {
-      // Build observations for scoring
-      const observations = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => {
-          const val = p.mean ?? p.max;
-          return {
-            determinand: p.parameter,
-            value: val?.value ?? 0,
-            unit: p.unit,
-            date: zone.date_to || `${zone.year}-12-31`,
-          };
-        });
+      // One figure per parameter (the year's mean; a bacteria count is the
+      // typical sample, not a mean lifted above zero by one sample in 150).
+      const figures = scottishZoneReadings(zone);
+      const observations = figures.map((r) => ({
+        determinand: r.determinand,
+        value: r.value,
+        unit: r.unit,
+        date: zone.date_to || `${zone.year}-12-31`,
+      }));
 
       const score = computeScore(observations, "drinking");
 
       // Build DB rows
-      const readings = zone.parameters
-        .filter((p) => p.mean !== null || p.max !== null)
-        .map((p) => ({
+      const readings = figures.map((r) => ({
           postcode_district: district,
           supplier_id: "scottish-water",
           supply_zone: zone.zone_name,
-          determinand: p.parameter,
-          value: p.mean?.value ?? p.max?.value ?? 0,
-          unit: p.unit,
-          uk_limit: p.regulatory_limit ? parseFloat(p.regulatory_limit) || null : null,
+          determinand: r.determinand,
+          value: r.value,
+          unit: r.unit,
+          uk_limit: r.ukLimit,
           who_guideline: null,
           sample_date: zone.date_to || `${zone.year}-12-31`,
           source: "scottish_water_zone" as const,

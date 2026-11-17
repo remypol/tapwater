@@ -53,23 +53,31 @@ export interface DistrictBlend {
 }
 
 /**
- * A zone's figure for one parameter: the year's mean.
+ * A zone's figure for one parameter: the year's mean, with two exceptions.
  *
- * Bacteria counts have no mean in the reports, only the lowest and highest
- * sample of the year. The highest is one sample out of dozens or hundreds:
- * until November 2026 it was used as the reading, which marked 122 of 264
- * districts as failing for coliform bacteria on the strength of a single
- * sample each. The figure is now the typical sample: the lowest value, unless
- * at least half of the year's samples broke the limit, in which case the
- * highest stands. That matches the other companies, where the reading is the
- * latest sample.
+ * Bacteria counts (limit of zero). Thames gives no mean for them, only the
+ * lowest and highest sample of the year; Scottish Water gives a mean such as
+ * 0.01, which is one positive sample in 156. Either way the reading used to be
+ * "above zero", which marked 122 of 264 Thames districts and 99 Scottish ones
+ * as failing for coliform bacteria on the strength of a single sample each.
+ * The figure is the typical sample instead: the lowest value, unless at least
+ * half of the year's samples broke the limit. That matches the other
+ * companies, where the reading is the latest sample.
+ *
+ * And one lone outlier: see withoutLoneOutlier.
+ *
+ * Exported for the Scottish Water import, whose zone reports have the same shape.
  */
-function figure(p: ZoneReportParameter): number | null {
+export function zoneFigure(p: ZoneReportParameter): number | null {
   const failed = p.contraventions ?? 0;
-  if (p.mean) return withoutLoneOutlier(p, failed) ?? p.mean.value;
+  const limit = p.regulatory_limit != null && p.regulatory_limit !== "" ? parseFloat(p.regulatory_limit) : NaN;
   const mostlyFailing = p.total_samples != null && p.total_samples > 0 && failed * 2 >= p.total_samples;
-  if (mostlyFailing) return p.max?.value ?? p.min?.value ?? null;
-  return p.min?.value ?? p.max?.value ?? null;
+  const isCount = limit === 0 || !p.mean;
+  if (isCount) {
+    if (mostlyFailing) return p.mean?.value ?? p.max?.value ?? p.min?.value ?? null;
+    return p.min?.value ?? p.mean?.value ?? p.max?.value ?? null;
+  }
+  return withoutLoneOutlier(p, failed) ?? (p.mean as ZoneValue).value;
 }
 
 /**
@@ -126,7 +134,7 @@ export function blendZones(reports: Map<string, ZoneReport>, weights: Record<str
     let limit: number | null = null;
     for (const u of used) {
       const p = u.report.parameters.find((x) => x.parameter === name);
-      const v = p ? figure(p) : null;
+      const v = p ? zoneFigure(p) : null;
       if (!p || v == null) continue;
       // A zone reporting the same parameter in another unit cannot be averaged in.
       if (unit != null && p.unit !== unit) continue;

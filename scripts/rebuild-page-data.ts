@@ -8,13 +8,17 @@
  * this recomputes the scores straight away through the same upsertPageData the
  * cron uses. The EA layer is taken from what page_data already holds.
  *
+ * Also the way to put Scottish Water, NI Water and Thames districts back on
+ * their imported readings (17 Nov 2026: the refresh job had been blanking all
+ * 522 Scottish and Northern Irish districts on every pass).
+ *
  * Usage:
  *   export $(grep -E "^(NEXT_PUBLIC_SUPABASE_URL|SUPABASE_SERVICE_ROLE_KEY)=" .env.local | xargs)
  *   npx tsx scripts/rebuild-page-data.ts southern-water [--dry-run] [--only BN1,SO14]
  */
 
 import { getSupabase } from "../src/lib/supabase";
-import { upsertPageData } from "../src/lib/db-writer";
+import { getImportedReadings, upsertPageData } from "../src/lib/db-writer";
 import { computeScore } from "../src/lib/scoring";
 import type { PostcodeSeedData } from "../src/lib/ea-fetcher";
 import type { StreamRecord } from "../src/lib/stream-api";
@@ -31,7 +35,13 @@ if (!supplierId) {
 
 const db = getSupabase();
 
+/**
+ * The readings a district's page is built from: the imported ones for Thames,
+ * Scottish Water and NI Water, the stored portal samples for everyone else.
+ */
 async function storedReadings(district: string): Promise<StreamRecord[]> {
+  const imported = await getImportedReadings(district, supplierId);
+  if (imported) return imported;
   const rows: StreamRecord[] = [];
   const PAGE = 1000;
   for (let offset = 0; ; offset += PAGE) {

@@ -23,11 +23,9 @@
  */
 import { readFileSync } from "node:fs";
 import { getSupabase } from "../src/lib/supabase";
-import { upsertPageData, writeStreamReadings } from "../src/lib/db-writer";
+import { rebuildPageFromRecords } from "../src/lib/db-writer";
 import { blendZones, zoneLabel, type ZoneReport } from "../src/lib/thames-blend";
 import { THAMES_DISTRICTS, getThamesZones } from "../src/lib/thames-zones";
-import type { PostcodeSeedData } from "../src/lib/ea-fetcher";
-import type { StreamRecord } from "../src/lib/stream-api";
 
 const flags = process.argv.slice(2);
 const dryRun = flags.includes("--dry-run");
@@ -124,34 +122,22 @@ async function main() {
     if (insError) throw new Error(`${district}: ${insError.message}`);
 
     // The page reads page_data, built the same way the refresh job builds it.
-    const records: StreamRecord[] = blend.readings.map((r) => ({
-      sampleId: `thames-zone-${district}`,
-      sampleDate,
-      determinand: r.determinand,
-      dwiCode: "",
-      unit: r.unit,
-      belowDetectionLimit: false,
-      value: r.value,
-      lsoa: "",
-    }));
-    await writeStreamReadings(district, "thames-water", records);
-    const { data: page } = await db.from("page_data").select("environmental_context").eq("postcode_district", district).maybeSingle();
-    const ctx = (page?.environmental_context ?? {}) as Partial<PostcodeSeedData>;
-    await upsertPageData(
-      {
-        district,
-        areaName: row.area_name,
-        city: row.city,
-        region: row.region,
-        latitude: row.latitude,
-        longitude: row.longitude,
-        samplingPointCount: ctx.samplingPointCount ?? 0,
-        recentObservations: ctx.recentObservations ?? 0,
-        pfasDetected: false,
-        topReadings: ctx.topReadings ?? [],
-      },
-      records,
+    await rebuildPageFromRecords(
+      district,
+      blend.readings.map((r) => ({
+        sampleId: sourceRef,
+        sampleDate,
+        determinand: r.determinand,
+        dwiCode: "",
+        unit: r.unit,
+        belowDetectionLimit: false,
+        value: r.value,
+        lsoa: "",
+      })),
     );
+    // Earlier runs, and the refresh job before it could read imported rows,
+    // kept a second copy of every reading under the portal's label.
+    await db.from("drinking_water_readings").delete().eq("postcode_district", district).eq("source", "stream_portal").eq("source_ref", `thames-zone-${district}`);
     // The zone name is only worth showing when one zone covers most of the district.
     const main = blend.zones[0];
     await db
