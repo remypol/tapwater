@@ -15,6 +15,7 @@ import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { SOFTENER_GUIDES, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
 import { pickRelatedGuides } from "@/lib/guides";
 import { formatReading, formatSampleDate, hardnessBandLabel, type TankAction } from "@/lib/tank-plan";
+import { isOverPartLLine } from "@/lib/part-l";
 import { catchmentExplorerUrl, chemicalFails, describeRiverStatus, failingElements, waterBodyNoun, ECOLOGICAL_CLASSES } from "@/lib/river-status";
 import { formatMicrograms, formatSampleMonth, humaniseSiteLabel } from "@/components/pfas-nearby";
 import type { PostcodePageLoad } from "@/lib/postcode-page-load";
@@ -323,6 +324,13 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   <i style={{ left: `${Math.min(hardValue / HARD_MAX, 1) * 100}%` }} />
                 </div>
                 <div className="wt-ends"><span>Soft</span><span>{HARD_MAX} mg/L</span></div>
+                {isOverPartLLine(hardValue) ? (
+                  <p className="wt-fine" style={{ marginTop: 16 }}>
+                    Over 200 mg/L, the building regulations guidance for England counts this as a hard water area: a new combination boiler or water
+                    heater should have limescale protection.{" "}
+                    <Link className="wt-link" href="/guides/hard-water-boiler-regulations">The 200 ppm rule</Link>
+                  </p>
+                ) : null}
                 {page.hardnessLinks.town || page.hardnessLinks.area ? (
                   <p className="wt-hardlinks">
                     {page.hardnessLinks.town ? (

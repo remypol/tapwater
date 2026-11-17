@@ -74,6 +74,11 @@ export const GUIDES_REGISTRY: Record<string, GuideMeta> = {
     title: "Salt-Free Water Softeners UK",
     description: "Conditioners and electronic descalers, honestly assessed",
   },
+  "hard-water-boiler-regulations": {
+    slug: "hard-water-boiler-regulations",
+    title: "Hard Water and New Boilers",
+    description: "The 200 ppm rule in the building regulations, with a postcode check",
+  },
   "best-water-filters-uk": {
     slug: "best-water-filters-uk",
     title: "Best Water Filters UK",

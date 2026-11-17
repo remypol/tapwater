@@ -49,6 +49,7 @@ const GUIDE_SLUGS = [
   "harvey-vs-kinetico-water-softener",
   "water-softener-salt-guide",
   "salt-free-water-softener-uk",
+  "hard-water-boiler-regulations",
   "best-water-filter-tap-uk",
   "water-quality-pregnancy",
   "water-and-eczema",

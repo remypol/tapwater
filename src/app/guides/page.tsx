@@ -217,6 +217,14 @@ const GUIDES = [
     iconBg: "bg-amber-50",
   },
   {
+    slug: "hard-water-boiler-regulations",
+    title: "Hard Water and New Boilers",
+    subtitle: "The 200 ppm rule in the building regulations, with a postcode check",
+    icon: Zap,
+    iconColor: "text-amber-600",
+    iconBg: "bg-amber-50",
+  },
+  {
     slug: "best-water-filter-tap-uk",
     title: "Best Water Filter Taps UK",
     subtitle: "3-way triflow taps and tap-mounted filters, honestly separated",

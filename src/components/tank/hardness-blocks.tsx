@@ -6,6 +6,7 @@ import { postcodeAreaName } from "@/lib/postcode-areas";
 import type { HardnessMapArea } from "@/lib/data";
 import { householdLoads, WATER_USE_SOURCE, REQUEST_WINDOW_DAYS } from "@/lib/softener-sizing";
 import { MARKETPLACE_GUIDE } from "@/lib/softener-prices";
+import { isOverPartLLine } from "@/lib/part-l";
 import { SoftenerButton } from "./tank-actions";
 import { TankSearch } from "./tank-search";
 
@@ -149,6 +150,12 @@ export function SoftenerLocalFacts({ place, area, hardness, softenerPrice, reque
         Chalk figures are {Math.round(hardness)} mg/L of calcium carbonate multiplied by 137 litres a person a day, {WATER_USE_SOURCE}. Prices are from the{" "}
         <Link href="/guides/water-softener-cost-uk" className="wt-link">softener cost guide</Link>, which gives the source for each.
       </p>
+      {isOverPartLLine(hardness) ? (
+        <p className="wt-fine" style={{ marginTop: 10 }}>
+          Having a boiler fitted? Over 200 mg/L the building regulations guidance for England asks for limescale protection on it.{" "}
+          <Link href="/guides/hard-water-boiler-regulations" className="wt-link">The 200 ppm rule, with a postcode check</Link>
+        </p>
+      ) : null}
       <p className="wt-fine" style={{ marginTop: 10 }}>
         Fit softeners in {place}?{" "}
         {requests > 0

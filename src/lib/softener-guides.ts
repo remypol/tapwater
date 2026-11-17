@@ -51,6 +51,11 @@ export const SOFTENER_GUIDES: SoftenerGuideLink[] = [
     label: "Salt-free softeners",
     blurb: "Conditioners and electronic descalers, honestly assessed",
   },
+  {
+    slug: "hard-water-boiler-regulations",
+    label: "Hard water and new boilers",
+    blurb: "The 200 ppm rule in the building regulations, with a postcode check",
+  },
 ];
 
 export const SOFTENER_HUB_SLUG = "best-water-softener-uk";
