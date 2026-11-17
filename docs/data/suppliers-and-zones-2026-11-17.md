@@ -100,6 +100,7 @@ Still on a postcode-area estimate, because the company has no checker we use and
 - **Would have been lost:** about 30 districts that carried Thames figures by mistake and belong to South East Water or Wessex Water, which publish no samples: Wokingham (RG40, RG41), Bracknell (RG12, RG42), Maidenhead (SL6), Camberley, Chippenham, Salisbury. Several are in our best softener-lead area. The rule was "no tap results, no index".
 - **Rule now** (`isIndexableDistrict` in `src/lib/data.ts`, used by the page and the sitemap): a page is indexed when it has tap results, or when it has the water company's own hardness reading for the district. A page resting on river samples and an estimated hardness stays out (Bristol, for example).
 - Pages without tap results say so in their summary: the score comes from rivers and groundwater nearby, the hardness figure is the company's own.
+- Counted after the changes: 2,695 of 2,782 district pages are indexable (about 1,940 before), and there are 418 hard-water town pages (336 before), because more districts now have a measured hardness reading.
 - The company table ranks a company only on districts with its own tap results. South East Water, Wessex Water and Bristol Water are listed without a score, with the reason.
 
 ## Scripts, in the order they are used
