@@ -82,7 +82,8 @@ One more of the same kind: 29 South East Water and Wessex Water districts (Wokin
 - Southern Water publishes hardness as calcium, not as calcium carbonate, so its 90 districts had no measured hardness. The conversion is exact (× 100.09/40.08) and is now done on every refresh (`src/lib/derived-hardness.ts`): Brighton 276, Worthing 279 to 300, Southampton about 300, Hastings 81.
 - Bristol Water has a postcode checker its robots.txt allows; an adapter was added and all 47 of its districts have a reading (Bristol about 205 to 290, Frome 334).
 - SES Water has one too (`POST /api/waterqualitysearch/search`, the same system South West Water uses), also allowed. It rate-limits after about seven requests at one a second, so the run uses one request every twenty seconds. Two faults in the ingest script came out of this and are fixed: a district without a reading skipped the pause before the next request, and the script carried on after a company answered "too many requests". It now waits before every request and stops at the first such answer. SES softens its water at the works: its "parts per million" are of calcium (74 beside 13 Clark degrees), which is about 185 mg/L as CaCO3. Sutton and Redhill had been shown at about 256 from their neighbours' figures; the real figure is lower, and the pages now carry it.
-- Districts with a measured hardness: 1,773 before, **2,016** after. Over the 200 ppm line in the building regulations guidance: 759 before, **967** after.
+- SES Water: 27 of 28 districts stored. Sutton 205, Redhill and Reigate 185, Dorking 195, Oxted and Lingfield 130.
+- Districts with a measured hardness: 1,773 before, **2,043** after. Over the 200 ppm line in the building regulations guidance: 759 before, **976** after.
 
 Still without a measured figure:
 
@@ -112,7 +113,7 @@ Still without a measured figure:
 - **Would have been lost:** about 30 districts that carried Thames figures by mistake and belong to South East Water or Wessex Water, which publish no samples: Wokingham (RG40, RG41), Bracknell (RG12, RG42), Maidenhead (SL6), Camberley, Chippenham, Salisbury. Several are in our best softener-lead area. The rule was "no tap results, no index".
 - **Rule now** (`isIndexableDistrict` in `src/lib/data.ts`, used by the page and the sitemap): a page is indexed when it has tap results, or when it has the water company's own hardness reading for the district. A page resting on river samples and an estimated hardness stays out (Bristol, for example).
 - Pages without tap results say so in their summary: the score comes from rivers and groundwater nearby, the hardness figure is the company's own.
-- Counted after the changes: 2,731 of 2,782 district pages are indexable (about 1,940 before), and there are 432 hard-water town pages (336 before), because more districts now have a measured hardness reading.
+- Counted after the changes: 2,731 of 2,782 district pages are indexable (about 1,940 before), and there are 448 hard-water town pages (336 before), because more districts now have a measured hardness reading.
 - The company table ranks a company only on districts with its own tap results. South East Water, Wessex Water and Bristol Water are listed without a score, with the reason.
 
 ## Scripts, in the order they are used
@@ -129,6 +130,10 @@ npx tsx scripts/refresh-districts.ts <districts | --changed> real supplier's res
 npx tsx scripts/derive-hardness.ts southern-water           hardness as CaCO3 from stored samples
 npx tsx scripts/audit-stream-units.ts                       every company's units, before trusting a new dataset
 ```
+
+## Weekly health report
+
+`getHealthReport()` read two tables without paging and so counted the first thousand of 2,782 districts. It now reads all of them (2,555 with tap results, 227 on the river layer alone on 17 November), judges each company's freshness on its districts with tap results, and no longer lists South East Water, Wessex Water and Bristol Water every week for having no sample dates. What it reports truthfully and will keep reporting until the companies publish: eight companies' newest samples are from December 2024 (United Utilities, Anglian, Welsh Water, NI Water, South Staffs, Cambridge, SES, Portsmouth). `scripts/check-stream-sources.ts` confirms nothing newer is on the portal.
 
 ## Not done
 
