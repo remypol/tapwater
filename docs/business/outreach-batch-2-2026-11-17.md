@@ -1,6 +1,10 @@
-# Outreach, second batch: prepared 17 November 2026, not sent
+# Outreach, second batch: sent 17 November 2026
 
-Nothing below has been sent. Each email needs Remy's go-ahead. Figures were counted on 17 November 2026 with the same rule the installer page uses (one person per district counted once); re-count before sending if this sits for more than a few days.
+Remy approved the batch ("Yes, send all") and all 16 went out through Resend at 13:28 to 13:29 UTC on 17 November 2026: the ten installer emails from `partners@tapwater.uk` and the six business-data emails from `hello@tapwater.uk`. Resend shows every one as delivered, which means the recipient's mail server accepted it, not that anyone has read it. Replies arrive at those two addresses, which forward to the cc-community inbox.
+
+Follow up on or after 24 November, with fresh request counts and one new fact, and only with Remy's go-ahead. The phone list further down has not been worked.
+
+Figures were counted on 17 November 2026 with the same rule the installer page uses (one person per district counted once).
 
 ## Requests by postcode area
 
@@ -24,7 +28,7 @@ Nothing below has been sent. Each email needs Remy's go-ahead. Figures were coun
 
 Already written to on 17 November (no reply yet): Compass, UK Water Softeners, Silkflow, Friendly Water. Follow-up due on or after 24 November.
 
-## Part 1: installers (10 emails)
+## Part 1: installers (10 emails, all delivered)
 
 From `partners@tapwater.uk`. Only limited companies and LLPs with a business address printed on their own website. Addresses were read on each company's own site on 17 November.
 
@@ -115,7 +119,7 @@ Subject: Homeowner softener enquiries in Reading, Slough and Kingston
 
 One thing the research turned up: the only published referral payments in this trade are about £50 for an installed softener (Scott Jenkins's voucher, salt from others). £35 for an enquiry that has not been qualified will meet resistance until we can show how many turn into sales, so the three free leads matter.
 
-## Part 2: business data (6 emails)
+## Part 2: business data (6 emails, all delivered)
 
 From `hello@tapwater.uk`. Each address is the business contact printed on the company's own site.
 
