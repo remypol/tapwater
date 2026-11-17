@@ -5,6 +5,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/json-ld";
 import { GeoCitation } from "@/components/geo-citation";
 import { OG_IMAGE } from "@/lib/og";
+import { FixPicks } from "@/components/fix-picks";
 
 const year = new Date().getFullYear();
 
@@ -204,6 +205,19 @@ export default function SmartWaterGuide() {
             <PostcodeSearch />
           </div>
         </div>
+
+        <FixPicks
+          className="mt-12"
+          pageType="guide"
+          placement="guide-picks"
+          title="Filtered tap water instead of bottles"
+          intro={
+            <>
+              Smartwater is distilled water with a little mineral added back for taste. If the taste of your tap water is the reason you buy
+              it, a filter fixes that for a fraction of the price a litre. These are the three our readers pick most.
+            </>
+          }
+        />
 
         <h2 className="font-display text-2xl italic text-ink mt-14 mb-6">
           Frequently asked questions

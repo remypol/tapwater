@@ -466,3 +466,8 @@
 .wt-compare b { font-family: var(--font-rhd), system-ui, sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.015em; }
 .wt-compare small { color: var(--wt-mute); font-size: 0.9rem; }
 .wt-hardlinks { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 0.98rem; }
+
+/* "A water softener in {town}": household table beside the price ledger. */
+.wt-local-grid { margin-top: 28px; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+.wt-local .wt-ledger li strong em { display: block; margin-left: 0; font-weight: 400; font-size: 0.85rem; }
+@media (max-width: 900px) { .wt-local-grid { grid-template-columns: 1fr; } }

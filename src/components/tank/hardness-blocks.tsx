@@ -4,6 +4,8 @@ import { HARDNESS_BANDS, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
 import { hardnessColour } from "@/components/hardness-map";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import type { HardnessMapArea } from "@/lib/data";
+import { householdLoads, WATER_USE_SOURCE, REQUEST_WINDOW_DAYS } from "@/lib/softener-sizing";
+import { MARKETPLACE_GUIDE } from "@/lib/softener-prices";
 import { SoftenerButton } from "./tank-actions";
 import { TankSearch } from "./tank-search";
 
@@ -97,6 +99,63 @@ export function SoftenerPanel({ district, heading, intro, hardness }: { district
         <SoftenerButton district={district ?? "your postcode"} label={district ? `Get softener quotes for ${district}` : "Get softener quotes"} paint="sun" placement="action" />
         <Link href="/guides/do-i-need-a-water-softener" className="wt-link">Do I actually need one?</Link>
       </div>
+    </div>
+  );
+}
+
+/**
+ * What a softener is up against in this place, in figures that change with the
+ * local reading: the hardness a household takes in over a year, what one costs
+ * fitted, and how many neighbours have asked. Sits above the quote panel on the
+ * town and area pages, and carries one line for installers, who find these pages
+ * when they search for their own trade and town.
+ */
+export function SoftenerLocalFacts({ place, area, hardness, softenerPrice, requests, approximate = false }: { place: string; area: string; hardness: number; softenerPrice: string; requests: number; approximate?: boolean }) {
+  const rows = householdLoads(hardness);
+  const four = rows.find((r) => r.people === 4) ?? rows[rows.length - 1];
+  const { serviceYearly } = MARKETPLACE_GUIDE;
+  return (
+    <div className="wt-local">
+      <p className="wt-sub" style={{ maxWidth: "62ch" }}>
+        At {approximate ? "about " : ""}{Math.round(hardness)} mg/L, a family of four in {place} takes in about <strong>{four.kg} kg of dissolved chalk a year</strong> with its water. Only part of it
+        settles as limescale, mostly where water is heated, but that is what furs up kettles, boilers and shower heads. A softener takes it out as the water
+        enters the house.
+      </p>
+      <div className="wt-local-grid">
+        <div className="wt-tablewrap">
+          <table className="wt-table wt-table--light wt-nums" style={{ minWidth: 0 }}>
+            <caption className="wt-sr">Hardness minerals a household in {place} takes in each year, by household size</caption>
+            <thead><tr><th scope="col">Household</th><th scope="col" style={{ textAlign: "right" }}>Water a year</th><th scope="col" style={{ textAlign: "right" }}>Dissolved chalk a year</th></tr></thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.people}>
+                  <td>{r.people} {r.people === 1 ? "person" : "people"}</td>
+                  <td style={{ textAlign: "right" }}>{r.litres.toLocaleString("en-GB")} litres</td>
+                  <td style={{ textAlign: "right" }}>{r.kg} kg</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ul className="wt-ledger wt-nums">
+          <li><strong>Softener, supplied and fitted</strong><b>{softenerPrice}</b></li>
+          <li><strong>Yearly service</strong><b>£{serviceYearly.low} to £{serviceYearly.high}</b></li>
+          {requests > 0 ? (
+            <li><strong>Quote requests from {area} postcodes<em>last {REQUEST_WINDOW_DAYS} days</em></strong><b>{requests}</b></li>
+          ) : null}
+        </ul>
+      </div>
+      <p className="wt-fine" style={{ marginTop: 20 }}>
+        Chalk figures are {Math.round(hardness)} mg/L of calcium carbonate multiplied by 137 litres a person a day, {WATER_USE_SOURCE}. Prices are from the{" "}
+        <Link href="/guides/water-softener-cost-uk" className="wt-link">softener cost guide</Link>, which gives the source for each.
+      </p>
+      <p className="wt-fine" style={{ marginTop: 10 }}>
+        Fit softeners in {place}?{" "}
+        {requests > 0
+          ? `${requests} ${requests === 1 ? "homeowner" : "homeowners"} in ${area} postcodes asked us for quotes in the last ${REQUEST_WINDOW_DAYS} days.`
+          : `We pass on quote requests from ${area} postcodes.`}{" "}
+        <Link href="/partners" className="wt-link">Your first three are free</Link>.
+      </p>
     </div>
   );
 }

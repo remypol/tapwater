@@ -13,7 +13,7 @@ import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import type { HardnessAreaPage, HardnessMapArea, HardnessMapDistrict } from "@/lib/data";
 import { TankSearch } from "./tank-search";
 import { SoftenerButton, StickyAction } from "./tank-actions";
-import { AreaPills, AreaTable, CheckPostcode, GuideLink, HardnessScale, SoftenerPanel } from "./hardness-blocks";
+import { AreaPills, AreaTable, CheckPostcode, GuideLink, HardnessScale, SoftenerLocalFacts, SoftenerPanel } from "./hardness-blocks";
 import "./tank.css";
 
 /**
@@ -285,7 +285,7 @@ function bandWord(v: number): string {
   return v < 60 ? "soft" : v < 120 ? "moderately soft" : v < 180 ? "moderately hard" : v < 250 ? "hard" : "very hard";
 }
 
-export function HardnessArea({ data, faqs, towns = [] }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[]; towns?: HardnessTown[] }) {
+export function HardnessArea({ data, faqs, towns = [], softenerPrice, requests = 0 }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[]; towns?: HardnessTown[]; softenerPrice?: string; requests?: number }) {
   const { summary, districts, nearby } = data;
   const town = postcodeAreaName(data.area);
   const hard = summary.median >= HARD_WATER_THRESHOLD;
@@ -355,8 +355,9 @@ Hardest first. Hard starts at 180 mg/L, very hard at 250.
       {hard ? (
         <section className="wt-chalk">
           <div className="wt-inner">
-            <h2 className="wt-h2">What to do about it</h2>
-            <div className="wt-do-grid" style={{ marginTop: 32 }}>
+            <h2 className="wt-h2">A water softener in {town}</h2>
+            {softenerPrice ? <SoftenerLocalFacts place={town} area={data.area} hardness={summary.median} softenerPrice={softenerPrice} requests={requests} approximate={districts.some((d) => d.measured && isThamesRotationDistrict(d.district))} /> : null}
+            <div className="wt-do-grid" style={{ marginTop: 40 }}>
               <SoftenerPanel
                 hardness={summary.median}
                 heading="Hard water: compare softener quotes"
@@ -449,10 +450,12 @@ export interface HardnessTownView {
   sampled: string | null;
   /** "£1,195 to £2,900": what a fitted softener costs, from the cost guide's sources. */
   softenerPrice: string;
+  /** Quote requests from the town's postcode area in the last 90 days. */
+  requests: number;
   faqs: { question: string; answer: string }[];
 }
 
-export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled, softenerPrice, faqs }: HardnessTownView) {
+export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled, softenerPrice, requests, faqs }: HardnessTownView) {
   const areaTown = postcodeAreaName(town.area);
   const measured = town.districts.filter((d) => d.measured);
   const estimated = town.districts.length - measured.length;
@@ -542,8 +545,9 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
 
       <section className="wt-chalk">
         <div className="wt-inner">
-          <h2 className="wt-h2">What to do about it</h2>
-          <div className="wt-do-grid" style={{ marginTop: 32 }}>
+          <h2 className="wt-h2">A water softener in {town.town}</h2>
+          <SoftenerLocalFacts place={town.town} area={town.area} hardness={town.median} softenerPrice={softenerPrice} requests={requests} approximate={approximate} />
+          <div className="wt-do-grid" style={{ marginTop: 40 }}>
             <SoftenerPanel
               hardness={town.median}
               heading={`Softener quotes in ${town.town}`}

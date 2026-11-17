@@ -4,6 +4,7 @@ import { PostcodeSearch } from "@/components/postcode-search";
 import { FAQSchema, BreadcrumbSchema, ArticleSchema } from "@/components/json-ld";
 import { Scale, ShieldCheck, Leaf, PiggyBank, BookOpen } from "lucide-react";
 import { OG_IMAGE } from "@/lib/og";
+import { FixPicks } from "@/components/fix-picks";
 
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
@@ -292,6 +293,19 @@ export default function TapVsBottledGuide() {
             <span><strong className="text-ink">Whole-house systems</strong> (£500–2,000+) — filter all water entering your home. Useful if you have known issues with your supply or older plumbing. Usually combine sediment, carbon, and sometimes UV filtration.</span>
           </li>
         </ul>
+
+        <FixPicks
+          className="mt-10"
+          pageType="guide"
+          placement="guide-picks"
+          title="If you switch from bottles to the tap"
+          intro={
+            <>
+              A family of four drinking only bottled water spends at least £1,460 a year by the sums above. A filter jug and a year of
+              cartridges cost a small part of that. These are the three filters our readers pick most, from a jug to a system under the sink.
+            </>
+          }
+        />
 
         {/* Check your area */}
         <h2 className="font-display text-xl italic mt-10 mb-4 text-ink">

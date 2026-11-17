@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getHardnessArea, getHardnessAreaCodes, getHardnessTowns, getPostcodeData } from "@/lib/data";
 import { nearbyTowns, type HardnessTown } from "@/lib/hardness-towns";
-import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
+import { formatPriceRange, installedPriceRange, MARKETPLACE_GUIDE } from "@/lib/softener-prices";
+import { softenerRequestsByArea } from "@/lib/softener-local";
+import { householdLoad, REQUEST_WINDOW_DAYS } from "@/lib/softener-sizing";
 import { formatSampleDate } from "@/lib/tank-plan";
 import { isThamesRotationDistrict } from "@/lib/thames-zones";
 import { postcodeAreaName } from "@/lib/postcode-areas";
@@ -46,12 +48,35 @@ function townDescription(town: HardnessTown): string {
   return `${town.town} tap water is ${town.median >= 250 ? "very hard" : "hard"} at ${town.median} mg/L${range}. District table, what it costs you and softener quotes.`;
 }
 
+/**
+ * The two questions someone asks once they have decided the water is hard: what
+ * a softener costs here and who fits one. The cost does not change with the
+ * town, so the answer says so and gives the local figure that does: how much
+ * hardness a household takes in.
+ */
+function softenerFaqs(place: string, area: string, hardness: number, softenerPrice: string, requests: number) {
+  const { serviceYearly } = MARKETPLACE_GUIDE;
+  const four = householdLoad(4, hardness);
+  return [
+    {
+      question: `How much does a water softener cost in ${place}?`,
+      answer: `Supplied and fitted, a water softener typically costs ${softenerPrice}, plus £${serviceYearly.low} to £${serviceYearly.high} a year for a service. The price depends on the size of the home and the type of softener, not on the town, so compare at least two quotes. What does change with ${place} is the workload: at ${Math.round(hardness)} mg/L a family of four takes in about ${four.kg} kg of dissolved chalk a year.`,
+    },
+    {
+      question: `Who fits water softeners in ${place}?`,
+      answer: `Independent water softener installers who cover ${area} postcodes. Ask for quotes on this page and we pass your request to up to two of them as soon as one covers your postcode; they phone you with a price and you are free to say no.${requests > 0 ? ` ${requests} ${requests === 1 ? "homeowner" : "homeowners"} in ${area} postcodes asked in the last ${REQUEST_WINDOW_DAYS} days.` : ""}`,
+    },
+  ];
+}
+
 async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[] }) {
   const measured = town.districts.filter((d) => d.measured);
-  const [records, area] = await Promise.all([
+  const [records, area, requestsByArea] = await Promise.all([
     Promise.all(measured.slice(0, 6).map((d) => getPostcodeData(d.district))),
     getHardnessArea(town.area),
+    softenerRequestsByArea(),
   ]);
+  const requests = requestsByArea.get(town.area) ?? 0;
   const approximate = measured.some((d) => isThamesRotationDistrict(d.district));
   // The supplier on record for these districts comes from the same unreliable list.
   const suppliers = approximate ? [] : [...new Set(records.map((r) => r?.supplier).filter((s): s is string => Boolean(s)))];
@@ -73,6 +98,7 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
       question: `Do I need a water softener in ${town.town}?`,
       answer: `At ${town.median} mg/L a softener pays for itself in most homes, because kettles, boilers and showers scale up quickly. Fitted, one typically costs ${softenerPrice}. Check your own postcode first${town.measuredCount > 1 && !approximate ? `, because ${town.town} districts range from ${town.min} to ${town.max} mg/L` : ""}.`,
     },
+    ...softenerFaqs(town.town, town.area, town.median, softenerPrice, requests),
     ...(suppliers.length > 0
       ? [{
           question: `Who supplies water in ${town.town}?`,
@@ -100,6 +126,7 @@ async function TownRoute({ town, all }: { town: HardnessTown; all: HardnessTown[
         suppliers={suppliers}
         sampled={newest ? formatSampleDate(newest) : null}
         softenerPrice={softenerPrice}
+        requests={requests}
         faqs={faqs}
       />
     </>
@@ -220,9 +247,13 @@ export default async function HardnessAreaPage({ params }: Props) {
     },
   ];
 
+  const softenerPrice = formatPriceRange(installedPriceRange());
+  const requests = (await softenerRequestsByArea()).get(data.area) ?? 0;
+  const allFaqs = hard ? [...faqs, ...softenerFaqs(town, data.area, summary.median, softenerPrice, requests)] : faqs;
+
   return (
     <>
-      <FAQSchema faqs={faqs} />
+      <FAQSchema faqs={allFaqs} />
       <BreadcrumbSchema
         items={[
           { name: "Home", url: "https://www.tapwater.uk" },
@@ -230,7 +261,13 @@ export default async function HardnessAreaPage({ params }: Props) {
           { name: town, url: `https://www.tapwater.uk/hardness/${data.area.toLowerCase()}` },
         ]}
       />
-      <HardnessArea data={data} faqs={faqs} towns={(await getHardnessTowns()).filter((t) => t.area === data.area)} />
+      <HardnessArea
+        data={data}
+        faqs={allFaqs}
+        towns={(await getHardnessTowns()).filter((t) => t.area === data.area)}
+        softenerPrice={softenerPrice}
+        requests={requests}
+      />
     </>
   );
 }
