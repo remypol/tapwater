@@ -35,10 +35,14 @@ type Adapter = (postcode: string, lat: number, lng: number) => Promise<Lookup | 
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+/** Set when a company answers 429 (too many requests): the run for that company stops at once. */
+let rateLimited = false;
+
 async function getJson<T>(url: string, init: RequestInit = {}): Promise<T | null> {
   const res = await fetch(url, { ...init, headers: { "user-agent": UA, accept: "application/json, text/html;q=0.9", ...(init.headers ?? {}) } });
   if (!res.ok) {
     console.log(`     HTTP ${res.status} from ${new URL(url).host}`);
+    if (res.status === 429) rateLimited = true;
     return null;
   }
   return (await res.json()) as T;
@@ -122,6 +126,32 @@ const ADAPTERS: Record<string, Adapter> = {
     const v = num(values?.["8"] == null ? null : String(values["8"]));
     if (!Number.isFinite(v) || v <= 0) return null;
     return { mgCaCO3: v, zone: values?.["1"] ? String(values["1"]) : null };
+  },
+
+  // SES Water's "water quality and hardness report" search. It answers with
+  // "partsPerMillion" beside Clark, French and German degrees, and the parts
+  // per million are of calcium, not calcium carbonate: 74 beside 13 Clark
+  // degrees (13 × 14.254 = 185, and 74 × 100.09/40.08 = 185). SES softens its
+  // water at the works, which is why Sutton and Redhill read about 185 and not
+  // the 280 of their neighbours. The figure is only used when the calcium and
+  // the Clark degrees agree. robots.txt disallows /episerver/ and /utils/ only.
+  // Read on 17 Nov 2026.
+  "ses-water": async (postcode) => {
+    const d = await getJson<{ match?: boolean; areaName?: string; partsPerMillion?: number; clarkeDegrees?: number }>(
+      "https://www.seswater.co.uk/api/waterqualitysearch/search",
+      { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ postcode }) },
+    );
+    if (!d?.match) return null;
+    const asCalcium = Number(d.partsPerMillion);
+    const clark = Number(d.clarkeDegrees);
+    if (!(asCalcium > 0) || !(clark > 0)) return null;
+    const fromCalcium = asCalcium * (100.09 / 40.08);
+    const fromClark = clark * 14.254;
+    if (Math.abs(fromCalcium - fromClark) / fromClark > 0.1) {
+      console.log(`     ${postcode}: ${asCalcium} ppm and ${clark} Clark degrees do not agree, left out`);
+      return null;
+    }
+    return { mgCaCO3: Math.round(fromCalcium), zone: d.areaName ?? null };
   },
 
   "anglian-water": async (_postcode, lat, lng) => {
@@ -254,6 +284,7 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10);
 
   for (const supplier of suppliers) {
+    rateLimited = false;
     const { data: districts, error } = await supabase
       .from("postcode_districts")
       .select("id, latitude, longitude")
@@ -283,6 +314,11 @@ async function main() {
         const postcode = supplier === "anglian-water" ? district : await nearestPostcode(d.latitude, d.longitude);
         if (!postcode) { miss++; console.log(`  ${district.padEnd(5)} no postcode near centroid`); continue; }
         const r = await ADAPTERS[supplier](postcode, d.latitude, d.longitude);
+        if (rateLimited) {
+          // Asking again straight away is what a rate limit is there to stop.
+          console.log(`  ${supplier} says we are asking too fast. Stopped here; run again later with --skip-existing and a larger --delay.`);
+          break;
+        }
         if (!r || r.mgCaCO3 <= 0 || r.mgCaCO3 > 1000) { miss++; console.log(`  ${district.padEnd(5)} ${postcode.padEnd(8)} no hardness`); continue; }
         ok++;
         console.log(`  ${district.padEnd(5)} ${postcode.padEnd(8)} ${String(Math.round(r.mgCaCO3)).padStart(4)} mg/L  ${r.zone ?? ""}`);

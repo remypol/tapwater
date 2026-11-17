@@ -81,6 +81,7 @@ One more of the same kind: 29 South East Water and Wessex Water districts (Wokin
 - 261 corrected districts got a hardness reading from their real company's own checker (`scripts/ingest-company-hardness.ts`): Affinity 94, South East Water 81, Essex & Suffolk 45, Wessex 22, Anglian 13, Northumbrian 3, United Utilities 3. Woking reads 271 mg/L (the site said 139), Maidenhead 334, Wokingham 302.
 - Southern Water publishes hardness as calcium, not as calcium carbonate, so its 90 districts had no measured hardness. The conversion is exact (× 100.09/40.08) and is now done on every refresh (`src/lib/derived-hardness.ts`): Brighton 276, Worthing 279 to 300, Southampton about 300, Hastings 81.
 - Bristol Water has a postcode checker its robots.txt allows; an adapter was added and all 47 of its districts have a reading (Bristol about 205 to 290, Frome 334).
+- SES Water has one too (`POST /api/waterqualitysearch/search`), also allowed. It rate-limits after about seven requests at one a second, so the run uses one request every twenty seconds, and the ingest script now stops the moment a company answers "too many requests". SES softens its water at the works: its "parts per million" are of calcium (74 beside 13 Clark degrees), which is about 185 mg/L as CaCO3. Sutton and Redhill had been shown at about 256 from their neighbours' figures; the real figure is lower, and the pages now carry it.
 - Districts with a measured hardness: 1,773 before, **2,016** after. Over the 200 ppm line in the building regulations guidance: 759 before, **967** after.
 
 Still without a measured figure:
@@ -89,11 +90,10 @@ Still without a measured figure:
 |---|---|---|
 | Severn Trent | 275 (195 with no figure at all: B, CV, DE, DY, LE, ST, TF, WR, WV) | Its checker calls `/bin/waterquality/info.json`, and its robots.txt disallows `/bin`. Its open dataset has no hardness, calcium or magnesium. **Do not automate it.** This is the largest gap: Coventry, Leicester and Derby are hard-water towns |
 | Welsh Water | 191 (184 with no figure) | No hardness in its samples; checker not looked at. Mostly soft water, so low value for softener requests |
-| South Staffs Water | 45 (none) | No hardness in its samples; checker not looked at. Hard water (Walsall, West Bromwich) |
+| South Staffs Water | 45 (none) | No hardness in its samples. Its robots.txt disallows nothing, but no postcode checker was found on its water hardness or water quality pages in a short look. Hard water (Walsall, West Bromwich) |
 | South West Water | 41 of 131 (TQ, TR) | Its checker allows about twenty calls an hour; the run was never finished. Soft water |
-| SES Water | 28 (21 on an area estimate, 7 none) | Has a postcode "water quality and hardness report"; endpoint not looked at. Very hard water, so worth doing |
-| Portsmouth Water | 23 (area estimate) | Not looked at. Very hard |
-| Cambridge Water | 11 (area estimate) | Not looked at. Very hard |
+| Portsmouth Water | 23 (area estimate) | Its website refused us outright with a Cloudflare block page (17 Nov 2026, from a Dutch connection). Not pursued. Very hard water |
+| Cambridge Water | 11 (area estimate) | Shares South Staffs Water's site; no postcode checker found in a short look. Very hard water |
 | Hafren Dyfrdwy | 13 | Not looked at. Soft |
 
 ## 7. Company pages
