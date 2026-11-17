@@ -8,6 +8,8 @@ import { getScoreColor } from "@/lib/types";
 import { CITIES } from "@/lib/cities";
 import { REGIONS } from "@/lib/regions";
 import { OG_IMAGE } from "@/lib/og";
+import { PostcodeSearch } from "@/components/postcode-search";
+import { FixPicks } from "@/components/fix-picks";
 
 export const revalidate = 86400;
 
@@ -315,6 +317,12 @@ export default async function RankingsPage() {
             <li><strong>Regions</strong><b>{regionRankings.length}</b></li>
             <li><strong>Areas tested</strong><b>{totalPostcodes.toLocaleString()}</b></li>
           </ul>
+          <div className="mt-8 max-w-lg">
+            <p className="wt-sub" style={{ marginBottom: 12 }}>
+              A city average hides a lot. Enter your postcode for the readings from your own supply.
+            </p>
+            <PostcodeSearch size="sm" />
+          </div>
         </header>
 
         <hr className="border-rule" />
@@ -666,6 +674,22 @@ export default async function RankingsPage() {
             </div>
           </section>
         </ScrollReveal>
+
+        <hr className="border-rule mt-12" />
+
+        {/* ── What fixes it ── */}
+        <FixPicks
+          className="mt-10"
+          pageType="rankings"
+          placement="rankings-picks"
+          title="Wherever your area ranks, this is what fixes it"
+          intro={
+            <>
+              A low rank does not mean unsafe water, and a high one does not mean nothing to improve. These are the three fixes our readers pick
+              most. For one matched to your own readings, check your postcode above.
+            </>
+          }
+        />
 
         <hr className="border-rule mt-12" />
 

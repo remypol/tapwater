@@ -5,6 +5,7 @@ import { ChevronRight, Shield, Droplets, ArrowRight } from "lucide-react";
 import { BreadcrumbSchema, ArticleSchema, FAQSchema } from "@/components/json-ld";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { PostcodeSearch } from "@/components/postcode-search";
+import { GuideFilters } from "@/components/guide-filters";
 import { getAllPostcodeDistricts, getPostcodeData, getHardness, isRankable } from "@/lib/data";
 import { getScoreColor } from "@/lib/types";
 import type { PostcodeData } from "@/lib/types";
@@ -21,6 +22,33 @@ const PRESS_CSV_BY_RANKING: Record<string, string> = {
   "hardest-water": "hardest-water",
   "best-water": "best-worst-overall",
   "worst-water": "best-worst-overall",
+};
+
+// Named filters under each ranking's advice. These pages told readers what kind of
+// filter works and linked to the whole catalogue: 108 search visits in 90 days and
+// no shop click (link report, 17 Nov 2026). Each pick lists the contaminant the
+// ranking is about. Hard water gets the softener quote instead: no filter fixes it.
+const RANKING_PICKS: Record<string, { slug: string; highlight: string }[]> = {
+  "worst-lead": [
+    { slug: "zerowater-12-cup", highlight: "A jug certified for lead, for the least money" },
+    { slug: "waterdrop-g3p600", highlight: "Reverse osmosis under the sink, for the most lead removed" },
+  ],
+  "worst-nitrate": [
+    { slug: "waterdrop-g3p600", highlight: "Reverse osmosis, the method that takes out nitrate" },
+    { slug: "zerowater-12-cup", highlight: "A jug that lists nitrate, for the least money" },
+  ],
+  "worst-pfas": [
+    { slug: "waterdrop-g3p600", highlight: "Reverse osmosis, certified to NSF/ANSI 58" },
+    { slug: "waterdrop-10ua", highlight: "The low-cost under-sink filter that lists PFAS" },
+  ],
+  "worst-water": [
+    { slug: "waterdrop-g3p600", highlight: "One system for the widest list of contaminants" },
+    { slug: "waterdrop-10ua", highlight: "The under-sink filter most of our readers choose" },
+  ],
+  "best-water": [
+    { slug: "brita-marella-xl", highlight: "A jug for the chlorine taste, nothing more" },
+    { slug: "waterdrop-10ua", highlight: "Under the sink, fitted without a plumber" },
+  ],
 };
 
 // ── Rankings config ──
@@ -751,6 +779,15 @@ export default async function RankingPage({
                 {config.filterAdvice}
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
+                {slug === "hardest-water" ? (
+                  <Link
+                    href="/hardness#softener-quotes"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-btn text-white hover:bg-btn-hover transition-colors"
+                  >
+                    <Droplets className="w-4 h-4" />
+                    Get free softener quotes
+                  </Link>
+                ) : null}
                 <Link
                   href="/filters/"
                   className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
@@ -770,6 +807,12 @@ export default async function RankingPage({
                   Test your water
                 </Link>
               </div>
+              {RANKING_PICKS[slug] ? (
+                <GuideFilters reason={slug} picks={RANKING_PICKS[slug]}>
+                  Two that fit, at either end of the price range. Check your own postcode first: a filter is only worth buying for
+                  something your water actually has.
+                </GuideFilters>
+              ) : null}
             </div>
           </section>
         </ScrollReveal>
