@@ -37,9 +37,12 @@ export default async function SuppliersPage() {
       let streamCount = 0;
       for (const area of supplier.postcodeAreas) {
         const data = await getPostcodeData(area);
-        if (data && data.safetyScore >= 0) {
+        // Only tap-water results count. A district with river and groundwater
+        // samples alone has a score too, but it is not the company's water:
+        // ranked on those, the three companies that publish no samples came last.
+        if (data && data.safetyScore >= 0 && data.dataSource === "stream") {
           scores.push(data.safetyScore);
-          if (data.dataSource === "stream") streamCount++;
+          streamCount++;
         }
       }
       const avgScore =
@@ -125,7 +128,7 @@ export default async function SuppliersPage() {
                       <span className="text-faint font-normal text-xs">/10</span>
                     </span>
                   ) : (
-                    <span className="text-faint text-xs">No data</span>
+                    <span className="text-faint text-xs">Publishes no results</span>
                   )}
                 </td>
                 <td className="px-4 py-3.5 text-right font-data text-muted hidden sm:table-cell">
@@ -148,8 +151,10 @@ export default async function SuppliersPage() {
       </div>
 
       <footer className="mt-10 text-sm text-faint leading-relaxed">
-        Scores are based on drinking water quality tests where available, supplemented
-        by Environment Agency environmental monitoring. See our{" "}
+        A company&apos;s average is taken over the districts where we hold its own tap-water
+        test results; the Areas column counts those districts. South East Water, Wessex
+        Water and Bristol Water publish no sample results we can use, so they are listed
+        without a score. See our{" "}
         <Link href="/about/methodology" className="underline underline-offset-2 hover:text-muted transition-colors">
           methodology
         </Link>{" "}

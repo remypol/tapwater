@@ -133,12 +133,14 @@ export default async function SupplierPage({ params }: Props) {
 
   // A score of -1 means "no results to score": such a district has a page but
   // must not be listed with a score or drag the company's average down.
+  // Only districts with the company's own tap-water results are scored here: a
+  // score built from river and groundwater samples says nothing about the company.
+  const hasTapResults = (row: (typeof allAreaData)[number]) =>
+    row.data !== null && row.data.safetyScore >= 0 && row.data.dataSource === "stream";
   const postcodeRows = allAreaData
-    .filter((row) => row.data !== null && row.data.safetyScore >= 0)
+    .filter(hasTapResults)
     .sort((a, b) => (a.data!.safetyScore ?? 0) - (b.data!.safetyScore ?? 0));
-  const unknownAreas = allAreaData
-    .filter((row) => row.data === null || row.data.safetyScore < 0)
-    .map((row) => row.area);
+  const unknownAreas = allAreaData.filter((row) => !hasTapResults(row)).map((row) => row.area);
 
   // Aggregate quality stats
   const scoredRows = postcodeRows.filter((r) => r.data !== null);
@@ -177,10 +179,12 @@ export default async function SupplierPage({ params }: Props) {
       ? Math.round((hardOrHarder / hardnessReadings.length) * 100)
       : null;
 
+  const qualitySentence = describeSupplierQuality(supplier.name, supplier.quality);
+
   // FAQ answers generated from this supplier's numbers, never from boilerplate.
   const safetyAnswer =
     avgScore === null
-      ? `We are still collecting scored drinking-water data for ${supplier.name}'s area. ${supplier.name} is a regulated UK water company and its supply meets legal standards; check a specific postcode on this page for the readings we do hold.`
+      ? `${supplier.name} publishes no tap-water sample results we can use, so we do not score its water. It is a regulated UK water company, tested under the same rules as every other. ${qualitySentence ?? ""} Its district pages show water hardness and nearby river and groundwater monitoring.`
       : avgScore >= 7
         ? `Yes. Across ${scoredRows.length} monitored postcode districts, ${supplier.name}'s average water quality score is ${avgScore}/10. The lowest-scoring district we monitor is ${worstArea?.area} (${worstArea?.data!.safetyScore}/10) and the highest is ${bestArea?.area} (${bestArea?.data!.safetyScore}/10).`
         : `${supplier.name}'s water meets legal standards, but the average score across ${scoredRows.length} monitored districts is ${avgScore}/10, with ${totalFlagged} contaminant readings flagged above recommended levels. Check your own district in the table on this page.`;
@@ -190,7 +194,6 @@ export default async function SupplierPage({ params }: Props) {
       ? `Hardness readings for ${supplier.name}'s districts are still being collected. Enter your postcode on our hardness checker for the reading in your area.`
       : `Across ${hardnessReadings.length} monitored districts in ${supplier.name}'s area, the average hardness is ${avgHardness} mg/L CaCO₃ and ${hardPct}% of districts read hard or very hard. ${hardPct !== null && hardPct >= 50 ? "Expect limescale: descaling, and in many homes a water softener, are worth considering." : "Limescale pressure is moderate to low for most of this supply area."}`;
 
-  const qualitySentence = describeSupplierQuality(supplier.name, supplier.quality);
   const complianceAnswer = `${qualitySentence ?? `No regulator publishes a rating for ${supplier.name} on its own.`} ${
     supplier.quality?.kind === "cri"
       ? "The index weighs every failed test by how serious the substance is, how many people the failure could reach and how the company dealt with it. The Inspectorate does not publish a pass rate for each company; across England 99.97% of tests met the standards in 2025."
@@ -273,9 +276,11 @@ export default async function SupplierPage({ params }: Props) {
             <h2 className="font-display text-2xl text-ink italic mb-1">
               Water Quality Across {supplier.name} Area
             </h2>
-            <p className="text-sm text-muted mb-5">
-              Scores sorted by lowest first &mdash; worst quality at the top.
-            </p>
+            {scoredRows.length > 0 ? (
+              <p className="text-sm text-muted mb-5">
+                Every district with {supplier.name}&apos;s own tap-water results, lowest score first.
+              </p>
+            ) : null}
 
             {scoredRows.length > 0 ? (
               <div className="card overflow-hidden">
@@ -344,14 +349,17 @@ export default async function SupplierPage({ params }: Props) {
               </div>
             ) : (
               <div className="card p-6 text-center">
-                <p className="text-muted">No scored postcode data available for this supplier yet.</p>
+                <p className="text-muted">
+                  {supplier.name} publishes no tap-water sample results we can use, so its districts are
+                  not scored. Each district page shows water hardness and nearby river and groundwater monitoring.
+                </p>
               </div>
             )}
 
             {unknownAreas.length > 0 && (
               <p className="text-xs text-faint mt-3">
-                {unknownAreas.length} more district{unknownAreas.length !== 1 ? "s" : ""} in this
-                company&apos;s area {unknownAreas.length !== 1 ? "have" : "has"} no results we can score yet
+                {unknownAreas.length} {postcodeRows.length > 0 ? "more " : ""}district{unknownAreas.length !== 1 ? "s" : ""} in this
+                company&apos;s area {unknownAreas.length !== 1 ? "have" : "has"} no tap-water results we can score
                 {unknownAreas.length <= 40 ? `: ${unknownAreas.join(", ")}.` : "."}
               </p>
             )}
