@@ -172,11 +172,21 @@ export async function releaseToPartner(sb: SupabaseClient, partnerId: string, no
     sentTo.set(d.lead_id, set);
   }
 
+  // Requests saved before repeats were caught at the door: the same person asking
+  // twice for the same district must not cost an installer two credits.
+  const seen = new Set<string>();
+  const personKey = (l: LeadRow) => `${l.email.trim().toLowerCase()}|${l.postcode_district.toUpperCase()}`;
+  for (const lead of leads) {
+    if (sentTo.get(lead.id)?.has(partner.id)) seen.add(personKey(lead));
+  }
+
   let delivered = 0;
   for (const lead of leads) {
     if (partner.lead_credits <= 0) break;
     const already = sentTo.get(lead.id) ?? new Set<string>();
     if (already.has(partner.id) || already.size >= MAX_INSTALLERS_PER_LEAD) continue;
+    if (seen.has(personKey(lead))) continue;
+    seen.add(personKey(lead));
     if (!(await sendLead(sb, send, lead, partner))) break;
     delivered++;
     await markForwarded(sb, lead.id);
@@ -188,10 +198,16 @@ export async function releaseToPartner(sb: SupabaseClient, partnerId: string, no
 /** Recent, shareable requests per postcode area, for the partner page and the approval email. */
 export async function waitingByArea(sb: SupabaseClient, days: number, now = new Date()): Promise<Map<string, number>> {
   const since = new Date(now.getTime() - days * 86_400_000).toISOString();
-  const { data } = await sb.from("softener_leads").select("postcode_district").gte("created_at", since);
+  const { data } = await sb.from("softener_leads").select("postcode_district, email").gte("created_at", since);
   const counts = new Map<string, number>();
-  for (const row of (data ?? []) as { postcode_district: string }[]) {
-    const area = row.postcode_district.toUpperCase().replace(/[0-9].*$/, "");
+  // One person asking twice for the same district is one request.
+  const seen = new Set<string>();
+  for (const row of (data ?? []) as { postcode_district: string; email: string }[]) {
+    const district = row.postcode_district.toUpperCase();
+    const key = `${row.email.trim().toLowerCase()}|${district}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const area = district.replace(/[0-9].*$/, "");
     if (area) counts.set(area, (counts.get(area) ?? 0) + 1);
   }
   return counts;
