@@ -61,7 +61,7 @@ Remy approved applying. All ten were submitted on account 2996923 with the websi
 | Fahren Hot Taps | 34865 | Boiling water taps; the three boiling tap guides link to Quooker, Qettle and Fohen for nothing |
 | Pure Clear Filters | 86411 | Filter bottles and jugs |
 | Tefal | 82985 | Kettle already in the hard-water kettle guide on a 3% Amazon link |
-| Morphy Richards UK | 115194 | Same |
+| Morphy Richards UK | 115194 | Same. **Rejected the same day**: "Site does not complement advertiser brand". Its kettle keeps its Amazon link (1 click in 90 days) |
 | Robert Dyas | 1528 | Sells BRITA jugs, kettles and softener salt |
 | Plumbworld | 17287 | Taps and shower fittings |
 | Wickes | 1563 | Softeners, salt, taps |
