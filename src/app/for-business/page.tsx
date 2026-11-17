@@ -19,28 +19,32 @@ export const metadata: Metadata = {
   twitter: { images: OG_IMAGE, card: "summary_large_image", title: `${TITLE} | TapWater.uk`, description: DESCRIPTION },
 };
 
+// A real response, built from the live data on 17 November 2026. The sample here
+// used to show a nitrite "fail" and Thames Water for Luton: the first was a scoring
+// bug and the second a wrong supplier match, both since fixed. Regenerate it from
+// the API if the shape changes; do not edit the figures by hand.
 const SAMPLE = `{
-  "postcode": "LU5 2AB",
-  "district": "LU5",
-  "areaName": "Central Bedfordshire",
-  "supplier": { "name": "Thames Water", "id": "thames-water" },
-  "score": 8.4,
-  "grade": "good",
-  "hardness": { "mgPerLitre": 289, "label": "very hard", "estimated": false },
+  "postcode": "IP1 2BX",
+  "district": "IP1",
+  "areaName": "Ipswich",
+  "supplier": { "name": "Anglian Water", "id": "anglian-water" },
+  "score": 9.1,
+  "grade": "excellent",
+  "hardness": { "mgPerLitre": 402, "label": "very hard", "estimated": false },
   "contaminants": {
-    "tested": 23,
+    "tested": 18,
     "flagged": 1,
     "flaggedReadings": [
-      { "name": "Nitrite", "value": 0.67, "unit": "mg/L", "ukLimit": 0.5, "status": "fail" }
+      { "name": "Nitrate", "value": 41.55, "unit": "mg/L", "ukLimit": 50, "status": "warning" }
     ]
   },
   "pfas": { "inTapWaterTests": null, "nearbyMonitoring": null },
   "incidents": [],
   "provenance": {
     "dataSource": "stream",
-    "sampleCount": 73,
-    "lastSampleDate": "2025-12-31",
-    "reportUrl": "https://www.tapwater.uk/postcode/LU5"
+    "sampleCount": 871,
+    "lastSampleDate": "2024-12-29",
+    "reportUrl": "https://www.tapwater.uk/postcode/IP1"
   }
 }`;
 
@@ -126,9 +130,9 @@ export default async function ForBusinessPage() {
       <section id="report" className="mb-14 scroll-mt-24" aria-labelledby="report-heading">
         <h2 id="report-heading" className="font-display text-3xl text-ink italic">What a report looks like</h2>
         <p className="text-body mt-3 max-w-2xl leading-relaxed">
-          A real response for a Bedfordshire postcode. Every number on it also appears on the
+          A real response for an Ipswich postcode. Every number on it also appears on the
           public page at{" "}
-          <Link href="/postcode/LU5" className="text-ink underline underline-offset-2 decoration-rule hover:decoration-accent">tapwater.uk/postcode/LU5</Link>,
+          <Link href="/postcode/IP1" className="text-ink underline underline-offset-2 decoration-rule hover:decoration-accent">tapwater.uk/postcode/IP1</Link>,
           so your users, and you, can check it.
         </p>
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -136,7 +140,7 @@ export default async function ForBusinessPage() {
           <div className="text-sm text-body leading-relaxed space-y-4">
             <div>
               <p className="font-semibold text-ink">The call</p>
-              <pre className="mt-1.5 overflow-x-auto rounded-lg bg-accent-light px-3 py-2 font-data text-xs text-ink">{`GET /api/v1/report?postcode=LU5 2AB
+              <pre className="mt-1.5 overflow-x-auto rounded-lg bg-accent-light px-3 py-2 font-data text-xs text-ink">{`GET /api/v1/report?postcode=IP1 2BX
 x-api-key: tw_live_…`}</pre>
             </div>
             <div>
