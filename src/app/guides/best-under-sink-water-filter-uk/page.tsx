@@ -15,7 +15,7 @@ import { OG_IMAGE } from "@/lib/og";
 export const revalidate = 86400;
 
 const year = new Date().getFullYear();
-const TITLE = `Best Under Sink Water Filter UK (${year}): Kitchen Drinking Water Filters Compared`;
+const TITLE = `Best Under Sink Water Filter UK (${year}): Top Picks Compared`;
 
 const FAQ_DATA = [
   {
@@ -44,7 +44,7 @@ export function generateMetadata(): Metadata {
   return {
     title: TITLE,
     description:
-      "Under sink water filters compared on certifications, what they actually remove, and true running costs, matched to real UK water quality data.",
+      "The best under sink water filter for a UK kitchen: what each one removes, certifications and true yearly running costs, matched to real UK water data.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/best-under-sink-water-filter-uk",
     },

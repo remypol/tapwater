@@ -9,9 +9,9 @@ import { FixPicks } from "@/components/fix-picks";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Tap Water vs Bottled Water UK (${year})`,
+    title: `Is Bottled Water Better Than Tap Water? UK Facts (${year})`,
     description:
-      "Is UK tap water safer than bottled water? Compare quality testing, contamination levels, environmental impact, and cost. The evidence may surprise you.",
+      "Is bottled water better than tap water? In the UK, tap water is tested more often, has fewer microplastics and costs far less. The evidence, side by side.",
     openGraph: {
       images: OG_IMAGE,
       title: `Tap Water vs Bottled Water UK (${year})`,

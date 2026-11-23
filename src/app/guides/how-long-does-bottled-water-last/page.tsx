@@ -41,7 +41,7 @@ export function generateMetadata(): Metadata {
   return {
     title: "How Long Does Bottled Water Last? (UK)",
     description:
-      "Does bottled water expire? What the UK best-before date means, how long tap or bottled water lasts in a bottle once opened, and when heat is the problem.",
+      "Can water expire? Sealed bottled water keeps for years. Tap water in a bottle lasts about a day once opened, or around six months sealed and stored cool.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/how-long-does-bottled-water-last",
     },

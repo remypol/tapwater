@@ -9,9 +9,9 @@ import { FixPicks } from "@/components/fix-picks";
 export function generateMetadata(): Metadata {
   const year = new Date().getFullYear();
   return {
-    title: `Is UK Tap Water Safe to Drink? (${year})`,
+    title: `Is UK Tap Water Safe to Drink? Yes, Here Is the Data (${year})`,
     description:
-      "Is UK tap water safe? Yes — but not perfect. Learn what's in your water, regional differences, and when to consider a filter. Based on official data.",
+      "Yes, UK tap water is safe to drink: 99.97% of tests in England met legal standards in 2025. What can still be in it, how areas differ, when to filter.",
     openGraph: {
       images: OG_IMAGE,
       title: `Is UK Tap Water Safe to Drink? (${year})`,

@@ -34,9 +34,9 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: "What Is Smart Water? Vapour-Distilled Water With Electrolytes",
+    title: "What Is Smart Water, and Is It Good for You? (UK)",
     description:
-      "What smart water is (vapour-distilled water plus electrolytes for taste), whether it hydrates better, and how its mineral content compares to UK tap water.",
+      "Smart water is vapour-distilled water with a pinch of electrolytes. Is it good for you, does it hydrate better, and how does it compare to UK tap water?",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/what-is-smart-water",
     },

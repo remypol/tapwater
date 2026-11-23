@@ -61,9 +61,9 @@ const FAQ_DATA = [
 /* ── Metadata ────────────────────────────────────────────────────────── */
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = `Best Kettle for Hard Water UK (${year}): Filter Kettles Compared`;
+  const title = `Best Kettle for Hard Water UK (${year}): 7 Kettles Compared`;
   const description =
-    "Why kettles fur up, which kettle limescale filters actually work, and seven UK kettles compared for hard water. Check your postcode hardness first.";
+    "The best kettle for hard water: seven UK kettles compared on their limescale filters, plus why kettles fur up. Check your postcode hardness first.";
   return {
     title,
     description,

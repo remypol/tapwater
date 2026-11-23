@@ -115,6 +115,15 @@ function firstThatFits(max: number, candidates: string[]): string {
   return candidates.find((c) => c.length <= max) ?? candidates[candidates.length - 1];
 }
 
+// A few city pages are found on a different search than "can you drink tap
+// water in ...": "norwich water" for Norwich and "severn trent water quality"
+// for Stoke-on-Trent (Search Console, 15-21 Nov 2026, page one, no clicks).
+// Those cities lead their title and description with that phrase.
+const SEARCH_LEAD: Record<string, string> = {
+  norwich: "Norwich Water Quality",
+  "stoke-on-trent": "Severn Trent Water Quality in Stoke-on-Trent",
+};
+
 // ── Static generation ──
 
 export async function generateStaticParams() {
@@ -152,7 +161,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Google cuts a title at roughly 60 characters. Drop the year first, then
   // shorten the wording.
-  const pageTitle = scored.length === 0
+  const lead = SEARCH_LEAD[city.slug];
+  const pageTitle = lead && scored.length > 0
+    ? answersYes
+      ? firstThatFits(62, [
+          `${lead}: Safe to Drink, ${score} (${year})`,
+          `${lead}: Safe to Drink, ${score}`,
+          `${lead}: ${score}`,
+        ])
+      : firstThatFits(62, [`${lead}: ${score}, ${areas}`, `${lead}: ${score}`])
+    : scored.length === 0
     ? firstThatFits(62, [
         `Can You Drink Tap Water in ${city.name}? What We Know`,
         `Can You Drink ${city.name} Tap Water? What We Know`,
@@ -176,7 +194,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // With no tap water results a score line would read "0.0/10 based on 0
   // contaminants across 0 postcodes", which is what Google showed for Edinburgh,
   // so those cities get the plain facts and no figure.
-  const description = scored.length === 0
+  const description = lead && answersYes
+    ? firstThatFits(154, [
+        `${lead}: yes, the tap water is safe to drink. It scores ${score} across ${districts}, with ${contaminantCount} contaminants tested.${suppliedBy}`,
+        `${lead}: yes, the tap water is safe to drink. It scores ${score} across ${districts}, with ${contaminantCount} contaminants tested.`,
+        `${lead}: yes, the tap water is safe to drink. It scores ${score} across ${districts}.`,
+      ])
+    : scored.length === 0
     ? firstThatFits(154, [
         `${city.name} tap water is held to the same legal standards as the rest of the UK.${suppliedBy} ${held.full}`,
         `${city.name} tap water is held to the same legal standards as all UK tap water.${suppliedBy} ${held.short}`,

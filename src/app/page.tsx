@@ -12,9 +12,9 @@ import { FAQSchema } from "@/components/json-ld";
 import { REGIONS } from "@/lib/regions";
 
 export const metadata: Metadata = {
-  title: { absolute: "Check UK Tap Water Quality by Postcode | TapWater.uk" },
+  title: { absolute: "UK Tap Water Quality: Check Your Postcode Free | TapWater.uk" },
   description:
-    "Check the water quality in your area by postcode. Free UK report from real drinking-water tests: lead, PFAS, nitrate and more against the legal limits.",
+    "Is your tap water safe? Check UK tap water quality for your postcode: a free report from real drinking-water tests for lead, PFAS, nitrate and hardness.",
   openGraph: {
     title: "Check the water quality in your area",
     description:
