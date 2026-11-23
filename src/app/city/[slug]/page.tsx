@@ -121,7 +121,7 @@ function firstThatFits(max: number, candidates: string[]): string {
 // Those cities lead their title and description with that phrase.
 const SEARCH_LEAD: Record<string, string> = {
   norwich: "Norwich Water Quality",
-  "stoke-on-trent": "Severn Trent Water Quality in Stoke-on-Trent",
+  "stoke-on-trent": "Severn Trent Water Quality in Stoke",
 };
 
 // ── Static generation ──
