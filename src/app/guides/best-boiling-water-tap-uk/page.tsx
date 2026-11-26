@@ -355,7 +355,7 @@ export default function BestBoilingWaterTapGuide() {
           Quooker states its taps accept softened water within conditions.
           You can{" "}
           <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-            request softener quotes for your postcode
+            see what helps with hard water
           </Link>{" "}
           on our hardness page.
         </p>

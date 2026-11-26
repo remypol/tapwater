@@ -41,10 +41,9 @@ export default function AffiliateDisclosurePage() {
         </p>
         <p className="text-base text-body leading-relaxed mb-6">
           We participate in affiliate programmes including Amazon Associates, the Awin network
-          (Waterdrop and Frizzlife), Osmio Water&apos;s own affiliate programme, and, for water
-          softener quotes, Bark. Affiliate links are used only for products we have assessed as
-          genuinely relevant to our readers. Where we link to a quote service, we may receive a fee
-          when an installer takes on your request; this never changes what you pay.
+          (including Waterdrop, Frizzlife and Hello Klean) and Osmio Water&apos;s own affiliate
+          programme. Affiliate links are used only for products we have assessed as genuinely
+          relevant to our readers. We do not sell, fit or take referral fees for water softeners.
         </p>
         <p className="text-base font-medium text-ink leading-relaxed mb-6">
           As an Amazon Associate we earn from qualifying purchases.

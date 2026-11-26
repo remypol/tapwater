@@ -426,7 +426,7 @@ export default function BestKettleHardWaterGuide() {
               </Link>{" "}
               or{" "}
               <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-                request installer quotes for your postcode
+                see what helps with hard water
               </Link>
               .
             </p>

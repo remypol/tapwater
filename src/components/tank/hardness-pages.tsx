@@ -10,11 +10,14 @@ import { getProductBySlug } from "@/lib/products";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import { SOFTENER_GUIDES } from "@/lib/softener-guides";
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
+import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
 import type { HardnessAreaPage, HardnessMapArea, HardnessMapDistrict } from "@/lib/data";
 import { TankSearch } from "./tank-search";
 import { SoftenerButton, StickyAction } from "./tank-actions";
 import { AreaPills, AreaTable, CheckPostcode, GuideLink, HardnessScale, SoftenerLocalFacts, SoftenerPanel } from "./hardness-blocks";
 import "./tank.css";
+
+const SOFTENER_PRICE = formatPriceRange(installedPriceRange());
 
 /**
  * The three hardness pages. Copy, FAQs and links come across from the previous
@@ -188,7 +191,7 @@ export function HardnessHub({ areas, towns = [], year, dateModified }: { areas: 
             <SoftenerPanel
               hardness={220}
               heading="Water softener, for the whole house"
-              intro="An ion exchange softener is the most effective solution. It replaces calcium and magnesium ions with sodium ions, producing genuinely soft water throughout the house. Units cost £500–£1,500 installed, with ongoing costs of roughly £5–£10 per month for salt. Life expectancy is 15–20 years. Keep one unsoftened tap in the kitchen for drinking."
+              intro={`An ion exchange softener is the only thing that takes the hardness out: it swaps calcium and magnesium for sodium, so the whole house gets soft water. Fitted, one typically costs ${SOFTENER_PRICE}, plus roughly £5–£10 a month for salt, and lasts 15–20 years. Keep one unsoftened tap in the kitchen for drinking.`}
             />
             <div className="wt-side">
               <div className="wt-second">
@@ -285,7 +288,7 @@ function bandWord(v: number): string {
   return v < 60 ? "soft" : v < 120 ? "moderately soft" : v < 180 ? "moderately hard" : v < 250 ? "hard" : "very hard";
 }
 
-export function HardnessArea({ data, faqs, towns = [], softenerPrice, requests = 0 }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[]; towns?: HardnessTown[]; softenerPrice?: string; requests?: number }) {
+export function HardnessArea({ data, faqs, towns = [], softenerPrice }: { data: HardnessAreaPage; faqs: { question: string; answer: string }[]; towns?: HardnessTown[]; softenerPrice?: string }) {
   const { summary, districts, nearby } = data;
   const town = postcodeAreaName(data.area);
   const hard = summary.median >= HARD_WATER_THRESHOLD;
@@ -315,7 +318,7 @@ export function HardnessArea({ data, faqs, towns = [], softenerPrice, requests =
               <HardnessScale value={summary.median} />
               {hard ? (
                 <div className="wt-heroacts">
-                  <SoftenerButton district={data.area} label={`Get softener quotes in ${town}`} paint="ink" placement="hero" />
+                  <SoftenerButton district={data.area} label={`What helps with limescale in ${town}`} paint="ink" placement="hero" />
                   <a href="#districts" className="wt-link">Find your district</a>
                 </div>
               ) : null}
@@ -356,11 +359,11 @@ Hardest first. Hard starts at 180 mg/L, very hard at 250.
         <section className="wt-chalk">
           <div className="wt-inner">
             <h2 className="wt-h2">A water softener in {town}</h2>
-            {softenerPrice ? <SoftenerLocalFacts place={town} area={data.area} hardness={summary.median} softenerPrice={softenerPrice} requests={requests} approximate={districts.some((d) => d.measured && isThamesApproximateDistrict(d.district))} /> : null}
+            {softenerPrice ? <SoftenerLocalFacts place={town} area={data.area} hardness={summary.median} softenerPrice={softenerPrice} approximate={districts.some((d) => d.measured && isThamesApproximateDistrict(d.district))} /> : null}
             <div className="wt-do-grid" style={{ marginTop: 40 }}>
               <SoftenerPanel
                 hardness={summary.median}
-                heading="Hard water: compare softener quotes"
+                heading="Only a softener removes it"
                 intro={`At ${summary.median} mg/L most ${data.area} homes get their money back on a softener within a few years. A filter will not touch limescale; only a softener does.`}
               />
               <div className="wt-side">
@@ -372,7 +375,7 @@ Hardest first. Hard starts at 180 mg/L, very hard at 250.
               </div>
             </div>
             <div className="wt-form">
-              <SoftenerLeadForm hardnessValue={summary.median} hardnessLabel={summary.label} source="hardness_area" heading={`Softener quotes for ${town}`} intro={`At ${summary.median} mg/L most ${data.area} homes get their money back on a softener within a few years. Free quotes from installers covering your postcode.`} />
+              <SoftenerLeadForm hardnessValue={summary.median} hardnessLabel={summary.label} source="hardness_area" postcode={town} />
             </div>
             <h2 className="wt-h2" style={{ marginTop: 56 }}>Before you buy</h2>
             <SoftenerGuideList />
@@ -417,8 +420,8 @@ Hardest first. Hard starts at 180 mg/L, very hard at 250.
       ) : null}
 
       {hard ? (
-        <StickyAction heroId="wt-hardness" title={`${summary.median} mg/L in ${town}`} note="Compare softener quotes">
-          <SoftenerButton district={data.area} label="Get quotes" paint="sun" placement="sticky" />
+        <StickyAction heroId="wt-hardness" title={`${summary.median} mg/L in ${town}`} note="What helps with the limescale">
+          <SoftenerButton district={data.area} label="What helps" paint="sun" placement="sticky" />
         </StickyAction>
       ) : null}
 
@@ -450,12 +453,10 @@ export interface HardnessTownView {
   sampled: string | null;
   /** "£1,195 to £2,900": what a fitted softener costs, from the cost guide's sources. */
   softenerPrice: string;
-  /** Quote requests from the town's postcode area in the last 90 days. */
-  requests: number;
   faqs: { question: string; answer: string }[];
 }
 
-export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled, softenerPrice, requests, faqs }: HardnessTownView) {
+export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled, softenerPrice, faqs }: HardnessTownView) {
   const areaTown = postcodeAreaName(town.area);
   const measured = town.districts.filter((d) => d.measured);
   const estimated = town.districts.length - measured.length;
@@ -500,7 +501,7 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
               </p>
               <HardnessScale value={town.median} />
               <div className="wt-heroacts">
-                <SoftenerButton district={town.districts[0].district} label={`Get softener quotes in ${town.town}`} paint="ink" placement="hero" />
+                <SoftenerButton district={town.districts[0].district} label={`What helps with limescale in ${town.town}`} paint="ink" placement="hero" />
                 <a href="#districts" className="wt-link">Find your district</a>
               </div>
             </div>
@@ -546,11 +547,11 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
       <section className="wt-chalk">
         <div className="wt-inner">
           <h2 className="wt-h2">A water softener in {town.town}</h2>
-          <SoftenerLocalFacts place={town.town} area={town.area} hardness={town.median} softenerPrice={softenerPrice} requests={requests} approximate={approximate} />
+          <SoftenerLocalFacts place={town.town} area={town.area} hardness={town.median} softenerPrice={softenerPrice} approximate={approximate} />
           <div className="wt-do-grid" style={{ marginTop: 40 }}>
             <SoftenerPanel
               hardness={town.median}
-              heading={`Softener quotes in ${town.town}`}
+              heading="Only a softener removes it"
               intro={`At ${town.median} mg/L a softener is the only thing that stops limescale; a filter does not. Fitted, one typically costs ${softenerPrice}.`}
             />
             <div className="wt-side">
@@ -566,8 +567,7 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
               hardnessValue={town.median}
               hardnessLabel={bandWord(town.median)}
               source="hardness_town"
-              heading={`Softener quotes for ${town.town}`}
-              intro={`At ${town.median} mg/L most homes in ${town.town} get their money back on a softener within a few years. Free quotes from installers who cover your postcode.`}
+              postcode={town.town}
             />
           </div>
           <h2 className="wt-h2" style={{ marginTop: 56 }}>Before you buy</h2>
@@ -590,8 +590,8 @@ export function HardnessTownPage({ town, nearby, areaMedian, suppliers, sampled,
         </section>
       ) : null}
 
-      <StickyAction heroId="wt-hardness" title={`${town.median} mg/L in ${town.town}`} note="Compare softener quotes">
-        <SoftenerButton district={town.districts[0].district} label="Get quotes" paint="sun" placement="sticky" />
+      <StickyAction heroId="wt-hardness" title={`${town.median} mg/L in ${town.town}`} note="What helps with the limescale">
+        <SoftenerButton district={town.districts[0].district} label="What helps" paint="sun" placement="sticky" />
       </StickyAction>
 
       <section className="wt-faq">
@@ -779,11 +779,10 @@ export function HardnessMapGuide({ districts, hardest, softest, veryHardShare, y
         <div className="wt-inner">
           <h2 className="wt-h2">In the amber on the map?</h2>
           <p className="wt-sub">
-            If you want something you can buy today rather than have fitted, these are the two we point hard-water readers to most. Neither reduces hardness itself: one deals
-            with the chlorine that makes hard water rough on skin and hair, the other gives you soft, mineral-free drinking water from a unit that plugs in.
+            Anything over 180 mg/L is softener territory. Below is what a softener costs, and what deals with the scale for far less if you are not ready for one.
           </p>
           <div className="wt-do-grid" style={{ marginTop: 32 }}>
-            <SoftenerPanel hardness={220} heading="Anything over 180 mg/L is softener territory" intro="Get free quotes from installers covering your postcode and compare at least two before you buy." />
+            <SoftenerPanel hardness={220} heading="Anything over 180 mg/L is softener territory" intro="Only a softener takes the hardness out. Get written prices from at least two installers before you buy; the cost guide has what each brand charges." />
             <div className="wt-side">
               <div className="wt-second">
                 <h3>Best water softeners compared</h3>
@@ -792,9 +791,8 @@ export function HardnessMapGuide({ districts, hardest, softest, veryHardShare, y
               </div>
             </div>
           </div>
-          <Picks pageType="guide" placement="guide-solutions" reason="hard-water" />
           <div className="wt-form">
-            <SoftenerLeadForm hardnessValue={220} hardnessLabel="hard" source="hardness_map" heading="In the amber on the map?" intro="Anything over 180 mg/L is softener territory. Get free quotes from installers covering your postcode and compare at least two before you buy." />
+            <SoftenerLeadForm hardnessValue={220} hardnessLabel="hard" source="hardness_map" />
           </div>
         </div>
       </section>

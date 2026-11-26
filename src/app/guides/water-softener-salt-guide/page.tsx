@@ -313,8 +313,6 @@ export default function WaterSoftenerSaltGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="Buying salt because you have no softener yet?"
-            intro="If you are reading this before you own one, get the unit priced first. Free quotes from installers covering your postcode, and the salt question answers itself."
           />
         </div>
 

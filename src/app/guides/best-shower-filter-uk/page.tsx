@@ -434,7 +434,7 @@ export default function BestShowerFilterGuide() {
           does. A cartridge in a shower arm cannot. If scale is your problem,
           check the reading at your postcode and, if it is 200 mg/L or more,{" "}
           <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-            get softener quotes
+            look at a water softener
           </Link>{" "}
           rather than buying a filter and being disappointed.
         </p>

@@ -73,7 +73,7 @@ export function FixPicks({ pageType, placement, title, intro, className = "" }: 
             href="/hardness#softener-quotes"
             className="inline-flex items-center gap-1 font-medium text-ink hover:text-accent transition-colors"
           >
-            Hard water? Get softener quotes
+            Hard water? What helps
             <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
           <Link

@@ -446,7 +446,7 @@ export default async function CityPage({ params }: Props) {
             {cityIsHard ? (
               <p className="wt-herohard wt-nums">
                 {city.name} water is {hardnessClass} at {Math.round(avgHardness ?? 0)} mg/L.{" "}
-                <a href="#softener-quotes" className="wt-link">Get softener quotes</a>
+                <a href="#softener-quotes" className="wt-link">What helps</a>
               </p>
             ) : null}
           </div>
@@ -648,8 +648,8 @@ export default async function CityPage({ params }: Props) {
       ) : null}
 
       {cityIsHard ? (
-        <StickyAction title={`${Math.round(avgHardness ?? 0)} mg/L: ${hardnessClass} water`} note={`Softener quotes in ${city.name}`}>
-          <SoftenerButton district={city.name} label="Get quotes" paint="sun" placement="sticky" />
+        <StickyAction title={`${Math.round(avgHardness ?? 0)} mg/L: ${hardnessClass} water`} note="What helps with the limescale">
+          <SoftenerButton district={city.name} label="What helps" paint="sun" placement="sticky" />
         </StickyAction>
       ) : null}
 

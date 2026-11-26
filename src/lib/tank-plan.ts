@@ -155,7 +155,7 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   const isHard = hardness != null && hardness.value >= HARD_WATER_THRESHOLD;
   const softener: TankAction = {
     kind: "softener",
-    title: `Get softener quotes for ${district}`,
+    title: "See what helps with limescale",
     reason: hardness
       ? `At ${Math.round(hardness.value)} mg/L a softener is the only thing that stops limescale. Filters do not soften water.`
       : "A softener is the only thing that stops limescale.",

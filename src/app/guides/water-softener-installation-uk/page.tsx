@@ -248,8 +248,6 @@ export default function WaterSoftenerInstallationGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="Get installation quotes for your postcode"
-            intro="Installers price on your pipework and unit size. Request free quotes from installers covering your area and ask each one to itemise the bypass, drain and hard-water tap."
           />
         </div>
 

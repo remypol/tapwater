@@ -361,7 +361,7 @@ export default function FohenVsQuookerGuide() {
         <p className="text-base text-body leading-relaxed mt-6">
           If your postcode comes back very hard, you can{" "}
           <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-            request softener quotes for your postcode
+            see what helps with hard water
           </Link>{" "}
           on our hardness page; the{" "}
           <Link href="/guides/best-water-softener-uk" className="text-accent hover:underline">

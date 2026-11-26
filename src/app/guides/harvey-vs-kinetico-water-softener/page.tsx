@@ -234,8 +234,6 @@ export default function HarveyVsKineticoGuide() {
             hardnessValue={250}
             hardnessLabel="very hard"
             source="softener_guide"
-            heading="Get quotes for both"
-            intro="Neither brand publishes a fitted price, so the comparison only becomes real with two surveys. Request free quotes from installers covering your postcode and ask each to itemise the unit, fitting and the hard-water tap."
           />
         </div>
 

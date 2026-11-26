@@ -299,8 +299,6 @@ export default function SaltFreeSoftenerGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="If a real softener is possible, price one"
-            intro="Installed softeners typically run £1,000 to £2,500 and are the only proven fix. Request free quotes from installers covering your postcode before settling for a device that may not work."
           />
         </div>
 

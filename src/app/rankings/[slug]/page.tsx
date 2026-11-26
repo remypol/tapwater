@@ -785,7 +785,7 @@ export default async function RankingPage({
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-btn text-white hover:bg-btn-hover transition-colors"
                   >
                     <Droplets className="w-4 h-4" />
-                    Get free softener quotes
+                    What helps with hard water
                   </Link>
                 ) : null}
                 <Link

@@ -262,8 +262,6 @@ export default function DoINeedASoftenerGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="Above 200 mg/L? Get quotes"
-            intro="Softeners are priced by survey. Request free quotes from installers covering your postcode, and compare two before you commit."
           />
         </div>
 

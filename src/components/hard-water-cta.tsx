@@ -12,23 +12,18 @@ interface HardWaterCtaProps {
   /** Average hardness in mg/L CaCO3. Renders nothing below the hard-water threshold. */
   hardness: number | null;
   hardnessClass: string | null;
-  /** Which page type the quote request came from, for the lead table. */
+  /** Which page type the click came from, for the click log. */
   source: Extract<SoftenerLeadSource, "city_page" | "region_page" | "supplier_page">;
-  /** Where the quotes are for, when placeName does not read as a place ("Thames Water's"). */
+  /** The place named in the products heading, when placeName does not read as a place ("Thames Water's"). */
   quoteArea?: string;
   className?: string;
 }
 
 /**
  * The hard-water funnel on city and region pages. These pages carry most of
- * the "is X water hard or soft" searches, and until now they answered the
- * question and stopped. This turns the answer into the next step: quotes for
- * a softener, and the guides that explain the decision.
- *
- * The quote form sits right under the answer. It used to be a link to
- * /hardness#softener-quotes, and across ~430 Search Console clicks a month on
- * city pages that link produced no quote requests: one extra page is enough to
- * lose people.
+ * the "is X water hard or soft" searches. The answer leads straight into the
+ * next step: what a softener costs, and the kettle, shower and jug that deal
+ * with the scale for less (HardWaterFixes, right under it).
  */
 export function HardWaterCta({ placeName, hardness, hardnessClass, source, quoteArea, className = "" }: HardWaterCtaProps) {
   if (hardness == null || hardness < HARD_WATER_THRESHOLD) return null;
@@ -56,7 +51,7 @@ export function HardWaterCta({ placeName, hardness, hardnessClass, source, quote
           className="inline-flex items-center justify-center gap-2 bg-btn text-white rounded-lg px-5 py-3 text-sm font-medium hover:bg-btn-hover transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <Droplets className="w-4 h-4" aria-hidden="true" />
-          Get softener quotes
+          What helps with hard water
         </Link>
         <Link
           href="/guides/do-i-need-a-water-softener/"
@@ -89,8 +84,7 @@ export function HardWaterCta({ placeName, hardness, hardnessClass, source, quote
         hardnessValue={rounded}
         hardnessLabel={hardnessClass ?? "hard"}
         source={source}
-        heading={`Softener quotes in ${quoteArea ?? placeName}`}
-        intro={`At ${rounded} mg/L a softener protects the boiler, kettle and taps. Tell us your postcode and we will pass your request to installers who cover it. Free, no obligation.`}
+        postcode={quoteArea ?? placeName}
       />
     </div>
     </>

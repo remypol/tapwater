@@ -250,8 +250,6 @@ export default async function HardWaterBoilerRegulationsGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="Over the line? Price a softener while the plumber is there"
-            intro={`A softener covers the boiler and the rest of the house in one go. Supplied and fitted, one typically costs ${softenerPrice}. Request free quotes from installers who cover your postcode.`}
           />
         </div>
 

@@ -372,7 +372,7 @@ export default function QettleVsQuookerGuide() {
           Thames valley, a cartridge slows the damage but a softener stops it.
           You can{" "}
           <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-            request softener quotes for your postcode
+            see what helps with hard water
           </Link>{" "}
           on our hardness page, and our{" "}
           <Link href="/guides/best-water-softener-uk" className="text-accent hover:underline">

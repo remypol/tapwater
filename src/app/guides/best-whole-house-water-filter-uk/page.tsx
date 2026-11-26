@@ -461,7 +461,7 @@ export default function BestWholeHouseFilterGuide() {
           does the opposite. If limescale is what brought you here, check the
           reading at your postcode and, if it is 200 mg/L or more,{" "}
           <Link href="/hardness#softener-quotes" className="text-accent hover:underline">
-            get softener quotes
+            look at a water softener
           </Link>{" "}
           instead of buying a filter.
         </p>

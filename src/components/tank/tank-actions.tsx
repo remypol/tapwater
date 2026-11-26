@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { events } from "@/lib/analytics";
-import { SOFTENER_PARTNER_URL, softenerPartnerEnabled } from "@/lib/softener-partner";
 
 interface SoftenerButtonProps {
   district: string;
@@ -14,29 +13,12 @@ interface SoftenerButtonProps {
 }
 
 /**
- * The one softener button used everywhere on the page. With an approved partner it
- * goes straight to their quote form in a new tab; without one it scrolls to our own
- * form further down. Either way the click is logged against the district.
+ * The hard-water button used everywhere on the page: it scrolls to the hard-water
+ * products (HardWaterFixes, id "softener-quotes") and logs the click.
  */
 export function SoftenerButton({ district, label, paint, placement }: SoftenerButtonProps) {
-  const className = `wt-btn wt-btn--${paint}`;
-  if (softenerPartnerEnabled) {
-    return (
-      <a
-        href={SOFTENER_PARTNER_URL}
-        target="_blank"
-        rel="sponsored noopener noreferrer"
-        className={className}
-        data-placement={placement}
-        onClick={() => events.softenerPartnerClick(district, "postcode_page")}
-      >
-        {label}
-        <ArrowUpRight aria-hidden="true" />
-      </a>
-    );
-  }
   return (
-    <a href="#softener-quotes" className={className} data-placement={placement} onClick={() => events.softenerBannerClick(district)}>
+    <a href="#softener-quotes" className={`wt-btn wt-btn--${paint}`} data-placement={placement} onClick={() => events.softenerBannerClick(district)}>
       {label}
       <ArrowRight aria-hidden="true" />
     </a>

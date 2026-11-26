@@ -4,7 +4,7 @@ import { HARDNESS_BANDS, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
 import { hardnessColour } from "@/components/hardness-map";
 import { postcodeAreaName } from "@/lib/postcode-areas";
 import type { HardnessMapArea } from "@/lib/data";
-import { householdLoads, WATER_USE_SOURCE, REQUEST_WINDOW_DAYS } from "@/lib/softener-sizing";
+import { householdLoads, WATER_USE_SOURCE } from "@/lib/softener-sizing";
 import { MARKETPLACE_GUIDE } from "@/lib/softener-prices";
 import { isOverPartLLine } from "@/lib/part-l";
 import { SoftenerButton } from "./tank-actions";
@@ -91,13 +91,8 @@ export function SoftenerPanel({ district, heading, intro, hardness }: { district
       <p className="wt-gauge wt-nums" aria-hidden="true">{Math.round(hardness)}<small>mg/L</small></p>
       <h3>{heading}</h3>
       <p>{intro}</p>
-      <ul className="wt-assure">
-        <li>Free quotes</li>
-        <li>Local installers</li>
-        <li>No obligation</li>
-      </ul>
       <div className="wt-acts">
-        <SoftenerButton district={district ?? "your postcode"} label={district ? `Get softener quotes for ${district}` : "Get softener quotes"} paint="sun" placement="action" />
+        <SoftenerButton district={district ?? "your postcode"} label="See what helps with limescale" paint="sun" placement="action" />
         <Link href="/guides/do-i-need-a-water-softener" className="wt-link">Do I actually need one?</Link>
       </div>
     </div>
@@ -111,7 +106,7 @@ export function SoftenerPanel({ district, heading, intro, hardness }: { district
  * town and area pages, and carries one line for installers, who find these pages
  * when they search for their own trade and town.
  */
-export function SoftenerLocalFacts({ place, area, hardness, softenerPrice, requests, approximate = false }: { place: string; area: string; hardness: number; softenerPrice: string; requests: number; approximate?: boolean }) {
+export function SoftenerLocalFacts({ place, hardness, softenerPrice, approximate = false }: { place: string; area: string; hardness: number; softenerPrice: string; approximate?: boolean }) {
   const rows = householdLoads(hardness);
   const four = rows.find((r) => r.people === 4) ?? rows[rows.length - 1];
   const { serviceYearly } = MARKETPLACE_GUIDE;
@@ -141,9 +136,6 @@ export function SoftenerLocalFacts({ place, area, hardness, softenerPrice, reque
         <ul className="wt-ledger wt-nums">
           <li><strong>Softener, supplied and fitted</strong><b>{softenerPrice}</b></li>
           <li><strong>Yearly service</strong><b>£{serviceYearly.low} to £{serviceYearly.high}</b></li>
-          {requests > 0 ? (
-            <li><strong>Quote requests from {area} postcodes<em>last {REQUEST_WINDOW_DAYS} days</em></strong><b>{requests}</b></li>
-          ) : null}
         </ul>
       </div>
       <p className="wt-fine" style={{ marginTop: 20 }}>
@@ -156,13 +148,6 @@ export function SoftenerLocalFacts({ place, area, hardness, softenerPrice, reque
           <Link href="/guides/hard-water-boiler-regulations" className="wt-link">The 200 ppm rule, with a postcode check</Link>
         </p>
       ) : null}
-      <p className="wt-fine" style={{ marginTop: 10 }}>
-        Fit softeners in {place}?{" "}
-        {requests > 0
-          ? `${requests} ${requests === 1 ? "homeowner" : "homeowners"} in ${area} postcodes asked us for quotes in the last ${REQUEST_WINDOW_DAYS} days.`
-          : `We pass on quote requests from ${area} postcodes.`}{" "}
-        <Link href="/partners" className="wt-link">Your first three are free</Link>.
-      </p>
     </div>
   );
 }

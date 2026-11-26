@@ -699,6 +699,41 @@ export const PRODUCTS: FilterProduct[] = [
     annualCost: 60,
   },
   {
+    // Hello Klean on Awin (92037), approved for 2996923 in November 2026. Price,
+    // refill cost, rating (3.93 from 44 reviews) and the chlorine and scale claims
+    // are from helloklean.com on 26 Nov 2026. "Scale inhibition" is their wording:
+    // the hardness still comes through the head, it just deposits less.
+    id: "helloklean-shower-head-plus",
+    brand: "Hello Klean",
+    model: "Shower Head Plus",
+    slug: "helloklean-shower-head-plus",
+    category: "shower",
+    removes: ["Chlorine", "Heavy metals"],
+    certifications: [],
+    priceGbp: 120,
+    priceTier: "premium",
+    affiliateUrl:
+      "https://www.awin1.com/cread.php?awinmid=92037&awinaffid=2996923&ued=https%3A%2F%2Fhelloklean.com%2Fproducts%2Fhello-klean-shower-head-plus&platform=pl",
+    affiliateProgram: "awin",
+    affiliateTag: "awin-2996923",
+    imageUrl: "https://cdn.shopify.com/s/files/1/0087/1828/6953/files/2026_04_02_HELLOKLEAN23286_1_copy_2_v3.jpg?v=1776769377",
+    rating: 3.9,
+    badge: "premium",
+    pros: [
+      "Removes 97% of chlorine, the usual cause of dry skin and hair in the shower",
+      "Scale inhibitor cuts the white film on screens and taps, by its maker's figures",
+      "Shows on the head when the cartridge needs changing",
+    ],
+    cons: [
+      "Does not soften the water: the hardness still comes through",
+      "£36 refill every three months, about £144 a year",
+      "Rated 3.9 out of 5 by its own buyers, lower than cheaper heads",
+    ],
+    bestFor: "Hard-water homes where skin, hair and a scaled shower screen are the complaint",
+    filterLife: "3 months",
+    annualCost: 144,
+  },
+  {
     id: "aquabliss-sf220",
     brand: "AquaBliss",
     // Was B01MUBU0YC, which Amazon now redirects to the SF100. B01G7AZB96 is the
@@ -1442,7 +1477,7 @@ export const CATEGORY_META: Record<
     description:
       "Reduce chlorine and sediment from your shower water to improve skin, hair, and breathing comfort.",
     bestFor: "Anyone with dry skin, eczema, or brittle hair from hard/chlorinated water",
-    priceRange: "£25–£85",
+    priceRange: "£25–£120",
   },
   water_softener: {
     title: "Water Softeners",

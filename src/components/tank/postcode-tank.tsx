@@ -10,7 +10,9 @@ import { SoftenerLeadForm } from "@/components/softener-lead-form";
 import { ReportLink, TankSignup } from "./keep-informed";
 import { OurTaapOffer } from "./our-taap-offer";
 import { CONTAMINANT_SLUG_MAP } from "@/lib/contaminant-slugs";
-import { softenerPartnerEnabled, SOFTENER_PARTNER_NAME } from "@/lib/softener-partner";
+import { formatPriceRange, installedPriceRange } from "@/lib/softener-prices";
+
+const SOFTENER_PRICE = formatPriceRange(installedPriceRange());
 import { HARD_WATER_THRESHOLD } from "@/lib/filters";
 import { SOFTENER_GUIDES, SOFTENER_THRESHOLD_MGL } from "@/lib/softener-guides";
 import { pickRelatedGuides } from "@/lib/guides";
@@ -85,19 +87,12 @@ function SoftenerAction({ action, district, lead, hardness }: { action: Extract<
           <small>mg/L</small>
         </p>
       ) : null}
-      <h3>{lead ? "Hard water: compare softener quotes" : "Stop the limescale"}</h3>
+      <h3>{lead ? "Hard water: what helps" : "Cut the limescale"}</h3>
       <p>{action.reason}</p>
       {lead ? (
         <p>
-          It pays for itself in most homes at this hardness, through a boiler that stays efficient and appliances that last.
+          A fitted softener costs {SOFTENER_PRICE}. A filter kettle and a shower filter deal with the scale you notice most, for far less.
         </p>
-      ) : null}
-      {lead && softenerPartnerEnabled ? (
-        <ul className="wt-assure">
-          <li>Free quotes</li>
-          <li>Installers who cover {district}</li>
-          <li>No obligation</li>
-        </ul>
       ) : null}
       <div className="wt-acts">
         <SoftenerButton district={district} label={action.title} paint={lead ? "sun" : "ink"} placement="action" />
@@ -391,12 +386,6 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   hardnessValue={hardValue}
                   hardnessLabel={hardness?.label ?? hardnessBandLabel(hardValue).toLowerCase()}
                   source="postcode_page"
-                  heading={`Softener quotes for ${district}`}
-                  intro={
-                    softenerPartnerEnabled
-                      ? `Tell ${SOFTENER_PARTNER_NAME || "our quote partner"} about your home and get quotes from installers who cover ${district}. It takes about a minute.`
-                      : `Leave your details and we will email you when we can match you with installers who cover ${district}. No obligation.`
-                  }
                 />
               </div>
             ) : null}
@@ -630,10 +619,10 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
       {primary ? (
         <StickyAction
           title={primary.kind === "softener" ? `${hardValue != null ? Math.round(hardValue) : ""} mg/L: ${hardnessBandLabel(hardValue ?? 0).toLowerCase()} water` : primary.title}
-          note={primary.kind === "softener" ? "Compare softener quotes" : "Our pick for this water"}
+          note={primary.kind === "softener" ? "What helps with the limescale" : "Our pick for this water"}
         >
           {primary.kind === "softener" ? (
-            <SoftenerButton district={district} label="Get quotes" paint="sun" placement="sticky" />
+            <SoftenerButton district={district} label="What helps" paint="sun" placement="sticky" />
           ) : (
             <a href="#wt-fix" className="wt-btn wt-btn--sun">See it</a>
           )}
@@ -729,8 +718,6 @@ export function PostcodeTankEmpty({ page }: { page: PostcodePageLoad }) {
                   hardnessValue={hardValue}
                   hardnessLabel={hardnessBandLabel(hardValue).toLowerCase()}
                   source="postcode_page"
-                  heading={`Softener quotes for ${district}`}
-                  intro={`Leave your details and we will email you when we can match you with installers who cover ${district}. No obligation.`}
                 />
               </div>
             ) : null}

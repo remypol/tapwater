@@ -359,8 +359,6 @@ export default function WaterSoftenerCostGuide() {
             hardnessValue={220}
             hardnessLabel="hard"
             source="softener_guide"
-            heading="Get a price for your home"
-            intro="Installers price by the size of unit you need and your pipework, so the only exact cost is a quote for your home. Request free quotes from installers covering your postcode and compare at least two."
           />
         </div>
 

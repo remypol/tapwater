@@ -31,11 +31,11 @@ export function GuideDisclosure({ quotes = false }: { quotes?: boolean }) {
       <p>
         {quotes ? (
           <>
-            This guide contains affiliate links to salt and test products, and a
-            free quote form. We may earn a commission on purchases and a fee when
-            an installer takes on a quote request. Neither changes what you pay,
-            and neither changes our verdicts, which are based on how softeners
-            actually work in UK water.{" "}
+            This guide contains affiliate links to salt, test kits, kettles and
+            shower filters. We earn a commission on purchases at no extra cost to
+            you. We do not sell or fit softeners and take nothing from the brands
+            reviewed here, so the verdicts are based on how softeners actually
+            work in UK water.{" "}
           </>
         ) : (
           <>

@@ -28,7 +28,7 @@ export function ProductCard({
   const candour = getCandourRows(product);
 
   return (
-    <article className="card overflow-hidden h-full flex flex-col">
+    <article className="@container card overflow-hidden h-full flex flex-col">
       <div className="p-5 flex-1 flex flex-col">
         {/* Purpose lead */}
         {highlight && (
@@ -64,11 +64,11 @@ export function ProductCard({
         {/* Ledger */}
         <dl className="mt-4 border-t border-rule divide-y divide-rule">
           {product.pros.length > 0 && (
-            <div className="py-3 sm:grid sm:grid-cols-[148px_1fr] sm:gap-x-4">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+            <div className="py-3 @md:grid @md:grid-cols-[148px_1fr] @md:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted @md:pt-0.5">
                 Why it fits
               </dt>
-              <dd className="mt-1.5 sm:mt-0">
+              <dd className="mt-1.5 @md:mt-0">
                 <ul className="space-y-1">
                   {product.pros.slice(0, 3).map((pro) => (
                     <li key={pro} className="text-sm text-body leading-relaxed">
@@ -80,11 +80,11 @@ export function ProductCard({
             </div>
           )}
           {candour && (
-            <div className="py-3 sm:grid sm:grid-cols-[148px_1fr] sm:gap-x-4">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:pt-0.5">
+            <div className="py-3 @md:grid @md:grid-cols-[148px_1fr] @md:gap-x-4">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted @md:pt-0.5">
                 {candour.label}
               </dt>
-              <dd className="mt-1.5 sm:mt-0">
+              <dd className="mt-1.5 @md:mt-0">
                 <ul className="space-y-1">
                   {candour.lines.map((line) => (
                     <li key={line} className="text-sm font-medium text-ink leading-relaxed">
@@ -98,7 +98,7 @@ export function ProductCard({
         </dl>
 
         {/* Rail */}
-        <div className="mt-auto pt-4 border-t border-rule flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-auto pt-4 border-t border-rule flex flex-col gap-3 @md:flex-row @md:items-center @md:justify-between">
           <TypicalPrice priceGbp={product.priceGbp} size="md" />
           <AffiliateLink
             href={product.affiliateUrl}
@@ -109,7 +109,7 @@ export function ProductCard({
             productSlug={product.slug}
             placement={placement}
             campaign={pageType}
-            className="inline-flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-lg border border-rule-strong text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors w-full sm:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="inline-flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-lg border border-rule-strong text-sm font-medium text-ink hover:border-accent hover:text-accent transition-colors w-full @md:w-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             {ctaText}
             <ExternalLink className="w-4 h-4" aria-hidden="true" />

@@ -253,8 +253,6 @@ export default function BestWaterSoftenerGuide() {
           hardnessValue={220}
           hardnessLabel="hard"
           source="softener_guide"
-          heading="Get softener quotes for your postcode"
-          intro="Softeners are sold installed, so the real price is a quote, not a sticker. Tell us where you live and we will match you with installers who cover your area. Compare two or three before you decide."
         />
 
         {/* ── How they work and what they cost ────────────────────── */}
@@ -605,16 +603,6 @@ export default function BestWaterSoftenerGuide() {
         </p>
 
         <GuideFaq faqs={FAQ_DATA} />
-
-        <div className="mt-14">
-          <SoftenerLeadForm
-            hardnessValue={220}
-            hardnessLabel="hard"
-            source="softener_guide"
-            heading="Ready to compare quotes?"
-            intro="The brands above all sell through installers, and prices vary by region. Two or three quotes for your postcode is the only way to find out what a softener really costs in your home."
-          />
-        </div>
 
         <SoftenerGuidesNav current={SLUG} className="mt-14" />
 

@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: "m.media-amazon.com",
         pathname: "/images/I/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/s/files/1/0087/1828/6953/**",
+      },
     ],
   },
   // NOTE: no redirects() here. Config redirects match case-INsensitively, so a

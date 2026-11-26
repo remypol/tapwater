@@ -556,7 +556,7 @@ function buildDay7(sub: SubscriberSequenceState): string {
       `<a href="${BASE_URL}/guides/do-i-need-a-water-softener/" style="color:${COLORS.accent};">Do I need a water softener?</a> &middot; <a href="${BASE_URL}/guides/water-softener-cost-uk/" style="color:${COLORS.accent};">What one costs</a> &middot; <a href="${BASE_URL}/guides/best-kettle-for-hard-water-uk/" style="color:${COLORS.accent};">Kettles that cope with hard water</a>`,
     );
     inner += contentBlock(hardHtml);
-    inner += ctaButton(`${BASE_URL}/hardness#softener-quotes`, "Get softener quotes");
+    inner += ctaButton(`${BASE_URL}/hardness#softener-quotes`, "What helps with hard water");
   }
 
   inner += disclosureBox();
