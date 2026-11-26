@@ -113,6 +113,11 @@ export default async function ForBusinessPage() {
             See a report
           </a>
         </div>
+        <p className="text-sm text-body mt-6 max-w-2xl leading-relaxed">
+          Selling filters, softeners or boilers? The{" "}
+          <Link href="/for-business/checker" className="text-ink font-medium underline underline-offset-2 decoration-rule hover:decoration-accent">hardness checker</Link>{" "}
+          puts a postcode box on your product page in two lines of HTML, free with our link or £99 a month without.
+        </p>
       </header>
 
       <section className="mb-14" aria-labelledby="who-heading">
