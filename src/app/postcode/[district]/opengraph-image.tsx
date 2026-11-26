@@ -48,7 +48,9 @@ export default async function Image({ params }: { params: Promise<{ district: st
 
   const scoreColor =
     data.safetyScore >= 7 ? '#16a34a' : data.safetyScore >= 5 ? '#d97706' : '#dc2626';
-  const hasData = data.scoreGrade !== 'insufficient-data';
+  // River-only districts have no tap score: the readings are untreated river samples.
+  const riverOnly = data.dataSource === 'ea-only';
+  const hasData = data.scoreGrade !== 'insufficient-data' && !riverOnly;
 
   return new ImageResponse(
     (
@@ -178,7 +180,7 @@ export default async function Image({ params }: { params: Promise<{ district: st
               }}
             >
               <div style={{ display: 'flex', fontSize: 28, color: '#8ea0cc' }}>
-                Insufficient Data
+                {riverOnly ? 'No tap results published' : 'Insufficient Data'}
               </div>
             </div>
           )}
@@ -197,7 +199,9 @@ export default async function Image({ params }: { params: Promise<{ district: st
           <div style={{ display: 'flex', fontSize: 16, color: '#8ea0cc' }}>
             {hasData
               ? `${data.contaminantsTested} contaminants tested · ${data.contaminantsFlagged} flagged`
-              : 'Limited monitoring data available'}
+              : riverOnly
+                ? 'River and groundwater samples only'
+                : 'Limited monitoring data available'}
           </div>
           <div style={{ display: 'flex', fontSize: 16, color: '#b9c8ea' }}>
             Check yours → tapwater.uk

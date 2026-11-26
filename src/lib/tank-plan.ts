@@ -57,6 +57,8 @@ export interface TankPlanInput {
   scoredCount: number;
   hardness: { value: number; estimated: boolean; estimatedFrom?: string | null } | null;
   recommendations: RecommendedProduct[];
+  /** The water company's name, for the sentence that says it publishes no tap results. */
+  supplier?: string;
 }
 
 /** "Very hard", "Soft" … from the one hardness scale the site uses. */
@@ -104,8 +106,13 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   }
   bubbles.sort((a, b) => b.share - a.share);
 
-  const over = readings.filter((r) => r.status === "fail");
-  const thin = input.dataSource === "ea-only" || input.scoredCount < 3;
+  // No tap results: the readings are river and groundwater samples, untreated. A
+  // drinking-water limit does not apply to them, so nothing on the page may say a
+  // result is "over the limit" (56 such pages did until 26 November 2026, e.g. RG40
+  // headlined "Ammonia is over the limit" from a river sample).
+  const riverOnly = input.dataSource === "ea-only";
+  const over = riverOnly ? [] : readings.filter((r) => r.status === "fail");
+  const thin = riverOnly || input.scoredCount < 3;
   const tone: TankTone = over.length > 0 ? "over" : thin ? "thin" : "clear";
 
   const headline: string[] = [];
@@ -118,6 +125,8 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
     headline.push(over.length === 1 ? `${over[0].name} found in a sample.` : `${over.length} must-be-zero results found in samples.`);
   } else if (tone === "over") {
     headline.push(over.length === 1 ? `${over[0].name} is over the limit.` : `${over.length} results are over the limit.`);
+  } else if (riverOnly) {
+    headline.push("No tap tests published.");
   } else if (tone === "thin") {
     headline.push("Too few tap tests to call it.");
   } else {
@@ -132,11 +141,10 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
     basis = `${counted} ${joinNames(over.slice(0, 3).map((r) => r.name))} ${over.length === 1 ? "was" : "were"} found in at least one sample in the period. The legal standard is none at all, so the water company has to investigate and retest when that happens. Everything else passed.`;
   } else if (tone === "over") {
     basis = `${counted} ${joinNames(over.slice(0, 3).map((r) => r.name))} came in above the legal limit. Everything else passed.`;
+  } else if (riverOnly) {
+    basis = `${input.supplier ? "It" : "The water company"} publishes no tap-water test results for ${district}, so there is no tap score here.${hardness && !hardness.estimated ? ` The hardness figure is the company's own.` : ""} Further down are ${readings.length} substances measured in rivers and groundwater nearby, before any treatment.`;
   } else if (tone === "thin") {
-    basis =
-      input.dataSource === "ea-only"
-        ? `${counted} These are river and groundwater samples near ${district}, not tests of treated tap water, so treat the score as a rough guide.`
-        : `${counted} Only ${input.scoredCount} of them have a legal limit to judge against, so treat the score as provisional.`;
+    basis = `${counted} Only ${input.scoredCount} of them have a legal limit to judge against, so treat the score as provisional.`;
   } else if (closest && closest.share >= 0.75) {
     basis = `${counted} Everything is inside the legal limit. One result, ${closest.name.toLowerCase()}, sits close to the line.`;
   } else {
@@ -159,7 +167,7 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
     // matchedCount carries ranking boosts (PFAS, hard water) as well as real matches,
     // so the sentence is built from the names, never from the count.
     reason:
-      p.matchedContaminants.length > 0
+      p.matchedContaminants.length > 0 && !riverOnly
         ? `Removes ${joinNames(p.matchedContaminants.slice(0, 3)).toLowerCase()}, the ${p.matchedContaminants.length === 1 ? "result" : "results"} that stood out in ${district}.`
         : p.bestFor,
   });
@@ -169,7 +177,7 @@ export function buildTankPlan(input: TankPlanInput): TankPlan {
   // A result that is merely close is worth a mention, not worth displacing the one
   // problem a hard-water household will pay to solve.
   const flaggedFix =
-    recommendations.length > 0 && recommendations[0].matchedContaminants.length > 0 && (over.length > 0 || !isHard);
+    !riverOnly && recommendations.length > 0 && recommendations[0].matchedContaminants.length > 0 && (over.length > 0 || !isHard);
 
   let ordered: TankAction[];
   if (flaggedFix) ordered = [products[0], ...(isHard ? [softener] : []), ...products.slice(1)];

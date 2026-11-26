@@ -413,6 +413,17 @@ function coverageFact(data: PostcodeData): Highlight | null {
   };
 }
 
+function noTapResultsFact(data: PostcodeData): Highlight {
+  const company = data.supplier && data.supplier !== "Unknown" ? data.supplier : "The water company";
+  return {
+    kind: "coverage",
+    weight: 40,
+    lead: `${company} publishes no tap-water test results here`,
+    detail: `So there is no tap score for ${data.district}. The ${data.contaminantsTested} substances on this page were measured in rivers and groundwater nearby, before treatment.`,
+    link: { href: "#wt-glass", label: "What was measured" },
+  };
+}
+
 // ── Selection ────────────────────────────────────────────────────────────────
 
 /**
@@ -423,6 +434,16 @@ export function districtHighlights(input: HighlightInput, limit = 3): Highlight[
   const { data } = input;
   if (data.safetyScore < 0) return [];
   const now = input.now ?? new Date();
+
+  // No tap results: the readings are untreated river and groundwater samples, so
+  // no fact that judges them against a drinking-water limit, or ranks the district
+  // on a score built from them, may be told. The hardness figure is the company's own.
+  if (data.dataSource === "ea-only") {
+    return [hardnessFact(data, input.hardness), noTapResultsFact(data), pfasNearbyFact(data, input.pfasNearby)]
+      .filter((h): h is Highlight => h !== null)
+      .sort((a, b) => b.weight - a.weight)
+      .slice(0, limit);
+  }
 
   const candidates = [
     staleFact(data, now),

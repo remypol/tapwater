@@ -63,8 +63,39 @@ describe("buildTankPlan headline", () => {
   });
 
   it("never says safe on river-only data or a handful of tests", () => {
-    expect(buildTankPlan({ ...base, dataSource: "ea-only" }).headline[0]).toBe("Too few tap tests to call it.");
+    expect(buildTankPlan({ ...base, dataSource: "ea-only" }).headline[0]).toBe("No tap tests published.");
     expect(buildTankPlan({ ...base, scoredCount: 2 }).headline[0]).toBe("Too few tap tests to call it.");
+  });
+
+  it("never calls a river sample over the limit (RG40, 26 November 2026)", () => {
+    const p = buildTankPlan({
+      ...base,
+      district: "RG40",
+      dataSource: "ea-only",
+      supplier: "South East Water",
+      readings: [r("Ammonia", 0.54, 0.5, "fail"), r("Nitrate", 19, 50)],
+      hardness: { value: 302, estimated: false },
+      recommendations: [product("RO", ["Ammonia"])],
+    });
+    expect(p.tone).toBe("thin");
+    expect(p.headline).toEqual(["No tap tests published.", "Very hard."]);
+    expect(p.basis).toContain("It publishes no tap-water test results for RG40");
+    expect(`${p.headline.join(" ")} ${p.basis}`).not.toMatch(/over the limit|above the legal limit/);
+    // The softener leads, and no filter claims to fix the river reading.
+    expect(p.primary?.kind).toBe("softener");
+    expect(p.secondary.map((a) => a.reason).join(" ")).not.toContain("Ammonia".toLowerCase());
+  });
+
+  it("does not let a river reading put a filter ahead of everything in a soft district", () => {
+    const p = buildTankPlan({
+      ...base,
+      dataSource: "ea-only",
+      readings: [r("Ammonia", 0.54, 0.5, "fail")],
+      hardness: { value: 90, estimated: false },
+      recommendations: [product("RO", ["Ammonia"])],
+    });
+    expect(p.primary?.kind).toBe("product");
+    expect(p.primary?.reason).toBe("Better tasting water");
   });
 
   it("leaves hardness out of the headline when there is no reading", () => {

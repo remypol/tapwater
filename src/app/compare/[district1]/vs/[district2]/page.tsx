@@ -19,6 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!data1 || !data2) return { title: "Not Found" };
 
+  const scored = data1.safetyScore >= 0 && data2.safetyScore >= 0 && data1.dataSource !== "ea-only" && data2.dataSource !== "ea-only";
+  if (!scored) {
+    const description = `${d1} (${data1.areaName}) and ${d2} (${data2.areaName}) side by side: supplier, hardness and what has been measured in each.`;
+    return {
+      title: `${d1} vs ${d2} Water Quality Compared`,
+      description,
+      openGraph: { images: OG_IMAGE, title: `${d1} vs ${d2} Water Quality Comparison`, description, url: `https://www.tapwater.uk/compare/${d1}/vs/${d2}`, type: "website" },
+    };
+  }
+
   return {
     title: `${d1} vs ${d2} Water Quality — Which Is Better?`,
     description: (() => {
@@ -43,7 +53,8 @@ export default async function ComparePage({ params }: Props) {
 
   if (!data1 || !data2) notFound();
 
-  const hasScores = data1.safetyScore >= 0 && data2.safetyScore >= 0;
+  // A river-only district has no tap score to compare (its readings are untreated river samples).
+  const hasScores = data1.safetyScore >= 0 && data2.safetyScore >= 0 && data1.dataSource !== "ea-only" && data2.dataSource !== "ea-only";
   const winner = data1.safetyScore > data2.safetyScore ? d1 : data2.safetyScore > data1.safetyScore ? d2 : null;
   const winnerData = winner === d1 ? data1 : winner === d2 ? data2 : null;
 
@@ -128,7 +139,7 @@ export default async function ComparePage({ params }: Props) {
         </div>
       </section>
 
-      {comparisonRows.length > 0 ? (
+      {hasScores && comparisonRows.length > 0 ? (
         <section className="wt-band wt-band--white">
           <div className="wt-inner">
             <h2 className="wt-h2">Contaminant comparison</h2>
@@ -157,10 +168,17 @@ export default async function ComparePage({ params }: Props) {
 
       <section className="wt-band wt-band--foam">
         <div className="wt-inner">
+          {hasScores ? (
           <p className="wt-prose wt-nums">
             {d1} ({data1.areaName}, {data1.city}) scored {data1.safetyScore.toFixed(1)}/10 with {data1.contaminantsFlagged} contaminants exceeding safe levels out of {data1.contaminantsTested} tested. {d2} ({data2.areaName}, {data2.city}) scored{" "}
             {data2.safetyScore.toFixed(1)}/10 with {data2.contaminantsFlagged} flagged out of {data2.contaminantsTested} tested. {verdictText}
           </p>
+          ) : (
+            <p className="wt-prose wt-nums">
+              {[data1, data2].filter((d) => d.dataSource === "ea-only").map((d) => `${d.supplier} publishes no tap-water results for ${d.district}`).join(", and ")}, so the two
+              cannot be scored against each other. Each full report has the hardness and what has been measured nearby.
+            </p>
+          )}
           <p className="wt-pills" style={{ marginTop: 28 }}>
             <Link href={`/postcode/${d1}`}>Full {d1} report</Link>
             <Link href={`/postcode/${d2}`}>Full {d2} report</Link>

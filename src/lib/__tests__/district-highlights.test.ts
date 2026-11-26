@@ -91,6 +91,24 @@ describe("districtHighlights", () => {
     expect(districtHighlights(input({ data: district({ safetyScore: -1 }) }))).toEqual([]);
   });
 
+  it("never judges river-only readings against a tap limit (RG40, 26 November 2026)", () => {
+    const data = district({
+      district: "RG40",
+      areaName: "Wokingham",
+      supplier: "South East Water",
+      dataSource: "ea-only",
+      contaminantsTested: 10,
+      contaminantsFlagged: 1,
+      readings: [reading({ name: "Ammonia", value: 0.54, ukLimit: 0.5, status: "fail" })],
+    });
+    const facts = districtHighlights(input({ data, hardness: { value: 302, label: "Very hard", estimated: false } as never }));
+    expect(facts.map((f) => f.kind)).toEqual(["hardness", "coverage"]);
+    expect(facts[1].lead).toBe("South East Water publishes no tap-water test results here");
+    const text = facts.map((f) => `${f.lead} ${f.detail}`).join(" ");
+    expect(text).not.toMatch(/over the|limit|scores? \d/i);
+    expect(highlightDescription(data, facts, 2026)).toBe("RG40 tap water (Wokingham). Among the hardest water in the country at 302 mg/L. Free 2026 report.");
+  });
+
   it("puts an exceeded limit ahead of everything except staleness", () => {
     const data = district({
       contaminantsFlagged: 1,

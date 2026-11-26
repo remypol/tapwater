@@ -25,7 +25,8 @@ import { buildTankPlan, type RecommendedProduct, type TankPlan } from "./tank-pl
 
 export interface PostcodeNeighbour {
   district: string;
-  score: number;
+  /** Null when the district has no tap results (river and groundwater samples only). */
+  score: number | null;
   hardness: number | null;
 }
 
@@ -83,7 +84,7 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
   const neighbourHardness = await Promise.all(scoredNearby.map((n) => getHardness(n.district)));
   const neighbours: PostcodeNeighbour[] = scoredNearby.map((n, i) => ({
     district: n.district,
-    score: n.safetyScore,
+    score: n.dataSource === "ea-only" ? null : n.safetyScore,
     hardness: neighbourHardness[i]?.value ?? null,
   }));
 
@@ -112,13 +113,14 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
     scoredCount,
     hardness: hardness ? { value: hardness.value, estimated: hardness.estimated ?? false, estimatedFrom: hardness.estimatedFrom } : null,
     recommendations,
+    supplier: data.supplier,
   });
 
   const highlights = hasData
     ? districtHighlights({
         data,
         cityPeers,
-        neighbours: neighbours.map((n) => ({ district: n.district, score: n.score })),
+        neighbours: neighbours.flatMap((n) => (n.score == null ? [] : [{ district: n.district, score: n.score }])),
         nationalAverage,
         hardness,
         pfasNearby,
@@ -134,7 +136,35 @@ export async function loadPostcodePage(district: string): Promise<PostcodePageLo
     : "";
   const scoreLabel = data.safetyScore >= 7 ? "safe" : data.safetyScore >= 4 ? "mostly safe but has some issues" : "below average and may need attention";
 
-  const faqs = hasData ? [
+  // No tap results: the readings are untreated river and groundwater samples, so the
+  // answers must not score the tap or call any result "over the limit".
+  const riverOnly = data.dataSource === "ea-only";
+  const riverOnlyFaqs = [
+    {
+      question: `Is ${data.district} tap water safe to drink?`,
+      answer: `${data.supplier} does not publish tap-water test results for ${data.district} (${data.areaName}), so we cannot give it a score. Every water company in England and Wales must meet the same legal standards at the tap, and 99.97% of tap-water tests in England met them in 2025 (Drinking Water Inspectorate). If you want to know exactly what comes out of your own tap, ${data.supplier} will tell you on request, or you can test it at home.`,
+    },
+    {
+      question: `What has been measured near ${data.district}?`,
+      answer: `The Environment Agency measured ${data.contaminantsTested} substances in rivers and groundwater near ${data.district}. These are untreated samples taken before any water treatment, so drinking-water limits do not apply to them and they are not a test of your tap.${pfasNearby ? ` PFAS (forever chemicals) were found at ${pfasNearby.samplingPointCount} monitoring site${pfasNearby.samplingPointCount === 1 ? "" : "s"} within ${pfasNearby.radiusKm} km.` : ""}`,
+    },
+  ];
+
+  const faqs = hasData && riverOnly ? [
+    ...riverOnlyFaqs,
+    {
+      question: `Who supplies water in ${data.district}?`,
+      answer: `${data.district} (${data.areaName}) is supplied by ${data.supplier}.`,
+    },
+    ...(hardnessValue != null ? [{
+      question: `Is ${data.district} water hard or soft?`,
+      answer: `${hardnessEstimated ? `No hardness reading has been published for ${data.district} itself. Across the ${hardnessArea} postcode area the typical value is ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}` : `${data.supplier} gives the hardness in ${data.district} (${data.areaName}) as ${hardnessValue} mg/L CaCO3, which is classified as ${hardnessLabel}`}. ${hardnessValue >= 180 ? "Hard water leaves limescale in kettles, showers and boilers; only a water softener removes it." : hardnessValue < 60 ? "Soft water is gentle on appliances and skin." : "This is a moderate hardness level."}`,
+    }] : []),
+    ...(localRiver ? [{
+      question: `How clean is the ${waterBodyNoun(localRiver.river.type)} near ${data.district}?`,
+      answer: `${describeRiverStatus(localRiver.river)} This is a rating of the ${waterBodyNoun(localRiver.river.type)}, not of tap water in ${data.district}, which is treated before it reaches homes.`,
+    }] : []),
+  ] : hasData ? [
     {
       question: `Is ${data.district} tap water safe to drink?`,
       answer: `Based on the latest tests, ${data.district} (${data.areaName}) water scores ${data.safetyScore}/10, which is ${scoreLabel}. ${data.contaminantsFlagged} of ${data.contaminantsTested} tested contaminants exceeded recommended levels. Water is supplied by ${data.supplier}.`,

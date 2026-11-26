@@ -41,7 +41,7 @@ function slotOrder(count: number): number[] {
   return slots;
 }
 
-export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
+export function BubbleColumn({ bubbles, untreated = false }: { bubbles: Bubble[]; untreated?: boolean }) {
   if (bubbles.length === 0) return null;
   const slots = slotOrder(bubbles.length);
   const closest = bubbles[0];
@@ -66,7 +66,9 @@ export function BubbleColumn({ bubbles }: { bubbles: Bubble[] }) {
   return (
     <figure className="wt-glass">
       <p className="wt-limits-cap wt-nums">
-        {closest.share > 1 ? (
+        {untreated ? (
+          <><strong>{closest.name}</strong> sits highest, at {pct(closest.share)} of the limit that would apply to tap water. These samples are untreated.</>
+        ) : closest.share > 1 ? (
           <><strong>{closest.name}</strong> is over its legal limit, at {pct(closest.share)} of it.</>
         ) : (
           <><strong>{closest.name}</strong> came closest to a limit, at {pct(closest.share)} of it. {clear} of {cols} substances used under a quarter of theirs.</>

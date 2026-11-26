@@ -114,7 +114,8 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
   const riverOnly = data.dataSource === "ea-only";
   // Set for the few Thames districts whose zones were taken from their neighbours.
   const borrowedFrom = data.supplierId === "thames-water" ? getThamesZones(district)?.approx ?? null : null;
-  const level = Math.max(0.12, Math.min(0.92, data.safetyScore / 10));
+  // With no tap score the tank is drawn half full: its height means nothing here.
+  const level = riverOnly ? 0.55 : Math.max(0.12, Math.min(0.92, data.safetyScore / 10));
   const avg = Math.max(0, Math.min(1, nationalAverage / 10));
   const hardValue = hardness?.value ?? null;
   const isHard = hardValue != null && hardValue >= HARD_WATER_THRESHOLD;
@@ -161,9 +162,11 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
       {/* ── 1. The tank ── */}
       <section className="wt-tank" id="wt-tank" style={{ ["--wt-surface" as string]: `${(1 - level) * 100}%` }}>
         <TankCanvas level={level} hardness={hardValue} />
-        <span className={`wt-tick${avg > level ? " wt-tick--air" : ""}`} style={{ top: `${(1 - avg) * 100}%` }}>
-          England and Wales average {nationalAverage.toFixed(1)}
-        </span>
+        {riverOnly ? null : (
+          <span className={`wt-tick${avg > level ? " wt-tick--air" : ""}`} style={{ top: `${(1 - avg) * 100}%` }}>
+            England and Wales average {nationalAverage.toFixed(1)}
+          </span>
+        )}
         <div className="wt-inner">
           <div>
             {/* The place line is part of the h1: the district and town are what people
@@ -183,16 +186,32 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
                   <ArrowDown aria-hidden="true" />
                 </a>
               ) : null}
-              <a href="#wt-glass" className="wt-link">See everything that was tested</a>
+              <a href="#wt-glass" className="wt-link">{riverOnly ? "See what was measured nearby" : "See everything that was tested"}</a>
             </div>
           </div>
-          <div className="wt-level wt-nums">
-            <p className="wt-big">{data.safetyScore.toFixed(1)}<small> / 10</small></p>
-            <p>
-              The tank is as full as the score.
-              {hardValue != null ? " The specks are the minerals that make water hard." : ""}
-            </p>
-          </div>
+          {riverOnly ? (
+            <div className="wt-level wt-nums">
+              {hardValue != null ? (
+                <>
+                  <p className="wt-big">{Math.round(hardValue)}<small> mg/L</small></p>
+                  <p>
+                    Hardness{hardness?.estimated ? `, typical for the ${hardness.estimatedFrom ?? "postcode"} area` : `, ${data.supplier}'s own figure`}. There is no tap score: no tap
+                    results are published here. The specks are the minerals that make water hard.
+                  </p>
+                </>
+              ) : (
+                <p>No tap score: {data.supplier} publishes no tap-water results for {district}.</p>
+              )}
+            </div>
+          ) : (
+            <div className="wt-level wt-nums">
+              <p className="wt-big">{data.safetyScore.toFixed(1)}<small> / 10</small></p>
+              <p>
+                The tank is as full as the score.
+                {hardValue != null ? " The specks are the minerals that make water hard." : ""}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -252,11 +271,24 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
       {/* ── 3. What's in the glass ── */}
       <section className="wt-bubbles" id="wt-glass" aria-labelledby="wt-glass-h">
         <div className="wt-inner">
-          <h2 className="wt-h2" id="wt-glass-h">What&apos;s in a glass of {district} water</h2>
-          <p className="wt-sub">
-            Every bubble is a substance the lab measured. The higher it floats, the closer it came to its legal limit, the dashed line at the top.
-          </p>
-          <BubbleColumn bubbles={plan.bubbles} />
+          {riverOnly ? (
+            <>
+              <h2 className="wt-h2" id="wt-glass-h">What&apos;s in the rivers and groundwater around {district}</h2>
+              <p className="wt-sub">
+                {data.supplier} publishes no tap-water results for {district}. These are Environment Agency samples of untreated river and
+                groundwater nearby. Drinking-water limits apply to treated tap water, not to these samples; the dashed line shows where that limit
+                would sit, for scale.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="wt-h2" id="wt-glass-h">What&apos;s in a glass of {district} water</h2>
+              <p className="wt-sub">
+                Every bubble is a substance the lab measured. The higher it floats, the closer it came to its legal limit, the dashed line at the top.
+              </p>
+            </>
+          )}
+          <BubbleColumn bubbles={plan.bubbles} untreated={riverOnly} />
           {plan.others.length > 0 ? (
             <ul className="wt-chips wt-nums">
               {plan.others.map((o) => (
@@ -271,7 +303,7 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             <div className="wt-tablewrap">
               <table className="wt-table wt-nums">
                 <thead>
-                  <tr><th scope="col">Substance</th><th scope="col">Result</th><th scope="col">Legal limit</th><th scope="col">Share of limit</th></tr>
+                  <tr><th scope="col">Substance</th><th scope="col">Result</th><th scope="col">{riverOnly ? "Tap-water limit" : "Legal limit"}</th><th scope="col">Share of limit</th></tr>
                 </thead>
                 <tbody>
                   {data.readings.map((r) => {
@@ -437,8 +469,9 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
               {data.supplyZone ? ` in the ${data.supplyZone} zone` : ""}
               {riverOnly ? (
                 <>
-                  . {data.supplier} publishes no tap-water test results for this area, so the score of {data.safetyScore.toFixed(1)} out of 10 comes
-                  from {data.contaminantsTested} substances measured in rivers and groundwater nearby, not from the tap. Treat it as background.
+                  . {data.supplier} publishes no tap-water test results for this area, so there is no tap score for {district}. The{" "}
+                  {data.contaminantsTested} substances on this page were measured in rivers and groundwater nearby, before treatment, and say
+                  nothing certain about your tap. Every water company must meet the same legal standards at the tap.
                   {hardness && !hardness.estimated ? ` The hardness figure, ${Math.round(hardness.value)} mg/L, is ${data.supplier}'s own for this district.` : ""}{" "}
                 </>
               ) : (
@@ -479,9 +512,9 @@ export function PostcodeTank({ page }: { page: PostcodePageLoad }) {
             <div className="wt-cards wt-nums">
               {neighbours.map((n) => (
                 <Link key={n.district} href={`/postcode/${n.district}`} className="wt-card">
-                  <i style={{ height: `${Math.max(12, Math.min(92, n.score * 10))}%` }} />
+                  <i style={{ height: `${n.score == null ? 55 : Math.max(12, Math.min(92, n.score * 10))}%` }} />
                   <b>{n.district}</b>
-                  <span>{n.score.toFixed(1)} out of 10{n.hardness != null ? ` · ${Math.round(n.hardness)} mg/L` : ""}</span>
+                  <span>{n.score == null ? "No tap results" : `${n.score.toFixed(1)} out of 10`}{n.hardness != null ? ` · ${Math.round(n.hardness)} mg/L` : ""}</span>
                 </Link>
               ))}
             </div>

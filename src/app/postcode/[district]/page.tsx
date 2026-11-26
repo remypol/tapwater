@@ -112,7 +112,7 @@ export default async function PostcodePage({ params }: Props) {
         latitude={data.latitude}
         longitude={data.longitude}
         supplier={data.supplier}
-        score={data.safetyScore}
+        score={data.dataSource === "ea-only" ? -1 : data.safetyScore}
         lastUpdated={data.lastUpdated}
         contaminantsTested={data.contaminantsTested}
         readings={data.readings}
