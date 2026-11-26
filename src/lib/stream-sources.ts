@@ -12,6 +12,8 @@
 export interface StreamService {
   year: number;
   serviceName: string;
+  /** The census-area field, when this dataset names it differently from the company's others (Anglian 2025: "LSOA"). */
+  geoField?: string;
 }
 
 export interface StreamSource {
@@ -211,6 +213,8 @@ const STREAM_SOURCES: Record<string, StreamSource> = {
   "anglian-water": {
     orgId: STREAM_ORG,
     services: [
+      // 2025 names the census-area field "LSOA" and gives dates as "2025-01-16".
+      { year: 2025, serviceName: "Anglian_Water_Domestic_Water_Quality_2025", geoField: "LSOA" },
       { year: 2024, serviceName: "Anglian_Water_Domestic_Water_Quality_2024" },
       // Undated service: samples stop at October 2022.
       { year: 2022, serviceName: "Anglian_Water_Domestic_Water_Quality" },

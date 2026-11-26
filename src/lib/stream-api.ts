@@ -38,6 +38,12 @@ export function parseStreamDate(
     return new Date(raw).toISOString().split("T")[0];
   }
 
+  // A date-only field comes back as "2025-01-16" even from a company whose other
+  // datasets use epoch dates (Anglian Water 2025).
+  if (format === "epoch" && typeof raw === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.trim())) {
+    return raw.trim();
+  }
+
   if (format === "string" && typeof raw === "string") {
     const datePart = raw.split(" ")[0];
 
@@ -150,7 +156,8 @@ export async function queryStreamService(
   const encodedName = serviceName.replace(/ /g, "%20");
   const baseUrl = `${ARCGIS_BASE}/${source.orgId}/ArcGIS/rest/services/${encodedName}/FeatureServer/0/query`;
   const lsoaList = lsoaCodes.map((c) => `'${c.replace(/'/g, "")}'`).join(",");
-  const where = `${source.geoField} IN (${lsoaList})`;
+  const geoField = source.services.find((s) => s.serviceName === serviceName)?.geoField ?? source.geoField;
+  const where = `${geoField} IN (${lsoaList})`;
 
   const allRecords: StreamRecord[] = [];
   let offset = 0;

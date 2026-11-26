@@ -35,6 +35,14 @@ describe("parseStreamDate", () => {
     expect(parseStreamDate("12/31/2024 12:00:00 AM", "string")).toBe("2024-12-31");
   });
 
+  it("reads a date-only string from an epoch-dated company (Anglian Water 2025)", () => {
+    expect(parseStreamDate("2025-01-16", "epoch")).toBe("2025-01-16");
+  });
+
+  it("still swaps Welsh Water's year-day-month strings", () => {
+    expect(parseStreamDate("2024-20-12", "string")).toBe("2024-12-20");
+  });
+
   it("returns empty string for null", () => {
     expect(parseStreamDate(null, "epoch")).toBe("");
   });
