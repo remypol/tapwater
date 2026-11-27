@@ -125,3 +125,31 @@ Replies go to `press@tapwater.uk`, which forwards to the cc-community inbox. If 
 
 - **Regulatory claims checked against dwi.gov.uk on 17 November 2026:** no statutory PFAS standard in England and Wales; guideline 0.1 µg/L for the sum of 48 named PFAS; updated guidance in March 2025 requires monitoring for a wider range. Our request for area results was refused on cost grounds in July 2026 (ref EIR2026/16348).
 
+
+## Hardest water, sent 27 November 2026
+
+Remy's go-ahead: "Ja, stuur ze" (27 Nov). Before sending, the data page texts were corrected (commit f624004): the hardness ranking now uses only districts with a company figure, and the PFAS and lead texts no longer carry unsourced claims.
+
+Every figure was re-read on production (`/api/checker`) on the day and traces to the company's own postcode checker (`drinking_water_readings`, source `company_scrape`). DH6 is left out of every pitch: its stored 480 comes from DH6 3HS, but another DH6 postcode gave 70 on 27 Nov, so the district spans two zones. TS27 is in the file at 480 and is not named in any pitch.
+
+Figures used: Haverhill CB9 499 (Anglian), IP13 Framlingham/Wickham Market 498 (Essex & Suffolk), Hartlepool TS24/TS25 491 and TS26 486 (Anglian, as Hartlepool Water), Wingate TS28 480 (Northumbrian, joint sixth with DH6 and TS27), Aldeburgh IP15 and Leiston IP16 473, Seaham SR7 and Peterlee SR8 470, Ipswich IP1 402, Sunderland SR1 308, Newcastle NE1 193, Darlington DL1 168, Durham DH1 68, softest Gairloch IV21 5. Chalk line: 4 people × 140 L/day × 365 × mg/L, rounded to 5 kg.
+
+Each email: the local figure first, the chalk line, "not a health risk, no legal limit", the Approved Document L 200 mg/L line, the method (company figures, re-checked 27 Nov, 1,800 districts), then links to `/rankings/hardest-water`, `/postcode/{district}` and `/api/press/data/hardest-water`.
+
+From `press@tapwater.uk` through Resend. Addresses were read on each outlet's own contact page on 27 Nov.
+
+| Outlet | Angle | Address used | Result |
+|---|---|---|---|
+| Suffolk News (Haverhill Echo, Bury Free Press) | Haverhill hardest in UK; Suffolk 4 of top 10 | suffolk@iliffepublishing.co.uk | Delivered |
+| Cambridgeshire Live | Haverhill hardest in UK | newsdesk@cambridge-news.co.uk | Delivered |
+| Newsquest Suffolk (EADT, Ipswich Star) | Suffolk 4 of top 10 (got the PFAS note on 17 Nov; said so) | suffolkeditors@newsquest.co.uk | Delivered |
+| Hartlepool Mail | Hartlepool 3 of top 5 | mail.news@iconicmediagroup.co.uk | Delivered |
+| The Northern Echo | Wingate 480 vs Durham city 68 | newsdesk@nne.co.uk | Delivered |
+| Sunderland Echo | Seaham and Peterlee 470 | echo.news@iconicmediagroup.co.uk | Delivered |
+| ChronicleLive | Hartlepool and east Durham | ec.news@ncjmedia.co.uk | Delivered |
+| Mirror (national) | UK table, money angle | mirror.money.saving@mirror.co.uk | **Bounced** |
+| Mirror (national) | Same email | webnews@mirror.co.uk (same contact page) | Delivered |
+
+Not sent: Daily Express (contact page lists complaints and letters only, no newsdesk address).
+
+Follow-up: one note after a week (4 Dec) to desks that have not replied, with one new fact, for example a second town in their patch. Not to the Mirror.
