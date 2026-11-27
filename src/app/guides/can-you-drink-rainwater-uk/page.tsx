@@ -33,9 +33,11 @@ const FAQ_DATA = [
 
 export function generateMetadata(): Metadata {
   return {
-    title: "Can You Drink Rainwater? The Honest UK Answer",
+    // Answer in the title: position 7.6 for "can you drink rain water" with 0.2%
+    // of searchers clicking (28 days to 24 Nov 2026).
+    title: "Can You Drink Rainwater? Not Untreated, and Boiling Isn’t Enough",
     description:
-      "Can you drink rainwater in the UK? What harvested rain actually contains, what boiling does and does not fix, the legality, and when treatment makes sense.",
+      "Not straight from the butt: collected rain carries bacteria from the roof, metals from gutters and PFAS from the sky. Boiling kills germs but not the rest. What treatment works.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/can-you-drink-rainwater-uk",
     },

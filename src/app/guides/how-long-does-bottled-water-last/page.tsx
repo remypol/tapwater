@@ -37,19 +37,31 @@ const FAQ_DATA = [
   },
 ];
 
+/** The answer most searchers want, before the explanation. Each row is argued in a section below. */
+const SHELF_LIFE: { what: string; keeps: string; note?: string }[] = [
+  { what: "Sealed, kept cool and dark", keeps: "Safe long past the date", note: "The best-before is 6 months to 2 years from bottling. Only the taste fades." },
+  { what: "Opened, in the fridge", keeps: "2 to 3 days" },
+  { what: "Opened, at room temperature", keeps: "About a day" },
+  { what: "Tap water in a bottle or jug", keeps: "24 hours in the fridge", note: "The Drinking Water Inspectorate's advice. In a clean, sealed container kept cool and dark: up to about six months." },
+  { what: "Left in a hot car or in the sun", keeps: "Drink it soon, don't store it", note: "Heat speeds up the move of packaging compounds into the water." },
+];
+
 export function generateMetadata(): Metadata {
   return {
-    title: "How Long Does Bottled Water Last? (UK)",
+    // Answer in the title: at position 4 for "how long does bottled water last"
+    // (20,000+ impressions in 28 days to 24 Nov 2026) the old question-only title
+    // drew 0.6% of searchers.
+    title: "How Long Does Bottled Water Last? Opened: 2–3 Days (UK)",
     description:
-      "Does bottled water expire? What the UK best-before date means, how long tap or bottled water lasts in a bottle once opened, and when heat is the problem.",
+      "Sealed: safe past its best-before date (6 months to 2 years); only the taste fades. Opened: 2–3 days in the fridge, a day out of it. Tap water in a bottle: 24 hours.",
     alternates: {
       canonical: "https://www.tapwater.uk/guides/how-long-does-bottled-water-last",
     },
     openGraph: {
       images: OG_IMAGE,
-      title: "How Long Does Bottled Water Last?",
+      title: "How Long Does Bottled Water Last? Opened: 2–3 Days",
       description:
-        "What the best-before date on bottled water really means, and when storage becomes the real problem.",
+        "Sealed: safe past its best-before date. Opened: 2–3 days in the fridge, a day out of it. Tap water in a bottle: 24 hours.",
       url: "https://www.tapwater.uk/guides/how-long-does-bottled-water-last",
       type: "article",
     },
@@ -134,6 +146,23 @@ export default function BottledWaterShelfLifeGuide() {
             real caution belongs, because heat speeds up the migration of
             packaging compounds into the water.
           </p>
+        </div>
+
+        <div className="card mt-8 overflow-hidden" role="region" aria-labelledby="quick-answer">
+          <div className="px-5 pt-4 pb-1"><p id="quick-answer" className="text-sm font-semibold text-ink">How long it keeps, at a glance</p></div>
+          <table className="w-full text-left text-sm">
+            <tbody className="divide-y divide-rule">
+              {SHELF_LIFE.map((r) => (
+                <tr key={r.what} className="align-top">
+                  <th scope="row" className="px-5 py-3 font-medium text-ink w-[42%]">{r.what}</th>
+                  <td className="px-5 py-3 text-body">
+                    <span className="font-semibold text-ink">{r.keeps}</span>
+                    {r.note ? <span className="block text-muted mt-0.5">{r.note}</span> : null}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <GeoCitation
