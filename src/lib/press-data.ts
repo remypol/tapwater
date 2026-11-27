@@ -117,7 +117,7 @@ async function buildWorstLead(): Promise<PressStoryData> {
     // never been replaced" is not something a compliance sample can show, and this
     // text is handed to journalists as a ready-made citation.
     lede: `Lead contamination remains one of the UK's most persistent drinking water challenges. TapWater.uk analysis of water company compliance data reveals that ${worstDistrict} recorded lead at ${multiplier}x the legal limit of 0.01 mg/L in its most recent sample.`,
-    context: `The UK tightened its legal limit for lead in drinking water from 0.025 to 0.01 mg/L in 2013 to align with WHO guidelines. An estimated 40% of UK homes still have lead service pipes, and there is no safe level of lead exposure — even low doses are linked to developmental effects in children.`,
+    context: `The UK tightened its legal limit for lead in drinking water from 0.025 to 0.01 mg/L in 2013 to align with WHO guidelines. Homes built before 1970 can still have lead pipes between the street and the tap, and no level of lead exposure is known to be safe, particularly for children.`,
     methodology: `Based on water company compliance testing published via the Stream Water Data Portal, covering ${scored.length.toLocaleString("en-GB")} UK postcode districts with drinking water results sampled in the last three years. Districts with fewer than five measured parameters, or with only environmental river and groundwater monitoring, are excluded. Uses the most recent sample for each district.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
@@ -197,9 +197,9 @@ async function buildMostPfas(): Promise<PressStoryData> {
     rankingsLink: STORY_CONFIG["most-pfas"].rankingsLink,
     csvHeaders: ["Rank", "City", "Region", "PFAS Detections", "Compounds Found", "Highest Level (µg/L)"],
     citation: `Source: TapWater.uk (https://www.tapwater.uk/pfas)\nData: Environment Agency Water Quality Archive, analysed by TapWater.uk`,
-    lede: `PFAS — per- and polyfluoroalkyl substances — have contaminated water sources near ${topCity} more than anywhere else in the UK, with ${topCount} individual compound detections recorded in Environment Agency monitoring data. Unlike most contaminants, PFAS do not break down in the environment or the human body, earning them the name "forever chemicals".`,
-    context: `The UK introduced a drinking water standard for PFAS in 2021, setting a 0.1 µg/L limit for individual PFAS compounds and a 1 µg/L sum-of-PFAS limit. The main UK sources are fire-fighting foam at airfields and industrial sites, and agricultural application of contaminated sewage sludge. Long-term PFAS exposure is associated with thyroid disruption, immune suppression, and increased cancer risk.`,
-    methodology: `Based on analysis of Environment Agency Water Quality Archive PFAS monitoring data, aggregated by city water supply zone. Detection counts include any measurement above the laboratory reporting limit.`,
+    lede: `Environment Agency monitoring has recorded more PFAS detections near ${topCity} than near any other UK city: ${topCount}, in river and groundwater samples. These are environmental samples, not tap water. PFAS break down so slowly in the environment and the body that they are called "forever chemicals".`,
+    context: `England and Wales have no statutory standard for PFAS in tap water. The Drinking Water Inspectorate's guidance sets 0.1 µg/L for the sum of 48 named PFAS, and since March 2025 asks water companies to monitor a wider range. Those tap-water results are not published by area. Main sources in the UK include fire-fighting foam at airfields and industrial sites. Some PFAS are linked in studies to effects on the thyroid, the immune system and certain cancers.`,
+    methodology: `Based on analysis of Environment Agency Water Quality Archive PFAS monitoring data, counted for the sampling points within the area of each city's page (near the city, not inside a boundary). A detection is any measurement above the laboratory reporting limit; one reading is one sample on one day.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
 }
@@ -210,11 +210,14 @@ async function buildHardestWater(): Promise<PressStoryData> {
   const hardnessResults: { data: PostcodeData; hardness: number }[] = [];
   for (const p of scored) {
     const h = await getHardness(p.district);
-    if (h) {
+    // Only a district's own figure: an area median is not something a paper can print for one town.
+    if (h && !h.estimated) {
       hardnessResults.push({ data: p, hardness: h.value });
     }
   }
   hardnessResults.sort((a, b) => b.hardness - a.hardness);
+  const softest = hardnessResults[hardnessResults.length - 1];
+  const times = softest && softest.hardness > 0 ? Math.round(hardnessResults[0].hardness / softest.hardness) : null;
   const top10 = hardnessResults.slice(0, 10);
 
   const worst = top10[0];
@@ -238,10 +241,10 @@ async function buildHardestWater(): Promise<PressStoryData> {
     entries,
     rankingsLink: STORY_CONFIG["hardest-water"].rankingsLink,
     csvHeaders: ["Rank", "Postcode", "Area", "City", "Hardness (mg/L CaCO3)", "Classification"],
-    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/hardest-water)\nData: Drinking Water Inspectorate data, analysed by TapWater.uk`,
-    lede: `Hard water costs UK households an estimated £700m per year in appliance damage, scale build-up, and excess detergent use. At ${worstValue} mg/L CaCO₃, ${worstDistrict} sits in the "very hard" classification — more than four times harder than the softest water areas in Scotland and Wales.`,
-    context: `The UK does not set a maximum legal limit for water hardness, though the DWI recommends suppliers keep levels below 200 mg/L for optimal plumbing health. Hardness is determined by the geology of the source catchment — chalk aquifers in South East England and the East Midlands produce the hardest water, while upland reservoirs in the north and west supply naturally soft water.`,
-    methodology: `Based on Drinking Water Inspectorate zonal hardness data, mapped to postcode districts. Values represent total hardness as calcium carbonate equivalent.`,
+    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/hardest-water)\nData: hardness figures published by each water company, compiled by TapWater.uk`,
+    lede: `${worstDistrict} (${worst?.data.areaName ?? ""}) has the hardest tap water of the ${hardnessResults.length.toLocaleString("en-GB")} UK postcode districts with a hardness figure from their water company: ${worstValue} mg/L as calcium carbonate.${times && softest ? ` That is ${times} times the ${softest.hardness} mg/L of ${softest.data.district} (${softest.data.areaName}).` : ""}`,
+    context: `Hard water is not a health risk and has no legal limit. It is a cost: scale on kettles, taps and boiler heat exchangers. Above 200 mg/L, Approved Document L of the Building Regulations asks for scale protection when a new combination boiler is fitted. Hardness comes from the rock the water passes through: chalk and limestone in eastern and southern England give the hardest water, upland reservoirs in Wales, Scotland and the north-west the softest.`,
+    methodology: `Each water company's own published hardness for the supply zone serving the district, from its postcode checker or its open data on the Stream Water Data Portal, collected by TapWater.uk and re-checked against the companies' checkers on 27 November 2026. Where a district spans several supply zones, the figure is for the postcode nearest its centre. Districts without their own figure are left out.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
 }
@@ -288,10 +291,10 @@ async function buildBestWorstOverall(): Promise<PressStoryData> {
     entries,
     rankingsLink: STORY_CONFIG["best-worst-overall"].rankingsLink,
     csvHeaders: ["Rank", "Postcode", "Area", "City", "Safety Score (/10)", "Category"],
-    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/best-water)\nData: Environment Agency & Drinking Water Inspectorate, analysed by TapWater.uk`,
-    lede: `UK tap water quality varies more than most people realise. ${bestDistrict} leads the country with a safety score of ${bestScore}/10 — consistently low contaminant readings across all 19 tested parameters. At the other end of the table, several postcodes score below 5, with multiple contaminants reading close to or above legal limits.`,
+    citation: `Source: TapWater.uk (https://www.tapwater.uk/rankings/best-water)\nData: water company drinking-water test results, analysed by TapWater.uk`,
+    lede: `UK tap water quality varies more than most people realise. ${bestDistrict} leads the country with a safety score of ${bestScore}/10 — with low readings across the parameters tested. At the other end of the table, several postcodes score below 5, with multiple contaminants reading close to or above legal limits.`,
     context: `The Drinking Water Inspectorate reports that 99.97% of tests in England met the legal standards in 2025. That is one figure for the whole country; TapWater.uk scores each postcode district from the test results published for that area, so the differences between places show.`,
-    methodology: `Safety scores combine 19 contaminant readings from Environment Agency and DWI data, normalised against legal limits and weighted by health risk. Scores reflect the most recent annual data for each postcode district.`,
+    methodology: `Scores combine the drinking-water test results each water company publishes for the district (through the Stream Water Data Portal and its own site), compared with legal limits and weighted by health risk. River and groundwater monitoring does not count towards a score.`,
     lastUpdated: new Date().toISOString().split("T")[0],
   };
 }
@@ -380,7 +383,11 @@ export async function getStoryCsv(slug: string): Promise<string | null> {
   // Footer attribution rows
   lines.push("");
   lines.push(rowToCsv(["Source", "TapWater.uk", "https://www.tapwater.uk", "", "", "", ""]));
-  lines.push(rowToCsv(["Data", "Environment Agency Water Quality Archive", "", "", "", "", ""]));
+  const DATA_SOURCE: Record<string, string> = {
+    "most-pfas": "Environment Agency Water Quality Archive (river and groundwater samples, not tap water)",
+    "hardest-water": "Hardness figures published by each water company",
+  };
+  lines.push(rowToCsv(["Data", DATA_SOURCE[slug] ?? "Water company drinking-water test results (Stream Water Data Portal)", "", "", "", "", ""]));
   lines.push(rowToCsv(["Generated", new Date().toISOString().split("T")[0], "", "", "", "", ""]));
 
   return lines.join("\n");
