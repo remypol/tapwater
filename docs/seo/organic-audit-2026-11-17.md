@@ -73,3 +73,20 @@ Running record of what was found and what was done. Search Console figures are f
 ## How to tell whether it worked
 
 Compare with `docs/numbers/baseline-2026-11-17.md` on 1 and 15 December. For this round specifically: click-through on /city pages (1.0% at position 6.7) and /hardness area pages (1.0% at 5.6); clicks to /hardness (43 in 28 days); position of /guides/how-to-test-your-water for "how to test water quality" (87); first impressions on /hardness/{town} pages.
+
+## 27 November 2026: where the traffic is (28 days to 24 Nov)
+
+5,860 clicks from 537,000 impressions. Guides carry 306,818 impressions at 0.9% click-through; postcode pages 59,692 at 1.6%; city pages 50,766 at 0.9% (position 6.9); hardness pages 36,889 at 1.2%.
+
+| Cluster, 90 days | Impressions | Click-through | Position | Action |
+|---|---|---|---|---|
+| How long bottled/tap water lasts | 154,410 | 0.7% | 5.3 | Done 27 Nov (600f495): answer in the title, a table at the top |
+| Filters (money pages) | 42,339 | 0.9% | 24.0 | Needs links, not copy |
+| Is tap water safe to drink | 32,497 | 0.8% | 8.0 | City titles changed 17 Nov; measure first |
+| Smart water | 22,808 | 0.2% | 7.4 | Title already answers; position is the problem |
+| Is X water hard / hardness by postcode | 22,577 | 1.0% | 13.2 | Hardness titles changed 17 Nov; measure first |
+| Softeners | 12,943 | 0.1% | 29.0 | Needs links |
+| Rainwater | 11,071 | 0.3% | 8.4 | Done 27 Nov: answer in the title |
+| Chlorine, fluoride, lead pipes, testing near me | about 3,800 | 0% | 28–50 | Small; one solid page each later |
+
+**Measure on 11 December:** click-through for "how long does bottled water last" (0.6% at 3.8) and "can you drink rain water" (0.2% at 7.6).
